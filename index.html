@@ -1,0 +1,1097 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AD Simulator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body { font-family: sans-serif; background: #1a1a2e; color: #e0e0e0; padding: 0.6rem 1rem; font-size: 14px; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    h2 { font-size: 15px; font-weight: 500; }
+    .header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 8px; }
+    .turn-badge { font-size: 12px; padding: 3px 9px; border-radius: 6px; background: #1e3a5f; color: #7eb8f7; font-weight: 500; }
+    .turn-badge.bot { background: #252540; color: #888; }
+    .section-label { font-size: 10px; color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 3px; text-align: center; }
+    .pool-grid { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 1fr; gap: 8px; margin-bottom: 0.5rem; min-height: 0; }
+    .draft-layout { display: grid; grid-template-columns: 380px 1fr 380px; gap: 12px; align-items: stretch; margin-bottom: 0.4rem; flex: 1; min-height: 0; }
+    .side-players { display: flex; flex-direction: column; gap: 8px; min-width: 0; height: 100%; }
+    .side-player { flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+    .pool-center { min-width: 0; display: flex; flex-direction: column; min-height: 0; }
+    #pool-ultimates { flex: 0 0 26%; }
+    .pool-row { display: grid; grid-template-columns: 110px 1fr 110px; gap: 10px; align-items: stretch; flex: 1; min-height: 0; }
+    .pool-models-col { display: flex; flex-direction: column; justify-content: space-between; gap: 8px; min-height: 0; }
+    .pool-models-col .ability-card { flex: 1; aspect-ratio: auto; min-height: 0; }
+    .pool-models-col .ability-card img { object-fit: cover; }
+    .std-col { display: flex; flex-direction: column; min-height: 0; }
+    .std-col #pool-standard { flex: 1; margin-bottom: 0; }
+    #pool-ultimates .ability-card, #pool-standard .ability-card { aspect-ratio: auto; }
+    @media (max-width: 1100px) {
+      .draft-layout { grid-template-columns: 1fr; flex: none; }
+      .side-players { flex-direction: row; flex-wrap: wrap; height: auto; }
+      .side-player { flex: 1 1 260px; }
+      .pool-row { grid-template-columns: 1fr; flex: none; }
+      .pool-models-col { flex-direction: row; flex-wrap: wrap; }
+    }
+    .ability-card { position: relative; background: #252540; border: 1px solid #333; border-radius: 6px; cursor: pointer; overflow: hidden; aspect-ratio: 1; transition: border-color 0.1s; }
+    .ability-card:hover:not(.disabled):not(.picked) { border-color: #7eb8f7; background: #1e3a5f; }
+    .ability-card.picked { opacity: 0.2; cursor: default; }
+    .ability-card.ult { border-color: #a0763a; border-width: 2px; }
+    .ability-card.ult:hover:not(.disabled):not(.picked) { background: #2a1f0e; }
+    .ability-card.model { border-color: #6a8f5a; border-width: 2px; }
+    .ability-card.model:hover:not(.disabled):not(.picked) { background: #1f3318; }
+    .ability-card.disabled { cursor: default; }
+    .ability-card img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .pool-synergy-badge { position: absolute; top: 2px; right: 2px; z-index: 2; font-size: 9px; font-weight: 700; padding: 1px 3px; border-radius: 3px; background: rgba(10,10,20,0.75); color: #999; line-height: 1.3; pointer-events: none; }
+    .pool-synergy-badge.positive { color: #7ef7b8; }
+    .ability-card.edit-mode { cursor: pointer; }
+    .ability-card.edit-mode.picked { opacity: 0.55; }
+    .ability-card.synergy-focus { outline: 2px solid #f4c542; outline-offset: -2px; }
+    .synergy-overlay { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; background: rgba(10,10,20,0.9); padding: 4px 5px; font-size: 13px; line-height: 1.5; font-weight: 600; }
+    .synergy-overlay .syn-row { display: flex; align-items: center; justify-content: space-between; gap: 4px; color: #ccc; }
+    .synergy-overlay .syn-row.adj { color: #7eb8f7; }
+    .synergy-overlay .syn-row.adj .adj-val { font-weight: 700; }
+    .synergy-overlay .syn-edit-btn { background: none; border: none; color: #7eb8f7; cursor: pointer; font-size: 15px; padding: 0 2px; line-height: 1; }
+    .synergy-overlay input[type="number"] { width: 52px; font-size: 13px; background: #111122; color: #e0e0e0; border: 1px solid #444; border-radius: 2px; padding: 0 2px; }
+    .side-player { position: relative; overflow: hidden; background: #252540; border: 1px solid #333; border-left: 4px solid #333; border-radius: 6px; padding: 10px; }
+    .side-player.active { border-color: #7eb8f7; border-left-color: #7eb8f7; background: #1e3a5f; }
+    .side-player.you { border-color: #5a7abf; }
+    .side-player.radiant { border-left-color: #5cb85c; }
+    .side-player.dire { border-left-color: #d9534f; }
+    .side-player.active.radiant, .side-player.active.dire { border-left-color: #7eb8f7; }
+    .you-tag { font-size: 9px; background: #2a4a8a; color: #7eb8f7; border-radius: 4px; padding: 1px 5px; }
+    .corner-tag { position: absolute; top: 4px; right: 6px; z-index: 2; }
+    .player-score { font-size: 10px; color: #7eb8f7; font-weight: 500; height: 12px; margin-bottom: 2px; }
+    .side-player.radiant .player-score { text-align: right; }
+    .side-player.dire .player-score { text-align: left; }
+    .side-player-slots { position: relative; z-index: 1; display: flex; align-items: center; gap: 6px; width: 100%; }
+    .mini-slot { flex: 1; aspect-ratio: 1; border-radius: 5px; background: #1a1a2e; border: 1px solid #333; overflow: hidden; min-width: 0; }
+    .mini-slot img { width: 100%; height: 100%; object-fit: contain; display: block; }
+    .mini-slot.filled { border-color: #5a7abf; }
+    .mini-slot.filled.ult { border-color: #a0763a; }
+    .mini-slot.model { flex: 1; aspect-ratio: 16 / 9; position: relative; transform: translateY(-30%); overflow: visible; border-color: #6a8f5a; }
+    .mini-slot.model img { position: absolute; top: -50%;   width: 150%; height: 170%; object-fit: cover; z-index: 0; }
+    .side-player-slots .mini-slot.model:first-child img { left: 0; }
+    .side-player-slots .mini-slot.model:last-child img { left: auto; right: 0; }
+    .mini-slot:not(.model) { position: relative; z-index: 1; transform: translateY(+10%);}
+    .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 0.4rem; flex-shrink: 0; }
+    .reset-btn { padding: 6px 12px; font-size: 13px; background: transparent; color: #888; border: 1px solid #444; border-radius: 6px; cursor: pointer; text-decoration: none; }
+    .status { font-size: 12px; color: #888; }
+    .log { padding: 6px 12px; background: #111122; border-radius: 6px; border: 1px solid #333; max-height: 60px; overflow-y: auto; flex-shrink: 0; }
+    .log-entry { font-size: 11px; color: #888; padding: 1px 0; line-height: 1.4; }
+    .log-entry.you { color: #7eb8f7; font-weight: 500; }
+    .done-banner { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 10; padding: 8px 16px; background: #1a3a1a; border: 1px solid #3a6a3a; border-radius: 6px; text-align: center; box-shadow: 0 4px 16px rgba(0,0,0,0.4); }
+    .done-banner p { font-size: 13px; font-weight: 500; color: #5cb85c; }
+    .done-banner small { font-size: 11px; color: #5cb85c; }
+    .loading { text-align: center; padding: 2rem; color: #888; }
+    .spot-selector { display: flex; align-items: center; gap: 8px; margin-bottom: 0.4rem; flex-wrap: wrap; flex-shrink: 0; }
+    .spot-selector label { font-size: 12px; color: #888; }
+    .spot-selector select { background: #252540; color: #e0e0e0; border: 1px solid #444; border-radius: 6px; padding: 4px 8px; font-size: 12px; }
+    .screenshot-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+    .screenshot-review-panel { background: #1a1a2e; border: 1px solid #444; border-radius: 10px; padding: 20px; max-width: 900px; max-height: 90vh; overflow-y: auto; }
+    .calibrate-canvas { display: block; max-width: 100%; border: 1px solid #444; border-radius: 6px; cursor: crosshair; margin-bottom: 14px; }
+    .screenshot-review-panel h3 { font-size: 16px; margin-bottom: 6px; }
+    .screenshot-review-hint { font-size: 12px; color: #888; margin-bottom: 14px; }
+    .screenshot-review-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 16px; }
+    .screenshot-review-cell { background: #252540; border: 1px solid #333; border-radius: 6px; padding: 6px; text-align: center; }
+    .screenshot-review-cell img.crop-thumb { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 4px; margin-bottom: 4px; border: 1px solid #444; }
+    .screenshot-review-cell select { width: 100%; font-size: 11px; background: #111122; color: #e0e0e0; border: 1px solid #444; border-radius: 4px; padding: 3px; margin-top: 4px; }
+    .screenshot-review-cell .match-confidence { font-size: 10px; color: #888; margin-top: 2px; }
+    .screenshot-review-cell .match-confidence.low { color: #d9534f; }
+    .screenshot-review-actions { display: flex; gap: 10px; justify-content: flex-end; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h2>Ability draft simulator</h2>
+  <span class="turn-badge" id="turn-badge">Loading...</span>
+</div>
+
+<div class="spot-selector">
+  <label>Your team:</label>
+  <select id="spot-select">
+    <option value="0">Radiant</option>
+    <option value="5">Dire</option>
+  </select>
+  <button class="reset-btn" id="reset-btn">New draft</button>
+  <button class="reset-btn" id="synergy-toggle-btn">See/edit synergies</button>
+  <button class="reset-btn" id="clear-overrides-btn" style="display:none">Clear all overrides</button>
+  <button class="reset-btn" id="import-screenshot-btn">Import from screenshot</button>
+  <input type="file" id="screenshot-file-input" accept="image/*" style="display:none" />
+  <a class="reset-btn" href="https://ad-simulator-mp.abilitydraft.workers.dev/simulator.html">Multiplayer</a>
+</div>
+
+<div id="screenshot-review-overlay" class="screenshot-overlay" style="display:none">
+  <div class="screenshot-review-panel">
+    <div id="screenshot-calibrate-step">
+      <h3>Mark the grid corners</h3>
+      <p class="screenshot-review-hint" id="calibrate-instructions"></p>
+      <canvas id="calibrate-canvas" class="calibrate-canvas"></canvas>
+      <div class="screenshot-review-actions">
+        <button class="reset-btn" id="calibrate-restart-btn">Restart marking</button>
+        <button class="reset-btn" id="screenshot-cancel-btn-calibrate">Cancel</button>
+      </div>
+    </div>
+    <div id="screenshot-crop-review-step" style="display:none">
+      <h3>Cropped pool preview</h3>
+      <p class="screenshot-review-hint">Check the crops line up with real icons before starting. These aren't identified, so bots will pick randomly among them.</p>
+      <div id="screenshot-review-grid" class="screenshot-review-grid"></div>
+      <div class="screenshot-review-actions">
+        <button class="reset-btn" id="screenshot-confirm-btn">Start draft with this pool</button>
+        <button class="reset-btn" id="screenshot-remark-btn">Re-mark corners</button>
+        <button class="reset-btn" id="screenshot-cancel-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="done-banner" style="display:none" class="done-banner">
+  <p id="done-headline">Draft complete!</p>
+  <small id="done-summary"></small>
+</div>
+
+<div class="draft-layout">
+  <div class="side-players" id="players-left"></div>
+
+  <div class="pool-center">
+    <div class="loading" id="pool-loading">Loading ability data...</div>
+    <div class="section-label">Ultimate Abilities</div>
+    <div id="pool-ultimates" class="pool-grid"></div>
+
+    <div class="pool-row">
+      <div class="pool-models-col" id="pool-models-left"></div>
+
+      <div class="std-col">
+        <div class="section-label">Standard Abilities</div>
+        <div id="pool-standard" class="pool-grid"></div>
+      </div>
+
+      <div class="pool-models-col" id="pool-models-right"></div>
+    </div>
+  </div>
+
+  <div class="side-players" id="players-right"></div>
+</div>
+
+<div class="controls">
+  <span class="status" id="status"></span>
+</div>
+
+<div class="log" id="log"></div>
+
+<script>
+const ICON_BASE = 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/abilities/';
+// Same portrait crop dota2.com's own hero grid uses - covers all 127 heroes
+// (including recent ones the old legacy _vert.jpg path was missing), used for
+// both the pool's model cards and the player ability-bar's model slot.
+const HERO_PORTRAIT_BASE = 'https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/';
+function heroPortraitSrcFor(heroName) {
+  return HERO_PORTRAIT_BASE + heroName + '.png';
+}
+// Some Ability-Draft-only "_ad" variants have no icon of their own on Valve's CDN;
+// their base (non-AD) ability shares the same art, so use that instead.
+const ICON_NAME_OVERRIDES = {
+  kez_falcon_rush_ad: 'kez_falcon_rush',
+  kez_shodo_sai_ad: 'kez_shodo_sai',
+  kez_talon_toss_ad: 'kez_talon_toss',
+  kez_ravens_veil_ad: 'kez_ravens_veil',
+};
+// Facet-variant pairs that occupy the same kit slot and should never both appear
+// in the same draft (Jakiro's E is either the fire or ice version, never both -
+// Dual Breath and Ice Path aren't part of this and should always both show up).
+const EXCLUSIVE_ABILITY_GROUPS = [
+  ['jakiro_liquid_fire', 'jakiro_liquid_ice'],
+  ['troll_warlord_whirling_axes_melee', 'troll_warlord_whirling_axes_ranged'],
+];
+function resolveExclusiveGroups(abilities) {
+  let result = abilities;
+  for (const group of EXCLUSIVE_ABILITY_GROUPS) {
+    const present = result.filter(a => group.includes(a.name));
+    if (present.length > 1) {
+      const keep = present[Math.floor(Math.random() * present.length)];
+      result = result.filter(a => !group.includes(a.name) || a === keep);
+    }
+  }
+  return result;
+}
+// Snake draft: each round alternates by position between teams (1,6,2,7,3,8,4,9,5,10),
+// then reverses for the next round (10,5,9,4,8,3,7,2,6,1) - the player at each end
+// picks twice in a row at the turn, which falls out naturally since the reversed
+// round's first pick is the forward round's last pick. All 5 rounds (the model
+// round plus the 4 ability rounds) are one continuous snake, not a separate
+// forward-only model round followed by its own restart.
+const FORWARD = [0,5,1,6,2,7,3,8,4,9];
+const BACKWARD = [...FORWARD].reverse();
+const PICK_ORDER = [...FORWARD, ...BACKWARD, ...FORWARD, ...BACKWARD, ...FORWARD];
+const SLOTS_PER_PLAYER = 5;
+
+let ALL_HEROES = [];
+let SLOT_ORDER = {}; // ability name (with any "_ad" suffix stripped) -> Q/W/E/... position in the hero's kit
+let SYNERGY = new Map(); // "nameA|nameB" (alphabetical) -> synergy value, from windrun's ability-pairs data
+let pool = [], picks = [], pickIndex = 0, done = false, logEntries = [];
+let YOUR_SLOT = 0;
+
+// User-edited synergy values, keyed the same way as SYNERGY ("nameA|nameB" alphabetical).
+// When a pair has an override, it replaces the windrun value for every bot-facing
+// score (synergyBetween/hasSynergyData) - windrun's own value stays in SYNERGY
+// untouched for reference. Persisted in localStorage so overrides survive page
+// reloads and "New draft" resets, and only change when explicitly re-edited.
+const SYNERGY_OVERRIDES_STORAGE_KEY = 'adSynergyOverrides';
+let SYNERGY_OVERRIDES = new Map();
+function loadSynergyOverrides() {
+  try {
+    const raw = localStorage.getItem(SYNERGY_OVERRIDES_STORAGE_KEY);
+    SYNERGY_OVERRIDES = raw ? new Map(Object.entries(JSON.parse(raw))) : new Map();
+  } catch { SYNERGY_OVERRIDES = new Map(); }
+}
+function persistSynergyOverrides() {
+  localStorage.setItem(SYNERGY_OVERRIDES_STORAGE_KEY, JSON.stringify(Object.fromEntries(SYNERGY_OVERRIDES)));
+}
+loadSynergyOverrides();
+
+// Synergy editor: pauses drafting so any spell/model (picked or not) can be clicked
+// to inspect and edit its synergy with everything else, without a pick being
+// confirmed in the process.
+let synergyEditMode = false;
+let synergyFocus = null;
+
+async function loadData() {
+  const [wrData, heroAbilities, synergyData] = await Promise.all([
+    fetch('/heroes_abilities.json').then(r => r.json()),
+    fetch('https://cdn.jsdelivr.net/npm/dotaconstants/build/hero_abilities.json').then(r => r.json()).catch(() => ({})),
+    fetch('/ability_synergies.json').then(r => r.json()).catch(() => []),
+  ]);
+
+  SYNERGY = new Map(synergyData.map(([a, b, s]) => [a < b ? a + '|' + b : b + '|' + a, s]));
+
+  ALL_HEROES = wrData
+    .map(h => ({
+      name: h.name,
+      display_name: h.display_name,
+      modelPickPositionHigh: h.model_avg_pick_position_high,
+      modelWinrateHigh: h.model_winrate_high,
+      abilities: h.abilities.map(a => ({
+        name: a.name,
+        display_name: a.display_name,
+        is_ultimate: a.is_ultimate,
+        winrate: a.winrate,
+        winrateHigh: a.winrate_high,
+        pickPositionHigh: a.avg_pick_position_high,
+      })),
+    }))
+    .filter(h => h.abilities.length > 0);
+
+  // Reference-only: Valve's own kit order (Q, W, E, ...) per hero, used purely to
+  // sort a hero's chosen basics for display. "_ad" variants aren't listed there
+  // under their own name, so strip the suffix before both building and looking up.
+  SLOT_ORDER = {};
+  for (const heroData of Object.values(heroAbilities)) {
+    (heroData.abilities || []).flat()
+      .filter(name => !name.startsWith('generic_hidden') && !name.startsWith('special_bonus'))
+      .forEach((name, i) => { SLOT_ORDER[name.replace(/_ad$/, '')] = i; });
+  }
+
+  initDraft();
+}
+
+function slotOrderFor(abilityName) {
+  return SLOT_ORDER[abilityName.replace(/_ad$/, '')] ?? 99;
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function toAbilityItem(a, ownerHeroDisplayName) {
+  return { kind: 'ability', name: a.name, display_name: a.display_name, hero: ownerHeroDisplayName, isUlt: a.is_ultimate, winrate: a.winrate, winrateHigh: a.winrateHigh, pickPositionHigh: a.pickPositionHigh, picked: false };
+}
+
+// Hero models only (not abilities) get their raw pick position reshaped before it
+// ever reaches pickScore/etc, applied once at pool-build time. Models already at 5
+// or below are left untouched (already great, no need to reshape them); anything
+// above 5 follows x -> x^2/25, but never drops below 5 even if the formula would
+// put it lower (x^2/25 < 5 for any x < 11.18, which would otherwise make a
+// middling model look better post-transform than it was raw).
+function transformModelPickPosition(x) {
+  if (x == null) return null;
+  if (x <= 5) return x;
+  return Math.max((x * x) / 25, 5);
+}
+
+function initDraft() {
+  YOUR_SLOT = parseInt(document.getElementById('spot-select').value);
+  poolHasRealData = true;
+  const chosen = shuffle([...ALL_HEROES]).slice(0, 12);
+  const chosenNames = new Set(chosen.map(h => h.name));
+  const outside = ALL_HEROES.filter(h => !chosenNames.has(h.name));
+
+  // Fallback pools for heroes missing a draftable basic/ultimate (e.g. Morphling has
+  // no draftable ultimate and only 2 draftable basics) - backfilled from heroes NOT
+  // among the 12 chosen, never duplicating an ability already placed.
+  const reserveBasics = shuffle(outside.flatMap(h => h.abilities.filter(a => !a.is_ultimate).map(a => toAbilityItem(a, h.display_name))));
+  const reserveUltimates = shuffle(outside.flatMap(h => h.abilities.filter(a => a.is_ultimate).map(a => toAbilityItem(a, h.display_name))));
+
+  pool = [];
+  chosen.forEach(h => {
+    pool.push({ kind: 'model', name: h.name, display_name: h.display_name, hero: h.display_name, winrateHigh: h.modelWinrateHigh, pickPositionHigh: transformModelPickPosition(h.modelPickPositionHigh), picked: false });
+
+    const basics = resolveExclusiveGroups(h.abilities.filter(a => !a.is_ultimate));
+    const ults = h.abilities.filter(a => a.is_ultimate);
+
+    // Heroes with more than 3 basics (Invoker, Kez) get a random 3, no more.
+    const ownBasics = shuffle([...basics]).slice(0, 3).map(a => toAbilityItem(a, h.display_name));
+    while (ownBasics.length < 3 && reserveBasics.length) ownBasics.push(reserveBasics.pop());
+    // Display order follows the hero's real kit order (Q, W, E, ...), not pick order.
+    ownBasics.sort((a, b) => slotOrderFor(a.name) - slotOrderFor(b.name));
+
+    // Heroes with more than 1 ultimate (Kez) get a random 1; heroes with 0 (Invoker,
+    // Morphling, ...) get a random one backfilled from outside the pool.
+    const ownUlt = ults.length
+      ? [toAbilityItem(shuffle([...ults])[0], h.display_name)]
+      : (reserveUltimates.length ? [reserveUltimates.pop()] : []);
+
+    pool.push(...ownBasics, ...ownUlt);
+  });
+
+  picks = Array(10).fill(null).map(() => []);
+  pickIndex = 0; done = false; logEntries = []; synergyFocus = null;
+  document.getElementById('done-banner').style.display = 'none';
+  render();
+  advanceBots();
+}
+
+// Screenshot import: reconstructs a past draft's pool from a screenshot of
+// Dota's own replay-viewer "Ability Draft" recap panel (the full-pool grid
+// shown while reviewing a replay, not the live picking screen), so a real
+// match can be replayed with different choices. No image recognition here -
+// each icon is cropped straight out of the screenshot and used as-is, with
+// no idea what ability/hero it actually is. That means these pool items
+// carry no pick-position/winrate/synergy data, so botPick() falls back to
+// picking uniformly at random among them (see poolHasRealData) rather than
+// scoring picks it has no real information about.
+//
+// Rather than assuming a fixed proportional layout (which breaks the moment
+// the screenshot's resolution, aspect ratio, or crop differs from whatever
+// it was calibrated against), the user marks the two opposite corners of
+// each grid directly on their own image - that works for literally any
+// resolution/aspect ratio/crop, since nothing is assumed about the image's
+// dimensions at all.
+//  - the ability grid is 8 cols x 6 rows; its rightmost 2 columns are
+//    ultimates, the other 6 are basic abilities.
+//  - the hero-model grid is 6 cols x 2 rows.
+const ABILITY_GRID_SIZE = { cols: 8, rows: 6 };
+const HERO_GRID_SIZE = { cols: 6, rows: 2 };
+const CALIBRATION_STEPS = [
+  { grid: 'ability', corner: 'top-left', label: 'Click the TOP-LEFT corner of the ABILITY icon grid (top-left corner of the very first ability icon)' },
+  { grid: 'ability', corner: 'bottom-right', label: 'Click the BOTTOM-RIGHT corner of the ABILITY icon grid (bottom-right corner of the very last ability icon)' },
+  { grid: 'hero', corner: 'top-left', label: 'Click the TOP-LEFT corner of the HERO MODEL grid (top-left corner of the first hero portrait)' },
+  { grid: 'hero', corner: 'bottom-right', label: 'Click the BOTTOM-RIGHT corner of the HERO MODEL grid (bottom-right corner of the last hero portrait)' },
+];
+let poolHasRealData = true; // false once a screenshot-imported pool is active
+let calibrationState = null; // { img, displayScale, points: [{x,y}, ...] } - points in the image's real pixel space
+let pendingScreenshotItems = null;
+
+function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+function startCalibration(file) {
+  loadImage(URL.createObjectURL(file)).then(img => {
+    calibrationState = { img, points: [] };
+    document.getElementById('screenshot-calibrate-step').style.display = 'block';
+    document.getElementById('screenshot-crop-review-step').style.display = 'none';
+    document.getElementById('screenshot-review-overlay').style.display = 'flex';
+    renderCalibrationCanvas();
+    updateCalibrationInstructions();
+  }).catch(err => {
+    console.error('Screenshot import failed:', err);
+    alert('Could not read that image: ' + err.message);
+  });
+}
+
+function updateCalibrationInstructions() {
+  const idx = calibrationState.points.length;
+  document.getElementById('calibrate-instructions').textContent =
+    idx < CALIBRATION_STEPS.length ? CALIBRATION_STEPS[idx].label : 'All corners marked - building preview...';
+}
+
+function renderCalibrationCanvas() {
+  const canvas = document.getElementById('calibrate-canvas');
+  const maxW = 820;
+  const scale = Math.min(1, maxW / calibrationState.img.naturalWidth);
+  canvas.width = calibrationState.img.naturalWidth * scale;
+  canvas.height = calibrationState.img.naturalHeight * scale;
+  calibrationState.displayScale = scale;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(calibrationState.img, 0, 0, canvas.width, canvas.height);
+
+  const pts = calibrationState.points;
+  const drawMarker = (p, color) => {
+    const x = p.x * scale, y = p.y * scale;
+    ctx.strokeStyle = color; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(x - 8, y); ctx.lineTo(x + 8, y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x, y - 8); ctx.lineTo(x, y + 8); ctx.stroke();
+  };
+  const drawGridOutline = (p1, p2, color, cols, rows) => {
+    const x1 = Math.min(p1.x, p2.x) * scale, y1 = Math.min(p1.y, p2.y) * scale;
+    const x2 = Math.max(p1.x, p2.x) * scale, y2 = Math.max(p1.y, p2.y) * scale;
+    ctx.strokeStyle = color; ctx.lineWidth = 1;
+    ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+    for (let c = 1; c < cols; c++) { const x = x1 + (x2 - x1) * c / cols; ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x, y2); ctx.stroke(); }
+    for (let r = 1; r < rows; r++) { const y = y1 + (y2 - y1) * r / rows; ctx.beginPath(); ctx.moveTo(x1, y); ctx.lineTo(x2, y); ctx.stroke(); }
+  };
+
+  if (pts.length >= 2) drawGridOutline(pts[0], pts[1], '#7eb8f7', ABILITY_GRID_SIZE.cols, ABILITY_GRID_SIZE.rows);
+  if (pts.length >= 4) drawGridOutline(pts[2], pts[3], '#5cb85c', HERO_GRID_SIZE.cols, HERO_GRID_SIZE.rows);
+  pts.forEach((p, i) => drawMarker(p, i < 2 ? '#7eb8f7' : '#5cb85c'));
+}
+
+// Crops a cols x rows grid whose two opposite corners are p1/p2 (in the
+// source image's real pixel space) into individual small canvases/data
+// URLs - a small inset shrinks each cell slightly so a not-quite-exact
+// corner click still lands inside the icon instead of on its neighbor.
+function cropGridFromCorners(srcCanvas, p1, p2, cols, rows) {
+  const x1 = Math.min(p1.x, p2.x), y1 = Math.min(p1.y, p2.y);
+  const x2 = Math.max(p1.x, p2.x), y2 = Math.max(p1.y, p2.y);
+  const cellW = (x2 - x1) / cols;
+  const cellH = (y2 - y1) / rows;
+  const inset = 0.06;
+  const cells = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const x = x1 + (c + inset) * cellW;
+      const y = y1 + (r + inset) * cellH;
+      const w = cellW * (1 - inset * 2);
+      const h = cellH * (1 - inset * 2);
+      const cellCanvas = document.createElement('canvas');
+      cellCanvas.width = 96; cellCanvas.height = 96;
+      cellCanvas.getContext('2d').drawImage(srcCanvas, x, y, w, h, 0, 0, 96, 96);
+      cells.push(cellCanvas.toDataURL());
+    }
+  }
+  return cells;
+}
+
+function finishCalibration() {
+  const [abilityTL, abilityBR, heroTL, heroBR] = calibrationState.points;
+  const srcCanvas = document.createElement('canvas');
+  srcCanvas.width = calibrationState.img.naturalWidth;
+  srcCanvas.height = calibrationState.img.naturalHeight;
+  srcCanvas.getContext('2d').drawImage(calibrationState.img, 0, 0);
+
+  const abilityCrops = cropGridFromCorners(srcCanvas, abilityTL, abilityBR, ABILITY_GRID_SIZE.cols, ABILITY_GRID_SIZE.rows);
+  const heroCrops = cropGridFromCorners(srcCanvas, heroTL, heroBR, HERO_GRID_SIZE.cols, HERO_GRID_SIZE.rows);
+
+  const items = [];
+  heroCrops.forEach((src, i) => {
+    items.push({ kind: 'model', name: 'ss_model_' + i, display_name: 'Unknown hero', hero: 'Unknown', imgSrc: src, isUlt: false, picked: false, pickPositionHigh: null, winrateHigh: null });
+  });
+  abilityCrops.forEach((src, i) => {
+    const col = i % ABILITY_GRID_SIZE.cols;
+    const isUlt = col >= 6; // rightmost 2 of 8 columns
+    items.push({ kind: 'ability', name: 'ss_ability_' + i, display_name: isUlt ? 'Unknown ultimate' : 'Unknown ability', hero: 'Unknown', imgSrc: src, isUlt, picked: false, pickPositionHigh: null, winrateHigh: null });
+  });
+
+  pendingScreenshotItems = items;
+  document.getElementById('screenshot-calibrate-step').style.display = 'none';
+  document.getElementById('screenshot-crop-review-step').style.display = 'block';
+  renderScreenshotReview(items);
+}
+
+function initDraftFromScreenshotPool(items) {
+  YOUR_SLOT = parseInt(document.getElementById('spot-select').value);
+  poolHasRealData = false;
+  pool = items;
+  picks = Array(10).fill(null).map(() => []);
+  pickIndex = 0; done = false; logEntries = []; synergyFocus = null;
+  document.getElementById('done-banner').style.display = 'none';
+  render();
+  advanceBots();
+}
+
+function renderScreenshotReview(items) {
+  const grid = document.getElementById('screenshot-review-grid');
+  grid.innerHTML = '';
+  items.forEach(item => {
+    const cell = document.createElement('div');
+    cell.className = 'screenshot-review-cell';
+    const img = document.createElement('img');
+    img.className = 'crop-thumb';
+    img.src = item.imgSrc;
+    cell.appendChild(img);
+    const label = document.createElement('div');
+    label.className = 'match-confidence';
+    label.textContent = item.kind === 'model' ? 'Model' : item.isUlt ? 'Ultimate' : 'Basic';
+    cell.appendChild(label);
+    grid.appendChild(cell);
+  });
+}
+
+function handleScreenshotFile(file) {
+  startCalibration(file);
+}
+
+function currentPlayer() { return PICK_ORDER[pickIndex]; }
+function isYourTeam(playerIdx) { return (playerIdx < 5) === (YOUR_SLOT < 5); }
+function isYourTurn() { return isYourTeam(currentPlayer()) && !done; }
+
+// A player's final loadout must be exactly 1 model + 3 basics + 1 ultimate, any order.
+function pickBlockedFor(playerIdx, item) {
+  if (item.kind === 'model') return picks[playerIdx].some(x => x.kind === 'model');
+  const abilityPicks = picks[playerIdx].filter(x => x.kind === 'ability');
+  if (item.isUlt) return abilityPicks.some(a => a.isUlt);
+  return abilityPicks.filter(a => !a.isUlt).length >= 3;
+}
+function synergyKeyFor(nameA, nameB) {
+  return nameA < nameB ? nameA + '|' + nameB : nameB + '|' + nameA;
+}
+// Synergy value between two abilities/models is the lift in combined winrate when
+// both are picked onto the same hero's loadout, vs. their individual winrates
+// (windrun's "SYNERGY" column). Missing data (no recorded pair) is treated as
+// neutral (0), not penalized. A user-set override (SYNERGY_OVERRIDES, via the
+// synergy editor) replaces the windrun value entirely when present.
+function synergyBetween(nameA, nameB) {
+  if (nameA === nameB) return 0;
+  const key = synergyKeyFor(nameA, nameB);
+  if (SYNERGY_OVERRIDES.has(key)) return SYNERGY_OVERRIDES.get(key);
+  return SYNERGY.get(key) || 0;
+}
+function hasSynergyData(nameA, nameB) {
+  if (nameA === nameB) return false;
+  const key = synergyKeyFor(nameA, nameB);
+  return SYNERGY.has(key) || SYNERGY_OVERRIDES.has(key);
+}
+
+// Shared by every "positive synergy only" score component (pool, ally, enemy):
+// negative and neutral pairs are excluded entirely rather than zeroed, so a
+// pile of anti-synergies never drags a total down, only good pairings count.
+function sumPositiveSynergy(itemName, others) {
+  return others.reduce((sum, o) => {
+    const s = synergyBetween(itemName, o.name);
+    return s > 0 ? sum + s : sum;
+  }, 0);
+}
+
+// Build quality score, shown per player and totaled per team - independent of the
+// bot's live pick-time scoring (no ramps/order-weights here, just a plain readout of
+// the finished/in-progress build): average high-skill winrate across every held item
+// (model included), as a percentage, plus the raw synergy (positive or negative) of
+// every pairwise combo among the held items.
+function buildScore(items) {
+  if (!items.length) return null;
+  const avgWinrateHigh = items.reduce((sum, p) => sum + (p.winrateHigh || 0), 0) / items.length;
+  let synergySum = 0;
+  for (let i = 0; i < items.length; i++) {
+    for (let j = i + 1; j < items.length; j++) {
+      synergySum += synergyBetween(items[i].name, items[j].name);
+    }
+  }
+  return avgWinrateHigh * 100 + synergySum;
+}
+
+// Weight on top of the raw synergy percentage, to dial how much a strong (or
+// anti-)synergy can outweigh a pick-position gap. Starts at 1 and grows by this
+// increment for every pick already made in the draft (across both teams), so
+// synergy matters more as the pool thins out and fewer good options remain.
+const SYNERGY_MULTIPLIER_BASE = 1.2;
+const SYNERGY_MULTIPLIER_INCREMENT = 0.08;
+function synergyMultiplier() {
+  return SYNERGY_MULTIPLIER_BASE + pickIndex * SYNERGY_MULTIPLIER_INCREMENT;
+}
+// Flat bonus applied whenever a pair has ANY recorded synergy data at all, positive
+// or negative - windrun only lists pairs that were actually picked together enough
+// to measure, so having data at all is itself a signal of a proven/popular combo,
+// separate from whether that combo happens to be good or bad. Starts at 0 and grows
+// quadratically with picks already made in the draft (across both teams), so known
+// combos barely matter early on but compound quickly later as the pool thins out.
+const KNOWN_COMBO_BONUS_COEFFICIENT = 0.008;
+function knownComboBonus() {
+  return pickIndex * pickIndex * KNOWN_COMBO_BONUS_COEFFICIENT;
+}
+// A held pick's own draft order (for this seat specifically, not the overall draft)
+// further weights its synergy contribution - this seat's 1st pick usually anchors
+// the build the most, so it counts for more than a hastier 4th pick. A seat holds
+// at most 4 items when a 5th is being scored, so index 0-3 always covers it.
+const SYNERGY_ORDER_WEIGHTS = [1.4, 1, 0.8, 0.6];
+
+// Rewards keeping options open: this item's total positive synergy with
+// everything still available in the pool (the same figure shown in the
+// pool-synergy badge), scaled by a discrete weight per pick number for this
+// seat - front-loaded on the 1st pick, tapering off, zero on the 5th/last
+// pick (nothing left to combo into afterward). Indexed by picks[playerIdx]
+// .length (0 on the 1st pick through 4 on the 5th).
+const POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE = [0.5, 0.15, 0.1, 0.1, 0];
+function poolSynergyTerm(item, playerIdx) {
+  const weight = POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[playerIdx].length];
+  return totalPositivePoolSynergy(item) * weight;
+}
+
+function enemiesOf(playerIdx) { return playerIdx < 5 ? [5, 6, 7, 8, 9] : [0, 1, 2, 3, 4]; }
+function alliesOf(playerIdx) {
+  return (playerIdx < 5 ? [0, 1, 2, 3, 4] : [5, 6, 7, 8, 9]).filter(p => p !== playerIdx);
+}
+
+// The next index in PICK_ORDER (after afterIndex) where seatIdx picks again,
+// or null if they've already made all their picks.
+function nextPickIndexFor(seatIdx, afterIndex) {
+  for (let i = afterIndex + 1; i < PICK_ORDER.length; i++) {
+    if (PICK_ORDER[i] === seatIdx) return i;
+  }
+  return null;
+}
+
+// Denies the enemy team good stuff: for each enemy seat, this item's positive
+// synergy with everything THEY already hold, weighted by how soon they pick
+// again - 10/(4 + picksBetween), where picksBetween is the count of other
+// picks strictly between now and their next turn (always odd, since seats
+// alternate strictly by team within a round: picking right after this one
+// gives the closest possible gap, 1 pick between, for a multiplier of 2;
+// picking 17 picks from now gives 10/21). A seat whose model/ultimate/3-basics
+// slot for this item's category is already filled is skipped entirely (via
+// pickBlockedFor, the same check that governs their own eligibility) - there's
+// nothing to deny if they can't take this category anyway. Summed across all
+// 5 enemies, since each has their own distance. Added to `adjustment` like
+// every other term here, so denying a good enemy target pulls this item
+// earlier, same direction as a good synergy with the bot's own build.
+function enemySynergyTerm(item, playerIdx) {
+  let total = 0;
+  for (const enemy of enemiesOf(playerIdx)) {
+    if (pickBlockedFor(enemy, item)) continue;
+    const nextIdx = nextPickIndexFor(enemy, pickIndex);
+    if (nextIdx == null) continue;
+    const picksBetween = nextIdx - pickIndex - 1;
+    const weight = 10 / (4 + picksBetween);
+    total += weight * sumPositiveSynergy(item.name, picks[enemy]);
+  }
+  return total;
+}
+
+// The mirror case for allies: this item's positive synergy with everything
+// the bot's teammates already hold, flat-weighted (no distance scaling,
+// since a teammate isn't "denied" by a delayed pick the way an enemy would
+// be), skipping any ally whose slot for this item's category is already
+// filled (same pickBlockedFor check as above - nothing to avoid stepping on
+// once they've already locked that category in). Subtracted from
+// `adjustment` instead of added - the opposite direction of every other term
+// here - so a strong ally-synergy candidate gets deprioritized rather than
+// prioritized, leaving it for that ally to pick themselves instead of this
+// seat taking it first.
+function allySynergyTerm(item, playerIdx) {
+  let total = 0;
+  for (const ally of alliesOf(playerIdx)) {
+    if (pickBlockedFor(ally, item)) continue;
+    total += sumPositiveSynergy(item.name, picks[ally]);
+  }
+  return total * 2;
+}
+
+// Lower avgPickPosition = picked earlier by real high-skill players = more prized,
+// but a strong high-skill win rate pulls that same item earlier still (the +60 is
+// just a constant offset, same for everyone, so it doesn't change any ranking - it
+// only exists to keep the number positive/readable). Missing data sorts last rather
+// than first. Subtracting synergy with everything already held by this player pulls
+// well-paired options toward the front (and a negative synergy - an anti-combo -
+// pushes a candidate back, since subtracting a negative adds to the score). The
+// enemy-denial and ally-avoidance terms are added/subtracted the same way - see
+// enemySynergyTerm/allySynergyTerm above for why each goes the direction it does.
+function pickScore(item, playerIdx) {
+  const base = item.pickPositionHigh == null ? Infinity : item.pickPositionHigh - item.winrateHigh * 100 + 60;
+  const multiplier = synergyMultiplier();
+  const bonus = knownComboBonus();
+  let adjustment = 0;
+  picks[playerIdx].forEach((held, i) => {
+    const orderWeight = SYNERGY_ORDER_WEIGHTS[i];
+    adjustment += synergyBetween(item.name, held.name) * multiplier * orderWeight;
+    if (hasSynergyData(item.name, held.name)) adjustment += bonus * orderWeight;
+  });
+  adjustment += poolSynergyTerm(item, playerIdx);
+  adjustment += enemySynergyTerm(item, playerIdx);
+  adjustment -= allySynergyTerm(item, playerIdx);
+  return base - adjustment;
+}
+
+function botPick() {
+  const p = currentPlayer();
+  const available = pool.filter(a => !a.picked && !pickBlockedFor(p, a));
+  if (!available.length) return null;
+
+  // A screenshot-imported pool carries no real ability/hero identity for bots
+  // to judge, so there's nothing meaningful to score - just pick randomly.
+  if (!poolHasRealData) return available[Math.floor(Math.random() * available.length)];
+
+  // Models and abilities compete directly - whichever remaining option scores
+  // lowest (earliest high-skill pick position, adjusted for synergy with this
+  // player's current picks) wins, regardless of kind.
+  return available.reduce((best, current) => pickScore(current, p) < pickScore(best, p) ? current : best);
+}
+
+function confirmPick(ability) {
+  if (!ability || ability.picked) return;
+  const p = currentPlayer();
+  ability.picked = true;
+  picks[p].push(ability);
+  logEntries.push({ player: p, name: ability.display_name, isUlt: ability.isUlt, isYou: isYourTeam(p) });
+  pickIndex++;
+  if (pickIndex >= PICK_ORDER.length) { done = true; render(); return; }
+  render();
+  if (!isYourTurn()) setTimeout(advanceBots, 400);
+}
+
+function advanceBots() {
+  if (synergyEditMode) return;
+  while (pickIndex < PICK_ORDER.length && !isYourTurn()) {
+    const b = botPick();
+    if (!b) break;
+    confirmPick(b);
+  }
+  render();
+}
+
+function iconSrcFor(a) {
+  if (a.imgSrc) return a.imgSrc; // screenshot-cropped item - use the crop itself, not a CDN lookup
+  return a.kind === 'model'
+    ? heroPortraitSrcFor(a.name)
+    : ICON_BASE + (ICON_NAME_OVERRIDES[a.name] || a.name) + '.png';
+}
+
+// Sum of `item`'s synergy against every other still-available (unpicked) pool
+// item, counting only the positive pairings - a rough "how much upside is left
+// to combo into" signal, shown on unpicked cards during drafting. Negative and
+// neutral pairs are excluded entirely, so a card surrounded by anti-synergies
+// doesn't get dragged down, only credited for what's good.
+function totalPositivePoolSynergy(item) {
+  return sumPositiveSynergy(item.name, pool.filter(o => o !== item && !o.picked));
+}
+
+function buildPoolSynergyBadge(a) {
+  const total = totalPositivePoolSynergy(a);
+  const badge = document.createElement('span');
+  badge.className = 'pool-synergy-badge';
+  if (total > 0.005) badge.classList.add('positive');
+  badge.textContent = (total > 0 ? '+' : '') + total.toFixed(2);
+  badge.title = 'Sum of positive-only synergies vs. everything else still available';
+  return badge;
+}
+
+function buildCard(a) {
+  const card = document.createElement('div');
+  const cls = ['ability-card'];
+  const blockedForYou = done ? false : pickBlockedFor(currentPlayer(), a);
+  if (a.picked) cls.push('picked');
+  if (a.kind === 'model') cls.push('model');
+  if (a.kind === 'ability' && a.isUlt) cls.push('ult');
+  if (!isYourTurn() || a.picked || blockedForYou) cls.push('disabled');
+  card.className = cls.join(' ');
+  card.title = a.kind === 'model'
+    ? a.display_name
+    : `${a.display_name} (${a.hero})${a.winrate ? ' — ' + Math.round(a.winrate * 100) + '% WR' : ''}`;
+  const img = document.createElement('img');
+  img.src = iconSrcFor(a);
+  img.alt = a.display_name;
+  img.onerror = () => { img.style.background = '#333'; img.src = ''; };
+  card.appendChild(img);
+  if (!a.picked) {
+    const badge = buildPoolSynergyBadge(a);
+    if (badge) card.appendChild(badge);
+  }
+  if (isYourTurn() && !a.picked && !blockedForYou) {
+    card.addEventListener('click', () => { confirmPick(a); });
+  }
+  return card;
+}
+
+// Synergy editor card: clickable regardless of picked/turn state (selects this
+// item as the inspection focus), and carries an overlay showing its synergy with
+// the current focus on every OTHER card. Kept separate from buildCard rather than
+// branching inside it, since the two modes share almost nothing behaviorally.
+function buildSynergyCard(a) {
+  const card = document.createElement('div');
+  const cls = ['ability-card', 'edit-mode'];
+  if (a.picked) cls.push('picked');
+  if (a.kind === 'model') cls.push('model');
+  if (a.kind === 'ability' && a.isUlt) cls.push('ult');
+  if (synergyFocus === a) cls.push('synergy-focus');
+  card.className = cls.join(' ');
+  card.title = a.kind === 'model'
+    ? a.display_name
+    : `${a.display_name} (${a.hero})`;
+  const img = document.createElement('img');
+  img.src = iconSrcFor(a);
+  img.alt = a.display_name;
+  img.onerror = () => { img.style.background = '#333'; img.src = ''; };
+  card.appendChild(img);
+  if (synergyFocus && synergyFocus !== a) card.appendChild(buildSynergyOverlay(a));
+  card.addEventListener('click', () => { synergyFocus = a; renderPool(); });
+  return card;
+}
+
+// otherItem is any pool item besides the current synergyFocus. Shows windrun's
+// recorded value (blank if no pair data exists) and the user's override (blank
+// until explicitly set) with an edit button that turns the value into a number
+// input; saving replaces the override (or clears it, on an empty value) and
+// persists immediately.
+function buildSynergyOverlay(otherItem) {
+  const key = synergyKeyFor(synergyFocus.name, otherItem.name);
+  const overlay = document.createElement('div');
+  overlay.className = 'synergy-overlay';
+  overlay.addEventListener('click', (e) => e.stopPropagation());
+
+  const wrValue = SYNERGY.has(key) ? SYNERGY.get(key) : null;
+  const wrRow = document.createElement('div');
+  wrRow.className = 'syn-row';
+  wrRow.innerHTML = `<span>Windrun</span><span>${wrValue == null ? '—' : wrValue.toFixed(2)}</span>`;
+  overlay.appendChild(wrRow);
+
+  const hasOverride = SYNERGY_OVERRIDES.has(key);
+  const adjValue = hasOverride ? SYNERGY_OVERRIDES.get(key) : null;
+  const adjRow = document.createElement('div');
+  adjRow.className = 'syn-row adj';
+  const label = document.createElement('span');
+  label.textContent = 'Adj';
+  const valSpan = document.createElement('span');
+  valSpan.className = 'adj-val';
+  valSpan.textContent = adjValue == null ? '—' : adjValue.toFixed(2);
+  const editBtn = document.createElement('button');
+  editBtn.className = 'syn-edit-btn';
+  editBtn.textContent = '✎';
+  editBtn.title = 'Edit adjusted synergy';
+  editBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const input = document.createElement('input');
+    input.type = 'number';
+    input.step = '0.01';
+    input.value = hasOverride ? adjValue : '';
+    adjRow.replaceChildren(label, input);
+    input.focus();
+    input.select();
+    const save = () => {
+      const raw = input.value.trim();
+      if (raw === '') {
+        SYNERGY_OVERRIDES.delete(key);
+      } else {
+        const num = parseFloat(raw);
+        if (!Number.isNaN(num)) SYNERGY_OVERRIDES.set(key, num);
+      }
+      persistSynergyOverrides();
+      renderPool();
+    };
+    input.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter') { ev.preventDefault(); save(); }
+      else if (ev.key === 'Escape') { ev.preventDefault(); renderPool(); }
+    });
+    input.addEventListener('blur', save);
+    input.addEventListener('click', (ev) => ev.stopPropagation());
+  });
+  adjRow.appendChild(label);
+  adjRow.appendChild(valSpan);
+  adjRow.appendChild(editBtn);
+  overlay.appendChild(adjRow);
+
+  return overlay;
+}
+
+function renderPool() {
+  document.getElementById('pool-loading').style.display = 'none';
+  const modelsLeftEl = document.getElementById('pool-models-left');
+  const modelsRightEl = document.getElementById('pool-models-right');
+  const ultsEl = document.getElementById('pool-ultimates');
+  const stdEl = document.getElementById('pool-standard');
+  modelsLeftEl.innerHTML = ''; modelsRightEl.innerHTML = ''; ultsEl.innerHTML = ''; stdEl.innerHTML = '';
+  const models = pool.filter(a => a.kind === 'model');
+  const half = Math.ceil(models.length / 2);
+  const cardFor = synergyEditMode ? buildSynergyCard : buildCard;
+  models.forEach((a, i) => (i < half ? modelsLeftEl : modelsRightEl).appendChild(cardFor(a)));
+  pool.forEach(a => {
+    if (a.kind === 'model') return;
+    const card = cardFor(a);
+    (a.isUlt ? ultsEl : stdEl).appendChild(card);
+  });
+}
+
+// Model always leftmost, ultimate always rightmost, basics sorted Q/W/E in between -
+// independent of the order they were actually picked in.
+function orderedSlotsFor(playerPicks) {
+  const model = playerPicks.find(x => x.kind === 'model') || null;
+  const basics = playerPicks.filter(x => x.kind === 'ability' && !x.isUlt).sort((a, b) => slotOrderFor(a.name) - slotOrderFor(b.name));
+  const ult = playerPicks.find(x => x.kind === 'ability' && x.isUlt) || null;
+  return [model, basics[0] || null, basics[1] || null, basics[2] || null, ult];
+}
+
+function renderPlayers() {
+  const leftEl = document.getElementById('players-left');
+  const rightEl = document.getElementById('players-right');
+  leftEl.innerHTML = ''; rightEl.innerHTML = '';
+  for (let i = 0; i < 10; i++) {
+    const isActive = !done && currentPlayer() === i;
+    const isYou = isYourTeam(i);
+    const isRadiant = i < 5;
+    const row = document.createElement('div');
+    row.className = 'side-player' + (isRadiant ? ' radiant' : ' dire') + (isActive ? ' active' : '') + (isYou && !isActive ? ' you' : '');
+
+    // Model sits toward the outer edge of the screen: left for Radiant, right for Dire.
+    // Everything else keeps the same left-to-right order (basics Q/W/E, then ultimate) -
+    // only the model's position moves, not a full mirror of the row.
+    const orderedSlots = orderedSlotsFor(picks[i]);
+    const displaySlots = isRadiant ? orderedSlots : [...orderedSlots.slice(1), orderedSlots[0]];
+
+    if (isYou) {
+      const tag = document.createElement('span');
+      tag.className = 'you-tag corner-tag';
+      tag.textContent = 'You';
+      row.appendChild(tag);
+    }
+
+    const scoreEl = document.createElement('div');
+    scoreEl.className = 'player-score';
+    const score = buildScore(picks[i]);
+    scoreEl.textContent = score == null ? '' : `Score: ${score.toFixed(1)}`;
+    row.appendChild(scoreEl);
+
+    const slotsEl = document.createElement('div');
+    slotsEl.className = 'side-player-slots';
+    displaySlots.forEach((pick, idx) => {
+      const isModelSlot = isRadiant ? idx === 0 : idx === displaySlots.length - 1;
+      const slot = document.createElement('div');
+      slot.className = 'mini-slot' + (isModelSlot ? ' model' : '') + (pick ? ' filled' + (!isModelSlot && pick.isUlt ? ' ult' : '') : '');
+      if (pick) {
+        slot.title = pick.display_name;
+        const img = document.createElement('img');
+        img.src = iconSrcFor(pick);
+        img.alt = pick.display_name;
+        img.onerror = () => { img.style.background = '#333'; img.src = ''; };
+        slot.appendChild(img);
+      }
+      slotsEl.appendChild(slot);
+    });
+
+    row.appendChild(slotsEl);
+    (isRadiant ? leftEl : rightEl).appendChild(row);
+  }
+}
+
+function renderControls() {
+  const badge = document.getElementById('turn-badge');
+  const status = document.getElementById('status');
+  const banner = document.getElementById('done-banner');
+  if (synergyEditMode) {
+    badge.textContent = 'Synergy editor (draft paused)';
+    badge.className = 'turn-badge bot';
+    status.textContent = synergyFocus
+      ? `Showing synergies for ${synergyFocus.display_name} — click another spell/model to switch, or the edit button to adjust a value`
+      : 'Click any spell or model (drafted or not) to inspect its synergies';
+    banner.style.display = 'none';
+    return;
+  }
+  if (done) {
+    badge.textContent = 'Draft complete';
+    badge.className = 'turn-badge bot';
+    banner.style.display = 'block';
+    const radiantScore = [0, 1, 2, 3, 4].reduce((sum, p) => sum + (buildScore(picks[p]) || 0), 0);
+    const direScore = [5, 6, 7, 8, 9].reduce((sum, p) => sum + (buildScore(picks[p]) || 0), 0);
+    const winner = radiantScore >= direScore ? 'RADIANT' : 'DIRE';
+    document.getElementById('done-headline').textContent =
+      `${winner} WINS! Dire score: ${direScore.toFixed(1)}  Radiant score: ${radiantScore.toFixed(1)}`;
+    const teamStart = YOUR_SLOT < 5 ? 0 : 5;
+    const summary = Array.from({ length: 5 }, (_, i) => teamStart + i)
+      .map(p => `P${p + 1}: ${picks[p].map(a => a.display_name).join(', ')}`)
+      .join(' | ');
+    document.getElementById('done-summary').textContent = summary;
+    status.textContent = '';
+  } else if (isYourTurn()) {
+    badge.textContent = `Your pick — Player ${currentPlayer() + 1} (${pickIndex + 1} of ${PICK_ORDER.length})`;
+    badge.className = 'turn-badge';
+    status.textContent = 'Click an ability to pick it';
+  } else {
+    badge.textContent = 'Opponent picking...';
+    badge.className = 'turn-badge bot';
+    status.textContent = '';
+  }
+}
+
+function renderLog() {
+  document.getElementById('log').innerHTML = logEntries.slice().reverse().map(e =>
+    `<div class="log-entry${e.isYou ? ' you' : ''}">Player ${e.player + 1} picked ${e.name}${e.isUlt ? ' (ult)' : ''}</div>`
+  ).join('');
+}
+
+function render() { renderPool(); renderPlayers(); renderControls(); renderLog(); }
+
+document.getElementById('reset-btn').addEventListener('click', initDraft);
+
+function toggleSynergyEditMode() {
+  synergyEditMode = !synergyEditMode;
+  synergyFocus = null;
+  document.getElementById('synergy-toggle-btn').textContent = synergyEditMode ? 'Return to draft' : 'See/edit synergies';
+  document.getElementById('clear-overrides-btn').style.display = synergyEditMode ? '' : 'none';
+  render();
+  if (!synergyEditMode && !done && !isYourTurn()) setTimeout(advanceBots, 400);
+}
+document.getElementById('synergy-toggle-btn').addEventListener('click', toggleSynergyEditMode);
+
+document.getElementById('clear-overrides-btn').addEventListener('click', () => {
+  if (SYNERGY_OVERRIDES.size === 0) return;
+  if (!confirm(`Clear all ${SYNERGY_OVERRIDES.size} saved synergy override(s)? This can't be undone.`)) return;
+  SYNERGY_OVERRIDES.clear();
+  persistSynergyOverrides();
+  render();
+});
+
+document.getElementById('import-screenshot-btn').addEventListener('click', () => {
+  document.getElementById('screenshot-file-input').click();
+});
+document.getElementById('screenshot-file-input').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  e.target.value = ''; // allow re-selecting the same file later
+  if (file) handleScreenshotFile(file);
+});
+document.getElementById('calibrate-canvas').addEventListener('click', (e) => {
+  if (!calibrationState || calibrationState.points.length >= CALIBRATION_STEPS.length) return;
+  const rect = e.target.getBoundingClientRect();
+  const scale = calibrationState.displayScale;
+  calibrationState.points.push({ x: (e.clientX - rect.left) / scale, y: (e.clientY - rect.top) / scale });
+  renderCalibrationCanvas();
+  updateCalibrationInstructions();
+  if (calibrationState.points.length === CALIBRATION_STEPS.length) finishCalibration();
+});
+document.getElementById('calibrate-restart-btn').addEventListener('click', () => {
+  if (!calibrationState) return;
+  calibrationState.points = [];
+  renderCalibrationCanvas();
+  updateCalibrationInstructions();
+});
+document.getElementById('screenshot-remark-btn').addEventListener('click', () => {
+  if (!calibrationState) return;
+  calibrationState.points = [];
+  document.getElementById('screenshot-calibrate-step').style.display = 'block';
+  document.getElementById('screenshot-crop-review-step').style.display = 'none';
+  renderCalibrationCanvas();
+  updateCalibrationInstructions();
+});
+document.getElementById('screenshot-cancel-btn-calibrate').addEventListener('click', () => {
+  document.getElementById('screenshot-review-overlay').style.display = 'none';
+});
+document.getElementById('screenshot-cancel-btn').addEventListener('click', () => {
+  document.getElementById('screenshot-review-overlay').style.display = 'none';
+});
+document.getElementById('screenshot-confirm-btn').addEventListener('click', () => {
+  document.getElementById('screenshot-review-overlay').style.display = 'none';
+  if (pendingScreenshotItems) initDraftFromScreenshotPool(pendingScreenshotItems);
+});
+
+loadData().catch(err => {
+  console.error('loadData failed:', err);
+  document.getElementById('pool-loading').textContent = 'Failed to load ability data: ' + err.message;
+});
+</script>
+</body>
+</html>
