@@ -2,7 +2,7 @@
 
 Dota 2 Ability Draft simulator, hosted on Cloudflare Pages.
 
-Everything in `public/` is the site. Every push to `main` deploys it to Cloudflare Pages via `.github/workflows/deploy.yml`.
+Everything in `public/` is the site. Every push to `main` deploys it to the Pages project's `testing` branch alias (testing.ad-simulator-dl4.pages.dev), not production, via `.github/workflows/deploy.yml`.
 
 ## Deploy setup (one time)
 
