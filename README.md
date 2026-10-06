@@ -2,4 +2,14 @@
 
 Dota 2 Ability Draft simulator, hosted on Cloudflare Pages.
 
-The page loads `/heroes_abilities.json` and `/ability_synergies.json` from the site root; those data files are not in this repo yet.
+Everything in `public/` is the site. Every push to `main` deploys it to Cloudflare Pages via `.github/workflows/deploy.yml`.
+
+## Deploy setup (one time)
+
+In the repo's Settings → Secrets and variables → Actions:
+
+- Secret `CLOUDFLARE_API_TOKEN`: a Cloudflare API token with the "Cloudflare Pages: Edit" permission.
+- Secret `CLOUDFLARE_ACCOUNT_ID`: your Cloudflare account ID.
+- Variable `CF_PAGES_PROJECT`: the name of the existing Pages project.
+
+The deploy refuses to run unless `public/heroes_abilities.json` and `public/ability_synergies.json` are present, since the page needs them.
