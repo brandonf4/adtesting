@@ -85,6 +85,7 @@
     .loading { text-align: center; padding: 2rem; color: #888; }
     .spot-selector { display: flex; align-items: center; gap: 8px; margin-bottom: 0.4rem; flex-wrap: wrap; flex-shrink: 0; }
     .spot-selector label { font-size: 12px; color: #888; }
+    .spot-selector-right { margin-left: auto; display: flex; gap: 8px; }
     .spot-selector select { background: #252540; color: #e0e0e0; border: 1px solid #444; border-radius: 6px; padding: 4px 8px; font-size: 12px; }
     .screenshot-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 2rem; }
     .screenshot-review-panel { background: #1a1a2e; border: 1px solid #444; border-radius: 10px; padding: 20px; max-width: 900px; max-height: 90vh; overflow-y: auto; }
@@ -114,11 +115,13 @@
     <option value="5">Dire</option>
   </select>
   <button class="reset-btn" id="reset-btn">New draft</button>
-  <button class="reset-btn" id="synergy-toggle-btn">See/edit synergies</button>
-  <button class="reset-btn" id="clear-overrides-btn" style="display:none">Clear all overrides</button>
   <button class="reset-btn" id="import-screenshot-btn">Import from screenshot</button>
   <input type="file" id="screenshot-file-input" accept="image/*" style="display:none" />
   <a class="reset-btn" href="https://ad-simulator-mp.abilitydraft.workers.dev/simulator.html">Multiplayer</a>
+  <div class="spot-selector-right">
+    <button class="reset-btn" id="clear-overrides-btn" style="display:none">Clear all overrides</button>
+    <button class="reset-btn" id="synergy-toggle-btn">See/edit synergies</button>
+  </div>
 </div>
 
 <div id="screenshot-review-overlay" class="screenshot-overlay" style="display:none">
