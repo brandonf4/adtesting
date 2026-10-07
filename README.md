@@ -12,3 +12,10 @@ In the repo's Settings → Secrets and variables → Actions:
 - Secret `CLOUDFLARE_ACCOUNT_ID`: your Cloudflare account ID.
 
 The deploy refuses to run unless `public/heroes_abilities.json` and `public/ability_synergies.json` are present, since the page needs them.
+
+## Refreshing the windrun data
+
+windrun blocks server-side requests, so the data is exported from a browser:
+
+1. On windrun.io, open the browser console and run `scripts/windrun-export.js`, or save the `ability-high-skill` and `ability-pairs` API responses for the latest patch.
+2. Run `scripts/convert-windrun.py` (see its header) to regenerate the two JSON files in `public/`.
