@@ -868,13 +868,18 @@ function botDecision() {
   decision.personal = personal;
   decision.rows = available.map(a => ({ item: a, ...scoreParts(a, p, parts, bonuses) }))
     .sort((x, y) => x.total - y.total);
-  // Hard override: a category every enemy has already filled can't be taken
-  // from us by them, so (assuming our team doesn't take it either) it's
-  // guaranteed to still be there later - defer it while this seat still has
-  // any other category to fill. If every category left is in that state,
-  // pick normally among them.
-  const enemyFull = ['model', 'ult', 'basic'].filter(cat =>
-    enemiesOf(p).every(e => slotsLeftFor(e, cat) === 0));
+  // Hard override: if every enemy who picks between now and this seat's next
+  // turn has already filled a category, nothing in it can be taken from us
+  // before we pick again (allies aren't counted), so defer it while this seat
+  // still has any other category to fill. If every category left is in that
+  // state, pick normally among them. On a seat's last pick there's no next
+  // turn, so nothing is deferred.
+  const next = nextPickIndexFor(p, pickIndex);
+  const enemiesBefore = next == null ? null
+    : [...new Set(PICK_ORDER.slice(pickIndex + 1, next))].filter(s => enemiesOf(p).includes(s));
+  decision.enemiesBeforeNext = enemiesBefore;
+  const enemyFull = enemiesBefore == null ? [] : ['model', 'ult', 'basic'].filter(cat =>
+    enemiesBefore.every(e => slotsLeftFor(e, cat) === 0));
   const deferrable = decision.rows.filter(r => enemyFull.includes(categoryOf(r.item)));
   decision.deferredCats = deferrable.length < decision.rows.length
     ? [...new Set(deferrable.map(r => categoryOf(r.item)))] : [];
@@ -1275,7 +1280,7 @@ bonus = −${SCARCITY_WEIGHT} × clamp(fallback − best, 0, ${SCARCITY_CAP})</d
         const tag = [i === 0 ? 'best' : '', i < s.taken ? 'assumed taken' : '', i + 1 === s.fallbackRank ? 'fallback' : ''].filter(Boolean).join(', ');
         return `<tr class="${cls}"><td>${i + 1}. ${o.item.display_name}</td><td>${n1(o.p)}</td><td>${tag}</td></tr>`;
       });
-      const deferred = d.deferredCats && d.deferredCats.includes(cat) ? ' <span style="color:#f4c542">(deferred: all enemies filled)</span>' : '';
+      const deferred = d.deferredCats && d.deferredCats.includes(cat) ? ' <span style="color:#f4c542">(deferred: every enemy picking before the next turn has filled it)</span>' : '';
       html += `<div class="cat"><b>${CAT_LABEL[cat]}</b>: ${s.enemyPicks} enemy picks → ${s.taken} taken, ${s.slotsLeft} slot${s.slotsLeft === 1 ? '' : 's'} left → fallback rank ${s.fallbackRank}${deferred}${mine}
         ${tipTable(['Option', 'Personal', ''], rows)}
         <div class="f">−${SCARCITY_WEIGHT} × clamp(${Number.isFinite(s.fallback) ? n1(s.fallback) : 'none left'} − ${n1(s.best)}, 0, ${SCARCITY_CAP}) = ${s.bonus ? '−' + n1(s.bonus) : '0.0'}</div></div>`;
@@ -1330,7 +1335,7 @@ function renderBotPanel() {
     html += `<div>Screenshot pool: options have no data, so the bot picks at random.</div>`;
   } else {
     if (d.deferredCats && d.deferredCats.length) {
-      html += `<div style="margin-bottom:6px;color:#f4c542">Deferred (hard override): ${d.deferredCats.map(c => catLabel[c]).join(', ')}. All 5 enemies have filled ${d.deferredCats.length > 1 ? 'these categories' : 'this category'}, so it will come back to this player.</div>`;
+      html += `<div style="margin-bottom:6px;color:#f4c542">Deferred (hard override): ${d.deferredCats.map(c => catLabel[c]).join(', ')}. Every enemy picking before this player's next turn (${(d.enemiesBeforeNext || []).map(e => 'P' + (e + 1)).join(', ') || 'none'}) has filled ${d.deferredCats.length > 1 ? 'these categories' : 'this category'}, so nothing in it can be taken before then.</div>`;
     }
     const cols = [['base', 'Base'], ['ownSynergy', 'Own synergy'], ['combo', 'Known combo'], ['pool', 'Pool upside'], ['enemy', 'Enemy denial'], ['ally', 'Ally avoid'], ['scarcity', 'Scarcity'], ['total', 'Total']];
     html += `<table><thead><tr><th>Option (top ${Math.min(10, d.rows.length)} of ${d.rows.length})</th>${cols.map(([k, l]) => `<th data-col="${k}">${l}</th>`).join('')}</tr></thead><tbody>`;
