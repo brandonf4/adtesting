@@ -707,7 +707,10 @@ function allySynergyTerm(item, playerIdx) {
 // pushes a candidate back, since subtracting a negative adds to the score). The
 // enemy-denial and ally-avoidance terms are added/subtracted the same way - see
 // enemySynergyTerm/allySynergyTerm above for why each goes the direction it does.
-function pickScore(item, playerIdx) {
+// The bot's own view of an item: base value plus everything about how it fits
+// THIS seat's build (own synergy, known-combo bonus, pool upside) - i.e.
+// pickScore without the enemy-denial/ally-avoidance terms or category scarcity.
+function personalScore(item, playerIdx) {
   const base = item.pickPositionHigh == null ? Infinity : item.pickPositionHigh - item.winrateHigh * 100 + 60;
   const multiplier = synergyMultiplier();
   const bonus = knownComboBonus();
@@ -718,9 +721,73 @@ function pickScore(item, playerIdx) {
     if (hasSynergyData(item.name, held.name)) adjustment += bonus * orderWeight;
   });
   adjustment += poolSynergyTerm(item, playerIdx);
-  adjustment += enemySynergyTerm(item, playerIdx);
-  adjustment -= allySynergyTerm(item, playerIdx);
   return base - adjustment;
+}
+
+// Category scarcity: a flat bonus shared by every option in a category (model,
+// ultimate, basic), so the order within a category never changes - only which
+// category the bot spends this pick on. It doesn't predict what the enemy will
+// take; it assumes floor(enemy picks before this seat's next turn / 2) of this
+// seat's top options in the category are gone (only enemies who can still take
+// that category count), then compares the category's best option against what
+// would be left: the option at rank taken + slotsLeft, counting the best as
+// rank 1 (slotsLeft > 1 for basics, since those slots all fill from one list). The
+// bigger that gap, the more urgent the category, up to SCARCITY_CAP. Ally picks
+// aren't counted.
+const SCARCITY_WEIGHT = 0.5;
+const SCARCITY_CAP = 30;
+function categoryOf(item) {
+  if (item.kind === 'model') return 'model';
+  return item.isUlt ? 'ult' : 'basic';
+}
+function slotsLeftFor(playerIdx, cat) {
+  const held = picks[playerIdx];
+  if (cat === 'model') return held.some(x => x.kind === 'model') ? 0 : 1;
+  const abilities = held.filter(x => x.kind === 'ability');
+  if (cat === 'ult') return abilities.some(a => a.isUlt) ? 0 : 1;
+  return 3 - abilities.filter(a => !a.isUlt).length;
+}
+// Returns { model, ult, basic } -> flat bonus, given personal scores for every
+// option this seat can currently take.
+function categoryScarcityBonuses(playerIdx, available, personal) {
+  const bonuses = { model: 0, ult: 0, basic: 0 };
+  const next = nextPickIndexFor(playerIdx, pickIndex);
+  if (next == null) return bonuses; // last pick: nothing to wait for
+  for (const cat of Object.keys(bonuses)) {
+    const options = available.filter(a => categoryOf(a) === cat);
+    if (!options.length) continue;
+    const sample = options[0];
+    let enemyPicks = 0;
+    for (let i = pickIndex + 1; i < next; i++) {
+      const seat = PICK_ORDER[i];
+      if (!isYourTeam(seat) === !isYourTeam(playerIdx)) continue; // ally of this seat
+      if (!pickBlockedFor(seat, sample)) enemyPicks++;
+    }
+    const taken = Math.floor(enemyPicks / 2);
+    const scores = options.map(a => personal.get(a)).sort((a, b) => a - b);
+    const best = scores[0];
+    if (!Number.isFinite(best)) continue;
+    // Skipping now: the top `taken` options (the current best included) are
+    // gone, and the remaining slotsLeft slots get filled from what's next, so
+    // the worst of those is the fallback.
+    const idx = taken + slotsLeftFor(playerIdx, cat) - 1;
+    const fallback = idx < scores.length ? scores[idx] : Infinity;
+    const urgency = Math.min(Math.max(fallback - best, 0), SCARCITY_CAP);
+    bonuses[cat] = urgency * SCARCITY_WEIGHT;
+  }
+  return bonuses;
+}
+
+// Lower = better. personalScore, then the enemy-denial and ally-avoidance terms
+// are added/subtracted the same way - see enemySynergyTerm/allySynergyTerm above
+// for why each goes the direction it does - and finally the category scarcity
+// bonus for this option's category.
+function pickScore(item, playerIdx, personal, scarcity) {
+  let score = personal ? personal.get(item) : personalScore(item, playerIdx);
+  score -= enemySynergyTerm(item, playerIdx);
+  score += allySynergyTerm(item, playerIdx);
+  if (scarcity) score -= scarcity[categoryOf(item)];
+  return score;
 }
 
 function botPick() {
@@ -735,7 +802,10 @@ function botPick() {
   // Models and abilities compete directly - whichever remaining option scores
   // lowest (earliest high-skill pick position, adjusted for synergy with this
   // player's current picks) wins, regardless of kind.
-  return available.reduce((best, current) => pickScore(current, p) < pickScore(best, p) ? current : best);
+  const personal = new Map(available.map(a => [a, personalScore(a, p)]));
+  const scarcity = categoryScarcityBonuses(p, available, personal);
+  const scores = new Map(available.map(a => [a, pickScore(a, p, personal, scarcity)]));
+  return available.reduce((best, current) => scores.get(current) < scores.get(best) ? current : best);
 }
 
 function confirmPick(ability) {
