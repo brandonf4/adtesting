@@ -1220,6 +1220,18 @@ function renderLog() {
 function render() { renderPool(); renderPlayers(); renderControls(); renderLog(); renderBotPanel(); }
 
 document.getElementById('bot-pick-btn').addEventListener('click', botPickNow);
+// Enter = Bot pick, except while typing (synergy editor inputs, selects) or with
+// the screenshot import dialog open. preventDefault stops a focused button
+// (e.g. Bot pick itself, after a mouse click) from also firing on Enter.
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' || e.repeat) return;
+  const t = e.target;
+  if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+  if (document.getElementById('screenshot-review-overlay').style.display !== 'none') return;
+  if (document.getElementById('bot-pick-btn').disabled) return;
+  e.preventDefault();
+  botPickNow();
+});
 
 document.getElementById('reset-btn').addEventListener('click', initDraft);
 
