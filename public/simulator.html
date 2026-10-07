@@ -788,13 +788,17 @@ function categoryScarcityBonuses(playerIdx, available, personal, details) {
   for (const cat of Object.keys(bonuses)) {
     const options = available.filter(a => categoryOf(a) === cat);
     if (!options.length) continue;
-    const sample = options[0];
-    let enemyPicks = 0;
+    // Each enemy counts once per pick it makes before our next turn, but never
+    // more times than it has open slots in this category (an enemy with an ult
+    // already can't take ours; one with 1 open basic slot counts at most once).
+    const enemyTurns = new Map();
     for (let i = pickIndex + 1; i < next; i++) {
       const seat = PICK_ORDER[i];
       if (!isYourTeam(seat) === !isYourTeam(playerIdx)) continue; // ally of this seat
-      if (!pickBlockedFor(seat, sample)) enemyPicks++;
+      enemyTurns.set(seat, (enemyTurns.get(seat) || 0) + 1);
     }
+    let enemyPicks = 0;
+    for (const [seat, turns] of enemyTurns) enemyPicks += Math.min(turns, slotsLeftFor(seat, cat));
     const taken = Math.floor(enemyPicks / 2);
     const scores = options.map(a => personal.get(a)).sort((a, b) => a - b);
     const best = scores[0];
@@ -853,7 +857,17 @@ function botDecision() {
   const bonuses = categoryScarcityBonuses(p, available, personal, decision.scarcity);
   decision.rows = available.map(a => ({ item: a, ...scoreParts(a, p, parts, bonuses) }))
     .sort((x, y) => x.total - y.total);
-  decision.chosen = decision.rows[0].item;
+  // Hard override: a category every enemy has already filled can't be taken
+  // from us by them, so (assuming our team doesn't take it either) it's
+  // guaranteed to still be there later - defer it while this seat still has
+  // any other category to fill. If every category left is in that state,
+  // pick normally among them.
+  const enemyFull = ['model', 'ult', 'basic'].filter(cat =>
+    enemiesOf(p).every(e => slotsLeftFor(e, cat) === 0));
+  const deferrable = decision.rows.filter(r => enemyFull.includes(categoryOf(r.item)));
+  decision.deferredCats = deferrable.length < decision.rows.length
+    ? [...new Set(deferrable.map(r => categoryOf(r.item)))] : [];
+  decision.chosen = decision.rows.find(r => !decision.deferredCats.includes(categoryOf(r.item))).item;
   return (botDecisionCache = decision);
 }
 function botPick() {
@@ -1166,6 +1180,9 @@ function renderBotPanel() {
   if (d.random) {
     html += `<div>Screenshot pool: options have no data, so the bot picks at random.</div>`;
   } else {
+    if (d.deferredCats && d.deferredCats.length) {
+      html += `<div style="margin-bottom:6px;color:#f4c542">Deferred (hard override): ${d.deferredCats.map(c => catLabel[c]).join(', ')}. All 5 enemies have filled ${d.deferredCats.length > 1 ? 'these categories' : 'this category'}, so it will come back to this player.</div>`;
+    }
     html += `<div class="scarcity-row">` + ['model', 'ult', 'basic'].map(cat => {
       const s = d.scarcity[cat];
       if (!s) return `<div class="scarcity-chip">${catLabel[cat]} scarcity: <b>0.0</b><small>${slotsLeftFor(d.seat, cat) ? 'last pick or no options' : 'slot filled'}</small></div>`;
@@ -1178,7 +1195,8 @@ function renderBotPanel() {
     d.rows.slice(0, 10).forEach(r => {
       const it = r.item;
       const label = `${it.display_name} <span style="color:#888">· ${catLabel[categoryOf(it)]}${it.kind === 'ability' ? ' · ' + it.hero : ''}</span>`;
-      html += `<tr class="${it === c ? 'chosen' : ''}"><td>${label}</td>` + cols.map(([k]) => {
+      const deferred = d.deferredCats && d.deferredCats.includes(categoryOf(it));
+      html += `<tr class="${it === c ? 'chosen' : ''}"${deferred ? ' style="opacity:0.45"' : ''}><td>${label}${deferred ? ' <span style="color:#f4c542">(deferred)</span>' : ''}</td>` + cols.map(([k]) => {
         if (k === 'base') return `<td>${Number.isFinite(r.base) ? r.base.toFixed(1) : 'no data'}</td>`;
         if (k === 'total') return `<td class="total">${Number.isFinite(r.total) ? r.total.toFixed(1) : '∞'}</td>`;
         const f = fmtPart(r[k]);
