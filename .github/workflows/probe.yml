@@ -1,0 +1,28 @@
+name: Probe windrun API
+on:
+  push:
+    branches: [probe-windrun]
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe endpoints
+        run: |
+          UA="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+          for u in \
+            https://api.windrun.io/api/v2/patches \
+            https://api.windrun.io/api/v2/abilities \
+            https://api.windrun.io/api/v2/heroes \
+            https://api.windrun.io/api/v2/ability-pairs \
+            https://api.windrun.io/api/v2/ability-high-skill \
+            https://api.windrun.io/api/v2/static/abilities \
+            https://api.windrun.io/api/v2/static/heroes \
+            https://api.windrun.io/api/v2/static/patches \
+            https://api.windrun.io/api/v1/abilities \
+            https://windrun.io/abilities \
+            https://windrun.io/ability-pairs ; do
+            echo "=== $u"
+            curl -sS -m 20 -A "$UA" -o body -w "HTTP %{http_code} %{content_type} %{size_download}B\n" "$u" || true
+            head -c 700 body | tr '\n' ' '; echo
+            grep -oE '(https?:)?//[a-z0-9.]*windrun[a-z0-9./_-]*|/api/v[0-9]/[a-zA-Z0-9/_-]+' body | sort -u | head -40 || true
+          done
