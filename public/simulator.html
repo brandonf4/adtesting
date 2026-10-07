@@ -87,6 +87,30 @@
     .spot-selector label { font-size: 12px; color: #888; }
     .spot-selector-right { margin-left: auto; display: flex; gap: 8px; }
     .spot-selector select { background: #252540; color: #e0e0e0; border: 1px solid #444; border-radius: 6px; padding: 4px 8px; font-size: 12px; }
+    .bot-pick-btn { padding: 4px 12px; font-size: 12px; background: #1e3a5f; color: #7eb8f7; border: 1px solid #5a7abf; border-radius: 6px; cursor: pointer; font-weight: 500; }
+    .bot-pick-btn:disabled { background: transparent; color: #555; border-color: #333; cursor: default; }
+    .header-right { display: flex; align-items: center; gap: 8px; }
+    .bot-panel { position: fixed; top: 8px; left: 50%; transform: translateX(-50%); z-index: 20; width: min(980px, 96vw); max-height: 48vh; overflow-y: auto; background: rgba(17,17,34,0.97); border: 1px solid #5a7abf; border-radius: 8px; padding: 10px 12px; box-shadow: 0 6px 24px rgba(0,0,0,0.5); font-size: 12px; }
+    .bot-panel.collapsed .bot-panel-body { display: none; }
+    .bot-panel-head { display: flex; align-items: center; gap: 10px; }
+    .bot-panel-head img { width: 34px; height: 34px; object-fit: cover; border-radius: 4px; border: 1px solid #444; }
+    .bot-panel-head .title { flex: 1; font-size: 13px; }
+    .bot-panel-head .title b { color: #f4c542; }
+    .bot-panel-body { margin-top: 8px; }
+    .bot-panel .scarcity-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+    .bot-panel .scarcity-chip { background: #252540; border: 1px solid #333; border-radius: 5px; padding: 4px 8px; }
+    .bot-panel .scarcity-chip b { color: #7ef7b8; }
+    .bot-panel .scarcity-chip small { color: #888; display: block; font-size: 10px; }
+    .bot-panel table { width: 100%; border-collapse: collapse; }
+    .bot-panel th, .bot-panel td { padding: 3px 6px; text-align: right; border-bottom: 1px solid #252540; white-space: nowrap; }
+    .bot-panel th:first-child, .bot-panel td:first-child { text-align: left; white-space: normal; }
+    .bot-panel th { color: #888; font-weight: 500; font-size: 11px; }
+    .bot-panel tr.chosen td { background: #1e3a5f; color: #fff; }
+    .bot-panel td.neg { color: #7ef7b8; }
+    .bot-panel td.pos { color: #f08a8a; }
+    .bot-panel td.zero { color: #555; }
+    .bot-panel td.total { font-weight: 700; }
+    .bot-panel .consts { margin-top: 6px; color: #888; font-size: 11px; }
     .screenshot-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 2rem; }
     .screenshot-review-panel { background: #1a1a2e; border: 1px solid #444; border-radius: 10px; padding: 20px; max-width: 900px; max-height: 90vh; overflow-y: auto; }
     .calibrate-canvas { display: block; max-width: 100%; border: 1px solid #444; border-radius: 6px; cursor: crosshair; margin-bottom: 14px; }
@@ -105,8 +129,13 @@
 
 <div class="header">
   <h2>Ability draft simulator</h2>
-  <span class="turn-badge" id="turn-badge">Loading...</span>
+  <div class="header-right">
+    <span class="turn-badge" id="turn-badge">Loading...</span>
+    <button class="bot-pick-btn" id="bot-pick-btn" disabled>Bot pick</button>
+  </div>
 </div>
+
+<div id="bot-panel" class="bot-panel" style="display:none"></div>
 
 <div class="spot-selector">
   <label>Your team:</label>
@@ -364,7 +393,6 @@ function initDraft() {
   pickIndex = 0; done = false; logEntries = []; synergyFocus = null;
   document.getElementById('done-banner').style.display = 'none';
   render();
-  advanceBots();
 }
 
 // Screenshot import: reconstructs a past draft's pool from a screenshot of
@@ -519,7 +547,6 @@ function initDraftFromScreenshotPool(items) {
   pickIndex = 0; done = false; logEntries = []; synergyFocus = null;
   document.getElementById('done-banner').style.display = 'none';
   render();
-  advanceBots();
 }
 
 function renderScreenshotReview(items) {
@@ -707,21 +734,26 @@ function allySynergyTerm(item, playerIdx) {
 // pushes a candidate back, since subtracting a negative adds to the score). The
 // enemy-denial and ally-avoidance terms are added/subtracted the same way - see
 // enemySynergyTerm/allySynergyTerm above for why each goes the direction it does.
-// The bot's own view of an item: base value plus everything about how it fits
-// THIS seat's build (own synergy, known-combo bonus, pool upside) - i.e.
-// pickScore without the enemy-denial/ally-avoidance terms or category scarcity.
-function personalScore(item, playerIdx) {
+// The bot's own view of an item, split into its parts. Every part is its signed
+// effect on the score (lower = better), so a good synergy shows as negative.
+// personal = base + ownSynergy + combo + pool: base value plus everything about
+// how the item fits THIS seat's build, i.e. pickScore without the enemy-denial,
+// ally-avoidance and category-scarcity terms.
+function personalParts(item, playerIdx) {
   const base = item.pickPositionHigh == null ? Infinity : item.pickPositionHigh - item.winrateHigh * 100 + 60;
   const multiplier = synergyMultiplier();
   const bonus = knownComboBonus();
-  let adjustment = 0;
+  let ownSynergy = 0, combo = 0;
   picks[playerIdx].forEach((held, i) => {
     const orderWeight = SYNERGY_ORDER_WEIGHTS[i];
-    adjustment += synergyBetween(item.name, held.name) * multiplier * orderWeight;
-    if (hasSynergyData(item.name, held.name)) adjustment += bonus * orderWeight;
+    ownSynergy -= synergyBetween(item.name, held.name) * multiplier * orderWeight;
+    if (hasSynergyData(item.name, held.name)) combo -= bonus * orderWeight;
   });
-  adjustment += poolSynergyTerm(item, playerIdx);
-  return base - adjustment;
+  const poolPart = -poolSynergyTerm(item, playerIdx);
+  return { base, ownSynergy, combo, pool: poolPart, personal: base + ownSynergy + combo + poolPart };
+}
+function personalScore(item, playerIdx) {
+  return personalParts(item, playerIdx).personal;
 }
 
 // Category scarcity: a flat bonus shared by every option in a category (model,
@@ -749,7 +781,7 @@ function slotsLeftFor(playerIdx, cat) {
 }
 // Returns { model, ult, basic } -> flat bonus, given personal scores for every
 // option this seat can currently take.
-function categoryScarcityBonuses(playerIdx, available, personal) {
+function categoryScarcityBonuses(playerIdx, available, personal, details) {
   const bonuses = { model: 0, ult: 0, basic: 0 };
   const next = nextPickIndexFor(playerIdx, pickIndex);
   if (next == null) return bonuses; // last pick: nothing to wait for
@@ -774,38 +806,58 @@ function categoryScarcityBonuses(playerIdx, available, personal) {
     const fallback = idx < scores.length ? scores[idx] : Infinity;
     const urgency = Math.min(Math.max(fallback - best, 0), SCARCITY_CAP);
     bonuses[cat] = urgency * SCARCITY_WEIGHT;
+    if (details) details[cat] = { enemyPicks, taken, slotsLeft: slotsLeftFor(playerIdx, cat), best, fallback, fallbackRank: idx + 1, bonus: bonuses[cat] };
   }
   return bonuses;
 }
 
-// Lower = better. personalScore, then the enemy-denial and ally-avoidance terms
-// are added/subtracted the same way - see enemySynergyTerm/allySynergyTerm above
-// for why each goes the direction it does - and finally the category scarcity
-// bonus for this option's category.
-function pickScore(item, playerIdx, personal, scarcity) {
-  let score = personal ? personal.get(item) : personalScore(item, playerIdx);
-  score -= enemySynergyTerm(item, playerIdx);
-  score += allySynergyTerm(item, playerIdx);
-  if (scarcity) score -= scarcity[categoryOf(item)];
-  return score;
+// Lower = better. personal score, then the enemy-denial and ally-avoidance terms
+// - see enemySynergyTerm/allySynergyTerm above for why each goes the direction it
+// does - and finally the category scarcity bonus for this option's category.
+// Returns every part (each as its signed effect on the score) plus the total.
+function scoreParts(item, playerIdx, personalPartsMap, scarcity) {
+  const pp = personalPartsMap ? personalPartsMap.get(item) : personalParts(item, playerIdx);
+  const enemy = -enemySynergyTerm(item, playerIdx);
+  const ally = allySynergyTerm(item, playerIdx);
+  const scarcityPart = scarcity ? -scarcity[categoryOf(item)] : 0;
+  return { ...pp, enemy, ally, scarcity: scarcityPart, total: pp.personal + enemy + ally + scarcityPart };
+}
+function pickScore(item, playerIdx) {
+  return scoreParts(item, playerIdx).total;
 }
 
-function botPick() {
+// Everything the bot considered for the current pick: the chosen option, every
+// available option with its score parts (sorted best first), and the category
+// scarcity details. Cached per pick so the proposal shown in the panel is
+// exactly what "Bot pick" confirms (screenshot pools pick randomly once).
+let botDecisionCache = null;
+function botDecision() {
+  if (botDecisionCache && botDecisionCache.pickIndex === pickIndex && botDecisionCache.pool === pool) return botDecisionCache;
   const p = currentPlayer();
   const available = pool.filter(a => !a.picked && !pickBlockedFor(p, a));
-  if (!available.length) return null;
+  const decision = { pickIndex, pool, seat: p, chosen: null, rows: [], scarcity: {}, random: false };
+  if (!available.length) return (botDecisionCache = decision);
 
   // A screenshot-imported pool carries no real ability/hero identity for bots
   // to judge, so there's nothing meaningful to score - just pick randomly.
-  if (!poolHasRealData) return available[Math.floor(Math.random() * available.length)];
+  if (!poolHasRealData) {
+    decision.random = true;
+    decision.chosen = available[Math.floor(Math.random() * available.length)];
+    return (botDecisionCache = decision);
+  }
 
   // Models and abilities compete directly - whichever remaining option scores
-  // lowest (earliest high-skill pick position, adjusted for synergy with this
-  // player's current picks) wins, regardless of kind.
-  const personal = new Map(available.map(a => [a, personalScore(a, p)]));
-  const scarcity = categoryScarcityBonuses(p, available, personal);
-  const scores = new Map(available.map(a => [a, pickScore(a, p, personal, scarcity)]));
-  return available.reduce((best, current) => scores.get(current) < scores.get(best) ? current : best);
+  // lowest wins, regardless of kind.
+  const parts = new Map(available.map(a => [a, personalParts(a, p)]));
+  const personal = new Map(available.map(a => [a, parts.get(a).personal]));
+  const bonuses = categoryScarcityBonuses(p, available, personal, decision.scarcity);
+  decision.rows = available.map(a => ({ item: a, ...scoreParts(a, p, parts, bonuses) }))
+    .sort((x, y) => x.total - y.total);
+  decision.chosen = decision.rows[0].item;
+  return (botDecisionCache = decision);
+}
+function botPick() {
+  return botDecision().chosen;
 }
 
 function confirmPick(ability) {
@@ -817,17 +869,14 @@ function confirmPick(ability) {
   pickIndex++;
   if (pickIndex >= PICK_ORDER.length) { done = true; render(); return; }
   render();
-  if (!isYourTurn()) setTimeout(advanceBots, 400);
 }
 
-function advanceBots() {
-  if (synergyEditMode) return;
-  while (pickIndex < PICK_ORDER.length && !isYourTurn()) {
-    const b = botPick();
-    if (!b) break;
-    confirmPick(b);
-  }
-  render();
+// Bots no longer pick on their own: each bot pick waits for the "Bot pick"
+// button, with the proposal and its full score breakdown shown in the panel.
+function botPickNow() {
+  if (done || synergyEditMode || isYourTurn()) return;
+  const b = botPick();
+  if (b) confirmPick(b);
 }
 
 function iconSrcFor(a) {
@@ -1085,10 +1134,63 @@ function renderControls() {
     badge.className = 'turn-badge';
     status.textContent = 'Click an ability to pick it';
   } else {
-    badge.textContent = 'Opponent picking...';
+    badge.textContent = `Bot to pick — Player ${currentPlayer() + 1} (${pickIndex + 1} of ${PICK_ORDER.length})`;
     badge.className = 'turn-badge bot';
-    status.textContent = '';
+    status.textContent = 'Press "Bot pick" to confirm the proposed bot pick';
   }
+}
+
+function fmtPart(v) {
+  if (!Number.isFinite(v)) return { text: v > 0 ? '∞' : '−∞', cls: 'pos' };
+  if (Math.abs(v) < 0.05) return { text: '0.0', cls: 'zero' };
+  return { text: (v > 0 ? '+' : '−') + Math.abs(v).toFixed(1), cls: v < 0 ? 'neg' : 'pos' };
+}
+let botPanelCollapsed = false;
+function renderBotPanel() {
+  const panel = document.getElementById('bot-panel');
+  const btn = document.getElementById('bot-pick-btn');
+  const botTurn = !done && !synergyEditMode && !isYourTurn() && pickIndex < PICK_ORDER.length;
+  btn.disabled = !botTurn;
+  if (!botTurn) { panel.style.display = 'none'; return; }
+  const d = botDecision();
+  panel.style.display = 'block';
+  panel.classList.toggle('collapsed', botPanelCollapsed);
+  const seatName = `Player ${d.seat + 1} (${d.seat < 5 ? 'Radiant' : 'Dire'})`;
+  const catLabel = { model: 'Model', ult: 'Ultimate', basic: 'Basic' };
+  const c = d.chosen;
+  let html = `<div class="bot-panel-head">
+    ${c ? `<img src="${iconSrcFor(c)}" alt="">` : ''}
+    <div class="title">${seatName} proposes <b>${c ? c.display_name : 'nothing'}</b>${c ? ` (${catLabel[categoryOf(c)]}${c.kind === 'ability' ? ', ' + c.hero : ''})` : ''} — pick ${pickIndex + 1} of ${PICK_ORDER.length}</div>
+    <button class="reset-btn" id="bot-panel-toggle">${botPanelCollapsed ? 'Show details' : 'Hide details'}</button>
+  </div><div class="bot-panel-body">`;
+  if (d.random) {
+    html += `<div>Screenshot pool: options have no data, so the bot picks at random.</div>`;
+  } else {
+    html += `<div class="scarcity-row">` + ['model', 'ult', 'basic'].map(cat => {
+      const s = d.scarcity[cat];
+      if (!s) return `<div class="scarcity-chip">${catLabel[cat]} scarcity: <b>0.0</b><small>${slotsLeftFor(d.seat, cat) ? 'last pick or no options' : 'slot filled'}</small></div>`;
+      const fb = Number.isFinite(s.fallback) ? s.fallback.toFixed(1) : 'none left';
+      return `<div class="scarcity-chip">${catLabel[cat]} scarcity: <b>−${s.bonus.toFixed(1)}</b>
+        <small>${s.enemyPicks} enemy picks → ${s.taken} taken · ${s.slotsLeft} slot${s.slotsLeft === 1 ? '' : 's'} · best ${s.best.toFixed(1)} vs fallback #${s.fallbackRank} ${fb}</small></div>`;
+    }).join('') + `</div>`;
+    const cols = [['base', 'Base'], ['ownSynergy', 'Own synergy'], ['combo', 'Known combo'], ['pool', 'Pool upside'], ['enemy', 'Enemy denial'], ['ally', 'Ally avoid'], ['scarcity', 'Scarcity'], ['total', 'Total']];
+    html += `<table><thead><tr><th>Option (top ${Math.min(10, d.rows.length)} of ${d.rows.length})</th>${cols.map(([, l]) => `<th>${l}</th>`).join('')}</tr></thead><tbody>`;
+    d.rows.slice(0, 10).forEach(r => {
+      const it = r.item;
+      const label = `${it.display_name} <span style="color:#888">· ${catLabel[categoryOf(it)]}${it.kind === 'ability' ? ' · ' + it.hero : ''}</span>`;
+      html += `<tr class="${it === c ? 'chosen' : ''}"><td>${label}</td>` + cols.map(([k]) => {
+        if (k === 'base') return `<td>${Number.isFinite(r.base) ? r.base.toFixed(1) : 'no data'}</td>`;
+        if (k === 'total') return `<td class="total">${Number.isFinite(r.total) ? r.total.toFixed(1) : '∞'}</td>`;
+        const f = fmtPart(r[k]);
+        return `<td class="${f.cls}">${f.text}</td>`;
+      }).join('') + `</tr>`;
+    });
+    html += `</tbody></table>`;
+    html += `<div class="consts">Lower total = picked first. Now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}), ally avoid ×2, enemy denial 10/(4+picks between).</div>`;
+  }
+  html += `</div>`;
+  panel.innerHTML = html;
+  document.getElementById('bot-panel-toggle').addEventListener('click', () => { botPanelCollapsed = !botPanelCollapsed; renderBotPanel(); });
 }
 
 function renderLog() {
@@ -1097,7 +1199,9 @@ function renderLog() {
   ).join('');
 }
 
-function render() { renderPool(); renderPlayers(); renderControls(); renderLog(); }
+function render() { renderPool(); renderPlayers(); renderControls(); renderLog(); renderBotPanel(); }
+
+document.getElementById('bot-pick-btn').addEventListener('click', botPickNow);
 
 document.getElementById('reset-btn').addEventListener('click', initDraft);
 
@@ -1107,7 +1211,7 @@ function toggleSynergyEditMode() {
   document.getElementById('synergy-toggle-btn').textContent = synergyEditMode ? 'Return to draft' : 'See/edit synergies';
   document.getElementById('clear-overrides-btn').style.display = synergyEditMode ? '' : 'none';
   render();
-  if (!synergyEditMode && !done && !isYourTurn()) setTimeout(advanceBots, 400);
+  botDecisionCache = null; // synergy overrides may have changed
 }
 document.getElementById('synergy-toggle-btn').addEventListener('click', toggleSynergyEditMode);
 
