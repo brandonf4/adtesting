@@ -873,13 +873,21 @@ function botDecision() {
   // before we pick again (allies aren't counted), so defer it while this seat
   // still has any other category to fill. If every category left is in that
   // state, pick normally among them. On a seat's last pick there's no next
-  // turn, so nothing is deferred.
+  // turn, so nothing is deferred. Exception: when 2+ of this seat's open
+  // categories are safe only because of who picks before the next turn (not
+  // filled by all 5 enemies), those deferrals are dropped and scarcity decides
+  // between them. A category all 5 enemies have filled stays deferred.
   const next = nextPickIndexFor(p, pickIndex);
   const enemiesBefore = next == null ? null
     : [...new Set(PICK_ORDER.slice(pickIndex + 1, next))].filter(s => enemiesOf(p).includes(s));
   decision.enemiesBeforeNext = enemiesBefore;
-  const enemyFull = enemiesBefore == null ? [] : ['model', 'ult', 'basic'].filter(cat =>
-    enemiesBefore.every(e => slotsLeftFor(e, cat) === 0));
+  const openCats = [...new Set(decision.rows.map(r => categoryOf(r.item)))];
+  const allEnemiesFull = openCats.filter(cat => enemiesOf(p).every(e => slotsLeftFor(e, cat) === 0));
+  const safeBeforeNext = enemiesBefore == null ? [] : openCats.filter(cat =>
+    !allEnemiesFull.includes(cat) && enemiesBefore.every(e => slotsLeftFor(e, cat) === 0));
+  decision.undeferredCats = safeBeforeNext.length >= 2 && enemiesBefore.length ? safeBeforeNext : [];
+  const enemyFull = enemiesBefore == null ? []
+    : [...allEnemiesFull, ...(safeBeforeNext.length >= 2 ? [] : safeBeforeNext)];
   const deferrable = decision.rows.filter(r => enemyFull.includes(categoryOf(r.item)));
   decision.deferredCats = deferrable.length < decision.rows.length
     ? [...new Set(deferrable.map(r => categoryOf(r.item)))] : [];
@@ -1336,6 +1344,9 @@ function renderBotPanel() {
   } else {
     if (d.deferredCats && d.deferredCats.length) {
       html += `<div style="margin-bottom:6px;color:#f4c542">Deferred (hard override): ${d.deferredCats.map(c => catLabel[c]).join(', ')}. Every enemy picking before this player's next turn (${(d.enemiesBeforeNext || []).map(e => 'P' + (e + 1)).join(', ') || 'none'}) has filled ${d.deferredCats.length > 1 ? 'these categories' : 'this category'}, so nothing in it can be taken before then.</div>`;
+    }
+    if (d.undeferredCats && d.undeferredCats.length) {
+      html += `<div style="margin-bottom:6px;color:#9ec3ff">Not deferred: ${d.undeferredCats.map(c => catLabel[c]).join(' and ')} are both filled by every enemy picking before the next turn (${(d.enemiesBeforeNext || []).map(e => 'P' + (e + 1)).join(', ')}), but not by all 5 enemies, so either is allowed and scarcity decides.</div>`;
     }
     const cols = [['base', 'Base'], ['ownSynergy', 'Own synergy'], ['combo', 'Known combo'], ['pool', 'Pool upside'], ['enemy', 'Enemy denial'], ['ally', 'Ally avoid'], ['scarcity', 'Scarcity'], ['total', 'Total']];
     html += `<table><thead><tr><th>Option (top ${Math.min(10, d.rows.length)} of ${d.rows.length})</th>${cols.map(([k, l]) => `<th data-col="${k}">${l}</th>`).join('')}</tr></thead><tbody>`;
