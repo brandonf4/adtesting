@@ -97,10 +97,6 @@
     .bot-panel-head .title { flex: 1; font-size: 13px; }
     .bot-panel-head .title b { color: #f4c542; }
     .bot-panel-body { margin-top: 8px; }
-    .bot-panel .scarcity-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
-    .bot-panel .scarcity-chip { background: #252540; border: 1px solid #333; border-radius: 5px; padding: 4px 8px; }
-    .bot-panel .scarcity-chip b { color: #7ef7b8; }
-    .bot-panel .scarcity-chip small { color: #888; display: block; font-size: 10px; }
     .bot-panel table { width: 100%; border-collapse: collapse; }
     .bot-panel th, .bot-panel td { padding: 3px 6px; text-align: right; border-bottom: 1px solid #252540; white-space: nowrap; }
     .bot-panel th:first-child, .bot-panel td:first-child { text-align: left; white-space: normal; }
@@ -110,6 +106,19 @@
     .bot-panel td.pos { color: #f08a8a; }
     .bot-panel td.zero { color: #555; }
     .bot-panel td.total { font-weight: 700; }
+    .bot-panel th[data-col], .bot-panel td[data-col] { cursor: help; }
+    .bot-panel th[data-col] { text-decoration: underline dotted #666; text-underline-offset: 3px; }
+    .bot-tip { position: fixed; z-index: 40; max-width: 480px; background: #0d0d1c; border: 1px solid #f4c542; border-radius: 6px; padding: 8px 10px; font-size: 12px; color: #ddd; box-shadow: 0 6px 24px rgba(0,0,0,0.7); pointer-events: none; }
+    .bot-tip h4 { margin: 0 0 4px; color: #f4c542; font-size: 12px; }
+    .bot-tip .f { font-family: monospace; color: #9ec3ff; margin: 3px 0; white-space: pre-wrap; }
+    .bot-tip table { border-collapse: collapse; margin: 4px 0; }
+    .bot-tip td, .bot-tip th { padding: 1px 6px; text-align: right; border-bottom: 1px solid #1f1f38; }
+    .bot-tip td:first-child, .bot-tip th:first-child { text-align: left; }
+    .bot-tip th { color: #888; font-weight: 500; }
+    .bot-tip .dim { color: #777; }
+    .bot-tip .cat { margin-top: 6px; }
+    .bot-tip tr.mark td { color: #7ef7b8; }
+    .bot-tip tr.fb td { color: #f08a8a; }
     .bot-panel .consts { margin-top: 6px; color: #888; font-size: 11px; }
     .screenshot-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); z-index: 50; display: flex; align-items: center; justify-content: center; padding: 2rem; }
     .screenshot-review-panel { background: #1a1a2e; border: 1px solid #444; border-radius: 10px; padding: 20px; max-width: 900px; max-height: 90vh; overflow-y: auto; }
@@ -136,6 +145,7 @@
 </div>
 
 <div id="bot-panel" class="bot-panel" style="display:none"></div>
+<div id="bot-tip" class="bot-tip" style="display:none"></div>
 
 <div class="spot-selector">
   <label>Your team:</label>
@@ -369,7 +379,7 @@ function initDraft() {
 
   pool = [];
   chosen.forEach(h => {
-    pool.push({ kind: 'model', name: h.name, display_name: h.display_name, hero: h.display_name, winrateHigh: h.modelWinrateHigh, pickPositionHigh: transformModelPickPosition(h.modelPickPositionHigh), picked: false });
+    pool.push({ kind: 'model', name: h.name, display_name: h.display_name, hero: h.display_name, winrateHigh: h.modelWinrateHigh, pickPositionHigh: transformModelPickPosition(h.modelPickPositionHigh), pickPositionHighRaw: h.modelPickPositionHigh, picked: false });
 
     const basics = resolveExclusiveGroups(h.abilities.filter(a => !a.is_ultimate));
     const ults = h.abilities.filter(a => a.is_ultimate);
@@ -855,6 +865,7 @@ function botDecision() {
   const parts = new Map(available.map(a => [a, personalParts(a, p)]));
   const personal = new Map(available.map(a => [a, parts.get(a).personal]));
   const bonuses = categoryScarcityBonuses(p, available, personal, decision.scarcity);
+  decision.personal = personal;
   decision.rows = available.map(a => ({ item: a, ...scoreParts(a, p, parts, bonuses) }))
     .sort((x, y) => x.total - y.total);
   // Hard override: a category every enemy has already filled can't be taken
@@ -1159,8 +1170,146 @@ function fmtPart(v) {
   if (Math.abs(v) < 0.05) return { text: '0.0', cls: 'zero' };
   return { text: (v > 0 ? '+' : '−') + Math.abs(v).toFixed(1), cls: v < 0 ? 'neg' : 'pos' };
 }
+// Hover explanations for the bot panel: hovering a column header explains that
+// term for the proposed pick; hovering a cell explains it for that row's option.
+const n1 = v => Number.isFinite(v) ? v.toFixed(1) : (v > 0 ? '∞' : '−∞');
+const n2 = v => Number.isFinite(v) ? v.toFixed(2) : (v > 0 ? '∞' : '−∞');
+const seatLabel = s => `P${s + 1}`;
+const CAT_LABEL = { model: 'Model', ult: 'Ultimate', basic: 'Basic' };
+function tipTable(head, rows) {
+  return `<table><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr>${rows.join('')}</table>`;
+}
+function explainColumn(col, row, d, fromCell) {
+  const it = row.item, seat = d.seat, held = picks[seat];
+  const who = `<b>${it.display_name}</b> for ${seatLabel(seat)}`;
+  if (col === 'base') {
+    if (!Number.isFinite(row.base)) return `<h4>Base: ${it.display_name}</h4>No high-skill pick position data, so it's picked last.`;
+    const wr = it.winrateHigh * 100;
+    let pp = '';
+    if (it.kind === 'model' && it.pickPositionHighRaw != null && it.pickPositionHighRaw !== it.pickPositionHigh) {
+      pp = `<div class="f">model pick position ${n2(it.pickPositionHighRaw)} → max(x²/25, 5) = ${n2(it.pickPositionHigh)}</div>`;
+    }
+    return `<h4>Base: ${who}</h4>
+      <div class="f">base = pick position (high skill) − winrate (high skill) × 100 + 60</div>${pp}
+      <div class="f">= ${n2(it.pickPositionHigh)} − ${n2(wr)} + 60 = ${n1(row.base)}</div>
+      <div class="dim">Model pick positions above 5 are reshaped with max(x²/25, 5).</div>`;
+  }
+  if (col === 'ownSynergy') {
+    const M = synergyMultiplier();
+    if (!held.length) return `<h4>Own synergy: ${who}</h4>No picks yet, so 0.`;
+    const rows = held.map((h, i) => {
+      const syn = synergyBetween(it.name, h.name), w = SYNERGY_ORDER_WEIGHTS[i];
+      return `<tr><td>${i + 1}. ${h.display_name}</td><td>${n2(syn)}</td><td>${w}</td><td>${n1(-syn * M * w)}</td></tr>`;
+    });
+    return `<h4>Own synergy: ${who}</h4>
+      <div class="f">−Σ synergy × M × W(order held)
+M = ${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT} × pick ${pickIndex} = ${n2(M)}</div>
+      ${tipTable(['Held pick', 'Synergy', 'W', 'Effect'], rows)}<div>Total ${n1(row.ownSynergy)}</div>`;
+  }
+  if (col === 'combo') {
+    const B = knownComboBonus();
+    if (!held.length) return `<h4>Known combo: ${who}</h4>No picks yet, so 0.`;
+    const rows = held.map((h, i) => {
+      const has = hasSynergyData(it.name, h.name), w = SYNERGY_ORDER_WEIGHTS[i];
+      return `<tr><td>${i + 1}. ${h.display_name}</td><td>${has ? 'yes (' + n2(synergyBetween(it.name, h.name)) + ')' : 'no'}</td><td>${w}</td><td>${n1(has ? -B * w : 0)}</td></tr>`;
+    });
+    return `<h4>Known combo: ${who}</h4>
+      <div class="f">−Σ bonus × W, for each held pick with any pair data
+bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFICIENT} × ${pickIndex}² = ${n2(B)}</div>
+      ${tipTable(['Held pick', 'Pair data', 'W', 'Effect'], rows)}<div>Total ${n1(row.combo)}</div>`;
+  }
+  if (col === 'pool') {
+    const P = POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[held.length];
+    const pos = pool.filter(o => o !== it && !o.picked)
+      .map(o => ({ o, s: synergyBetween(it.name, o.name) })).filter(x => x.s > 0).sort((a, b) => b.s - a.s);
+    const total = pos.reduce((t, x) => t + x.s, 0);
+    const rows = pos.slice(0, 5).map(x => `<tr><td>${x.o.display_name} <span class="dim">· ${CAT_LABEL[categoryOf(x.o)]}</span></td><td>+${n2(x.s)}</td></tr>`);
+    return `<h4>Pool upside: ${who}</h4>
+      <div class="f">−(Σ positive synergy with every unpicked option) × P[picks held]
+P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → ${P}</div>
+      ${pos.length ? tipTable(['Top 5 pool synergies', 'Synergy'], rows) : '<div class="dim">No positive synergies left in the pool.</div>'}
+      <div class="f">= −${n2(total)} (all ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${n1(row.pool)}</div>`;
+  }
+  if (col === 'enemy' || col === 'ally') {
+    const isEnemy = col === 'enemy';
+    const rows = (isEnemy ? enemiesOf(seat) : alliesOf(seat)).map(s => {
+      if (pickBlockedFor(s, it)) return `<tr><td>${seatLabel(s)}</td><td colspan="3" class="dim">${CAT_LABEL[categoryOf(it)]} slot filled, skipped</td></tr>`;
+      let w = 2, note = '×2';
+      if (isEnemy) {
+        const nx = nextPickIndexFor(s, pickIndex);
+        if (nx == null) return `<tr><td>${seatLabel(s)}</td><td colspan="3" class="dim">no picks left, skipped</td></tr>`;
+        const between = nx - pickIndex - 1;
+        w = 10 / (4 + between); note = `10/(4+${between}) = ${n2(w)}`;
+      }
+      const pairs = picks[s].map(h => ({ h, s: synergyBetween(it.name, h.name) })).filter(x => x.s > 0);
+      const sum = pairs.reduce((t, x) => t + x.s, 0);
+      const list = pairs.length ? pairs.map(x => `${x.h.display_name} +${n2(x.s)}`).join(', ') : '<span class="dim">none</span>';
+      return `<tr><td>${seatLabel(s)}</td><td style="text-align:left;white-space:normal">${list}</td><td>${note}</td><td>${n1((isEnemy ? -1 : 1) * w * sum)}</td></tr>`;
+    });
+    return isEnemy
+      ? `<h4>Enemy denial: ${who}</h4>
+        <div class="f">−Σ over enemies: 10 / (4 + picks before their next turn) × (positive synergy with their picks)</div>
+        ${tipTable(['Enemy', 'Positive synergies', 'Weight', 'Effect'], rows)}<div>Total ${n1(row.enemy)}</div>`
+      : `<h4>Ally avoid: ${who}</h4>
+        <div class="f">+2 × Σ over allies: positive synergy with their picks (pushes it later, leaving it for them)</div>
+        ${tipTable(['Ally', 'Positive synergies', 'Weight', 'Effect'], rows)}<div>Total ${n1(row.ally)}</div>`;
+  }
+  if (col === 'scarcity') {
+    let html = `<h4>Category scarcity for ${seatLabel(seat)}</h4>
+      <div class="f">taken = floor(enemy picks before next turn ÷ 2), each enemy capped at its open slots
+fallback = personal score at rank taken + slots left
+bonus = −${SCARCITY_WEIGHT} × clamp(fallback − best, 0, ${SCARCITY_CAP})</div>
+      <div class="dim">personal score = base + own synergy + known combo + pool upside</div>`;
+    for (const cat of ['model', 'ult', 'basic']) {
+      const s = d.scarcity[cat];
+      const mine = fromCell && categoryOf(it) === cat ? ` <span class="dim">← ${it.display_name}'s category</span>` : '';
+      if (!s) {
+        html += `<div class="cat"><b>${CAT_LABEL[cat]}</b>: 0.0 <span class="dim">(${slotsLeftFor(seat, cat) ? 'last pick or no options' : 'slot filled'})</span>${mine}</div>`;
+        continue;
+      }
+      const opts = d.rows.filter(r => categoryOf(r.item) === cat)
+        .map(r => ({ item: r.item, p: d.personal.get(r.item) })).sort((a, b) => a.p - b.p);
+      const show = Math.min(opts.length, Math.max(5, s.fallbackRank + 1));
+      const rows = opts.slice(0, show).map((o, i) => {
+        const cls = i === 0 ? 'mark' : i + 1 === s.fallbackRank ? 'fb' : '';
+        const tag = [i === 0 ? 'best' : '', i < s.taken ? 'assumed taken' : '', i + 1 === s.fallbackRank ? 'fallback' : ''].filter(Boolean).join(', ');
+        return `<tr class="${cls}"><td>${i + 1}. ${o.item.display_name}</td><td>${n1(o.p)}</td><td>${tag}</td></tr>`;
+      });
+      const deferred = d.deferredCats && d.deferredCats.includes(cat) ? ' <span style="color:#f4c542">(deferred: all enemies filled)</span>' : '';
+      html += `<div class="cat"><b>${CAT_LABEL[cat]}</b>: ${s.enemyPicks} enemy picks → ${s.taken} taken, ${s.slotsLeft} slot${s.slotsLeft === 1 ? '' : 's'} left → fallback rank ${s.fallbackRank}${deferred}${mine}
+        ${tipTable(['Option', 'Personal', ''], rows)}
+        <div class="f">−${SCARCITY_WEIGHT} × clamp(${Number.isFinite(s.fallback) ? n1(s.fallback) : 'none left'} − ${n1(s.best)}, 0, ${SCARCITY_CAP}) = ${s.bonus ? '−' + n1(s.bonus) : '0.0'}</div></div>`;
+    }
+    return html;
+  }
+  if (col === 'total') {
+    const parts = [['Base', row.base], ['Own synergy', row.ownSynergy], ['Known combo', row.combo], ['Pool upside', row.pool], ['Enemy denial', row.enemy], ['Ally avoid', row.ally], ['Scarcity', row.scarcity]];
+    return `<h4>Total: ${who}</h4><div class="f">base + own synergy + known combo + pool upside + enemy denial + ally avoid + scarcity (lower is picked first)</div>
+      ${tipTable(['Term', 'Value'], parts.map(([l, v]) => `<tr><td>${l}</td><td>${n1(v)}</td></tr>`))}<div>Total ${n1(row.total)}</div>`;
+  }
+  return '';
+}
+function showBotTip(el) {
+  const tip = document.getElementById('bot-tip');
+  const d = botDecisionCache;
+  if (!d || !d.rows.length) { tip.style.display = 'none'; return; }
+  const fromCell = el.dataset.row != null;
+  const row = fromCell ? d.rows[+el.dataset.row] : d.rows.find(r => r.item === d.chosen);
+  if (!row) { tip.style.display = 'none'; return; }
+  tip.innerHTML = explainColumn(el.dataset.col, row, d, fromCell);
+  tip.style.display = 'block';
+  const r = el.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
+  const left = Math.min(Math.max(8, r.left + r.width / 2 - tw / 2), window.innerWidth - tw - 8);
+  let top = r.bottom + 6;
+  if (top + th > window.innerHeight - 8) top = Math.max(8, r.top - th - 6);
+  tip.style.left = left + 'px';
+  tip.style.top = top + 'px';
+}
+function hideBotTip() { document.getElementById('bot-tip').style.display = 'none'; }
+
 let botPanelCollapsed = false;
 function renderBotPanel() {
+  hideBotTip();
   const panel = document.getElementById('bot-panel');
   const btn = document.getElementById('bot-pick-btn');
   const botTurn = !done && !synergyEditMode && !isYourTurn() && pickIndex < PICK_ORDER.length;
@@ -1183,24 +1332,18 @@ function renderBotPanel() {
     if (d.deferredCats && d.deferredCats.length) {
       html += `<div style="margin-bottom:6px;color:#f4c542">Deferred (hard override): ${d.deferredCats.map(c => catLabel[c]).join(', ')}. All 5 enemies have filled ${d.deferredCats.length > 1 ? 'these categories' : 'this category'}, so it will come back to this player.</div>`;
     }
-    html += `<div class="scarcity-row">` + ['model', 'ult', 'basic'].map(cat => {
-      const s = d.scarcity[cat];
-      if (!s) return `<div class="scarcity-chip">${catLabel[cat]} scarcity: <b>0.0</b><small>${slotsLeftFor(d.seat, cat) ? 'last pick or no options' : 'slot filled'}</small></div>`;
-      const fb = Number.isFinite(s.fallback) ? s.fallback.toFixed(1) : 'none left';
-      return `<div class="scarcity-chip">${catLabel[cat]} scarcity: <b>−${s.bonus.toFixed(1)}</b>
-        <small>${s.enemyPicks} enemy picks → ${s.taken} taken · ${s.slotsLeft} slot${s.slotsLeft === 1 ? '' : 's'} · best ${s.best.toFixed(1)} vs fallback #${s.fallbackRank} ${fb}</small></div>`;
-    }).join('') + `</div>`;
     const cols = [['base', 'Base'], ['ownSynergy', 'Own synergy'], ['combo', 'Known combo'], ['pool', 'Pool upside'], ['enemy', 'Enemy denial'], ['ally', 'Ally avoid'], ['scarcity', 'Scarcity'], ['total', 'Total']];
-    html += `<table><thead><tr><th>Option (top ${Math.min(10, d.rows.length)} of ${d.rows.length})</th>${cols.map(([, l]) => `<th>${l}</th>`).join('')}</tr></thead><tbody>`;
-    d.rows.slice(0, 10).forEach(r => {
+    html += `<table><thead><tr><th>Option (top ${Math.min(10, d.rows.length)} of ${d.rows.length})</th>${cols.map(([k, l]) => `<th data-col="${k}">${l}</th>`).join('')}</tr></thead><tbody>`;
+    d.rows.slice(0, 10).forEach((r, ri) => {
       const it = r.item;
       const label = `${it.display_name} <span style="color:#888">· ${catLabel[categoryOf(it)]}${it.kind === 'ability' ? ' · ' + it.hero : ''}</span>`;
       const deferred = d.deferredCats && d.deferredCats.includes(categoryOf(it));
       html += `<tr class="${it === c ? 'chosen' : ''}"${deferred ? ' style="opacity:0.45"' : ''}><td>${label}${deferred ? ' <span style="color:#f4c542">(deferred)</span>' : ''}</td>` + cols.map(([k]) => {
-        if (k === 'base') return `<td>${Number.isFinite(r.base) ? r.base.toFixed(1) : 'no data'}</td>`;
-        if (k === 'total') return `<td class="total">${Number.isFinite(r.total) ? r.total.toFixed(1) : '∞'}</td>`;
+        const at = `data-col="${k}" data-row="${ri}"`;
+        if (k === 'base') return `<td ${at}>${Number.isFinite(r.base) ? r.base.toFixed(1) : 'no data'}</td>`;
+        if (k === 'total') return `<td class="total" ${at}>${Number.isFinite(r.total) ? r.total.toFixed(1) : '∞'}</td>`;
         const f = fmtPart(r[k]);
-        return `<td class="${f.cls}">${f.text}</td>`;
+        return `<td class="${f.cls}" ${at}>${f.text}</td>`;
       }).join('') + `</tr>`;
     });
     html += `</tbody></table>`;
@@ -1220,6 +1363,11 @@ function renderLog() {
 function render() { renderPool(); renderPlayers(); renderControls(); renderLog(); renderBotPanel(); }
 
 document.getElementById('bot-pick-btn').addEventListener('click', botPickNow);
+document.getElementById('bot-panel').addEventListener('mouseover', (e) => {
+  const el = e.target.closest('[data-col]');
+  if (el) showBotTip(el); else hideBotTip();
+});
+document.getElementById('bot-panel').addEventListener('mouseleave', hideBotTip);
 // Enter = Bot pick, except while typing (synergy editor inputs, selects) or with
 // the screenshot import dialog open. preventDefault stops a focused button
 // (e.g. Bot pick itself, after a mouse click) from also firing on Enter.
