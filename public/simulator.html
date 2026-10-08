@@ -665,15 +665,22 @@ function knownComboBonus() {
 const SYNERGY_ORDER_WEIGHTS = [1.4, 1, 0.8, 0.6];
 
 // Rewards keeping options open: this item's total positive synergy with
-// everything still available in the pool (the same figure shown in the
-// pool-synergy badge), scaled by a discrete weight per pick number for this
+// everything still available in the pool that this seat could still take
+// after picking it (a category this seat has filled, or that this item would
+// fill, doesn't count), scaled by a discrete weight per pick number for this
 // seat - front-loaded on the 1st pick, tapering off, zero on the 5th/last
 // pick (nothing left to combo into afterward). Indexed by picks[playerIdx]
-// .length (0 on the 1st pick through 4 on the 5th).
+// .length (0 on the 1st pick through 4 on the 5th). The pool-synergy badge on
+// each card still counts the whole pool, since it isn't tied to one seat.
 const POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE = [0.5, 0.15, 0.1, 0.1, 0];
+function poolPartnersFor(item, playerIdx) {
+  const own = categoryOf(item);
+  return pool.filter(o => o !== item && !o.picked &&
+    slotsLeftFor(playerIdx, categoryOf(o)) - (categoryOf(o) === own ? 1 : 0) > 0);
+}
 function poolSynergyTerm(item, playerIdx) {
   const weight = POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[playerIdx].length];
-  return totalPositivePoolSynergy(item) * weight;
+  return sumPositiveSynergy(item.name, poolPartnersFor(item, playerIdx)) * weight;
 }
 
 function enemiesOf(playerIdx) { return playerIdx < 5 ? [5, 6, 7, 8, 9] : [0, 1, 2, 3, 4]; }
@@ -1233,12 +1240,12 @@ bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFIC
   }
   if (col === 'pool') {
     const P = POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[held.length];
-    const pos = pool.filter(o => o !== it && !o.picked)
+    const pos = poolPartnersFor(it, seat)
       .map(o => ({ o, s: synergyBetween(it.name, o.name) })).filter(x => x.s > 0).sort((a, b) => b.s - a.s);
     const total = pos.reduce((t, x) => t + x.s, 0);
     const rows = pos.slice(0, 5).map(x => `<tr><td>${x.o.display_name} <span class="dim">· ${CAT_LABEL[categoryOf(x.o)]}</span></td><td>+${n2(x.s)}</td></tr>`);
     return `<h4>Pool upside: ${who}</h4>
-      <div class="f">−(Σ positive synergy with every unpicked option) × P[picks held]
+      <div class="f">−(Σ positive synergy with unpicked options this player can still take after this pick) × P[picks held]
 P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → ${P}</div>
       ${pos.length ? tipTable(['Top 5 pool synergies', 'Synergy'], rows) : '<div class="dim">No positive synergies left in the pool.</div>'}
       <div class="f">= −${n2(total)} (all ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${n1(row.pool)}</div>`;
