@@ -270,6 +270,11 @@ const SLOTS_PER_PLAYER = 5;
 let ALL_HEROES = [];
 let SLOT_ORDER = {}; // ability name (with any "_ad" suffix stripped) -> Q/W/E/... position in the hero's kit
 let SYNERGY = new Map(); // "nameA|nameB" (alphabetical) -> synergy value, from windrun's ability-pairs data
+// For model + ability pairs missing from the pairs data (model_ability_shifts.json):
+// hero name -> [primary attribute, attack type], and ability name -> how much worse
+// it does on each attribute/attack type than overall (negative winrate points only).
+let MODEL_TYPES = new Map();
+let MODEL_SHIFTS = {};
 let pool = [], picks = [], pickIndex = 0, done = false, logEntries = [];
 let YOUR_SLOT = 0;
 
@@ -302,7 +307,12 @@ async function loadData() {
     fetch('/heroes_abilities.json').then(r => r.json()),
     fetch('https://cdn.jsdelivr.net/npm/dotaconstants/build/hero_abilities.json').then(r => r.json()).catch(() => ({})),
     fetch('/ability_synergies.json').then(r => r.json()).catch(() => []),
-  ]);
+    fetch('/model_ability_shifts.json').then(r => r.json()).catch(() => ({ heroes: {}, abilities: {} })),
+  ]).then(([wr, ha, syn, shifts]) => {
+    MODEL_TYPES = new Map(Object.entries(shifts.heroes || {}));
+    MODEL_SHIFTS = shifts.abilities || {};
+    return [wr, ha, syn];
+  });
 
   SYNERGY = new Map(synergyData.map(([a, b, s]) => [a < b ? a + '|' + b : b + '|' + a, s]));
 
@@ -597,14 +607,37 @@ function synergyKeyFor(nameA, nameB) {
 }
 // Synergy value between two abilities/models is the lift in combined winrate when
 // both are picked onto the same hero's loadout, vs. their individual winrates
-// (windrun's "SYNERGY" column). Missing data (no recorded pair) is treated as
-// neutral (0), not penalized. A user-set override (SYNERGY_OVERRIDES, via the
-// synergy editor) replaces the windrun value entirely when present.
+// (windrun's "SYNERGY" column). A user-set override (SYNERGY_OVERRIDES, via the
+// synergy editor) replaces the windrun value entirely when present. A missing
+// ability + ability pair is neutral (0). A missing model + ability pair gets an
+// estimate instead: the average of how much worse the ability does on the model's
+// primary attribute and on its attack type than overall (each 0 if not clearly
+// negative). windrun only lists the most-played pairs, so bad model pairings are
+// never in the pairs data; this is where they show up.
+function isModelName(name) { return MODEL_TYPES.has(name); }
+function estimatedModelSynergy(nameA, nameB) {
+  const [model, ability] = isModelName(nameA) ? [nameA, nameB] : [nameB, nameA];
+  if (!isModelName(model) || isModelName(ability)) return 0;
+  const shifts = MODEL_SHIFTS[ability];
+  if (!shifts) return 0;
+  const [attr, attackType] = MODEL_TYPES.get(model);
+  return ((shifts[attr] || 0) + (shifts[attackType] || 0)) / 2;
+}
+function synergyIsEstimated(nameA, nameB) {
+  const key = synergyKeyFor(nameA, nameB);
+  return nameA !== nameB && !SYNERGY_OVERRIDES.has(key) && !SYNERGY.has(key) && estimatedModelSynergy(nameA, nameB) !== 0;
+}
 function synergyBetween(nameA, nameB) {
   if (nameA === nameB) return 0;
   const key = synergyKeyFor(nameA, nameB);
   if (SYNERGY_OVERRIDES.has(key)) return SYNERGY_OVERRIDES.get(key);
-  return SYNERGY.get(key) || 0;
+  if (SYNERGY.has(key)) return SYNERGY.get(key);
+  return estimatedModelSynergy(nameA, nameB);
+}
+// Known-combo bonus applies to ability + ability pairs with any recorded data. Model
+// + ability pairs never get it: those are judged by their real or estimated synergy.
+function knownComboApplies(nameA, nameB) {
+  return hasSynergyData(nameA, nameB) && !isModelName(nameA) && !isModelName(nameB);
 }
 function hasSynergyData(nameA, nameB) {
   if (nameA === nameB) return false;
@@ -764,7 +797,7 @@ function personalParts(item, playerIdx) {
   picks[playerIdx].forEach((held, i) => {
     const orderWeight = SYNERGY_ORDER_WEIGHTS[i];
     ownSynergy -= synergyBetween(item.name, held.name) * multiplier * orderWeight;
-    if (hasSynergyData(item.name, held.name)) combo -= bonus * orderWeight;
+    if (knownComboApplies(item.name, held.name)) combo -= bonus * orderWeight;
   });
   const poolPart = -poolSynergyTerm(item, playerIdx);
   return { base, ownSynergy, combo, pool: poolPart, personal: base + ownSynergy + combo + poolPart };
@@ -1219,22 +1252,25 @@ function explainColumn(col, row, d, fromCell) {
     if (!held.length) return `<h4>Own synergy: ${who}</h4>No picks yet, so 0.`;
     const rows = held.map((h, i) => {
       const syn = synergyBetween(it.name, h.name), w = SYNERGY_ORDER_WEIGHTS[i];
-      return `<tr><td>${i + 1}. ${h.display_name}</td><td>${n2(syn)}</td><td>${w}</td><td>${n1(-syn * M * w)}</td></tr>`;
+      const est = synergyIsEstimated(it.name, h.name) ? ' <span class="dim">(est.)</span>' : '';
+      return `<tr><td>${i + 1}. ${h.display_name}</td><td>${n2(syn)}${est}</td><td>${w}</td><td>${n1(-syn * M * w)}</td></tr>`;
     });
     return `<h4>Own synergy: ${who}</h4>
       <div class="f">−Σ synergy × M × W(order held)
 M = ${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT} × pick ${pickIndex} = ${n2(M)}</div>
-      ${tipTable(['Held pick', 'Synergy', 'W', 'Effect'], rows)}<div>Total ${n1(row.ownSynergy)}</div>`;
+      ${tipTable(['Held pick', 'Synergy', 'W', 'Effect'], rows)}<div>Total ${n1(row.ownSynergy)}</div>
+      <div class="dim">est. = model + ability pair missing from windrun's pair data: average of the ability's winrate drop on the model's attribute and attack type (drops only).</div>`;
   }
   if (col === 'combo') {
     const B = knownComboBonus();
     if (!held.length) return `<h4>Known combo: ${who}</h4>No picks yet, so 0.`;
     const rows = held.map((h, i) => {
-      const has = hasSynergyData(it.name, h.name), w = SYNERGY_ORDER_WEIGHTS[i];
-      return `<tr><td>${i + 1}. ${h.display_name}</td><td>${has ? 'yes (' + n2(synergyBetween(it.name, h.name)) + ')' : 'no'}</td><td>${w}</td><td>${n1(has ? -B * w : 0)}</td></tr>`;
+      const has = knownComboApplies(it.name, h.name), w = SYNERGY_ORDER_WEIGHTS[i];
+      const model = isModelName(it.name) || isModelName(h.name);
+      return `<tr><td>${i + 1}. ${h.display_name}</td><td>${model ? 'model pair, no bonus' : has ? 'yes (' + n2(synergyBetween(it.name, h.name)) + ')' : 'no'}</td><td>${w}</td><td>${n1(has ? -B * w : 0)}</td></tr>`;
     });
     return `<h4>Known combo: ${who}</h4>
-      <div class="f">−Σ bonus × W, for each held pick with any pair data
+      <div class="f">−Σ bonus × W, for each held pick with any pair data (ability + ability only)
 bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFICIENT} × ${pickIndex}² = ${n2(B)}</div>
       ${tipTable(['Held pick', 'Pair data', 'W', 'Effect'], rows)}<div>Total ${n1(row.combo)}</div>`;
   }
