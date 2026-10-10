@@ -362,17 +362,6 @@ function toAbilityItem(a, ownerHeroDisplayName) {
   return { kind: 'ability', name: a.name, display_name: a.display_name, hero: ownerHeroDisplayName, isUlt: a.is_ultimate, winrate: a.winrate, winrateHigh: a.winrateHigh, pickPositionHigh: a.pickPositionHigh, picked: false };
 }
 
-// Hero models only (not abilities) get their raw pick position reshaped before it
-// ever reaches pickScore/etc, applied once at pool-build time. Models already at 5
-// or below are left untouched (already great, no need to reshape them); anything
-// above 5 follows x -> x^2/25, but never drops below 5 even if the formula would
-// put it lower (x^2/25 < 5 for any x < 11.18, which would otherwise make a
-// middling model look better post-transform than it was raw).
-function transformModelPickPosition(x) {
-  if (x == null) return null;
-  if (x <= 5) return x;
-  return Math.max((x * x) / 25, 5);
-}
 
 function initDraft() {
   YOUR_SLOT = parseInt(document.getElementById('spot-select').value);
@@ -389,7 +378,7 @@ function initDraft() {
 
   pool = [];
   chosen.forEach(h => {
-    pool.push({ kind: 'model', name: h.name, display_name: h.display_name, hero: h.display_name, winrateHigh: h.modelWinrateHigh, pickPositionHigh: transformModelPickPosition(h.modelPickPositionHigh), pickPositionHighRaw: h.modelPickPositionHigh, picked: false });
+    pool.push({ kind: 'model', name: h.name, display_name: h.display_name, hero: h.display_name, winrateHigh: h.modelWinrateHigh, pickPositionHigh: h.modelPickPositionHigh, picked: false });
 
     const basics = resolveExclusiveGroups(h.abilities.filter(a => !a.is_ultimate));
     const ults = h.abilities.filter(a => a.is_ultimate);
@@ -1238,14 +1227,9 @@ function explainColumn(col, row, d, fromCell) {
   if (col === 'base') {
     if (!Number.isFinite(row.base)) return `<h4>Base: ${it.display_name}</h4>No high-skill pick position data, so it's picked last.`;
     const wr = it.winrateHigh * 100;
-    let pp = '';
-    if (it.kind === 'model' && it.pickPositionHighRaw != null && it.pickPositionHighRaw !== it.pickPositionHigh) {
-      pp = `<div class="f">model pick position ${n2(it.pickPositionHighRaw)} → max(x²/25, 5) = ${n2(it.pickPositionHigh)}</div>`;
-    }
     return `<h4>Base: ${who}</h4>
-      <div class="f">base = pick position (high skill) − winrate (high skill) × 100 + 60</div>${pp}
-      <div class="f">= ${n2(it.pickPositionHigh)} − ${n2(wr)} + 60 = ${n1(row.base)}</div>
-      <div class="dim">Model pick positions above 5 are reshaped with max(x²/25, 5).</div>`;
+      <div class="f">base = pick position (high skill) − winrate (high skill) × 100 + 60</div>
+      <div class="f">= ${n2(it.pickPositionHigh)} − ${n2(wr)} + 60 = ${n1(row.base)}</div>`;
   }
   if (col === 'ownSynergy') {
     const M = synergyMultiplier();
