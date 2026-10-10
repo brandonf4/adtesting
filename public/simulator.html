@@ -833,9 +833,11 @@ function allySynergyTerm(item, playerIdx, cache) {
 // Scores are computed as "lower = picked first", with every adjustment at the
 // scale it was tuned for (pick positions, ~46 wide). They're displayed as
 // DISPLAY_SCALE × that: higher = picked first, base = windrun Strength (~23 wide),
-// every adjustment halved, and good effects positive. So the internal base is
-// Strength / DISPLAY_SCALE = −2 × Strength.
-const DISPLAY_SCALE = -0.5;
+// every adjustment scaled by |DISPLAY_SCALE|, and good effects positive. So the
+// internal base is Strength / DISPLAY_SCALE = −4 × Strength. Was −0.5 (adjustments
+// halved to match Strength's range); toned down to −0.25 on 2026-10-10.
+const DISPLAY_SCALE = -0.25;
+const SCALE_LABEL = '¼';
 const shown = v => v * DISPLAY_SCALE;
 function personalParts(item, playerIdx) {
   const strength = STRENGTH[item.name];
@@ -1310,7 +1312,7 @@ const s1 = v => { const x = shown(v); return Number.isFinite(x) ? (x > 0.05 ? '+
 function explainColumn(col, row, d, fromCell) {
   const it = row.item, seat = d.seat, held = picks[seat];
   const who = `<b>${it.display_name}</b> for ${seatLabel(seat)}`;
-  const half = 'shown at ½ of the tuned size, good effects as +';
+  const half = `shown at ${SCALE_LABEL} of the tuned size, good effects as +`;
   if (col === 'base') {
     if (!Number.isFinite(row.base)) return `<h4>Base: ${it.display_name}</h4>No Strength data, so it's picked last.`;
     return `<h4>Base: ${who}</h4>
@@ -1327,7 +1329,7 @@ function explainColumn(col, row, d, fromCell) {
       return `<tr><td>${i + 1}. ${h.display_name}</td><td>${n2(syn)}${est}</td><td>${w}</td><td>${s1(-syn * M * w)}</td></tr>`;
     });
     return `<h4>Own synergy: ${who}</h4>
-      <div class="f">½ × Σ synergy × M × W(order held)
+      <div class="f">${SCALE_LABEL} × Σ synergy × M × W(order held)
 M = ${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT} × pick ${pickIndex} = ${n2(M)}</div>
       ${tipTable(['Held pick', 'Synergy', 'W', 'Effect'], rows)}<div>Total ${s1(row.ownSynergy)}</div>
       <div class="dim">est. = model + ability pair missing from windrun's pair data: average of the ability's winrate drop on the model's attribute and attack type (drops only).</div>`;
@@ -1341,7 +1343,7 @@ M = ${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT} × pick ${pickI
       return `<tr><td>${i + 1}. ${h.display_name}</td><td>${model ? 'model pair, no bonus' : has ? 'yes (' + n2(synergyBetween(it.name, h.name)) + ')' : 'no'}</td><td>${w}</td><td>${s1(has ? -B * w : 0)}</td></tr>`;
     });
     return `<h4>Known combo: ${who}</h4>
-      <div class="f">½ × Σ bonus × W, for each held pick with any pair data (ability + ability only)
+      <div class="f">${SCALE_LABEL} × Σ bonus × W, for each held pick with any pair data (ability + ability only)
 bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFICIENT} × ${pickIndex}² = ${n2(B)}</div>
       ${tipTable(['Held pick', 'Pair data', 'W', 'Effect'], rows)}<div>Total ${s1(row.combo)}</div>`;
   }
@@ -1352,10 +1354,10 @@ bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFIC
     const total = pos.reduce((t, x) => t + x.s, 0);
     const rows = pos.slice(0, 5).map(x => `<tr><td>${x.o.display_name} <span class="dim">· ${CAT_LABEL[categoryOf(x.o)]}</span></td><td>+${n2(x.s)}</td></tr>`);
     return `<h4>Pool upside: ${who}</h4>
-      <div class="f">½ × (Σ positive synergy with unpicked options this player can still take after this pick) × P[picks held]
+      <div class="f">${SCALE_LABEL} × (Σ positive synergy with unpicked options this player can still take after this pick) × P[picks held]
 P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → ${P}</div>
       ${pos.length ? tipTable(['Top 5 pool synergies', 'Synergy'], rows) : '<div class="dim">No positive synergies left in the pool.</div>'}
-      <div class="f">= ½ × ${n2(total)} (all ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${s1(row.pool)}</div>`;
+      <div class="f">= ${SCALE_LABEL} × ${n2(total)} (all ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${s1(row.pool)}</div>`;
   }
   if (col === 'enemy' || col === 'ally') {
     const isEnemy = col === 'enemy', cat = categoryOf(it);
@@ -1478,7 +1480,7 @@ function renderBotPanel() {
       }).join('') + `</tr>`;
     });
     html += `</tbody></table>`;
-    html += `<div class="consts">Higher total = picked first. Base = windrun Strength; every adjustment is shown at ½ of its tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}), enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
+    html += `<div class="consts">Higher total = picked first. Base = windrun Strength; every adjustment is shown at ${SCALE_LABEL} of its tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}), enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
   }
   html += `</div>`;
   panel.innerHTML = html;
