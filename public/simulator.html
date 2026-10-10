@@ -106,8 +106,8 @@
     .bot-panel th:first-child, .bot-panel td:first-child { text-align: left; white-space: normal; }
     .bot-panel th { color: #888; font-weight: 500; font-size: 11px; }
     .bot-panel tr.chosen td { background: #1e3a5f; color: #fff; }
-    .bot-panel td.neg { color: #7ef7b8; }
-    .bot-panel td.pos { color: #f08a8a; }
+    .bot-panel td.good { color: #7ef7b8; }
+    .bot-panel td.bad { color: #f08a8a; }
     .bot-panel td.zero { color: #555; }
     .bot-panel td.total { font-weight: 700; }
     .bot-panel th[data-col], .bot-panel td[data-col] { cursor: help; }
@@ -280,6 +280,9 @@ let SYNERGY = new Map(); // "nameA|nameB" (alphabetical) -> synergy value, from 
 // it does on each attribute/attack type than overall (negative winrate points only).
 let MODEL_TYPES = new Map();
 let MODEL_SHIFTS = {};
+// windrun's Strength per ability / hero model (ability_strength.json): a win-model
+// coefficient, higher = stronger. Used as the bot's base value.
+let STRENGTH = {};
 let pool = [], picks = [], pickIndex = 0, done = false, logEntries = [];
 let YOUR_SLOT = 0;
 
@@ -313,7 +316,9 @@ async function loadData() {
     fetch('https://cdn.jsdelivr.net/npm/dotaconstants/build/hero_abilities.json').then(r => r.json()).catch(() => ({})),
     fetch('/ability_synergies.json').then(r => r.json()).catch(() => []),
     fetch('/model_ability_shifts.json').then(r => r.json()).catch(() => ({ heroes: {}, abilities: {} })),
-  ]).then(([wr, ha, syn, shifts]) => {
+    fetch('/ability_strength.json').then(r => r.json()).catch(() => ({ strength: {} })),
+  ]).then(([wr, ha, syn, shifts, strength]) => {
+    STRENGTH = strength.strength || {};
     MODEL_TYPES = new Map(Object.entries(shifts.heroes || {}));
     MODEL_SHIFTS = shifts.abilities || {};
     return [wr, ha, syn];
@@ -825,8 +830,16 @@ function allySynergyTerm(item, playerIdx, cache) {
 // personal = base + ownSynergy + combo + pool: base value plus everything about
 // how the item fits THIS seat's build, i.e. pickScore without the enemy-denial,
 // ally-avoidance and category-scarcity terms.
+// Scores are computed as "lower = picked first", with every adjustment at the
+// scale it was tuned for (pick positions, ~46 wide). They're displayed as
+// DISPLAY_SCALE × that: higher = picked first, base = windrun Strength (~23 wide),
+// every adjustment halved, and good effects positive. So the internal base is
+// Strength / DISPLAY_SCALE = −2 × Strength.
+const DISPLAY_SCALE = -0.5;
+const shown = v => v * DISPLAY_SCALE;
 function personalParts(item, playerIdx) {
-  const base = item.pickPositionHigh == null ? Infinity : item.pickPositionHigh - item.winrateHigh * 100 + 60;
+  const strength = STRENGTH[item.name];
+  const base = strength == null ? Infinity : strength / DISPLAY_SCALE;
   const multiplier = synergyMultiplier();
   const bonus = knownComboBonus();
   let ownSynergy = 0, combo = 0;
@@ -1276,10 +1289,12 @@ function renderControls() {
   }
 }
 
+// Takes an internal score part, formats it as shown (higher = better).
 function fmtPart(v) {
-  if (!Number.isFinite(v)) return { text: v > 0 ? '∞' : '−∞', cls: 'pos' };
-  if (Math.abs(v) < 0.05) return { text: '0.0', cls: 'zero' };
-  return { text: (v > 0 ? '+' : '−') + Math.abs(v).toFixed(1), cls: v < 0 ? 'neg' : 'pos' };
+  const s = shown(v);
+  if (!Number.isFinite(s)) return { text: '—', cls: 'bad' };
+  if (Math.abs(s) < 0.05) return { text: '0.0', cls: 'zero' };
+  return { text: (s > 0 ? '+' : '−') + Math.abs(s).toFixed(1), cls: s > 0 ? 'good' : 'bad' };
 }
 // Hover explanations for the bot panel: hovering a column header explains that
 // term for the proposed pick; hovering a cell explains it for that row's option.
@@ -1290,15 +1305,18 @@ const CAT_LABEL = { model: 'Model', ult: 'Ultimate', basic: 'Basic' };
 function tipTable(head, rows) {
   return `<table><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr>${rows.join('')}</table>`;
 }
+// Signed, shown (higher = better) one-decimal value of an internal score part.
+const s1 = v => { const x = shown(v); return Number.isFinite(x) ? (x > 0.05 ? '+' : x < -0.05 ? '−' : '') + Math.abs(x).toFixed(1) : '—'; };
 function explainColumn(col, row, d, fromCell) {
   const it = row.item, seat = d.seat, held = picks[seat];
   const who = `<b>${it.display_name}</b> for ${seatLabel(seat)}`;
+  const half = 'shown at ½ of the tuned size, good effects as +';
   if (col === 'base') {
-    if (!Number.isFinite(row.base)) return `<h4>Base: ${it.display_name}</h4>No high-skill pick position data, so it's picked last.`;
-    const wr = it.winrateHigh * 100;
+    if (!Number.isFinite(row.base)) return `<h4>Base: ${it.display_name}</h4>No Strength data, so it's picked last.`;
     return `<h4>Base: ${who}</h4>
-      <div class="f">base = pick position (high skill) − winrate (high skill) × 100 + 60</div>
-      <div class="f">= ${n2(it.pickPositionHigh)} − ${n2(wr)} + 60 = ${n1(row.base)}</div>`;
+      <div class="f">base = windrun Strength (win-model coefficient, all skill levels, higher = stronger)
+= ${n2(shown(row.base))}</div>
+      <div class="dim">For reference: high-skill pick position ${n2(it.pickPositionHigh)}, high-skill winrate ${n2(it.winrateHigh * 100)}%.</div>`;
   }
   if (col === 'ownSynergy') {
     const M = synergyMultiplier();
@@ -1306,12 +1324,12 @@ function explainColumn(col, row, d, fromCell) {
     const rows = held.map((h, i) => {
       const syn = synergyBetween(it.name, h.name), w = SYNERGY_ORDER_WEIGHTS[i];
       const est = synergyIsEstimated(it.name, h.name) ? ' <span class="dim">(est.)</span>' : '';
-      return `<tr><td>${i + 1}. ${h.display_name}</td><td>${n2(syn)}${est}</td><td>${w}</td><td>${n1(-syn * M * w)}</td></tr>`;
+      return `<tr><td>${i + 1}. ${h.display_name}</td><td>${n2(syn)}${est}</td><td>${w}</td><td>${s1(-syn * M * w)}</td></tr>`;
     });
     return `<h4>Own synergy: ${who}</h4>
-      <div class="f">−Σ synergy × M × W(order held)
+      <div class="f">½ × Σ synergy × M × W(order held)
 M = ${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT} × pick ${pickIndex} = ${n2(M)}</div>
-      ${tipTable(['Held pick', 'Synergy', 'W', 'Effect'], rows)}<div>Total ${n1(row.ownSynergy)}</div>
+      ${tipTable(['Held pick', 'Synergy', 'W', 'Effect'], rows)}<div>Total ${s1(row.ownSynergy)}</div>
       <div class="dim">est. = model + ability pair missing from windrun's pair data: average of the ability's winrate drop on the model's attribute and attack type (drops only).</div>`;
   }
   if (col === 'combo') {
@@ -1320,12 +1338,12 @@ M = ${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT} × pick ${pickI
     const rows = held.map((h, i) => {
       const has = knownComboApplies(it.name, h.name), w = SYNERGY_ORDER_WEIGHTS[i];
       const model = isModelName(it.name) || isModelName(h.name);
-      return `<tr><td>${i + 1}. ${h.display_name}</td><td>${model ? 'model pair, no bonus' : has ? 'yes (' + n2(synergyBetween(it.name, h.name)) + ')' : 'no'}</td><td>${w}</td><td>${n1(has ? -B * w : 0)}</td></tr>`;
+      return `<tr><td>${i + 1}. ${h.display_name}</td><td>${model ? 'model pair, no bonus' : has ? 'yes (' + n2(synergyBetween(it.name, h.name)) + ')' : 'no'}</td><td>${w}</td><td>${s1(has ? -B * w : 0)}</td></tr>`;
     });
     return `<h4>Known combo: ${who}</h4>
-      <div class="f">−Σ bonus × W, for each held pick with any pair data (ability + ability only)
+      <div class="f">½ × Σ bonus × W, for each held pick with any pair data (ability + ability only)
 bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFICIENT} × ${pickIndex}² = ${n2(B)}</div>
-      ${tipTable(['Held pick', 'Pair data', 'W', 'Effect'], rows)}<div>Total ${n1(row.combo)}</div>`;
+      ${tipTable(['Held pick', 'Pair data', 'W', 'Effect'], rows)}<div>Total ${s1(row.combo)}</div>`;
   }
   if (col === 'pool') {
     const P = POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[held.length];
@@ -1334,10 +1352,10 @@ bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFIC
     const total = pos.reduce((t, x) => t + x.s, 0);
     const rows = pos.slice(0, 5).map(x => `<tr><td>${x.o.display_name} <span class="dim">· ${CAT_LABEL[categoryOf(x.o)]}</span></td><td>+${n2(x.s)}</td></tr>`);
     return `<h4>Pool upside: ${who}</h4>
-      <div class="f">−(Σ positive synergy with unpicked options this player can still take after this pick) × P[picks held]
+      <div class="f">½ × (Σ positive synergy with unpicked options this player can still take after this pick) × P[picks held]
 P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → ${P}</div>
       ${pos.length ? tipTable(['Top 5 pool synergies', 'Synergy'], rows) : '<div class="dim">No positive synergies left in the pool.</div>'}
-      <div class="f">= −${n2(total)} (all ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${n1(row.pool)}</div>`;
+      <div class="f">= ½ × ${n2(total)} (all ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${s1(row.pool)}</div>`;
   }
   if (col === 'enemy' || col === 'ally') {
     const isEnemy = col === 'enemy', cat = categoryOf(it);
@@ -1348,25 +1366,27 @@ P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → 
       if (!out) return `<tr><td>${seatLabel(s)}</td><td colspan="4" class="dim">no picks left, skipped</td></tr>`;
       if (!picks[s].length) return `<tr><td>${seatLabel(s)}</td><td colspan="4" class="dim">no picks yet, 0</td></tr>`;
       const l = outlookLoss(out, it);
-      const name = i => i < out.opts.length ? `${out.opts[i].item.display_name} ${n1(out.opts[i].p)}` : 'none left';
+      const name = i => i < out.opts.length ? `${out.opts[i].item.display_name} ${s1(out.opts[i].p)}` : 'none left';
       const gap = l.rank >= 0 && l.rank <= out.keepIdx
         ? `${name(out.keepIdx)} → ${name(out.keepIdx + 1)}`
         : `<span class="dim">outside their top ${out.keepIdx + 1}</span>`;
-      return `<tr><td>${seatLabel(s)}</td><td>${out.chances} → ${out.denied}</td><td>#${l.rank + 1}</td><td style="text-align:left;white-space:normal">${gap}</td><td>${n1((isEnemy ? -1 : 1) * l.loss)}</td></tr>`;
+      return `<tr><td>${seatLabel(s)}</td><td>${out.chances} → ${out.denied}</td><td>#${l.rank + 1}</td><td style="text-align:left;white-space:normal">${gap}</td><td>${s1((isEnemy ? -1 : 1) * l.loss)}</td></tr>`;
     });
     const head = ['Player', isEnemy ? 'Our picks → denied' : 'Enemy picks → denied', 'Rank', 'Kept option → next', 'Effect'];
+    const w = SCARCITY_WEIGHT, cap = SCARCITY_CAP * Math.abs(DISPLAY_SCALE);
     const formula = `<div class="f">denied = opposing picks before their turn (1-2: all, then half rounded up), each opposing player capped at its open ${CAT_LABEL[cat]} slots
 kept rank = denied + slots left; if ${it.display_name} ranks within it, losing it drops them one rank
-effect = ${isEnemy ? '−' : '+'}${SCARCITY_WEIGHT} × clamp(next − kept, 0, ${SCARCITY_CAP}), scores = their own synergy + known combo with what they hold (no base value)</div>`;
+effect = ${isEnemy ? '+' : '−'}${w} × clamp(kept − next, 0, ${cap}), scores = their own synergy + known combo with what they hold (no base value), ${half}</div>`;
     return `<h4>${isEnemy ? 'Enemy denial' : 'Ally avoid'}: ${who}</h4>${formula}
-      ${tipTable(head, rows)}<div>Total ${n1(isEnemy ? row.enemy : row.ally)}</div>`;
+      ${tipTable(head, rows)}<div>Total ${s1(isEnemy ? row.enemy : row.ally)}</div>`;
   }
   if (col === 'scarcity') {
+    const cap = SCARCITY_CAP * Math.abs(DISPLAY_SCALE);
     let html = `<h4>Category scarcity for ${seatLabel(seat)}</h4>
       <div class="f">taken = enemy picks before next turn (1-2: all, then half rounded up), each enemy capped at its open slots
 fallback = personal score at rank taken + slots left
-bonus = −${SCARCITY_WEIGHT} × clamp(fallback − best, 0, ${SCARCITY_CAP})</div>
-      <div class="dim">personal score = base + own synergy + known combo + pool upside</div>`;
+bonus = +${SCARCITY_WEIGHT} × clamp(best − fallback, 0, ${cap})</div>
+      <div class="dim">personal score = base + own synergy + known combo + pool upside (higher is better)</div>`;
     for (const cat of ['model', 'ult', 'basic']) {
       const s = d.scarcity[cat];
       const mine = fromCell && categoryOf(it) === cat ? ` <span class="dim">← ${it.display_name}'s category</span>` : '';
@@ -1380,19 +1400,19 @@ bonus = −${SCARCITY_WEIGHT} × clamp(fallback − best, 0, ${SCARCITY_CAP})</d
       const rows = opts.slice(0, show).map((o, i) => {
         const cls = i === 0 ? 'mark' : i + 1 === s.fallbackRank ? 'fb' : '';
         const tag = [i === 0 ? 'best' : '', i < s.taken ? 'assumed taken' : '', i + 1 === s.fallbackRank ? 'fallback' : ''].filter(Boolean).join(', ');
-        return `<tr class="${cls}"><td>${i + 1}. ${o.item.display_name}</td><td>${n1(o.p)}</td><td>${tag}</td></tr>`;
+        return `<tr class="${cls}"><td>${i + 1}. ${o.item.display_name}</td><td>${n1(shown(o.p))}</td><td>${tag}</td></tr>`;
       });
       const deferred = d.deferredCats && d.deferredCats.includes(cat) ? ' <span style="color:#f4c542">(deferred: every enemy picking before the next turn has filled it)</span>' : '';
       html += `<div class="cat"><b>${CAT_LABEL[cat]}</b>: ${s.enemyPicks} enemy picks → ${s.taken} taken, ${s.slotsLeft} slot${s.slotsLeft === 1 ? '' : 's'} left → fallback rank ${s.fallbackRank}${deferred}${mine}
         ${tipTable(['Option', 'Personal', ''], rows)}
-        <div class="f">−${SCARCITY_WEIGHT} × clamp(${Number.isFinite(s.fallback) ? n1(s.fallback) : 'none left'} − ${n1(s.best)}, 0, ${SCARCITY_CAP}) = ${s.bonus ? '−' + n1(s.bonus) : '0.0'}</div></div>`;
+        <div class="f">${SCARCITY_WEIGHT} × clamp(${n1(shown(s.best))} − ${Number.isFinite(s.fallback) ? n1(shown(s.fallback)) : 'none left'}, 0, ${cap}) = ${s.bonus ? '+' + n1(-shown(s.bonus)) : '0.0'}</div></div>`;
     }
     return html;
   }
   if (col === 'total') {
     const parts = [['Base', row.base], ['Own synergy', row.ownSynergy], ['Known combo', row.combo], ['Pool upside', row.pool], ['Enemy denial', row.enemy], ['Ally avoid', row.ally], ['Scarcity', row.scarcity]];
-    return `<h4>Total: ${who}</h4><div class="f">base + own synergy + known combo + pool upside + enemy denial + ally avoid + scarcity (lower is picked first)</div>
-      ${tipTable(['Term', 'Value'], parts.map(([l, v]) => `<tr><td>${l}</td><td>${n1(v)}</td></tr>`))}<div>Total ${n1(row.total)}</div>`;
+    return `<h4>Total: ${who}</h4><div class="f">base + own synergy + known combo + pool upside + enemy denial + ally avoid + scarcity (higher is picked first)</div>
+      ${tipTable(['Term', 'Value'], parts.map(([l, v]) => `<tr><td>${l}</td><td>${l === 'Base' ? n2(shown(v)) : s1(v)}</td></tr>`))}<div>Total ${n1(shown(row.total))}</div>`;
   }
   return '';
 }
@@ -1451,14 +1471,14 @@ function renderBotPanel() {
       const deferred = d.deferredCats && d.deferredCats.includes(categoryOf(it));
       html += `<tr class="${it === c ? 'chosen' : ''}"${deferred ? ' style="opacity:0.45"' : ''}><td>${label}${deferred ? ' <span style="color:#f4c542">(deferred)</span>' : ''}</td>` + cols.map(([k]) => {
         const at = `data-col="${k}" data-row="${ri}"`;
-        if (k === 'base') return `<td ${at}>${Number.isFinite(r.base) ? r.base.toFixed(1) : 'no data'}</td>`;
-        if (k === 'total') return `<td class="total" ${at}>${Number.isFinite(r.total) ? r.total.toFixed(1) : '∞'}</td>`;
+        if (k === 'base') return `<td ${at}>${Number.isFinite(r.base) ? shown(r.base).toFixed(1) : 'no data'}</td>`;
+        if (k === 'total') return `<td class="total" ${at}>${Number.isFinite(r.total) ? shown(r.total).toFixed(1) : '—'}</td>`;
         const f = fmtPart(r[k]);
         return `<td class="${f.cls}" ${at}>${f.text}</td>`;
       }).join('') + `</tr>`;
     });
     html += `</tbody></table>`;
-    html += `<div class="consts">Lower total = picked first. Now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}), enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
+    html += `<div class="consts">Higher total = picked first. Base = windrun Strength; every adjustment is shown at ½ of its tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}), enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
   }
   html += `</div>`;
   panel.innerHTML = html;
