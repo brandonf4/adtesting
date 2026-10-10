@@ -140,6 +140,7 @@
   <h2>Ability draft simulator</h2>
   <div class="header-right">
     <span class="turn-badge" id="turn-badge">Loading...</span>
+    <button class="bot-pick-btn" id="undo-pick-btn" title="Undo the last pick (any seat)" disabled>◀ Undo pick</button>
     <button class="bot-pick-btn" id="bot-pick-btn" disabled>Bot pick</button>
   </div>
 </div>
@@ -938,6 +939,21 @@ function confirmPick(ability) {
   render();
 }
 
+// Rewind: takes back the most recent pick (any seat, yours or a bot's), returning
+// it to the pool and the draft to that seat's turn, so skipped options can be
+// re-examined. Press repeatedly to go further back. The bot's decision is
+// recomputed from the restored state.
+function undoPick() {
+  if (synergyEditMode || pickIndex === 0) return;
+  pickIndex--;
+  done = false;
+  const item = picks[PICK_ORDER[pickIndex]].pop();
+  if (item) item.picked = false;
+  logEntries.pop();
+  botDecisionCache = null;
+  render();
+}
+
 // Bots no longer pick on their own: each bot pick waits for the "Bot pick"
 // button, with the proposal and its full score breakdown shown in the panel.
 function botPickNow() {
@@ -1181,6 +1197,7 @@ function renderControls() {
     banner.style.display = 'none';
     return;
   }
+  banner.style.display = 'none'; // hidden again if a finished draft is rewound
   if (done) {
     badge.textContent = 'Draft complete';
     badge.className = 'turn-badge bot';
@@ -1354,6 +1371,7 @@ function renderBotPanel() {
   const btn = document.getElementById('bot-pick-btn');
   const botTurn = !done && !synergyEditMode && !isYourTurn() && pickIndex < PICK_ORDER.length;
   btn.disabled = !botTurn;
+  document.getElementById('undo-pick-btn').disabled = synergyEditMode || pickIndex === 0;
   if (!botTurn) { panel.style.display = 'none'; return; }
   const d = botDecision();
   panel.style.display = 'block';
@@ -1406,6 +1424,7 @@ function renderLog() {
 function render() { renderPool(); renderPlayers(); renderControls(); renderLog(); renderBotPanel(); }
 
 document.getElementById('bot-pick-btn').addEventListener('click', botPickNow);
+document.getElementById('undo-pick-btn').addEventListener('click', undoPick);
 document.getElementById('bot-panel').addEventListener('mouseover', (e) => {
   const el = e.target.closest('[data-col]');
   if (el) showBotTip(el); else hideBotTip();
