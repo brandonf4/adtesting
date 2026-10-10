@@ -724,49 +724,82 @@ function nextPickIndexFor(seatIdx, afterIndex) {
   return null;
 }
 
-// Denies the enemy team good stuff: for each enemy seat, this item's positive
-// synergy with everything THEY already hold, weighted by how soon they pick
-// again - 10/(4 + picksBetween), where picksBetween is the count of other
-// picks strictly between now and their next turn (always odd, since seats
-// alternate strictly by team within a round: picking right after this one
-// gives the closest possible gap, 1 pick between, for a multiplier of 2;
-// picking 17 picks from now gives 10/21). A seat whose model/ultimate/3-basics
-// slot for this item's category is already filled is skipped entirely (via
-// pickBlockedFor, the same check that governs their own eligibility) - there's
-// nothing to deny if they can't take this category anyway. Summed across all
-// 5 enemies, since each has their own distance. Added to `adjustment` like
-// every other term here, so denying a good enemy target pulls this item
-// earlier, same direction as a good synergy with the bot's own build.
-function enemySynergyTerm(item, playerIdx) {
-  let total = 0;
-  for (const enemy of enemiesOf(playerIdx)) {
-    if (pickBlockedFor(enemy, item)) continue;
-    const nextIdx = nextPickIndexFor(enemy, pickIndex);
-    if (nextIdx == null) continue;
-    const picksBetween = nextIdx - pickIndex - 1;
-    const weight = 10 / (4 + picksBetween);
-    total += weight * sumPositiveSynergy(item.name, picks[enemy]);
+// How many of a seat's top options in a category the other team is assumed to
+// take when it has `chances` picks before that seat's next turn: every chance for
+// the first two, then half of them rounded up (3-4 -> 2, 5-6 -> 3, 7-8 -> 4, 9-10 -> 5).
+function deniedCount(chances) { return chances <= 2 ? chances : Math.ceil(chances / 2); }
+
+// Picks the other team makes strictly between now and `seat`'s next turn that
+// could go to `cat`: each opposing seat counts once per turn it gets, but never
+// more times than it has open slots in that category (an enemy with an ult
+// already can't take one). null if `seat` has no turn left.
+function opposingPicksBefore(seat, cat) {
+  const next = nextPickIndexFor(seat, pickIndex);
+  if (next == null) return null;
+  const turns = new Map();
+  for (let i = pickIndex + 1; i < next; i++) {
+    const s = PICK_ORDER[i];
+    if (!isYourTeam(s) === !isYourTeam(seat)) continue; // same team as `seat`
+    turns.set(s, (turns.get(s) || 0) + 1);
   }
-  return total;
+  let n = 0;
+  for (const [s, t] of turns) n += Math.min(t, slotsLeftFor(s, cat));
+  return n;
 }
 
-// The mirror case for allies: this item's positive synergy with everything
-// the bot's teammates already hold, flat-weighted (no distance scaling,
-// since a teammate isn't "denied" by a delayed pick the way an enemy would
-// be), skipping any ally whose slot for this item's category is already
-// filled (same pickBlockedFor check as above - nothing to avoid stepping on
-// once they've already locked that category in). Subtracted from
-// `adjustment` instead of added - the opposite direction of every other term
-// here - so a strong ally-synergy candidate gets deprioritized rather than
-// prioritized, leaving it for that ally to pick themselves instead of this
-// seat taking it first.
-function allySynergyTerm(item, playerIdx) {
-  let total = 0;
-  for (const ally of alliesOf(playerIdx)) {
-    if (pickBlockedFor(ally, item)) continue;
-    total += sumPositiveSynergy(item.name, picks[ally]);
+// Another seat's view of one category: its options ranked best first by its own
+// personal score, how many the other team is assumed to deny before its next
+// turn, and keepIdx - the rank (0-based) of the worst option it still ends up
+// with (denied + slots left - 1, the same fallback rank category scarcity uses).
+// null if the seat can't take the category or has no turn left. Cached per
+// decision in `cache`, since every candidate looks up the same 9 seats.
+function seatOutlook(seat, cat, cache) {
+  const key = seat + '|' + cat;
+  if (cache && cache.has(key)) return cache.get(key);
+  let out = null;
+  const slots = slotsLeftFor(seat, cat);
+  const chances = slots ? opposingPicksBefore(seat, cat) : null;
+  if (chances != null) {
+    const opts = pool.filter(o => !o.picked && categoryOf(o) === cat)
+      .map(o => ({ item: o, p: personalScore(o, seat) })).sort((a, b) => a.p - b.p);
+    const denied = deniedCount(chances);
+    out = { seat, cat, chances, denied, slots, opts, keepIdx: denied + slots - 1 };
   }
-  return total * 2;
+  if (cache) cache.set(key, out);
+  return out;
+}
+// What it costs that seat if `item` leaves the pool now. Only matters if the
+// item is in its top keepIdx + 1 (the options it either gets or has denied):
+// then everything below shifts up one rank and its worst kept option becomes
+// the next one down. Weighted and capped like category scarcity.
+function outlookLoss(out, item) {
+  if (!out) return { rank: -1, loss: 0 };
+  const rank = out.opts.findIndex(x => x.item === item);
+  if (rank < 0 || rank > out.keepIdx) return { rank, loss: 0 };
+  const at = i => i < out.opts.length ? out.opts[i].p : Infinity;
+  const kept = at(out.keepIdx), next = at(out.keepIdx + 1);
+  if (!Number.isFinite(kept)) return { rank, loss: 0, kept, next };
+  return { rank, kept, next, loss: Math.min(Math.max(next - kept, 0), SCARCITY_CAP) * SCARCITY_WEIGHT };
+}
+
+// Enemy denial: for each enemy who can still take this category, how much worse
+// their result in it gets if this seat takes the item now. If our team has 1 pick
+// before their turn and the item is one of their two best, they'd lose their 2nd
+// best and drop to their 3rd, so the gap between those is what taking it denies.
+// Pulls the item earlier (negative), summed over enemies.
+function enemySynergyTerm(item, playerIdx, cache) {
+  const cat = categoryOf(item);
+  return enemiesOf(playerIdx).reduce((t, e) => t + outlookLoss(seatOutlook(e, cat, cache), item).loss, 0);
+}
+
+// Ally avoid: the mirror for teammates. If a teammate has two similar options and
+// one enemy pick before their turn, taking one leaves them exposed to losing the
+// other, a big gap, so this pushes the item later. If it's their only good option
+// the enemy would deny it anyway, so the gap (their 2nd vs 3rd best) is small and
+// this seat is free to take it.
+function allySynergyTerm(item, playerIdx, cache) {
+  const cat = categoryOf(item);
+  return alliesOf(playerIdx).reduce((t, a) => t + outlookLoss(seatOutlook(a, cat, cache), item).loss, 0);
 }
 
 // Lower avgPickPosition = picked earlier by real high-skill players = more prized,
@@ -803,9 +836,9 @@ function personalScore(item, playerIdx) {
 // Category scarcity: a flat bonus shared by every option in a category (model,
 // ultimate, basic), so the order within a category never changes - only which
 // category the bot spends this pick on. It doesn't predict what the enemy will
-// take; it assumes floor(enemy picks before this seat's next turn / 2) of this
+// take; it assumes deniedCount(enemy picks before this seat's next turn) of this
 // seat's top options in the category are gone (only enemies who can still take
-// that category count), then compares the category's best option against what
+// that category count, see opposingPicksBefore), then compares the category's best option against what
 // would be left: the option at rank taken + slotsLeft, counting the best as
 // rank 1 (slotsLeft > 1 for basics, since those slots all fill from one list). The
 // bigger that gap, the more urgent the category, up to SCARCITY_CAP. Ally picks
@@ -832,18 +865,8 @@ function categoryScarcityBonuses(playerIdx, available, personal, details) {
   for (const cat of Object.keys(bonuses)) {
     const options = available.filter(a => categoryOf(a) === cat);
     if (!options.length) continue;
-    // Each enemy counts once per pick it makes before our next turn, but never
-    // more times than it has open slots in this category (an enemy with an ult
-    // already can't take ours; one with 1 open basic slot counts at most once).
-    const enemyTurns = new Map();
-    for (let i = pickIndex + 1; i < next; i++) {
-      const seat = PICK_ORDER[i];
-      if (!isYourTeam(seat) === !isYourTeam(playerIdx)) continue; // ally of this seat
-      enemyTurns.set(seat, (enemyTurns.get(seat) || 0) + 1);
-    }
-    let enemyPicks = 0;
-    for (const [seat, turns] of enemyTurns) enemyPicks += Math.min(turns, slotsLeftFor(seat, cat));
-    const taken = Math.floor(enemyPicks / 2);
+    const enemyPicks = opposingPicksBefore(playerIdx, cat);
+    const taken = deniedCount(enemyPicks);
     const scores = options.map(a => personal.get(a)).sort((a, b) => a - b);
     const best = scores[0];
     if (!Number.isFinite(best)) continue;
@@ -863,10 +886,10 @@ function categoryScarcityBonuses(playerIdx, available, personal, details) {
 // - see enemySynergyTerm/allySynergyTerm above for why each goes the direction it
 // does - and finally the category scarcity bonus for this option's category.
 // Returns every part (each as its signed effect on the score) plus the total.
-function scoreParts(item, playerIdx, personalPartsMap, scarcity) {
+function scoreParts(item, playerIdx, personalPartsMap, scarcity, outlooks) {
   const pp = personalPartsMap ? personalPartsMap.get(item) : personalParts(item, playerIdx);
-  const enemy = -enemySynergyTerm(item, playerIdx);
-  const ally = allySynergyTerm(item, playerIdx);
+  const enemy = -enemySynergyTerm(item, playerIdx, outlooks);
+  const ally = allySynergyTerm(item, playerIdx, outlooks);
   const scarcityPart = scarcity ? -scarcity[categoryOf(item)] : 0;
   return { ...pp, enemy, ally, scarcity: scarcityPart, total: pp.personal + enemy + ally + scarcityPart };
 }
@@ -900,7 +923,8 @@ function botDecision() {
   const personal = new Map(available.map(a => [a, parts.get(a).personal]));
   const bonuses = categoryScarcityBonuses(p, available, personal, decision.scarcity);
   decision.personal = personal;
-  decision.rows = available.map(a => ({ item: a, ...scoreParts(a, p, parts, bonuses) }))
+  decision.outlooks = new Map();
+  decision.rows = available.map(a => ({ item: a, ...scoreParts(a, p, parts, bonuses, decision.outlooks) }))
     .sort((x, y) => x.total - y.total);
   // Hard override: if every enemy who picks between now and this seat's next
   // turn has already filled a category, nothing in it can be taken from us
@@ -1307,32 +1331,29 @@ P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → 
       <div class="f">= −${n2(total)} (all ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${n1(row.pool)}</div>`;
   }
   if (col === 'enemy' || col === 'ally') {
-    const isEnemy = col === 'enemy';
+    const isEnemy = col === 'enemy', cat = categoryOf(it);
+    const cache = d.outlooks || new Map();
     const rows = (isEnemy ? enemiesOf(seat) : alliesOf(seat)).map(s => {
-      if (pickBlockedFor(s, it)) return `<tr><td>${seatLabel(s)}</td><td colspan="3" class="dim">${CAT_LABEL[categoryOf(it)]} slot filled, skipped</td></tr>`;
-      let w = 2, note = '×2';
-      if (isEnemy) {
-        const nx = nextPickIndexFor(s, pickIndex);
-        if (nx == null) return `<tr><td>${seatLabel(s)}</td><td colspan="3" class="dim">no picks left, skipped</td></tr>`;
-        const between = nx - pickIndex - 1;
-        w = 10 / (4 + between); note = `10/(4+${between}) = ${n2(w)}`;
-      }
-      const pairs = picks[s].map(h => ({ h, s: synergyBetween(it.name, h.name) })).filter(x => x.s > 0);
-      const sum = pairs.reduce((t, x) => t + x.s, 0);
-      const list = pairs.length ? pairs.map(x => `${x.h.display_name} +${n2(x.s)}`).join(', ') : '<span class="dim">none</span>';
-      return `<tr><td>${seatLabel(s)}</td><td style="text-align:left;white-space:normal">${list}</td><td>${note}</td><td>${n1((isEnemy ? -1 : 1) * w * sum)}</td></tr>`;
+      if (!slotsLeftFor(s, cat)) return `<tr><td>${seatLabel(s)}</td><td colspan="4" class="dim">${CAT_LABEL[cat]} slot filled, skipped</td></tr>`;
+      const out = seatOutlook(s, cat, cache);
+      if (!out) return `<tr><td>${seatLabel(s)}</td><td colspan="4" class="dim">no picks left, skipped</td></tr>`;
+      const l = outlookLoss(out, it);
+      const name = i => i < out.opts.length ? `${out.opts[i].item.display_name} ${n1(out.opts[i].p)}` : 'none left';
+      const gap = l.rank >= 0 && l.rank <= out.keepIdx
+        ? `${name(out.keepIdx)} → ${name(out.keepIdx + 1)}`
+        : `<span class="dim">outside their top ${out.keepIdx + 1}</span>`;
+      return `<tr><td>${seatLabel(s)}</td><td>${out.chances} → ${out.denied}</td><td>#${l.rank + 1}</td><td style="text-align:left;white-space:normal">${gap}</td><td>${n1((isEnemy ? -1 : 1) * l.loss)}</td></tr>`;
     });
-    return isEnemy
-      ? `<h4>Enemy denial: ${who}</h4>
-        <div class="f">−Σ over enemies: 10 / (4 + picks before their next turn) × (positive synergy with their picks)</div>
-        ${tipTable(['Enemy', 'Positive synergies', 'Weight', 'Effect'], rows)}<div>Total ${n1(row.enemy)}</div>`
-      : `<h4>Ally avoid: ${who}</h4>
-        <div class="f">+2 × Σ over allies: positive synergy with their picks (pushes it later, leaving it for them)</div>
-        ${tipTable(['Ally', 'Positive synergies', 'Weight', 'Effect'], rows)}<div>Total ${n1(row.ally)}</div>`;
+    const head = ['Player', isEnemy ? 'Our picks → denied' : 'Enemy picks → denied', 'Rank', 'Kept option → next', 'Effect'];
+    const formula = `<div class="f">denied = opposing picks before their turn (1-2: all, then half rounded up), each opposing player capped at its open ${CAT_LABEL[cat]} slots
+kept rank = denied + slots left; if ${it.display_name} ranks within it, losing it drops them one rank
+effect = ${isEnemy ? '−' : '+'}${SCARCITY_WEIGHT} × clamp(next − kept, 0, ${SCARCITY_CAP}), using their personal scores</div>`;
+    return `<h4>${isEnemy ? 'Enemy denial' : 'Ally avoid'}: ${who}</h4>${formula}
+      ${tipTable(head, rows)}<div>Total ${n1(isEnemy ? row.enemy : row.ally)}</div>`;
   }
   if (col === 'scarcity') {
     let html = `<h4>Category scarcity for ${seatLabel(seat)}</h4>
-      <div class="f">taken = floor(enemy picks before next turn ÷ 2), each enemy capped at its open slots
+      <div class="f">taken = enemy picks before next turn (1-2: all, then half rounded up), each enemy capped at its open slots
 fallback = personal score at rank taken + slots left
 bonus = −${SCARCITY_WEIGHT} × clamp(fallback − best, 0, ${SCARCITY_CAP})</div>
       <div class="dim">personal score = base + own synergy + known combo + pool upside</div>`;
@@ -1427,7 +1448,7 @@ function renderBotPanel() {
       }).join('') + `</tr>`;
     });
     html += `</tbody></table>`;
-    html += `<div class="consts">Lower total = picked first. Now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}), ally avoid ×2, enemy denial 10/(4+picks between).</div>`;
+    html += `<div class="consts">Lower total = picked first. Now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}), enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
   }
   html += `</div>`;
   panel.innerHTML = html;
