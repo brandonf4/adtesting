@@ -49,6 +49,10 @@
     .synergy-overlay { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; background: rgba(10,10,20,0.9); padding: 4px 5px; font-size: 13px; line-height: 1.5; font-weight: 600; }
     .synergy-overlay .syn-row { display: flex; align-items: center; justify-content: space-between; gap: 4px; color: #ccc; }
     .synergy-overlay .syn-row.adj { color: #7eb8f7; }
+    .synergy-overlay .syn-row.est { color: #f4c542; }
+    /* On narrow cards, cut the label rather than the number */
+    .synergy-overlay .syn-row > span:first-child { min-width: 0; overflow: hidden; text-overflow: clip; white-space: nowrap; }
+    .synergy-overlay .syn-row > span:not(:first-child) { flex-shrink: 0; }
     .synergy-overlay .syn-row.adj .adj-val { font-weight: 700; }
     .synergy-overlay .syn-edit-btn { background: none; border: none; color: #7eb8f7; cursor: pointer; font-size: 15px; padding: 0 2px; line-height: 1; }
     .synergy-overlay input[type="number"] { width: 52px; font-size: 13px; background: #111122; color: #e0e0e0; border: 1px solid #444; border-radius: 2px; padding: 0 2px; }
@@ -1056,6 +1060,21 @@ function buildSynergyOverlay(otherItem) {
   wrRow.className = 'syn-row';
   wrRow.innerHTML = `<span>Windrun</span><span>${wrValue == null ? '—' : wrValue.toFixed(2)}</span>`;
   overlay.appendChild(wrRow);
+
+  // Model + ability pair with no windrun data: show the estimate the bots use
+  // (average of the ability's winrate drop on the model's attribute and attack type).
+  const modelPair = isModelName(synergyFocus.name) !== isModelName(otherItem.name);
+  if (modelPair && wrValue == null && estimatedModelSynergy(synergyFocus.name, otherItem.name) !== 0) {
+    const [model, ability] = isModelName(synergyFocus.name) ? [synergyFocus.name, otherItem.name] : [otherItem.name, synergyFocus.name];
+    const [attr, attackType] = MODEL_TYPES.get(model);
+    const shifts = MODEL_SHIFTS[ability] || {};
+    const est = estimatedModelSynergy(model, ability);
+    const estRow = document.createElement('div');
+    estRow.className = 'syn-row est';
+    estRow.title = `Estimated: (${attr} ${(shifts[attr] || 0).toFixed(2)} + ${attackType} ${(shifts[attackType] || 0).toFixed(2)}) / 2. Only clear winrate drops count; used when there's no windrun pair data or override.`;
+    estRow.innerHTML = `<span>Est.</span><span>${est.toFixed(2)}</span>`;
+    overlay.appendChild(estRow);
+  }
 
   const hasOverride = SYNERGY_OVERRIDES.has(key);
   const adjValue = hasOverride ? SYNERGY_OVERRIDES.get(key) : null;
