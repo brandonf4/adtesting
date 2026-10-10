@@ -747,8 +747,11 @@ function opposingPicksBefore(seat, cat) {
   return n;
 }
 
-// Another seat's view of one category: its options ranked best first by its own
-// personal score, how many the other team is assumed to deny before its next
+// Another seat's view of one category: its options ranked best first by how much
+// each adds to what that seat already holds (own synergy + known combo only, no
+// base value or pool upside - a generally strong option isn't "theirs" just
+// because they'd also like it, so a seat with no picks yet ranks everything 0),
+// how many the other team is assumed to deny before its next
 // turn, and keepIdx - the rank (0-based) of the worst option it still ends up
 // with (denied + slots left - 1, the same fallback rank category scarcity uses).
 // null if the seat can't take the category or has no turn left. Cached per
@@ -761,12 +764,18 @@ function seatOutlook(seat, cat, cache) {
   const chances = slots ? opposingPicksBefore(seat, cat) : null;
   if (chances != null) {
     const opts = pool.filter(o => !o.picked && categoryOf(o) === cat)
-      .map(o => ({ item: o, p: personalScore(o, seat) })).sort((a, b) => a.p - b.p);
+      .map(o => ({ item: o, p: buildFitScore(o, seat) })).sort((a, b) => a.p - b.p);
     const denied = deniedCount(chances);
     out = { seat, cat, chances, denied, slots, opts, keepIdx: denied + slots - 1 };
   }
   if (cache) cache.set(key, out);
   return out;
+}
+// Own synergy + known combo of `item` with what `seat` holds, signed like
+// personalParts (lower = better fit); 0 when they hold nothing.
+function buildFitScore(item, seat) {
+  const pp = personalParts(item, seat);
+  return pp.ownSynergy + pp.combo;
 }
 // What it costs that seat if `item` leaves the pool now. Only matters if the
 // item is in its top keepIdx + 1 (the options it either gets or has denied):
@@ -1337,6 +1346,7 @@ P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → 
       if (!slotsLeftFor(s, cat)) return `<tr><td>${seatLabel(s)}</td><td colspan="4" class="dim">${CAT_LABEL[cat]} slot filled, skipped</td></tr>`;
       const out = seatOutlook(s, cat, cache);
       if (!out) return `<tr><td>${seatLabel(s)}</td><td colspan="4" class="dim">no picks left, skipped</td></tr>`;
+      if (!picks[s].length) return `<tr><td>${seatLabel(s)}</td><td colspan="4" class="dim">no picks yet, 0</td></tr>`;
       const l = outlookLoss(out, it);
       const name = i => i < out.opts.length ? `${out.opts[i].item.display_name} ${n1(out.opts[i].p)}` : 'none left';
       const gap = l.rank >= 0 && l.rank <= out.keepIdx
@@ -1347,7 +1357,7 @@ P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → 
     const head = ['Player', isEnemy ? 'Our picks → denied' : 'Enemy picks → denied', 'Rank', 'Kept option → next', 'Effect'];
     const formula = `<div class="f">denied = opposing picks before their turn (1-2: all, then half rounded up), each opposing player capped at its open ${CAT_LABEL[cat]} slots
 kept rank = denied + slots left; if ${it.display_name} ranks within it, losing it drops them one rank
-effect = ${isEnemy ? '−' : '+'}${SCARCITY_WEIGHT} × clamp(next − kept, 0, ${SCARCITY_CAP}), using their personal scores</div>`;
+effect = ${isEnemy ? '−' : '+'}${SCARCITY_WEIGHT} × clamp(next − kept, 0, ${SCARCITY_CAP}), scores = their own synergy + known combo with what they hold (no base value)</div>`;
     return `<h4>${isEnemy ? 'Enemy denial' : 'Ally avoid'}: ${who}</h4>${formula}
       ${tipTable(head, rows)}<div>Total ${n1(isEnemy ? row.enemy : row.ally)}</div>`;
   }
