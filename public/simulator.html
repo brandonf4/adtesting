@@ -710,28 +710,9 @@ function poolPartnersFor(item, playerIdx) {
   return pool.filter(o => o !== item && !o.picked &&
     slotsLeftFor(playerIdx, categoryOf(o)) - (categoryOf(o) === own ? 1 : 0) > 0);
 }
-// Same denial assumption as category scarcity: in each category, the enemies
-// picking before this seat's next turn are assumed to take this item's best
-// partners there (ranked by positive synergy with it; deniedCount of those
-// picks, each enemy capped at its open slots). Only what's left counts, so an
-// early pick, with many enemy picks before the next turn, discounts most of its
-// top partners. Returns the positive partners, best first, each marked taken or kept.
-function poolPartnersAfterDenial(item, playerIdx) {
-  const pos = poolPartnersFor(item, playerIdx)
-    .map(o => ({ o, s: synergyBetween(item.name, o.name) })).filter(x => x.s > 0).sort((a, b) => b.s - a.s);
-  const deniedByCat = {};
-  for (const x of pos) {
-    const cat = categoryOf(x.o);
-    if (!(cat in deniedByCat)) deniedByCat[cat] = deniedCount(opposingPicksBefore(playerIdx, cat) || 0);
-    x.taken = deniedByCat[cat] > 0;
-    if (x.taken) deniedByCat[cat]--;
-  }
-  return pos;
-}
 function poolSynergyTerm(item, playerIdx) {
   const weight = POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[playerIdx].length];
-  if (!weight) return 0;
-  return poolPartnersAfterDenial(item, playerIdx).reduce((t, x) => t + (x.taken ? 0 : x.s), 0) * weight;
+  return sumPositiveSynergy(item.name, poolPartnersFor(item, playerIdx)) * weight;
 }
 
 function enemiesOf(playerIdx) { return playerIdx < 5 ? [5, 6, 7, 8, 9] : [0, 1, 2, 3, 4]; }
@@ -1368,19 +1349,15 @@ bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFIC
   }
   if (col === 'pool') {
     const P = POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[held.length];
-    const pos = poolPartnersAfterDenial(it, seat);
-    const kept = pos.filter(x => !x.taken);
-    const total = kept.reduce((t, x) => t + x.s, 0);
-    const denied = ['model', 'ult', 'basic'].filter(c => pos.some(x => categoryOf(x.o) === c))
-      .map(c => `${CAT_LABEL[c]} ${opposingPicksBefore(seat, c) || 0} → ${deniedCount(opposingPicksBefore(seat, c) || 0)}`).join(', ');
-    const show = [...pos.filter(x => x.taken).slice(0, 5), ...kept.slice(0, 5)].sort((a, b) => b.s - a.s);
-    const rows = show.map(x => `<tr${x.taken ? ' class="dim"' : ''}><td>${x.o.display_name} <span class="dim">· ${CAT_LABEL[categoryOf(x.o)]}</span></td><td>+${n2(x.s)}</td><td>${x.taken ? 'assumed taken' : 'kept'}</td></tr>`);
+    const pos = poolPartnersFor(it, seat)
+      .map(o => ({ o, s: synergyBetween(it.name, o.name) })).filter(x => x.s > 0).sort((a, b) => b.s - a.s);
+    const total = pos.reduce((t, x) => t + x.s, 0);
+    const rows = pos.slice(0, 5).map(x => `<tr><td>${x.o.display_name} <span class="dim">· ${CAT_LABEL[categoryOf(x.o)]}</span></td><td>+${n2(x.s)}</td></tr>`);
     return `<h4>Pool upside: ${who}</h4>
-      <div class="f">${SCALE_LABEL} × (Σ positive synergy with unpicked options this player can still take after this pick, minus the ones enemies are assumed to take) × P[picks held]
-taken per category = enemy picks before next turn (1-2: all, then half rounded up), each enemy capped at its open slots; they take this option's best partners
+      <div class="f">${SCALE_LABEL} × (Σ positive synergy with unpicked options this player can still take after this pick) × P[picks held]
 P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → ${P}</div>
-      ${pos.length ? `<div class="dim">Enemy picks → taken: ${denied}</div>` + tipTable(['Pool synergies (top taken + top 5 kept)', 'Synergy', ''], rows) : '<div class="dim">No positive synergies left in the pool.</div>'}
-      <div class="f">= ${SCALE_LABEL} × ${n2(total)} (${kept.length} kept of ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${s1(row.pool)}</div>`;
+      ${pos.length ? tipTable(['Top 5 pool synergies', 'Synergy'], rows) : '<div class="dim">No positive synergies left in the pool.</div>'}
+      <div class="f">= ${SCALE_LABEL} × ${n2(total)} (all ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${s1(row.pool)}</div>`;
   }
   if (col === 'enemy' || col === 'ally') {
     const isEnemy = col === 'enemy', cat = categoryOf(it);
