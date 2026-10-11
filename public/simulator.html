@@ -286,6 +286,9 @@ let MODEL_SHIFTS = {};
 // later than its strength suggests). Value/100 adjusts the base value.
 let STRENGTH = {};
 let VALUE = {};
+// From role_skew.json: ability name -> z-score per role (pos1, mid, offlane,
+// support). Only used to group abilities into roles; never adds points itself.
+let ROLE = {};
 let pool = [], picks = [], pickIndex = 0, done = false, logEntries = [];
 let YOUR_SLOT = 0;
 
@@ -320,7 +323,9 @@ async function loadData() {
     fetch('/ability_synergies.json').then(r => r.json()).catch(() => []),
     fetch('/model_ability_shifts.json').then(r => r.json()).catch(() => ({ heroes: {}, abilities: {} })),
     fetch('/ability_strength.json').then(r => r.json()).catch(() => ({ strength: {} })),
-  ]).then(([wr, ha, syn, shifts, strength]) => {
+    fetch('/role_skew.json').then(r => r.json()).catch(() => ({ abilities: {} })),
+  ]).then(([wr, ha, syn, shifts, strength, roles]) => {
+    ROLE = roles.abilities || {};
     STRENGTH = strength.strength || {};
     VALUE = strength.value || {};
     MODEL_TYPES = new Map(Object.entries(shifts.heroes || {}));
@@ -915,16 +920,174 @@ function categoryScarcityBonuses(playerIdx, available, personal, details) {
   return bonuses;
 }
 
+// ---- Roles ----
+// role_skew.json gives each ability a z-score per role. The z-scores never add
+// points: they only decide which role group(s) an ability belongs to, which
+// role each seat currently plays on its team, and which options count toward
+// a role's scarcity. All points still come from the quality terms above.
+// Models have no role data (windrun's model stat shifts aren't trusted), so
+// they fit every role and only compete on their normal scores.
+const ROLES = ['pos1', 'mid', 'offlane', 'support'];
+const ROLE_LABEL = { pos1: 'Carry', mid: 'Mid', offlane: 'Offlane', support: 'Support' };
+const TEAM_ROLES = ['pos1', 'mid', 'offlane', 'support', 'support'];
+const ROLE_Z_CAP = 3;
+// An ability fits a role when its z there is at least ROLE_FIT_Z, or within
+// ROLE_FIT_SPREAD of its best role (so general abilities like Blink fit many).
+const ROLE_FIT_Z = 1;
+const ROLE_FIT_SPREAD = 1;
+// Off-role cost: at most this share of the ability's base value, scaled by how
+// much role fit the team loses by taking it (see roleFit / teamAssignment).
+const OFF_ROLE_CUT = 0.3;
+// Role fit is judged against the ability's own best role, but abilities whose
+// best z is under ROLE_FIT_FLOOR (general ones, low z everywhere) are measured
+// against this floor instead, so small z differences don't count as a preference.
+const ROLE_FIT_FLOOR = 1;
+function roleData(item) { return item.kind === 'ability' ? ROLE[item.name] || null : null; }
+function roleZ(item, r) {
+  const d = roleData(item);
+  return d ? Math.max(-ROLE_Z_CAP, Math.min(ROLE_Z_CAP, d[r] || 0)) : 0;
+}
+// Roles an item fits; null = fits every role (models, abilities without data).
+function itemRoles(item) {
+  const d = roleData(item);
+  if (!d) return null;
+  const best = Math.max(...ROLES.map(r => roleZ(item, r)));
+  return ROLES.filter(r => roleZ(item, r) >= ROLE_FIT_Z || roleZ(item, r) >= best - ROLE_FIT_SPREAD);
+}
+// How well an ability plays role r, 0-1: 1 in its best role, falling by the z
+// it gives up relative to that best (or to ROLE_FIT_FLOOR if the best is lower).
+// Models and abilities without data fit every role (1).
+function roleFit(item, r) {
+  if (!roleData(item)) return 1;
+  const best = Math.max(...ROLES.map(x => roleZ(item, x)));
+  return Math.max(0, Math.min(1, 1 - (best - roleZ(item, r)) / Math.max(best, ROLE_FIT_FLOOR)));
+}
+function fitsRole(item, r) { const rs = itemRoles(item); return !rs || rs.includes(r); }
+// Every distinct way to hand the 5 team roles to 5 seats (60 of them).
+const ROLE_PERMUTATIONS = (() => {
+  const out = new Set();
+  const go = (left, acc) => {
+    if (!left.length) { out.add(acc.join(',')); return; }
+    left.forEach((r, i) => go([...left.slice(0, i), ...left.slice(i + 1)], [...acc, r]));
+  };
+  go(TEAM_ROLES, []);
+  return [...out].map(x => x.split(','));
+})();
+function teamSeats(seat) { return seat < 5 ? [0, 1, 2, 3, 4] : [5, 6, 7, 8, 9]; }
+// The team's current roles: the assignment that maximizes the summed role fit
+// of every held ability in its seat's role (ties: higher summed z). Recomputed
+// every pick, so nothing is locked in. `extra` = { seat, item } adds a candidate
+// to that seat first. Returns { roles: seat -> role, lost, total } where lost =
+// Σ (1 − fit), how far the team is from every ability playing its best role.
+function teamAssignment(seat, extra) {
+  const seats = teamSeats(seat);
+  const held = seats.map(s => [...picks[s], ...(extra && extra.seat === s ? [extra.item] : [])]
+    .filter(x => roleData(x)));
+  const prof = held.map(h => Object.fromEntries(ROLES.map(r => [r, h.reduce((t, x) => t + roleZ(x, r), 0)])));
+  let best = null;
+  for (const perm of ROLE_PERMUTATIONS) {
+    let total = 0, lost = 0;
+    perm.forEach((r, i) => { total += prof[i][r]; held[i].forEach(x => { lost += 1 - roleFit(x, r); }); });
+    if (!best || lost < best.lost - 1e-9 || (Math.abs(lost - best.lost) <= 1e-9 && total > best.total)) best = { perm, total, lost };
+  }
+  const roles = {};
+  seats.forEach((s, i) => { roles[s] = best.perm[i]; });
+  return { roles, lost: best.lost, total: best.total };
+}
+// Role alignment: the role fit the team loses by taking `item` (after.lost −
+// before.lost, capped at 1) times OFF_ROLE_CUT of its base value. A second
+// carry-only spell loses most of it; a flexible pick, or one next to a
+// flexible teammate who can slide roles, loses little. Order doesn't matter:
+// the same pair costs the same whichever was picked first. A much stronger
+// off-role pick still wins, and the team's roles reshuffle around it.
+//
+// Two ways to read the pick; the cheaper one is used:
+// - Keep: the seat already has a role and keeps it, so what matters is how good
+//   the item is in that role in absolute terms: no cut at z ≥ ROLE_KEEP_Z, and
+//   each z below that costs 1/ROLE_KEEP_SPAN of the full cut (e.g. Earth Spike
+//   on a Mid seat, Mid z 0.76: a small cut, even though it's best on supports).
+// - Shift: the team's roles are re-solved with the item added (relative fit
+//   decides who keeps a contested role), and the cut scales with the relative
+//   fit the team loses.
+const ROLE_KEEP_Z = 1;
+const ROLE_KEEP_SPAN = 3;
+function roleAlignmentTerm(item, seat, before, baseInternal) {
+  if (!roleData(item) || !Number.isFinite(baseInternal)) return { cost: 0 };
+  const full = Math.max(0, -baseInternal) * OFF_ROLE_CUT;
+  const after = teamAssignment(seat, { seat, item });
+  const shiftLost = Math.min(1, Math.max(0, after.lost - before.lost));
+  const hasRole = picks[seat].some(x => roleData(x));
+  const keepRole = hasRole ? before.roles[seat] : null;
+  const keepLost = hasRole ? Math.min(1, Math.max(0, (ROLE_KEEP_Z - roleZ(item, keepRole)) / ROLE_KEEP_SPAN)) : Infinity;
+  const keep = keepLost <= shiftLost;
+  const lost = keep ? keepLost : shiftLost;
+  return { cost: full * lost, after: keep ? before : after, lost, mode: keep ? 'keep' : 'shift', keepRole, keepLost, shiftLost, shiftAfter: after };
+}
+// Enemy picks strictly between now and our team's next pick (any seat on our
+// team), capped per enemy at its open slots in `cat`, like opposingPicksBefore.
+function teamOpposingPicksBefore(seat, cat) {
+  let next = null;
+  for (let i = pickIndex + 1; i < PICK_ORDER.length; i++) {
+    if (teamSeats(seat).includes(PICK_ORDER[i])) { next = i; break; }
+  }
+  if (next == null) return null;
+  const turns = new Map();
+  for (let i = pickIndex + 1; i < next; i++) turns.set(PICK_ORDER[i], (turns.get(PICK_ORDER[i]) || 0) + 1);
+  let n = 0;
+  for (const [s, t] of turns) n += Math.min(t, slotsLeftFor(s, cat));
+  return n;
+}
+// Role scarcity (team level): for each role our team still has an open slot
+// for in a category, rank the options fitting that role by this seat's quality
+// (personal score), assume the enemy takes the top deniedCount(enemy picks
+// before our team's next pick), and compare the best against the first one
+// left. Bonus = SCARCITY_WEIGHT × clamp(gap, 0, SCARCITY_CAP), shared by every
+// option fitting that role in that category; an option fitting several roles
+// takes its largest. Models fit every role, so they're not part of it.
+function roleScarcityBonuses(seat, available, personal, assignment, details) {
+  const out = {};
+  for (const cat of ['ult', 'basic']) {
+    const enemyPicks = teamOpposingPicksBefore(seat, cat);
+    if (enemyPicks == null) continue;
+    const taken = deniedCount(enemyPicks);
+    for (const r of ROLES) {
+      const open = teamSeats(seat).some(s => assignment.roles[s] === r && slotsLeftFor(s, cat) > 0);
+      const opts = available.filter(a => categoryOf(a) === cat && roleData(a) && fitsRole(a, r))
+        .map(a => ({ item: a, p: personal.get(a) })).sort((a, b) => a.p - b.p);
+      if (!opts.length || !Number.isFinite(opts[0].p)) continue;
+      const best = opts[0].p, fallback = taken < opts.length ? opts[taken].p : Infinity;
+      const bonus = open ? Math.min(Math.max(fallback - best, 0), SCARCITY_CAP) * SCARCITY_WEIGHT : 0;
+      out[cat + '|' + r] = bonus;
+      if (details) details[cat + '|' + r] = { cat, role: r, open, enemyPicks, taken, opts, best, fallback, bonus };
+    }
+  }
+  return out;
+}
+function roleScarcityFor(item, bonuses) {
+  if (!bonuses || !roleData(item)) return { bonus: 0, role: null };
+  let best = { bonus: 0, role: null };
+  for (const r of itemRoles(item)) {
+    const b = bonuses[categoryOf(item) + '|' + r] || 0;
+    if (b > best.bonus) best = { bonus: b, role: r };
+  }
+  return best;
+}
+
 // Lower = better. personal score, then the enemy-denial and ally-avoidance terms
 // - see enemySynergyTerm/allySynergyTerm above for why each goes the direction it
 // does - and finally the category scarcity bonus for this option's category.
 // Returns every part (each as its signed effect on the score) plus the total.
-function scoreParts(item, playerIdx, personalPartsMap, scarcity, outlooks) {
+function scoreParts(item, playerIdx, personalPartsMap, scarcity, outlooks, roleCtx) {
   const pp = personalPartsMap ? personalPartsMap.get(item) : personalParts(item, playerIdx);
   const enemy = -enemySynergyTerm(item, playerIdx, outlooks);
   const ally = allySynergyTerm(item, playerIdx, outlooks);
   const scarcityPart = scarcity ? -scarcity[categoryOf(item)] : 0;
-  return { ...pp, enemy, ally, scarcity: scarcityPart, total: pp.personal + enemy + ally + scarcityPart };
+  const ctx = roleCtx || { assignment: teamAssignment(playerIdx), bonuses: null };
+  const align = roleAlignmentTerm(item, playerIdx, ctx.assignment, pp.base);
+  const rs = roleScarcityFor(item, ctx.bonuses);
+  const role = align.cost, roleScarcity = -rs.bonus;
+  return { ...pp, enemy, ally, scarcity: scarcityPart, role, roleScarcity, roleAfter: align.after, roleInfo: align.after ? align : null, scarcityRole: rs.role,
+    total: pp.personal + enemy + ally + scarcityPart + role + roleScarcity };
 }
 function pickScore(item, playerIdx) {
   return scoreParts(item, playerIdx).total;
@@ -957,7 +1120,11 @@ function botDecision() {
   const bonuses = categoryScarcityBonuses(p, available, personal, decision.scarcity);
   decision.personal = personal;
   decision.outlooks = new Map();
-  decision.rows = available.map(a => ({ item: a, ...scoreParts(a, p, parts, bonuses, decision.outlooks) }))
+  decision.assignment = teamAssignment(p);
+  decision.roleScarcity = {};
+  const roleBonuses = roleScarcityBonuses(p, available, personal, decision.assignment, decision.roleScarcity);
+  const roleCtx = { assignment: decision.assignment, bonuses: roleBonuses };
+  decision.rows = available.map(a => ({ item: a, ...scoreParts(a, p, parts, bonuses, decision.outlooks, roleCtx) }))
     .sort((x, y) => x.total - y.total);
   // Hard override: if every enemy who picks between now and this seat's next
   // turn has already filled a category, nothing in it can be taken from us
@@ -1421,9 +1588,47 @@ bonus = +${SCARCITY_WEIGHT} × clamp(best − fallback, 0, ${cap})</div>
     }
     return html;
   }
+  if (col === 'role') {
+    const fit = itemRoles(it);
+    const before = d.assignment, after = row.roleAfter || teamAssignment(seat, { seat, item: it });
+    const fmtRoles = a => teamSeats(seat).map(s => `${seatLabel(s)} ${ROLE_LABEL[a.roles[s]]}`).join(' · ');
+    const zs = ROLES.map(r => `${ROLE_LABEL[r]} ${n2(roleZ(it, r))} (fit ${n2(roleFit(it, r))})`).join(', ');
+    if (!fit) return `<h4>Off-role: ${who}</h4>${it.kind === 'model' ? 'Models' : 'Abilities without role data'} fit every role, so 0.`;
+    return `<h4>Off-role: ${who}</h4>
+      <div class="f">fit in a role = 1 − (best z − z there) ÷ max(best z, ${ROLE_FIT_FLOOR}), between 0 and 1
+team roles = the assignment of Carry, Mid, Offlane, Support, Support to the 5 seats with the highest summed fit of held abilities
+keep (seat keeps its role) = clamp((${ROLE_KEEP_Z} − z in that role) ÷ ${ROLE_KEEP_SPAN}, 0, 1)
+shift (roles re-solved) = relative fit the team loses after this pick (max 1)
+cost = ${OFF_ROLE_CUT * 100}% × base × the smaller of the two</div>
+      <div>z: ${zs} <br>role scarcity groups (z ≥ ${ROLE_FIT_Z} or within ${ROLE_FIT_SPREAD} of best): <b>${fit.map(r => ROLE_LABEL[r]).join(', ')}</b></div>
+      <div>Before: ${fmtRoles(before)} <span class="dim">(fit lost ${n2(before.lost)})</span></div>
+      <div>Keep: ${row.roleInfo && row.roleInfo.keepRole ? `${seatLabel(seat)} stays ${ROLE_LABEL[row.roleInfo.keepRole]}, z ${n2(roleZ(it, row.roleInfo.keepRole))} → ${n2(row.roleInfo.keepLost)}` : '<span class="dim">seat has no role yet</span>'}</div>
+      <div>Shift: ${row.roleInfo ? `${fmtRoles(row.roleInfo.shiftAfter)} <span class="dim">(fit lost ${n2(row.roleInfo.shiftAfter.lost)})</span> → ${n2(row.roleInfo.shiftLost)}` : '—'}</div>
+      <div class="f">${OFF_ROLE_CUT * 100}% × base ${n2(shown(row.base))} × ${row.roleInfo ? n2(row.roleInfo.lost) + ' (' + row.roleInfo.mode + ')' : '0'} = ${s1(row.role)}</div>
+      <div class="dim">z-scores only pick the groups; the cost is in base points.</div>`;
+  }
+  if (col === 'roleScarcity') {
+    const cap = SCARCITY_CAP * Math.abs(DISPLAY_SCALE);
+    let html = `<h4>Role scarcity for ${seatLabel(seat)}'s team</h4>
+      <div class="f">taken = enemy picks before our team's next pick (1-2: all, then half rounded up), capped at their open slots
+gap = best option fitting the role − first one left after the top "taken"
+bonus = +${SCARCITY_WEIGHT} × clamp(gap, 0, ${cap}), for every option fitting that role (an option fitting several takes its largest)</div>
+      <div class="dim">ranked by personal score; only roles a seat on the team still has an open slot for in that category count. Models fit every role, so they're left out.</div>`;
+    const fit = itemRoles(it);
+    for (const cat of ['ult', 'basic']) {
+      const rows = ROLES.map(r => d.roleScarcity[cat + '|' + r]).filter(Boolean).map(x => {
+        const name = i => i < x.opts.length ? `${x.opts[i].item.display_name} ${n1(shown(x.opts[i].p))}` : 'none left';
+        const mine = fromCell && categoryOf(it) === cat && fit && fit.includes(x.role) ? ' ←' : '';
+        return `<tr><td>${ROLE_LABEL[x.role]}${mine}</td><td>${x.enemyPicks} → ${x.taken}</td><td style="text-align:left;white-space:normal">${name(0)} → ${name(x.taken)}</td><td>${x.open ? (x.bonus ? '+' + n1(-shown(x.bonus)) : '0.0') : '<span class="dim">no open slot</span>'}</td></tr>`;
+      });
+      html += `<div class="cat"><b>${CAT_LABEL[cat]}</b>${rows.length ? tipTable(['Role', 'Enemy picks → taken', 'Best → first left', 'Bonus'], rows) : ' <span class="dim">no options or no team pick left</span>'}</div>`;
+    }
+    if (fromCell) html += `<div>${it.display_name}: ${s1(row.roleScarcity)}${row.scarcityRole ? ' (' + ROLE_LABEL[row.scarcityRole] + ')' : ''}</div>`;
+    return html;
+  }
   if (col === 'total') {
-    const parts = [['Base', row.base], ['Own synergy', row.ownSynergy], ['Known combo', row.combo], ['Pool upside', row.pool], ['Enemy denial', row.enemy], ['Ally avoid', row.ally], ['Scarcity', row.scarcity]];
-    return `<h4>Total: ${who}</h4><div class="f">base + own synergy + known combo + pool upside + enemy denial + ally avoid + scarcity (higher is picked first)</div>
+    const parts = [['Base', row.base], ['Own synergy', row.ownSynergy], ['Known combo', row.combo], ['Pool upside', row.pool], ['Enemy denial', row.enemy], ['Ally avoid', row.ally], ['Scarcity', row.scarcity], ['Off-role', row.role], ['Role scarcity', row.roleScarcity]];
+    return `<h4>Total: ${who}</h4><div class="f">base + own synergy + known combo + pool upside + enemy denial + ally avoid + scarcity + off-role + role scarcity (higher is picked first)</div>
       ${tipTable(['Term', 'Value'], parts.map(([l, v]) => `<tr><td>${l}</td><td>${l === 'Base' ? n2(shown(v)) : s1(v)}</td></tr>`))}<div>Total ${n1(shown(row.total))}</div>`;
   }
   return '';
@@ -1475,11 +1680,14 @@ function renderBotPanel() {
     if (d.undeferredCats && d.undeferredCats.length) {
       html += `<div style="margin-bottom:6px;color:#9ec3ff">Not deferred: ${d.undeferredCats.map(c => catLabel[c]).join(' and ')} are both filled by every enemy picking before the next turn (${(d.enemiesBeforeNext || []).map(e => 'P' + (e + 1)).join(', ')}), but not by all 5 enemies, so either is allowed and scarcity decides.</div>`;
     }
-    const cols = [['base', 'Base'], ['ownSynergy', 'Own synergy'], ['combo', 'Known combo'], ['pool', 'Pool upside'], ['enemy', 'Enemy denial'], ['ally', 'Ally avoid'], ['scarcity', 'Scarcity'], ['total', 'Total']];
+    const cols = [['base', 'Base'], ['ownSynergy', 'Own synergy'], ['combo', 'Known combo'], ['pool', 'Pool upside'], ['enemy', 'Enemy denial'], ['ally', 'Ally avoid'], ['scarcity', 'Scarcity'], ['role', 'Off-role'], ['roleScarcity', 'Role scarcity'], ['total', 'Total']];
+    const ra = d.assignment;
+    if (ra) html += `<div style="margin-bottom:6px">Team roles now: ${teamSeats(d.seat).map(s => `${s === d.seat ? '<b>' : ''}${seatLabel(s)} ${picks[s].some(x => roleData(x)) ? ROLE_LABEL[ra.roles[s]] : '<span style="color:#888">open</span>'}${s === d.seat ? '</b>' : ''}`).join(' · ')}${ra.lost > 0.005 ? ` <span style="color:#888">(fit lost ${ra.lost.toFixed(2)})</span>` : ''}</div>`;
     html += `<table><thead><tr><th>Option (top ${Math.min(10, d.rows.length)} of ${d.rows.length})</th>${cols.map(([k, l]) => `<th data-col="${k}">${l}</th>`).join('')}</tr></thead><tbody>`;
     d.rows.slice(0, 10).forEach((r, ri) => {
       const it = r.item;
-      const label = `${it.display_name} <span style="color:#888">· ${catLabel[categoryOf(it)]}${it.kind === 'ability' ? ' · ' + it.hero : ''}</span>`;
+      const fit = itemRoles(it);
+      const label = `${it.display_name} <span style="color:#888">· ${catLabel[categoryOf(it)]}${it.kind === 'ability' ? ' · ' + it.hero : ''}${fit ? ' · ' + fit.map(r => ROLE_LABEL[r]).join('/') : ''}</span>`;
       const deferred = d.deferredCats && d.deferredCats.includes(categoryOf(it));
       html += `<tr class="${it === c ? 'chosen' : ''}"${deferred ? ' style="opacity:0.45"' : ''}><td>${label}${deferred ? ' <span style="color:#f4c542">(deferred)</span>' : ''}</td>` + cols.map(([k]) => {
         const at = `data-col="${k}" data-row="${ri}"`;
@@ -1490,7 +1698,7 @@ function renderBotPanel() {
       }).join('') + `</tr>`;
     });
     html += `</tbody></table>`;
-    html += `<div class="consts">Higher total = picked first. Base = 50 − high-skill pick position + windrun Value ÷ 100; every adjustment is shown at ${SCALE_LABEL} of its tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}), enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
+    html += `<div class="consts">Higher total = picked first. Base = 50 − high-skill pick position + windrun Value ÷ 100; every adjustment is shown at ${SCALE_LABEL} of its tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}, also used for role scarcity), off-role cut up to ${OFF_ROLE_CUT * 100}% of base × fit lost, enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
   }
   html += `</div>`;
   panel.innerHTML = html;
