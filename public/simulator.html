@@ -280,9 +280,12 @@ let SYNERGY = new Map(); // "nameA|nameB" (alphabetical) -> synergy value, from 
 // it does on each attribute/attack type than overall (negative winrate points only).
 let MODEL_TYPES = new Map();
 let MODEL_SHIFTS = {};
-// windrun's Strength per ability / hero model (ability_strength.json): a win-model
-// coefficient, higher = stronger. Used as the bot's base value.
+// From ability_strength.json (windrun's ability-values export), per ability / hero
+// model: Strength (win-model coefficient, higher = stronger; reference only) and
+// Value (mispricing = pick rank - strength rank, about -560..+490; positive = picked
+// later than its strength suggests). Value/100 adjusts the base value.
 let STRENGTH = {};
+let VALUE = {};
 let pool = [], picks = [], pickIndex = 0, done = false, logEntries = [];
 let YOUR_SLOT = 0;
 
@@ -319,6 +322,7 @@ async function loadData() {
     fetch('/ability_strength.json').then(r => r.json()).catch(() => ({ strength: {} })),
   ]).then(([wr, ha, syn, shifts, strength]) => {
     STRENGTH = strength.strength || {};
+    VALUE = strength.value || {};
     MODEL_TYPES = new Map(Object.entries(shifts.heroes || {}));
     MODEL_SHIFTS = shifts.abilities || {};
     return [wr, ha, syn];
@@ -831,17 +835,22 @@ function allySynergyTerm(item, playerIdx, cache) {
 // how the item fits THIS seat's build, i.e. pickScore without the enemy-denial,
 // ally-avoidance and category-scarcity terms.
 // Scores are computed as "lower = picked first", with every adjustment at the
-// scale it was tuned for (pick positions, ~46 wide). They're displayed as
-// DISPLAY_SCALE × that: higher = picked first, base = windrun Strength (~23 wide),
-// every adjustment scaled by |DISPLAY_SCALE|, and good effects positive. So the
-// internal base is Strength / DISPLAY_SCALE = −4 × Strength. Was −0.5 (adjustments
-// halved to match Strength's range); toned down to −0.25 on 2026-10-10.
-const DISPLAY_SCALE = -0.25;
-const SCALE_LABEL = '¼';
+// scale it was tuned for. They're displayed as DISPLAY_SCALE × that: higher =
+// picked first, good effects positive, every adjustment at |DISPLAY_SCALE| of its
+// tuned size. ½ keeps the balance between adjustments and base that was last set
+// (¼ against Strength's ~23-point range), since this base spans ~49 points.
+const DISPLAY_SCALE = -0.5;
+const SCALE_LABEL = '½';
+// Shown base: inverted high-skill pick position (50 − position, so earlier picks
+// score higher) plus windrun's Value / 100 (undervalued picks move up).
+const BASE_PICK_OFFSET = 50;
+const VALUE_DIVISOR = 100;
+function shownBase(item) {
+  return BASE_PICK_OFFSET - item.pickPositionHigh + (VALUE[item.name] || 0) / VALUE_DIVISOR;
+}
 const shown = v => v * DISPLAY_SCALE;
 function personalParts(item, playerIdx) {
-  const strength = STRENGTH[item.name];
-  const base = strength == null ? Infinity : strength / DISPLAY_SCALE;
+  const base = item.pickPositionHigh == null ? Infinity : shownBase(item) / DISPLAY_SCALE;
   const multiplier = synergyMultiplier();
   const bonus = knownComboBonus();
   let ownSynergy = 0, combo = 0;
@@ -1314,11 +1323,12 @@ function explainColumn(col, row, d, fromCell) {
   const who = `<b>${it.display_name}</b> for ${seatLabel(seat)}`;
   const half = `shown at ${SCALE_LABEL} of the tuned size, good effects as +`;
   if (col === 'base') {
-    if (!Number.isFinite(row.base)) return `<h4>Base: ${it.display_name}</h4>No Strength data, so it's picked last.`;
+    if (!Number.isFinite(row.base)) return `<h4>Base: ${it.display_name}</h4>No high-skill pick position data, so it's picked last.`;
+    const v = VALUE[it.name];
     return `<h4>Base: ${who}</h4>
-      <div class="f">base = windrun Strength (win-model coefficient, all skill levels, higher = stronger)
-= ${n2(shown(row.base))}</div>
-      <div class="dim">For reference: high-skill pick position ${n2(it.pickPositionHigh)}, high-skill winrate ${n2(it.winrateHigh * 100)}%.</div>`;
+      <div class="f">base = ${BASE_PICK_OFFSET} − pick position (high skill) + windrun Value ÷ ${VALUE_DIVISOR}
+= ${BASE_PICK_OFFSET} − ${n2(it.pickPositionHigh)} + ${v == null ? '0 (no Value data)' : (v >= 0 ? '' : '−') + Math.abs(v) + ' ÷ ' + VALUE_DIVISOR} = ${n2(shown(row.base))}</div>
+      <div class="dim">Value = windrun pick rank − strength rank (positive = picked later than its strength suggests). Strength ${STRENGTH[it.name] == null ? 'n/a' : n2(STRENGTH[it.name])}.</div>`;
   }
   if (col === 'ownSynergy') {
     const M = synergyMultiplier();
@@ -1480,7 +1490,7 @@ function renderBotPanel() {
       }).join('') + `</tr>`;
     });
     html += `</tbody></table>`;
-    html += `<div class="consts">Higher total = picked first. Base = windrun Strength; every adjustment is shown at ${SCALE_LABEL} of its tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}), enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
+    html += `<div class="consts">Higher total = picked first. Base = 50 − high-skill pick position + windrun Value ÷ 100; every adjustment is shown at ${SCALE_LABEL} of its tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}), enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
   }
   html += `</div>`;
   panel.innerHTML = html;

@@ -1,6 +1,7 @@
-# Builds public/ability_strength.json from windrun's ability-values export (the
-# "Strength" column on windrun's Abilities page: a win-model coefficient per ability
-# or hero model, higher = stronger). Keyed by the same names heroes_abilities.json
+# Builds public/ability_strength.json from windrun's ability-values export: the
+# "Strength" column on windrun's Abilities page (a win-model coefficient per ability
+# or hero model, higher = stronger) and the "Value" column (mispricing = pick rank -
+# strength rank; positive = picked later than its strength suggests). Keyed by the same names heroes_abilities.json
 # uses (ability shortName, hero npc name for models).
 # Usage: python3 scripts/build-strength.py <windrun-repo>/src/data public/windrun/ability-values.json public
 import json, sys
@@ -15,14 +16,16 @@ def ts_obj(path, var):
             if depth == 0: return json.loads(t[i:j + 1])
 AB = ts_obj(src + '/abilities.ts', 'abilitiesById'); HE = ts_obj(src + '/heroes.ts', 'heroesById')
 data = json.load(open(values_path))['data']
-out = {}
+out = {}; value = {}
 for v in data['abilityValues']:
     i = v['abilityId']
     if i < 0:
         h = HE.get(str(-i))
-        if h: out[h['npc'].replace('npc_dota_hero_', '')] = round(v['strength'], 3)
+        if h:
+            k = h['npc'].replace('npc_dota_hero_', ''); out[k] = round(v['strength'], 3); value[k] = v['mispricing']
     else:
         a = AB.get(str(i))
-        if a and a.get('shortName'): out[a['shortName']] = round(v['strength'], 3)
-json.dump({'patch': data['model']['patch'], 'strength': out}, open(outdir + '/ability_strength.json', 'w'), separators=(',', ':'))
+        if a and a.get('shortName'):
+            out[a['shortName']] = round(v['strength'], 3); value[a['shortName']] = v['mispricing']
+json.dump({'patch': data['model']['patch'], 'strength': out, 'value': value}, open(outdir + '/ability_strength.json', 'w'), separators=(',', ':'))
 print('entries', len(out))
