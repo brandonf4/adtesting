@@ -64,6 +64,7 @@
     .side-player.active.radiant, .side-player.active.dire { border-left-color: #7eb8f7; }
     .you-tag { font-size: 9px; background: #2a4a8a; color: #7eb8f7; border-radius: 4px; padding: 1px 5px; }
     .corner-tag { position: absolute; top: 4px; right: 6px; z-index: 2; }
+    .role-tag { position: absolute; top: 4px; left: 6px; z-index: 2; font-size: 9px; font-weight: 600; letter-spacing: 0.3px; background: #3a2f55; color: #d4c2ff; border-radius: 4px; padding: 1px 5px; }
     .player-score { font-size: 10px; color: #7eb8f7; font-weight: 500; height: 12px; margin-bottom: 2px; }
     .side-player.radiant .player-score { text-align: right; }
     .side-player.dire .player-score { text-align: left; }
@@ -942,7 +943,28 @@ const OFF_ROLE_CUT = 0.5;
 // best z is under ROLE_FIT_FLOOR (general ones, low z everywhere) are measured
 // against this floor instead, so small z differences don't count as a preference.
 const ROLE_FIT_FLOOR = 1;
-function roleData(item) { return item.kind === 'ability' ? ROLE[item.name] || null : null; }
+// Models have no role data of their own, so each gets a tentative one per pool:
+// the average z per role of every ability in this draft's pool that has known
+// (windrun or user-edited) pair data with the model, whatever the synergy value.
+// It feeds the team's role assignment, so later picks see the model's role, but
+// a model itself never takes an off-role cut or a role scarcity bonus.
+let modelRoleCache = { pool: null, map: new Map() };
+function modelRoleData(model) {
+  if (modelRoleCache.pool !== pool) modelRoleCache = { pool, map: new Map() };
+  if (modelRoleCache.map.has(model.name)) return modelRoleCache.map.get(model.name);
+  const partners = pool.filter(a => a.kind === 'ability' && ROLE[a.name] && hasSynergyData(model.name, a.name));
+  let out = null;
+  if (partners.length) {
+    out = { n: partners.length, partners: partners.map(a => a.display_name) };
+    ROLES.forEach(r => { out[r] = partners.reduce((t, a) => t + Math.max(-ROLE_Z_CAP, Math.min(ROLE_Z_CAP, ROLE[a.name][r] || 0)), 0) / partners.length; });
+  }
+  modelRoleCache.map.set(model.name, out);
+  return out;
+}
+function roleData(item) {
+  if (item.kind === 'model') return modelRoleData(item);
+  return item.kind === 'ability' ? ROLE[item.name] || null : null;
+}
 function roleZ(item, r) {
   const d = roleData(item);
   return d ? Math.max(-ROLE_Z_CAP, Math.min(ROLE_Z_CAP, d[r] || 0)) : 0;
@@ -1012,7 +1034,7 @@ function teamAssignment(seat, extra) {
 const ROLE_KEEP_Z = 1;
 const ROLE_KEEP_SPAN = 3;
 function roleAlignmentTerm(item, seat, before, baseInternal) {
-  if (!roleData(item) || !Number.isFinite(baseInternal)) return { cost: 0 };
+  if (item.kind !== 'ability' || !roleData(item) || !Number.isFinite(baseInternal)) return { cost: 0 };
   const full = Math.max(0, -baseInternal) * OFF_ROLE_CUT;
   const after = teamAssignment(seat, { seat, item });
   const shiftLost = Math.min(1, Math.max(0, after.lost - before.lost));
@@ -1052,7 +1074,7 @@ function roleScarcityBonuses(seat, available, personal, assignment, details) {
     const taken = deniedCount(enemyPicks);
     for (const r of ROLES) {
       const open = teamSeats(seat).some(s => assignment.roles[s] === r && slotsLeftFor(s, cat) > 0);
-      const opts = available.filter(a => categoryOf(a) === cat && roleData(a) && fitsRole(a, r))
+      const opts = available.filter(a => categoryOf(a) === cat && a.kind === 'ability' && roleData(a) && fitsRole(a, r))
         .map(a => ({ item: a, p: personal.get(a) })).sort((a, b) => a.p - b.p);
       if (!opts.length || !Number.isFinite(opts[0].p)) continue;
       const best = opts[0].p, fallback = taken < opts.length ? opts[taken].p : Infinity;
@@ -1064,7 +1086,7 @@ function roleScarcityBonuses(seat, available, personal, assignment, details) {
   return out;
 }
 function roleScarcityFor(item, bonuses) {
-  if (!bonuses || !roleData(item)) return { bonus: 0, role: null };
+  if (!bonuses || item.kind !== 'ability' || !roleData(item)) return { bonus: 0, role: null };
   let best = { bonus: 0, role: null };
   for (const r of itemRoles(item)) {
     const b = bonuses[categoryOf(item) + '|' + r] || 0;
@@ -1379,6 +1401,9 @@ function renderPlayers() {
   const leftEl = document.getElementById('players-left');
   const rightEl = document.getElementById('players-right');
   leftEl.innerHTML = ''; rightEl.innerHTML = '';
+  // Bot seats show the role their team currently gives them (re-solved every
+  // pick, so it can change when the bots swap roles).
+  const botTeamRoles = poolHasRealData ? teamAssignment(YOUR_SLOT < 5 ? 5 : 0).roles : null;
   for (let i = 0; i < 10; i++) {
     const isActive = !done && currentPlayer() === i;
     const isYou = isYourTeam(i);
@@ -1392,6 +1417,12 @@ function renderPlayers() {
     const orderedSlots = orderedSlotsFor(picks[i]);
     const displaySlots = isRadiant ? orderedSlots : [...orderedSlots.slice(1), orderedSlots[0]];
 
+    if (!isYou && botTeamRoles) {
+      const roleTag = document.createElement('span');
+      roleTag.className = 'role-tag';
+      roleTag.textContent = ROLE_LABEL[botTeamRoles[i]];
+      row.appendChild(roleTag);
+    }
     if (isYou) {
       const tag = document.createElement('span');
       tag.className = 'you-tag corner-tag';
@@ -1593,7 +1624,15 @@ bonus = +${SCARCITY_WEIGHT} × clamp(best − fallback, 0, ${cap})</div>
     const before = d.assignment, after = row.roleAfter || teamAssignment(seat, { seat, item: it });
     const fmtRoles = a => teamSeats(seat).map(s => `${seatLabel(s)} ${ROLE_LABEL[a.roles[s]]}`).join(' · ');
     const zs = ROLES.map(r => `${ROLE_LABEL[r]} ${n2(roleZ(it, r))} (fit ${n2(roleFit(it, r))})`).join(', ');
-    if (!fit) return `<h4>Off-role: ${who}</h4>${it.kind === 'model' ? 'Models' : 'Abilities without role data'} fit every role, so 0.`;
+    if (it.kind === 'model') {
+      const md = roleData(it);
+      if (!md) return `<h4>Off-role: ${who}</h4>No pool abilities with known pair data, so no tentative role and it fits every role. Models never take the off-role cut.`;
+      return `<h4>Off-role: ${who}</h4>
+        <div class="f">tentative z = average z of the ${md.n} pool abilit${md.n === 1 ? 'y' : 'ies'} with known pair data with this model (synergy value ignored)</div>
+        <div>${zs}</div><div class="dim">${md.partners.join(', ')}</div>
+        <div>Used for the team's role assignment once picked. Models never take the off-role cut, so 0.</div>`;
+    }
+    if (!fit) return `<h4>Off-role: ${who}</h4>Abilities without role data fit every role, so 0.`;
     return `<h4>Off-role: ${who}</h4>
       <div class="f">fit in a role = 1 − (best z − z there) ÷ max(best z, ${ROLE_FIT_FLOOR}), between 0 and 1
 team roles = the assignment of Carry, Mid, Offlane, Support, Support to the 5 seats with the highest summed fit of held abilities
