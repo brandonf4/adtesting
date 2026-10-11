@@ -1417,7 +1417,7 @@ function renderPlayers() {
     const orderedSlots = orderedSlotsFor(picks[i]);
     const displaySlots = isRadiant ? orderedSlots : [...orderedSlots.slice(1), orderedSlots[0]];
 
-    if (!isYou && botTeamRoles) {
+    if (!isYou && botTeamRoles && picks[i].some(x => roleData(x))) {
       const roleTag = document.createElement('span');
       roleTag.className = 'role-tag';
       roleTag.textContent = ROLE_LABEL[botTeamRoles[i]];
