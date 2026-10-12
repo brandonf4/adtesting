@@ -862,6 +862,27 @@ function shownBase(item) {
   return BASE_PICK_OFFSET - item.pickPositionHigh + (VALUE[item.name] || 0) / VALUE_DIVISOR;
 }
 const shown = v => v * DISPLAY_SCALE;
+// Role-based weights (added 2026-10-12). A seat's role is the one its team
+// currently assigns it; a seat holding nothing with role data has none (×1).
+// Estimated model penalties hurt cores more, carries most:
+const ESTIMATED_MODEL_PENALTY_BY_ROLE = { pos1: 1.5, offlane: 1.25, mid: 1.1, support: 1 };
+// Model category scarcity matters more for cores, carries most, less for supports:
+const MODEL_SCARCITY_BY_ROLE = { pos1: 1.5, mid: 1.2, offlane: 1.2, support: 0.75 };
+let seatRoleCache = { key: null, map: new Map() };
+function seatRole(seat) {
+  if (!picks[seat].some(x => roleData(x))) return null;
+  const key = picks.map(p => p.map(x => x.name).join('+')).join(',');
+  if (seatRoleCache.key !== key || seatRoleCache.pool !== pool) seatRoleCache = { key, pool, map: new Map() };
+  if (!seatRoleCache.map.has(seat)) seatRoleCache.map.set(seat, teamAssignment(seat).roles[seat]);
+  return seatRoleCache.map.get(seat);
+}
+function estimatedPenaltyWeight(seat) { const r = seatRole(seat); return r ? ESTIMATED_MODEL_PENALTY_BY_ROLE[r] : 1; }
+function modelScarcityWeight(seat) { const r = seatRole(seat); return r ? MODEL_SCARCITY_BY_ROLE[r] : 1; }
+// Synergy as this seat's bot weighs it: estimated model pairs scaled by role.
+function botSynergy(nameA, nameB, seat) {
+  const syn = synergyBetween(nameA, nameB);
+  return synergyIsEstimated(nameA, nameB) ? syn * estimatedPenaltyWeight(seat) : syn;
+}
 function personalParts(item, playerIdx) {
   const base = item.pickPositionHigh == null ? Infinity : shownBase(item) / DISPLAY_SCALE;
   const multiplier = synergyMultiplier();
@@ -869,7 +890,7 @@ function personalParts(item, playerIdx) {
   let ownSynergy = 0, combo = 0;
   picks[playerIdx].forEach((held, i) => {
     const orderWeight = SYNERGY_ORDER_WEIGHTS[i];
-    ownSynergy -= synergyBetween(item.name, held.name) * multiplier * orderWeight;
+    ownSynergy -= botSynergy(item.name, held.name, playerIdx) * multiplier * orderWeight;
     if (knownComboApplies(item.name, held.name)) combo -= bonus * orderWeight;
   });
   const poolPart = -poolSynergyTerm(item, playerIdx);
@@ -922,8 +943,9 @@ function categoryScarcityBonuses(playerIdx, available, personal, details) {
     const idx = taken + slotsLeftFor(playerIdx, cat) - 1;
     const fallback = idx < scores.length ? scores[idx] : Infinity;
     const urgency = Math.min(Math.max(fallback - best, 0), SCARCITY_CAP);
-    bonuses[cat] = urgency * SCARCITY_WEIGHT;
-    if (details) details[cat] = { enemyPicks, taken, slotsLeft: slotsLeftFor(playerIdx, cat), best, fallback, fallbackRank: idx + 1, bonus: bonuses[cat] };
+    const roleMult = cat === 'model' ? modelScarcityWeight(playerIdx) : 1;
+    bonuses[cat] = urgency * SCARCITY_WEIGHT * roleMult;
+    if (details) details[cat] = { enemyPicks, taken, slotsLeft: slotsLeftFor(playerIdx, cat), best, fallback, fallbackRank: idx + 1, bonus: bonuses[cat], roleMult };
   }
   return bonuses;
 }
@@ -1549,15 +1571,15 @@ function explainColumn(col, row, d, fromCell) {
     const M = synergyMultiplier();
     if (!held.length) return `<h4>Own synergy: ${who}</h4>No picks yet, so 0.`;
     const rows = held.map((h, i) => {
-      const syn = synergyBetween(it.name, h.name), w = SYNERGY_ORDER_WEIGHTS[i];
-      const est = synergyIsEstimated(it.name, h.name) ? ' <span class="dim">(est.)</span>' : '';
+      const syn = botSynergy(it.name, h.name, seat), w = SYNERGY_ORDER_WEIGHTS[i];
+      const est = synergyIsEstimated(it.name, h.name) ? ` <span class="dim">(est.${estimatedPenaltyWeight(seat) !== 1 ? ' ×' + estimatedPenaltyWeight(seat) + ' ' + ROLE_LABEL[seatRole(seat)] : ''})</span>` : '';
       return `<tr><td>${i + 1}. ${h.display_name}</td><td>${n2(syn)}${est}</td><td>${w}</td><td>${s1(-syn * M * w)}</td></tr>`;
     });
     return `<h4>Own synergy: ${who}</h4>
       <div class="f">${SCALE_LABEL} × Σ synergy × M × W(order held)
 M = ${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT} × pick ${pickIndex} = ${n2(M)}</div>
       ${tipTable(['Held pick', 'Synergy', 'W', 'Effect'], rows)}<div>Total ${s1(row.ownSynergy)}</div>
-      <div class="dim">est. = model + ability pair missing from windrun's pair data: ${MODEL_SHIFT_WEIGHT} × the average of the ability's winrate drop on the model's attribute and attack type (drops only).</div>`;
+      <div class="dim">est. = model + ability pair missing from windrun's pair data: ${MODEL_SHIFT_WEIGHT} × the average of the ability's winrate drop on the model's attribute and attack type (drops only), then × the seat's role weight: Carry 1.5, Offlane 1.25, Mid 1.1, Support 1.</div>`;
   }
   if (col === 'combo') {
     const B = knownComboBonus();
@@ -1631,7 +1653,7 @@ bonus = +${SCARCITY_WEIGHT} × clamp(best − fallback, 0, ${cap})</div>
       const deferred = d.deferredCats && d.deferredCats.includes(cat) ? ' <span style="color:#f4c542">(deferred: every enemy picking before the next turn has filled it)</span>' : '';
       html += `<div class="cat"><b>${CAT_LABEL[cat]}</b>: ${s.enemyPicks} enemy picks → ${s.taken} taken, ${s.slotsLeft} slot${s.slotsLeft === 1 ? '' : 's'} left → fallback rank ${s.fallbackRank}${deferred}${mine}
         ${tipTable(['Option', 'Personal', ''], rows)}
-        <div class="f">${SCARCITY_WEIGHT} × clamp(${n1(shown(s.best))} − ${Number.isFinite(s.fallback) ? n1(shown(s.fallback)) : 'none left'}, 0, ${cap}) = ${s.bonus ? '+' + n1(-shown(s.bonus)) : '0.0'}</div></div>`;
+        <div class="f">${SCARCITY_WEIGHT} × clamp(${n1(shown(s.best))} − ${Number.isFinite(s.fallback) ? n1(shown(s.fallback)) : 'none left'}, 0, ${cap})${s.roleMult && s.roleMult !== 1 ? ` × ${s.roleMult} (${ROLE_LABEL[seatRole(seat)]})` : ''} = ${s.bonus ? '+' + n1(-shown(s.bonus)) : '0.0'}</div></div>`;
     }
     return html;
   }
