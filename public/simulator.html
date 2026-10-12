@@ -1219,16 +1219,17 @@ function teamOpposingPicksBefore(seat, cat) {
 // before our team's next pick), and compare the best against the first one
 // left. Bonus = SCARCITY_WEIGHT × clamp(gap, 0, SCARCITY_CAP), shared by every
 // option fitting that role in that category; an option fitting several roles
-// takes its largest. Models fit every role, so they're not part of it.
+// takes its largest. Models count too (since 2026-10-12), by their tentative
+// role groups; a model with no tentative role is left out.
 function roleScarcityBonuses(seat, available, personal, assignment, details) {
   const out = {};
-  for (const cat of ['ult', 'basic']) {
+  for (const cat of ['model', 'ult', 'basic']) {
     const enemyPicks = teamOpposingPicksBefore(seat, cat);
     if (enemyPicks == null) continue;
     const taken = deniedCount(enemyPicks);
     for (const r of ROLES) {
       const open = teamSeats(seat).some(s => assignment.roles[s] === r && slotsLeftFor(s, cat) > 0);
-      const opts = available.filter(a => categoryOf(a) === cat && a.kind === 'ability' && roleData(a) && fitsRole(a, r))
+      const opts = available.filter(a => categoryOf(a) === cat && roleData(a) && fitsRole(a, r))
         .map(a => ({ item: a, p: personal.get(a) })).sort((a, b) => a.p - b.p);
       if (!opts.length || !Number.isFinite(opts[0].p)) continue;
       const best = opts[0].p, fallback = taken < opts.length ? opts[taken].p : Infinity;
@@ -1240,7 +1241,7 @@ function roleScarcityBonuses(seat, available, personal, assignment, details) {
   return out;
 }
 function roleScarcityFor(item, bonuses) {
-  if (!bonuses || item.kind !== 'ability' || !roleData(item)) return { bonus: 0, role: null };
+  if (!bonuses || !roleData(item)) return { bonus: 0, role: null };
   let best = { bonus: 0, role: null };
   for (const r of itemRoles(item)) {
     const b = bonuses[categoryOf(item) + '|' + r] || 0;
@@ -1848,33 +1849,16 @@ cost = ${OFF_ROLE_CUT * 100}% × base × the smaller of the two</div>
       <div class="f">taken = enemy picks before our team's next pick (1-2: all, then half rounded up), capped at their open slots
 gap = best option fitting the role − first one left after the top "taken"
 bonus = +${SCARCITY_WEIGHT} × clamp(gap, 0, ${cap}), for every option fitting that role (an option fitting several takes its largest)</div>
-      <div class="dim">ranked by personal score; only roles a seat on the team still has an open slot for in that category count. Models get their bonus in the Scarcity column (within this seat's role group); the Model section below shows it.</div>`;
+      <div class="dim">ranked by personal score; only roles a seat on the team still has an open slot for in that category count. Models use their tentative role groups.</div>`;
     if (d.roleScarcityOff) return html + `<div>${seatLabel(seat)} already plays ${ROLE_LABEL[seatRole(seat)]}, so role scarcity is off for its picks: it only helps a seat choose its role (usually its first pick). Category scarcity and the off-role cut handle the rest.</div>`;
     const fit = itemRoles(it);
-    for (const cat of ['ult', 'basic']) {
+    for (const cat of ['model', 'ult', 'basic']) {
       const rows = ROLES.map(r => d.roleScarcity[cat + '|' + r]).filter(Boolean).map(x => {
         const name = i => i < x.opts.length ? `${x.opts[i].item.display_name} ${n1(shown(x.opts[i].p))}` : 'none left';
         const mine = fromCell && categoryOf(it) === cat && fit && fit.includes(x.role) ? ' ←' : '';
         return `<tr><td>${ROLE_LABEL[x.role]}${mine}</td><td>${x.enemyPicks} → ${x.taken}</td><td style="text-align:left;white-space:normal">${name(0)} → ${name(x.taken)}</td><td>${x.open ? (x.bonus ? '+' + n1(-shown(x.bonus)) : '0.0') : '<span class="dim">no open slot</span>'}</td></tr>`;
       });
       html += `<div class="cat"><b>${CAT_LABEL[cat]}</b>${rows.length ? tipTable(['Role', 'Enemy picks → taken', 'Best → first left', 'Bonus'], rows) : ' <span class="dim">no options or no team pick left</span>'}</div>`;
-    }
-    // Models: shown here for reference; their bonus lives in the Scarcity column.
-    const ms = d.scarcity.model, myRole = seatRole(seat);
-    if (!myRole) html += `<div class="cat"><b>Model</b> <span class="dim">${seatLabel(seat)} has no role yet, so model scarcity compares all models (Scarcity column)</span></div>`;
-    else if (!slotsLeftFor(seat, 'model')) html += `<div class="cat"><b>Model</b> <span class="dim">model slot filled</span></div>`;
-    else {
-      const group = d.rows.filter(r => r.item.kind === 'model' && fitsRole(r.item, myRole))
-        .map(r => ({ item: r.item, p: d.personal.get(r.item) })).sort((a, b) => a.p - b.p);
-      const outCount = d.rows.filter(r => r.item.kind === 'model').length - group.length;
-      const rows = group.slice(0, Math.max(5, ms ? ms.fallbackRank : 0)).map((o, i) => {
-        const tag = [i === 0 ? 'best' : '', ms && i < ms.taken ? 'assumed taken' : '', ms && i + 1 === ms.fallbackRank ? 'fallback' : ''].filter(Boolean).join(', ');
-        return `<tr class="${i === 0 ? 'mark' : ms && i + 1 === ms.fallbackRank ? 'fb' : ''}"><td>${i + 1}. ${o.item.display_name}</td><td>${n1(shown(o.p))}</td><td>${tag}</td></tr>`;
-      });
-      const mine = fromCell && it.kind === 'model' ? (fitsRole(it, myRole) ? ` ← ${it.display_name} is in the group` : ` ← ${it.display_name} is outside the group, no bonus`) : '';
-      html += `<div class="cat"><b>Model</b> (${seatLabel(seat)} ${ROLE_LABEL[myRole]} group: ${group.length} model${group.length === 1 ? '' : 's'}, ${outCount} left out)<span class="dim">${mine}</span>
-        ${group.length ? tipTable(['Model', 'Personal', ''], rows) : '<div class="dim">no models in this group</div>'}
-        ${ms ? `<div class="f">${ms.enemyPicks} enemy picks → ${ms.taken} taken; ${SCARCITY_WEIGHT} × clamp(${n1(shown(ms.best))} − ${Number.isFinite(ms.fallback) ? n1(shown(ms.fallback)) : 'none left'}, 0, ${cap}) × ${ms.roleMult} = ${ms.bonus ? '+' + n1(-shown(ms.bonus)) : '0.0'} to group models only (in the Scarcity column)</div>` : ''}</div>`;
     }
     if (fromCell) html += `<div>${it.display_name}: ${s1(row.roleScarcity)}${row.scarcityRole ? ' (' + ROLE_LABEL[row.scarcityRole] + ')' : ''}</div>`;
     return html;
