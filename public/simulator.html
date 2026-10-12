@@ -1240,10 +1240,13 @@ function roleScarcityBonuses(seat, available, personal, assignment, details) {
   }
   return out;
 }
-function roleScarcityFor(item, bonuses) {
+// Only the role the seat would play after taking the item counts (2026-10-12),
+// so a spell isn't rewarded for a role a teammate already covers.
+function roleScarcityFor(item, bonuses, roleAfter) {
   if (!bonuses || !roleData(item)) return { bonus: 0, role: null };
   let best = { bonus: 0, role: null };
   for (const r of itemRoles(item)) {
+    if (roleAfter && r !== roleAfter) continue;
     const b = bonuses[categoryOf(item) + '|' + r] || 0;
     if (b > best.bonus) best = { bonus: b, role: r };
   }
@@ -1263,7 +1266,7 @@ function scoreParts(item, playerIdx, personalPartsMap, scarcity, outlooks, roleC
     : -scarcity[categoryOf(item)];
   const ctx = roleCtx || { assignment: teamAssignment(playerIdx), bonuses: null };
   const align = roleAlignmentTerm(item, playerIdx, ctx.assignment, pp.base);
-  const rs = roleScarcityFor(item, ctx.bonuses);
+  const rs = roleScarcityFor(item, ctx.bonuses, align.after ? align.after.roles[playerIdx] : null);
   const role = align.cost, roleScarcity = -rs.bonus;
   return { ...pp, enemy, ally, scarcity: scarcityPart, role, roleScarcity, roleAfter: align.after, roleInfo: align.after ? align : null, scarcityRole: rs.role,
     total: pp.personal + enemy + ally + scarcityPart + role + roleScarcity };
@@ -1321,6 +1324,10 @@ function botDecision() {
   // category scarcity and the off-role cut take over (2026-10-12).
   decision.roleScarcityOff = !!seatRole(p);
   const roleBonuses = decision.roleScarcityOff ? {} : roleScarcityBonuses(p, available, personal, decision.assignment, decision.roleScarcity);
+  // Category scarcity only takes over once role scarcity is off, so the two
+  // aren't stacked on the role-choosing pick (2026-10-12).
+  decision.categoryScarcityOff = !decision.roleScarcityOff;
+  if (decision.categoryScarcityOff) { bonuses.model = bonuses.ult = bonuses.basic = 0; delete bonuses.modelGroup; }
   const roleCtx = { assignment: decision.assignment, bonuses: roleBonuses };
   decision.rows = available.map(a => ({ item: a, ...scoreParts(a, p, parts, bonuses, decision.outlooks, roleCtx) }))
     .sort((x, y) => x.total - y.total);
@@ -1793,6 +1800,7 @@ effect = −${w} × clamp(next pick − the one after, 0, ${cap}), scores = thei
 fallback = personal score at rank taken + slots left
 bonus = +${SCARCITY_WEIGHT} × clamp(best − fallback, 0, ${cap})</div>
       <div class="dim">personal score = base + own synergy + known combo + pool upside, without get-back so a combo isn't counted twice (higher is better)</div>`;
+    if (d.categoryScarcityOff) return html + `<div>${seatLabel(seat)} has no role yet, so Role scarcity is on and category scarcity is off for this pick (it takes over once the seat has a role).</div>`;
     for (const cat of ['model', 'ult', 'basic']) {
       const s = d.scarcity[cat];
       const mine = fromCell && categoryOf(it) === cat ? ` <span class="dim">← ${it.display_name}'s category</span>` : '';
@@ -1848,7 +1856,7 @@ cost = ${OFF_ROLE_CUT * 100}% × base × the smaller of the two</div>
     let html = `<h4>Role scarcity for ${seatLabel(seat)}'s team</h4>
       <div class="f">taken = enemy picks before our team's next pick (1-2: all, then half rounded up), capped at their open slots
 gap = best option fitting the role − first one left after the top "taken"
-bonus = +${SCARCITY_WEIGHT} × clamp(gap, 0, ${cap}), for every option fitting that role (an option fitting several takes its largest)</div>
+bonus = +${SCARCITY_WEIGHT} × clamp(gap, 0, ${cap}), for options fitting that role, but only for the role this seat would play after taking the option</div>
       <div class="dim">ranked by personal score; only roles a seat on the team still has an open slot for in that category count. Models use their tentative role groups.</div>`;
     if (d.roleScarcityOff) return html + `<div>${seatLabel(seat)} already plays ${ROLE_LABEL[seatRole(seat)]}, so role scarcity is off for its picks: it only helps a seat choose its role (usually its first pick). Category scarcity and the off-role cut handle the rest.</div>`;
     const fit = itemRoles(it);
