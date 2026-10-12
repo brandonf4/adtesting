@@ -986,10 +986,18 @@ function itemRoles(item) {
 // How well an ability plays role r, 0-1: 1 in its best role, falling by the z
 // it gives up relative to that best (or to ROLE_FIT_FLOOR if the best is lower).
 // Models and abilities without data fit every role (1).
+// Offlaners can play support spells, so an Offlane seat credits a spell's
+// Support z less OFFLANE_SUPPORT_DISCOUNT when that beats its Offlane z: support
+// spells there are only slightly off-role, carry spells still fully.
+const OFFLANE_SUPPORT_DISCOUNT = 0.5;
+function seatRoleZ(item, r) {
+  const z = roleZ(item, r);
+  return r === 'offlane' ? Math.max(z, roleZ(item, 'support') - OFFLANE_SUPPORT_DISCOUNT) : z;
+}
 function roleFit(item, r) {
   if (!roleData(item)) return 1;
   const best = Math.max(...ROLES.map(x => roleZ(item, x)));
-  return Math.max(0, Math.min(1, 1 - (best - roleZ(item, r)) / Math.max(best, ROLE_FIT_FLOOR)));
+  return Math.max(0, Math.min(1, 1 - (best - seatRoleZ(item, r)) / Math.max(best, ROLE_FIT_FLOOR)));
 }
 function fitsRole(item, r) { const rs = itemRoles(item); return !rs || rs.includes(r); }
 // Every distinct way to hand the 5 team roles to 5 seats (60 of them).
@@ -1049,7 +1057,7 @@ function roleAlignmentTerm(item, seat, before, baseInternal) {
   const shiftLost = Math.min(1, Math.max(0, after.lost - before.lost));
   const hasRole = picks[seat].some(x => roleData(x));
   const keepRole = hasRole ? before.roles[seat] : null;
-  const keepLost = hasRole ? Math.min(1, Math.max(0, (ROLE_KEEP_Z[keepRole] - roleZ(item, keepRole)) / ROLE_KEEP_SPAN)) : Infinity;
+  const keepLost = hasRole ? Math.min(1, Math.max(0, (ROLE_KEEP_Z[keepRole] - seatRoleZ(item, keepRole)) / ROLE_KEEP_SPAN)) : Infinity;
   const keep = keepLost <= shiftLost;
   const lost = keep ? keepLost : shiftLost;
   return { cost: full * lost, after: keep ? before : after, lost, mode: keep ? 'keep' : 'shift', keepRole, keepLost, shiftLost, shiftAfter: after };
@@ -1644,12 +1652,12 @@ bonus = +${SCARCITY_WEIGHT} × clamp(best − fallback, 0, ${cap})</div>
     return `<h4>Off-role: ${who}</h4>
       <div class="f">fit in a role = 1 − (best z − z there) ÷ max(best z, ${ROLE_FIT_FLOOR}), between 0 and 1
 team roles = the assignment of Carry, Mid, Offlane, Support, Support to the 5 seats with the highest summed fit of held abilities
-keep (seat keeps its role) = clamp((bar − z in that role) ÷ ${ROLE_KEEP_SPAN}, 0, 1), bar = ${ROLES.map(r => ROLE_LABEL[r] + ' ' + ROLE_KEEP_Z[r]).join(', ')}
+keep (seat keeps its role) = clamp((bar − z in that role) ÷ ${ROLE_KEEP_SPAN}, 0, 1), bar = ${ROLES.map(r => ROLE_LABEL[r] + ' ' + ROLE_KEEP_Z[r]).join(', ')}; on Offlane, z = max(Offlane z, Support z − ${OFFLANE_SUPPORT_DISCOUNT})
 shift (roles re-solved) = relative fit the team loses after this pick (max 1)
 cost = ${OFF_ROLE_CUT * 100}% × base × the smaller of the two</div>
       <div>z: ${zs} <br>role scarcity groups (z ≥ ${ROLE_FIT_Z} or within ${ROLE_FIT_SPREAD} of best): <b>${fit.map(r => ROLE_LABEL[r]).join(', ')}</b></div>
       <div>Before: ${fmtRoles(before)} <span class="dim">(fit lost ${n2(before.lost)})</span></div>
-      <div>Keep: ${row.roleInfo && row.roleInfo.keepRole ? `${seatLabel(seat)} stays ${ROLE_LABEL[row.roleInfo.keepRole]}, z ${n2(roleZ(it, row.roleInfo.keepRole))} → ${n2(row.roleInfo.keepLost)}` : '<span class="dim">seat has no role yet</span>'}</div>
+      <div>Keep: ${row.roleInfo && row.roleInfo.keepRole ? `${seatLabel(seat)} stays ${ROLE_LABEL[row.roleInfo.keepRole]}, z ${n2(seatRoleZ(it, row.roleInfo.keepRole))} → ${n2(row.roleInfo.keepLost)}` : '<span class="dim">seat has no role yet</span>'}</div>
       <div>Shift: ${row.roleInfo ? `${fmtRoles(row.roleInfo.shiftAfter)} <span class="dim">(fit lost ${n2(row.roleInfo.shiftAfter.lost)})</span> → ${n2(row.roleInfo.shiftLost)}` : '—'}</div>
       <div class="f">${OFF_ROLE_CUT * 100}% × base ${n2(shown(row.base))} × ${row.roleInfo ? n2(row.roleInfo.lost) + ' (' + row.roleInfo.mode + ')' : '0'} = ${s1(row.role)}</div>
       <div class="dim">z-scores only pick the groups; the cost is in base points.</div>`;
