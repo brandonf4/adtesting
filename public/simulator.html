@@ -896,9 +896,29 @@ function denialLoss(out, item) {
   const best = out.opts[0].p, next = out.opts.length > 1 ? out.opts[1].p : Infinity;
   return { rank, best, next, loss: Math.min(Math.max(next - best, 0), SCARCITY_CAP) * SCARCITY_WEIGHT };
 }
+// No denial if a teammate who picks before that enemy's next turn has the item
+// as their clear best option in the category (by fit with what they hold): they'll
+// take it anyway, so the enemy is denied for free (2026-10-12).
+function teammateTakesFirst(item, playerIdx, enemy, cache) {
+  const cat = categoryOf(item);
+  const enemyNext = nextPickIndexFor(enemy, pickIndex);
+  if (enemyNext == null) return null;
+  for (const a of alliesOf(playerIdx)) {
+    const aNext = nextPickIndexFor(a, pickIndex);
+    if (aNext == null || aNext > enemyNext || !picks[a].length) continue;
+    const out = seatOutlook(a, cat, cache);
+    if (!out || !out.opts.length || out.opts[0].item !== item) continue;
+    const best = out.opts[0].p, next = out.opts.length > 1 ? out.opts[1].p : Infinity;
+    if (best < 0 && best < next) return a;
+  }
+  return null;
+}
 function enemySynergyTerm(item, playerIdx, cache) {
   const cat = categoryOf(item);
-  return enemiesOf(playerIdx).reduce((t, e) => t + denialLoss(seatOutlook(e, cat, cache), item).loss, 0);
+  return enemiesOf(playerIdx).reduce((t, e) => {
+    const l = denialLoss(seatOutlook(e, cat, cache), item);
+    return t + (l.loss && teammateTakesFirst(item, playerIdx, e, cache) != null ? 0 : l.loss);
+  }, 0);
 }
 
 // Ally avoid: the mirror for teammates. If a teammate has two similar options and
@@ -1746,15 +1766,18 @@ get-back = with − without, summed, × ${GET_BACK_WEIGHT}</div>`;
       if (!out) return `<tr><td>${seatLabel(s)}</td><td colspan="4" class="dim">no picks left, skipped</td></tr>`;
       if (!picks[s].length) return `<tr><td>${seatLabel(s)}</td><td colspan="4" class="dim">no picks yet, 0</td></tr>`;
       const l = isEnemy ? denialLoss(out, it) : outlookLoss(out, it);
+      const mate = isEnemy && l.loss ? teammateTakesFirst(it, seat, s, cache) : null;
+      if (mate != null) { l.loss = 0; }
       const name = i => i < out.opts.length ? `${out.opts[i].item.display_name} ${s1(out.opts[i].p)}` : 'none left';
       const gap = isEnemy
-        ? (l.rank === 0 ? `${name(0)} → ${name(1)}` : `<span class="dim">not their best (${name(0)})</span>`)
+        ? (l.rank === 0 ? `${name(0)} → ${name(1)}${mate != null ? ` <span class="dim">· 0: ${seatLabel(mate)} picks first and it's their best</span>` : ''}` : `<span class="dim">not their best (${name(0)})</span>`)
         : (l.rank >= 0 && l.rank <= out.keepIdx ? `${name(out.keepIdx)} → ${name(out.keepIdx + 1)}` : `<span class="dim">outside their top ${out.keepIdx + 1}</span>`);
       return `<tr><td>${seatLabel(s)}</td>${isEnemy ? '' : `<td>${out.chances} → ${out.denied}</td>`}<td>#${l.rank + 1}</td><td style="text-align:left;white-space:normal">${gap}</td><td>${s1((isEnemy ? -1 : 1) * l.loss)}</td></tr>`;
     });
     const head = isEnemy ? ['Player', 'Rank', 'Their best → next best', 'Effect'] : ['Player', 'Enemy picks → denied', 'Rank', 'Their next pick → next', 'Effect'];
     const w = SCARCITY_WEIGHT, cap = SCARCITY_CAP * Math.abs(DISPLAY_SCALE);
     const formula = isEnemy ? `<div class="f">only counts if ${it.display_name} is that enemy's best ${CAT_LABEL[cat]} option: they drop to their next best
+0 if a teammate who picks before that enemy has it as their own best option (they'll take it anyway)
 effect = +${w} × clamp(best − next best, 0, ${cap}), scores = their own synergy + known combo with what they hold (no base value), ${half}</div>`
       : `<div class="f">denied = enemy picks before their turn (1-2: all, then half rounded up), each enemy capped at its open ${CAT_LABEL[cat]} slots
 their next pick = rank denied + 1 (only their next pick counts); if ${it.display_name} ranks within it, losing it drops them one rank
