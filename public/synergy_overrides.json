@@ -1,1 +1,50 @@
-{ "overrides": {} }
+{
+  "updated": "2026-10-12",
+  "description": "Synergy edits baked into the site; they replace windrun pair values for every browser. Keys are ability/model names sorted alphabetically, joined by |.",
+  "overrides": {
+    "antimage_blink|queenofpain_blink": -9,
+    "chen_divine_favor|tinker_rearm": -5,
+    "juggernaut_blade_fury|tinker_rearm": 5,
+    "phantom_assassin_immaterial|tinker_rearm": -5,
+    "phantom_assassin_phantom_strike|tinker_rearm": -5,
+    "phantom_assassin_stifling_dagger|tinker_rearm": -5,
+    "tinker_rearm|viper_corrosive_skin": -5
+  },
+  "readable": [
+    {
+      "pair": "Blink (Anti-Mage) + Blink (Queen of Pain)",
+      "value": -9,
+      "windrun": null
+    },
+    {
+      "pair": "Divine Favor (Chen) + Rearm (Tinker)",
+      "value": -5,
+      "windrun": null
+    },
+    {
+      "pair": "Blade Fury (Juggernaut) + Rearm (Tinker)",
+      "value": 5,
+      "windrun": null
+    },
+    {
+      "pair": "Immaterial (Phantom Assassin) + Rearm (Tinker)",
+      "value": -5,
+      "windrun": null
+    },
+    {
+      "pair": "Phantom Strike (Phantom Assassin) + Rearm (Tinker)",
+      "value": -5,
+      "windrun": null
+    },
+    {
+      "pair": "Stifling Dagger (Phantom Assassin) + Rearm (Tinker)",
+      "value": -5,
+      "windrun": null
+    },
+    {
+      "pair": "Rearm (Tinker) + Corrosive Skin (Viper)",
+      "value": -5,
+      "windrun": null
+    }
+  ]
+}

@@ -625,18 +625,19 @@ function synergyKeyFor(nameA, nameB) {
 // (windrun's "SYNERGY" column). A user-set override (SYNERGY_OVERRIDES, via the
 // synergy editor) replaces the windrun value entirely when present. A missing
 // ability + ability pair is neutral (0). A missing model + ability pair gets an
-// estimate instead: the average of how much worse the ability does on the model's
-// primary attribute and on its attack type than overall (each 0 if not clearly
-// negative). windrun only lists the most-played pairs, so bad model pairings are
+// estimate instead: MODEL_SHIFT_WEIGHT × the average of how much worse the ability
+// does on the model's primary attribute and on its attack type than overall (each
+// 0 if not clearly negative). windrun only lists the most-played pairs, so bad model pairings are
 // never in the pairs data; this is where they show up.
 function isModelName(name) { return MODEL_TYPES.has(name); }
+const MODEL_SHIFT_WEIGHT = 2; // doubled 2026-10-12
 function estimatedModelSynergy(nameA, nameB) {
   const [model, ability] = isModelName(nameA) ? [nameA, nameB] : [nameB, nameA];
   if (!isModelName(model) || isModelName(ability)) return 0;
   const shifts = MODEL_SHIFTS[ability];
   if (!shifts) return 0;
   const [attr, attackType] = MODEL_TYPES.get(model);
-  return ((shifts[attr] || 0) + (shifts[attackType] || 0)) / 2;
+  return MODEL_SHIFT_WEIGHT * ((shifts[attr] || 0) + (shifts[attackType] || 0)) / 2;
 }
 function synergyIsEstimated(nameA, nameB) {
   const key = synergyKeyFor(nameA, nameB);
@@ -649,10 +650,10 @@ function synergyBetween(nameA, nameB) {
   if (SYNERGY.has(key)) return SYNERGY.get(key);
   return estimatedModelSynergy(nameA, nameB);
 }
-// Known-combo bonus applies to ability + ability pairs with any recorded data. Model
-// + ability pairs never get it: those are judged by their real or estimated synergy.
+// Known-combo bonus applies to any pair with recorded data (windrun or a user
+// edit), model + ability pairs included. Estimated model pairs don't count.
 function knownComboApplies(nameA, nameB) {
-  return hasSynergyData(nameA, nameB) && !isModelName(nameA) && !isModelName(nameB);
+  return hasSynergyData(nameA, nameB);
 }
 function hasSynergyData(nameA, nameB) {
   if (nameA === nameB) return false;
@@ -1548,18 +1549,17 @@ function explainColumn(col, row, d, fromCell) {
       <div class="f">${SCALE_LABEL} × Σ synergy × M × W(order held)
 M = ${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT} × pick ${pickIndex} = ${n2(M)}</div>
       ${tipTable(['Held pick', 'Synergy', 'W', 'Effect'], rows)}<div>Total ${s1(row.ownSynergy)}</div>
-      <div class="dim">est. = model + ability pair missing from windrun's pair data: average of the ability's winrate drop on the model's attribute and attack type (drops only).</div>`;
+      <div class="dim">est. = model + ability pair missing from windrun's pair data: ${MODEL_SHIFT_WEIGHT} × the average of the ability's winrate drop on the model's attribute and attack type (drops only).</div>`;
   }
   if (col === 'combo') {
     const B = knownComboBonus();
     if (!held.length) return `<h4>Known combo: ${who}</h4>No picks yet, so 0.`;
     const rows = held.map((h, i) => {
       const has = knownComboApplies(it.name, h.name), w = SYNERGY_ORDER_WEIGHTS[i];
-      const model = isModelName(it.name) || isModelName(h.name);
-      return `<tr><td>${i + 1}. ${h.display_name}</td><td>${model ? 'model pair, no bonus' : has ? 'yes (' + n2(synergyBetween(it.name, h.name)) + ')' : 'no'}</td><td>${w}</td><td>${s1(has ? -B * w : 0)}</td></tr>`;
+      return `<tr><td>${i + 1}. ${h.display_name}</td><td>${has ? 'yes (' + n2(synergyBetween(it.name, h.name)) + ')' : 'no'}</td><td>${w}</td><td>${s1(has ? -B * w : 0)}</td></tr>`;
     });
     return `<h4>Known combo: ${who}</h4>
-      <div class="f">${SCALE_LABEL} × Σ bonus × W, for each held pick with any pair data (ability + ability only)
+      <div class="f">${SCALE_LABEL} × Σ bonus × W, for each held pick with any pair data (windrun or edited; estimated model pairs don't count)
 bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFICIENT} × ${pickIndex}² = ${n2(B)}</div>
       ${tipTable(['Held pick', 'Pair data', 'W', 'Effect'], rows)}<div>Total ${s1(row.combo)}</div>`;
   }
