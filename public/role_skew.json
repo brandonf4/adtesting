@@ -6546,12 +6546,12 @@
    "pos1": 0.923,
    "mid": 0.118,
    "offlane": -0.151,
-   "support": 0.266,
+   "support": -0.2,
    "raw": {
     "pos1": 0.162,
     "mid": 0.35,
     "offlane": 22.7,
-    "support": 0.056
+    "support": -0.028
    }
   },
   "vengefulspirit_magic_missile": {
@@ -6977,15 +6977,15 @@
   "windrunner_windrun": {
    "ability": "Windrun",
    "hero": "Windranger",
-   "pos1": 0.125,
-   "mid": 0.569,
-   "offlane": -0.151,
-   "support": -0.038,
+   "pos1": 0.5,
+   "mid": 0.5,
+   "offlane": 0.5,
+   "support": 0.5,
    "raw": {
-    "pos1": 0.006,
-    "mid": 1.36,
-    "offlane": 22.7,
-    "support": 0.001
+    "pos1": 0.079,
+    "mid": 1.205,
+    "offlane": 31.729,
+    "support": 0.098
    }
   },
   "winter_wyvern_arctic_burn": {
