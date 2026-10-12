@@ -8,7 +8,70 @@
     "phantom_assassin_immaterial|tinker_rearm": -5,
     "phantom_assassin_phantom_strike|tinker_rearm": -5,
     "phantom_assassin_stifling_dagger|tinker_rearm": -5,
-    "tinker_rearm|viper_corrosive_skin": -5
+    "tinker_rearm|viper_corrosive_skin": -5,
+    "crystal_maiden|troll_warlord_berserkers_rage": -15,
+    "drow_ranger|troll_warlord_berserkers_rage": -15,
+    "mirana|troll_warlord_berserkers_rage": -15,
+    "morphling|troll_warlord_berserkers_rage": -15,
+    "nevermore|troll_warlord_berserkers_rage": -15,
+    "puck|troll_warlord_berserkers_rage": -15,
+    "razor|troll_warlord_berserkers_rage": -15,
+    "storm_spirit|troll_warlord_berserkers_rage": -15,
+    "troll_warlord_berserkers_rage|vengefulspirit": -15,
+    "troll_warlord_berserkers_rage|windrunner": -15,
+    "troll_warlord_berserkers_rage|zuus": -15,
+    "lina|troll_warlord_berserkers_rage": -15,
+    "lion|troll_warlord_berserkers_rage": -15,
+    "shadow_shaman|troll_warlord_berserkers_rage": -15,
+    "troll_warlord_berserkers_rage|witch_doctor": -15,
+    "lich|troll_warlord_berserkers_rage": -15,
+    "enigma|troll_warlord_berserkers_rage": -15,
+    "tinker|troll_warlord_berserkers_rage": -15,
+    "sniper|troll_warlord_berserkers_rage": -15,
+    "necrolyte|troll_warlord_berserkers_rage": -15,
+    "troll_warlord_berserkers_rage|warlock": -15,
+    "queenofpain|troll_warlord_berserkers_rage": -15,
+    "troll_warlord_berserkers_rage|venomancer": -15,
+    "death_prophet|troll_warlord_berserkers_rage": -15,
+    "pugna|troll_warlord_berserkers_rage": -15,
+    "templar_assassin|troll_warlord_berserkers_rage": -15,
+    "troll_warlord_berserkers_rage|viper": -15,
+    "luna|troll_warlord_berserkers_rage": -15,
+    "dazzle|troll_warlord_berserkers_rage": -15,
+    "leshrac|troll_warlord_berserkers_rage": -15,
+    "furion|troll_warlord_berserkers_rage": -15,
+    "clinkz|troll_warlord_berserkers_rage": -15,
+    "enchantress|troll_warlord_berserkers_rage": -15,
+    "huskar|troll_warlord_berserkers_rage": -15,
+    "troll_warlord_berserkers_rage|weaver": -15,
+    "jakiro|troll_warlord_berserkers_rage": -15,
+    "batrider|troll_warlord_berserkers_rage": -15,
+    "chen|troll_warlord_berserkers_rage": -15,
+    "ancient_apparition|troll_warlord_berserkers_rage": -15,
+    "gyrocopter|troll_warlord_berserkers_rage": -15,
+    "invoker|troll_warlord_berserkers_rage": -15,
+    "silencer|troll_warlord_berserkers_rage": -15,
+    "obsidian_destroyer|troll_warlord_berserkers_rage": -15,
+    "shadow_demon|troll_warlord_berserkers_rage": -15,
+    "lone_druid|troll_warlord_berserkers_rage": -15,
+    "rubick|troll_warlord_berserkers_rage": -15,
+    "disruptor|troll_warlord_berserkers_rage": -15,
+    "keeper_of_the_light|troll_warlord_berserkers_rage": -15,
+    "troll_warlord_berserkers_rage|wisp": -15,
+    "troll_warlord_berserkers_rage|visage": -15,
+    "medusa|troll_warlord_berserkers_rage": -15,
+    "skywrath_mage|troll_warlord_berserkers_rage": -15,
+    "techies|troll_warlord_berserkers_rage": -15,
+    "phoenix|troll_warlord_berserkers_rage": -15,
+    "oracle|troll_warlord_berserkers_rage": -15,
+    "troll_warlord_berserkers_rage|winter_wyvern": -15,
+    "arc_warden|troll_warlord_berserkers_rage": -15,
+    "dark_willow|troll_warlord_berserkers_rage": -15,
+    "grimstroke|troll_warlord_berserkers_rage": -15,
+    "hoodwink|troll_warlord_berserkers_rage": -15,
+    "snapfire|troll_warlord_berserkers_rage": -15,
+    "ringmaster|troll_warlord_berserkers_rage": -15,
+    "muerta|troll_warlord_berserkers_rage": -15
   },
   "readable": [
     {
@@ -44,6 +107,321 @@
     {
       "pair": "Rearm (Tinker) + Corrosive Skin (Viper)",
       "value": -5,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Crystal Maiden (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Drow Ranger (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Mirana (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Morphling (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Shadow Fiend (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Puck (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Razor (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Storm Spirit (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Vengeful Spirit (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Windranger (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Zeus (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Lina (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Lion (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Shadow Shaman (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Witch Doctor (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Lich (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Enigma (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Tinker (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Sniper (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Necrophos (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Warlock (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Queen of Pain (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Venomancer (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Death Prophet (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Pugna (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Templar Assassin (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Viper (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Luna (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Dazzle (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Leshrac (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Nature's Prophet (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Clinkz (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Enchantress (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Huskar (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Weaver (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Jakiro (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Batrider (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Chen (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Ancient Apparition (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Gyrocopter (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Invoker (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Silencer (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Outworld Devourer (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Shadow Demon (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Lone Druid (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Rubick (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Disruptor (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Keeper of the Light (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Io (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Visage (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Medusa (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Skywrath Mage (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Techies (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Phoenix (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Oracle (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Winter Wyvern (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Arc Warden (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Dark Willow (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Grimstroke (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Hoodwink (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Snapfire (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Ringmaster (model)",
+      "value": -15,
+      "windrun": null
+    },
+    {
+      "pair": "Berserker's Rage (Troll Warlord) + Muerta (model)",
+      "value": -15,
       "windrun": null
     }
   ]
