@@ -721,7 +721,10 @@ const SYNERGY_ORDER_WEIGHTS = [1.4, 1, 0.8, 0.6];
 // pick (nothing left to combo into afterward). Indexed by picks[playerIdx]
 // .length (0 on the 1st pick through 4 on the 5th). The pool-synergy badge on
 // each card still counts the whole pool, since it isn't tied to one seat.
-const POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE = [0.5, 0.15, 0.1, 0.1, 0];
+// Scaled to 0.7× of its old weights [0.5, 0.15, 0.1, 0.1, 0] on 2026-10-12, when
+// Get-back (below) was added, to limit double counting. It still pays for
+// forcing the enemy to spend a pick denying a partner.
+const POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE = [0.35, 0.105, 0.07, 0.07, 0];
 function poolPartnersFor(item, playerIdx) {
   const own = categoryOf(item);
   return pool.filter(o => o !== item && !o.picked &&
@@ -730,6 +733,66 @@ function poolPartnersFor(item, playerIdx) {
 function poolSynergyTerm(item, playerIdx) {
   const weight = POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[playerIdx].length];
   return sumPositiveSynergy(item.name, poolPartnersFor(item, playerIdx)) * weight;
+}
+
+// Get-back (added 2026-10-12): what this item lets the seat get back.
+// For each category the seat still needs after taking it (model, ult, basic),
+// the seat's options are predicted the way category scarcity predicts them:
+// ranked by value now (base + own synergy + known combo + off-role cut; models
+// limited to the role group the seat would have after taking this item), with the top
+// deniedCount(enemy picks before this seat's next turn) assumed gone. Then:
+//   with    = best leftover counting its synergy (and known combo) with this
+//             item, weighted as this item will be once held: × synergy
+//             multiplier × its own order weight
+//   without = best leftover ignoring this item
+// Estimated model pairs use that same after-pick role's penalty weight.
+// get-back = with − without, summed over the categories, × GET_BACK_WEIGHT.
+// Negative (good) when a strong partner should still be there on the way
+// back; positive (bad) when every likely leftover pairs badly with it, e.g.
+// Flak Cannon when only melee models are expected to be left. 0 on the last
+// pick or when nothing in a category is expected to be left.
+const GET_BACK_WEIGHT = 1;
+function getBackTerms(playerIdx, available, pre, roleAfter, details) {
+  const out = new Map(available.map(a => [a, 0]));
+  if (nextPickIndexFor(playerIdx, pickIndex) == null) return out;
+  const M = synergyMultiplier(), B = knownComboBonus();
+  const W = SYNERGY_ORDER_WEIGHTS[picks[playerIdx].length] ?? 0;
+  const cats = {};
+  for (const cat of ['model', 'ult', 'basic']) {
+    if (!slotsLeftFor(playerIdx, cat)) continue;
+    const enemyPicks = opposingPicksBefore(playerIdx, cat);
+    const taken = deniedCount(enemyPicks);
+    const opts = available.filter(a => categoryOf(a) === cat && Number.isFinite(pre.get(a)))
+      .sort((a, b) => pre.get(a) - pre.get(b));
+    cats[cat] = { cat, enemyPicks, taken, opts };
+  }
+  for (const x of available) {
+    const own = categoryOf(x);
+    const role = roleAfter.get(x) || null;
+    const estW = role ? ESTIMATED_MODEL_PENALTY_BY_ROLE[role] : 1;
+    let total = 0;
+    const rows = [];
+    for (const c of Object.values(cats)) {
+      if (slotsLeftFor(playerIdx, c.cat) - (c.cat === own ? 1 : 0) <= 0) continue;
+      const group = c.cat === 'model' && role ? role : null;
+      const left = c.opts.filter(o => o !== x && (!group || fitsRole(o, group))).slice(c.taken);
+      if (!left.length) { rows.push({ ...c, group, left, delta: 0 }); continue; }
+      const without = left[0];
+      let withX = null;
+      for (const y of left) {
+        const raw = synergyBetween(x.name, y.name);
+        const syn = synergyIsEstimated(x.name, y.name) ? raw * estW : raw;
+        const v = pre.get(y) - syn * M * W - (knownComboApplies(x.name, y.name) ? B * W : 0);
+        if (!withX || v < withX.v) withX = { item: y, v, syn };
+      }
+      const delta = withX.v - pre.get(without);
+      total += delta;
+      rows.push({ ...c, group, left, without: { item: without, v: pre.get(without) }, withX, delta });
+    }
+    out.set(x, total * GET_BACK_WEIGHT);
+    if (details) details.set(x, { rows, M, B, W, role, estW });
+  }
+  return out;
 }
 
 function enemiesOf(playerIdx) { return playerIdx < 5 ? [5, 6, 7, 8, 9] : [0, 1, 2, 3, 4]; }
@@ -844,7 +907,7 @@ function allySynergyTerm(item, playerIdx, cache) {
 // enemySynergyTerm/allySynergyTerm above for why each goes the direction it does.
 // The bot's own view of an item, split into its parts. Every part is its signed
 // effect on the score (lower = better), so a good synergy shows as negative.
-// personal = base + ownSynergy + combo + pool: base value plus everything about
+// personal = base + ownSynergy + combo + pool + getBack: base value plus everything about
 // how the item fits THIS seat's build, i.e. pickScore without the enemy-denial,
 // ally-avoidance and category-scarcity terms.
 // Scores are computed as "lower = picked first", with every adjustment at the
@@ -883,7 +946,7 @@ function botSynergy(nameA, nameB, seat) {
   const syn = synergyBetween(nameA, nameB);
   return synergyIsEstimated(nameA, nameB) ? syn * estimatedPenaltyWeight(seat) : syn;
 }
-function personalParts(item, playerIdx) {
+function personalParts(item, playerIdx, getBack = 0) {
   const base = item.pickPositionHigh == null ? Infinity : shownBase(item) / DISPLAY_SCALE;
   const multiplier = synergyMultiplier();
   const bonus = knownComboBonus();
@@ -894,7 +957,7 @@ function personalParts(item, playerIdx) {
     if (knownComboApplies(item.name, held.name)) combo -= bonus * orderWeight;
   });
   const poolPart = -poolSynergyTerm(item, playerIdx);
-  return { base, ownSynergy, combo, pool: poolPart, personal: base + ownSynergy + combo + poolPart };
+  return { base, ownSynergy, combo, pool: poolPart, getBack, personal: base + ownSynergy + combo + poolPart + getBack };
 }
 function personalScore(item, playerIdx) {
   return personalParts(item, playerIdx).personal;
@@ -1195,12 +1258,25 @@ function botDecision() {
 
   // Models and abilities compete directly - whichever remaining option scores
   // lowest wins, regardless of kind.
-  const parts = new Map(available.map(a => [a, personalParts(a, p)]));
+  // Get-back needs every option's value first (base + own synergy + known
+  // combo + off-role cut, no pool terms), and the role the seat would have
+  // after each option, so it's a second pass.
+  decision.assignment = teamAssignment(p);
+  const curRole = seatRole(p);
+  const roleAfter = new Map();
+  const pre = new Map(available.map(a => {
+    const pp = personalParts(a, p);
+    const align = a.kind === 'ability' ? roleAlignmentTerm(a, p, decision.assignment, pp.base) : { cost: 0 };
+    roleAfter.set(a, align.after ? align.after.roles[p] : curRole);
+    return [a, pp.base + pp.ownSynergy + pp.combo + align.cost];
+  }));
+  decision.getBack = new Map();
+  const getBack = getBackTerms(p, available, pre, roleAfter, decision.getBack);
+  const parts = new Map(available.map(a => [a, personalParts(a, p, getBack.get(a))]));
   const personal = new Map(available.map(a => [a, parts.get(a).personal]));
   const bonuses = categoryScarcityBonuses(p, available, personal, decision.scarcity);
   decision.personal = personal;
   decision.outlooks = new Map();
-  decision.assignment = teamAssignment(p);
   decision.roleScarcity = {};
   const roleBonuses = roleScarcityBonuses(p, available, personal, decision.assignment, decision.roleScarcity);
   const roleCtx = { assignment: decision.assignment, bonuses: roleBonuses };
@@ -1624,6 +1700,22 @@ P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → 
       ${pos.length ? tipTable(['Top 5 pool synergies', 'Synergy'], rows) : '<div class="dim">No positive synergies left in the pool.</div>'}
       <div class="f">= ${SCALE_LABEL} × ${n2(total)} (all ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${s1(row.pool)}</div>`;
   }
+  if (col === 'getBack') {
+    const info = d.getBack && d.getBack.get(it);
+    const head = `<h4>Get-back: ${who}</h4>
+      <div class="f">for each category this player still needs after this pick: rank its options by value now (base + own synergy + known combo + off-role cut${info && info.role ? '; models: ' + ROLE_LABEL[info.role] + ' group only, the role ' + seatLabel(seat) + ' would have after this pick' : ''}), assume the top (enemy picks before next turn → taken) are gone
+with = best leftover counting its synergy with ${it.display_name} × multiplier × W (+ known combo × W)
+without = best leftover ignoring ${it.display_name}
+get-back = with − without, summed, × ${GET_BACK_WEIGHT}</div>`;
+    if (!info) return head + '<div class="dim">Last pick, nothing to come back to: 0.</div>';
+    const name = v => v ? v.item.display_name : '';
+    const rows = info.rows.map(r => !r.left.length
+      ? `<tr><td>${CAT_LABEL[r.cat]}</td><td>${r.enemyPicks} → ${r.taken}</td><td colspan="3" class="dim">nothing expected to be left</td></tr>`
+      : `<tr><td>${CAT_LABEL[r.cat]}${r.group ? ' <span class="dim">(' + ROLE_LABEL[r.group] + ')</span>' : ''}</td><td>${r.enemyPicks} → ${r.taken}</td><td>${name(r.without)} ${n1(shown(r.without.v))}</td><td>${name(r.withX)} ${n1(shown(r.withX.v))} <span class="dim">(syn ${r.withX.syn >= 0 ? '+' : ''}${n2(r.withX.syn)})</span></td><td>${s1(r.delta * GET_BACK_WEIGHT)}</td></tr>`);
+    return head + `<div class="f">multiplier ${n2(info.M)}, W = order weight ${it.display_name} would get as pick ${held.length + 1} = ${info.W}, combo bonus ${n2(info.B)}, estimated model pairs × ${info.estW}${info.role ? ' (' + ROLE_LABEL[info.role] + ')' : ''}</div>
+      ${rows.length ? tipTable(['Needs', 'Enemy picks → taken', 'Best left without', 'Best left with', 'Effect'], rows) : '<div class="dim">No other category left to fill.</div>'}
+      <div>Total ${s1(row.getBack)}</div>`;
+  }
   if (col === 'enemy' || col === 'ally') {
     const isEnemy = col === 'enemy', cat = categoryOf(it);
     const cache = d.outlooks || new Map();
@@ -1653,7 +1745,7 @@ effect = ${isEnemy ? '+' : '−'}${w} × clamp(kept − next, 0, ${cap}), scores
       <div class="f">taken = enemy picks before next turn (1-2: all, then half rounded up), each enemy capped at its open slots
 fallback = personal score at rank taken + slots left
 bonus = +${SCARCITY_WEIGHT} × clamp(best − fallback, 0, ${cap})</div>
-      <div class="dim">personal score = base + own synergy + known combo + pool upside (higher is better)</div>`;
+      <div class="dim">personal score = base + own synergy + known combo + pool upside + get-back (higher is better)</div>`;
     for (const cat of ['model', 'ult', 'basic']) {
       const s = d.scarcity[cat];
       const mine = fromCell && categoryOf(it) === cat ? ` <span class="dim">← ${it.display_name}'s category</span>` : '';
@@ -1741,8 +1833,8 @@ bonus = +${SCARCITY_WEIGHT} × clamp(gap, 0, ${cap}), for every option fitting t
     return html;
   }
   if (col === 'total') {
-    const parts = [['Base', row.base], ['Own synergy', row.ownSynergy], ['Known combo', row.combo], ['Pool upside', row.pool], ['Enemy denial', row.enemy], ['Ally avoid', row.ally], ['Scarcity', row.scarcity], ['Off-role', row.role], ['Role scarcity', row.roleScarcity]];
-    return `<h4>Total: ${who}</h4><div class="f">base + own synergy + known combo + pool upside + enemy denial + ally avoid + scarcity + off-role + role scarcity (higher is picked first)</div>
+    const parts = [['Base', row.base], ['Own synergy', row.ownSynergy], ['Known combo', row.combo], ['Pool upside', row.pool], ['Get-back', row.getBack], ['Enemy denial', row.enemy], ['Ally avoid', row.ally], ['Scarcity', row.scarcity], ['Off-role', row.role], ['Role scarcity', row.roleScarcity]];
+    return `<h4>Total: ${who}</h4><div class="f">base + own synergy + known combo + pool upside + get-back + enemy denial + ally avoid + scarcity + off-role + role scarcity (higher is picked first)</div>
       ${tipTable(['Term', 'Value'], parts.map(([l, v]) => `<tr><td>${l}</td><td>${l === 'Base' ? n2(shown(v)) : s1(v)}</td></tr>`))}<div>Total ${n1(shown(row.total))}</div>`;
   }
   return '';
@@ -1794,7 +1886,7 @@ function renderBotPanel() {
     if (d.undeferredCats && d.undeferredCats.length) {
       html += `<div style="margin-bottom:6px;color:#9ec3ff">Not deferred: ${d.undeferredCats.map(c => catLabel[c]).join(' and ')} are both filled by every enemy picking before the next turn (${(d.enemiesBeforeNext || []).map(e => 'P' + (e + 1)).join(', ')}), but not by all 5 enemies, so either is allowed and scarcity decides.</div>`;
     }
-    const cols = [['base', 'Base'], ['ownSynergy', 'Own synergy'], ['combo', 'Known combo'], ['pool', 'Pool upside'], ['enemy', 'Enemy denial'], ['ally', 'Ally avoid'], ['scarcity', 'Scarcity'], ['role', 'Off-role'], ['roleScarcity', 'Role scarcity'], ['total', 'Total']];
+    const cols = [['base', 'Base'], ['ownSynergy', 'Own synergy'], ['combo', 'Known combo'], ['pool', 'Pool upside'], ['getBack', 'Get-back'], ['enemy', 'Enemy denial'], ['ally', 'Ally avoid'], ['scarcity', 'Scarcity'], ['role', 'Off-role'], ['roleScarcity', 'Role scarcity'], ['total', 'Total']];
     const ra = d.assignment;
     if (ra) html += `<div style="margin-bottom:6px">Team roles now: ${teamSeats(d.seat).map(s => `${s === d.seat ? '<b>' : ''}${seatLabel(s)} ${picks[s].some(x => roleData(x)) ? ROLE_LABEL[ra.roles[s]] : '<span style="color:#888">open</span>'}${s === d.seat ? '</b>' : ''}`).join(' · ')}${ra.lost > 0.005 ? ` <span style="color:#888">(fit lost ${ra.lost.toFixed(2)})</span>` : ''}</div>`;
     html += `<table><thead><tr><th>Option (top ${Math.min(10, d.rows.length)} of ${d.rows.length})</th>${cols.map(([k, l]) => `<th data-col="${k}">${l}</th>`).join('')}</tr></thead><tbody>`;
@@ -1812,7 +1904,7 @@ function renderBotPanel() {
       }).join('') + `</tr>`;
     });
     html += `</tbody></table>`;
-    html += `<div class="consts">Higher total = picked first. Base = 50 − high-skill pick position + windrun Value ÷ ${VALUE_DIVISOR}; every adjustment is shown at ${SCALE_LABEL} of its tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}, also used for role scarcity), off-role cut up to ${OFF_ROLE_CUT * 100}% of base × fit lost, enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
+    html += `<div class="consts">Higher total = picked first. Base = 50 − high-skill pick position + windrun Value ÷ ${VALUE_DIVISOR}; every adjustment is shown at ${SCALE_LABEL} of its tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, get-back weight ${GET_BACK_WEIGHT}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}, also used for role scarcity), off-role cut up to ${OFF_ROLE_CUT * 100}% of base × fit lost, enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
   }
   html += `</div>`;
   panel.innerHTML = html;
