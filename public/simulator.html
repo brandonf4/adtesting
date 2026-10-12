@@ -164,6 +164,7 @@
   <input type="file" id="screenshot-file-input" accept="image/*" style="display:none" />
   <a class="reset-btn" href="https://ad-simulator-mp.abilitydraft.workers.dev/simulator.html">Multiplayer</a>
   <div class="spot-selector-right">
+    <button class="reset-btn" id="export-overrides-btn" style="display:none">Export edits</button>
     <button class="reset-btn" id="clear-overrides-btn" style="display:none">Clear all overrides</button>
     <button class="reset-btn" id="synergy-toggle-btn">See/edit synergies</button>
   </div>
@@ -335,6 +336,11 @@ async function loadData() {
   });
 
   SYNERGY = new Map(synergyData.map(([a, b, s]) => [a < b ? a + '|' + b : b + '|' + a, s]));
+  // Synergy edits baked into the site (exported from the editor and committed
+  // to synergy_overrides.json) replace windrun's values for everyone. A
+  // browser's own edits (SYNERGY_OVERRIDES) still apply on top.
+  const baked = await fetch('/synergy_overrides.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
+  for (const [key, v] of Object.entries(baked.overrides || {})) SYNERGY.set(key, v);
 
   ALL_HEROES = wrData
     .map(h => ({
@@ -1781,10 +1787,37 @@ function toggleSynergyEditMode() {
   synergyFocus = null;
   document.getElementById('synergy-toggle-btn').textContent = synergyEditMode ? 'Return to draft' : 'See/edit synergies';
   document.getElementById('clear-overrides-btn').style.display = synergyEditMode ? '' : 'none';
+  document.getElementById('export-overrides-btn').style.display = synergyEditMode ? '' : 'none';
   render();
   botDecisionCache = null; // synergy overrides may have changed
 }
 document.getElementById('synergy-toggle-btn').addEventListener('click', toggleSynergyEditMode);
+
+// Downloads this browser's synergy edits as synergy_overrides-YYYY-MM-DD.json,
+// in the same shape the site loads from /synergy_overrides.json, with readable
+// names alongside so the edits can be reviewed before they're baked in.
+function exportSynergyOverrides() {
+  if (SYNERGY_OVERRIDES.size === 0) { alert('No synergy edits in this browser yet.'); return; }
+  const names = {};
+  ALL_HEROES.forEach(h => { names[h.name] = h.display_name + ' (model)'; h.abilities.forEach(a => { names[a.name] = `${a.display_name} (${h.display_name})`; }); });
+  const entries = [...SYNERGY_OVERRIDES].sort(([a], [b]) => a.localeCompare(b));
+  const data = {
+    exported: new Date().toISOString(),
+    count: entries.length,
+    overrides: Object.fromEntries(entries),
+    readable: entries.map(([key, v]) => {
+      const [a, b] = key.split('|');
+      return { pair: `${names[a] || a} + ${names[b] || b}`, value: v, windrun: SYNERGY.has(key) ? SYNERGY.get(key) : null };
+    }),
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = `synergy_overrides-${data.exported.slice(0, 10)}.json`;
+  document.body.appendChild(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+}
+document.getElementById('export-overrides-btn').addEventListener('click', exportSynergyOverrides);
 
 document.getElementById('clear-overrides-btn').addEventListener('click', () => {
   if (SYNERGY_OVERRIDES.size === 0) return;
