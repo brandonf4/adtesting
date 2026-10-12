@@ -301,6 +301,10 @@ let YOUR_SLOT = 0;
 // reloads and "New draft" resets, and only change when explicitly re-edited.
 const SYNERGY_OVERRIDES_STORAGE_KEY = 'adSynergyOverrides';
 let SYNERGY_OVERRIDES = new Map();
+// Baked blanket model rules (synergy_overrides.json "estimated"), e.g. Arcane
+// Orb −20 with every model but Outworld Devourer: they replace windrun's value
+// but count as estimated anti-synergy (role weight, no known combo, no model role).
+let BAKED_ESTIMATED = new Map();
 function loadSynergyOverrides() {
   try {
     const raw = localStorage.getItem(SYNERGY_OVERRIDES_STORAGE_KEY);
@@ -341,6 +345,7 @@ async function loadData() {
   // browser's own edits (SYNERGY_OVERRIDES) still apply on top.
   const baked = await fetch('/synergy_overrides.json').then(r => r.ok ? r.json() : {}).catch(() => ({}));
   for (const [key, v] of Object.entries(baked.overrides || {})) SYNERGY.set(key, v);
+  BAKED_ESTIMATED = new Map(Object.entries(baked.estimated || {}));
 
   ALL_HEROES = wrData
     .map(h => ({
@@ -634,6 +639,8 @@ const MODEL_SHIFT_WEIGHT = 2; // doubled 2026-10-12
 function estimatedModelSynergy(nameA, nameB) {
   const [model, ability] = isModelName(nameA) ? [nameA, nameB] : [nameB, nameA];
   if (!isModelName(model) || isModelName(ability)) return 0;
+  const bakedKey = synergyKeyFor(nameA, nameB);
+  if (BAKED_ESTIMATED.has(bakedKey)) return BAKED_ESTIMATED.get(bakedKey);
   const shifts = MODEL_SHIFTS[ability];
   if (!shifts) return 0;
   const [attr, attackType] = MODEL_TYPES.get(model);
@@ -641,12 +648,13 @@ function estimatedModelSynergy(nameA, nameB) {
 }
 function synergyIsEstimated(nameA, nameB) {
   const key = synergyKeyFor(nameA, nameB);
-  return nameA !== nameB && !SYNERGY_OVERRIDES.has(key) && !SYNERGY.has(key) && estimatedModelSynergy(nameA, nameB) !== 0;
+  return nameA !== nameB && !SYNERGY_OVERRIDES.has(key) && (BAKED_ESTIMATED.has(key) || (!SYNERGY.has(key) && estimatedModelSynergy(nameA, nameB) !== 0));
 }
 function synergyBetween(nameA, nameB) {
   if (nameA === nameB) return 0;
   const key = synergyKeyFor(nameA, nameB);
   if (SYNERGY_OVERRIDES.has(key)) return SYNERGY_OVERRIDES.get(key);
+  if (BAKED_ESTIMATED.has(key)) return BAKED_ESTIMATED.get(key);
   if (SYNERGY.has(key)) return SYNERGY.get(key);
   return estimatedModelSynergy(nameA, nameB);
 }
@@ -658,7 +666,7 @@ function knownComboApplies(nameA, nameB) {
 function hasSynergyData(nameA, nameB) {
   if (nameA === nameB) return false;
   const key = synergyKeyFor(nameA, nameB);
-  return SYNERGY.has(key) || SYNERGY_OVERRIDES.has(key);
+  return (SYNERGY.has(key) && !BAKED_ESTIMATED.has(key)) || SYNERGY_OVERRIDES.has(key);
 }
 
 // Shared by every "positive synergy only" score component (pool, ally, enemy):
@@ -1457,7 +1465,7 @@ function buildSynergyOverlay(otherItem) {
     const est = estimatedModelSynergy(model, ability);
     const estRow = document.createElement('div');
     estRow.className = 'syn-row est';
-    estRow.title = `Estimated: (${attr} ${(shifts[attr] || 0).toFixed(2)} + ${attackType} ${(shifts[attackType] || 0).toFixed(2)}) / 2. Only clear winrate drops count; used when there's no windrun pair data or override.`;
+    estRow.title = BAKED_ESTIMATED.has(key) ? 'Estimated: baked model rule (synergy_overrides.json). Treated like estimated anti-synergy.' : `Estimated: (${attr} ${(shifts[attr] || 0).toFixed(2)} + ${attackType} ${(shifts[attackType] || 0).toFixed(2)}) / 2. Only clear winrate drops count; used when there's no windrun pair data or override.`;
     estRow.innerHTML = `<span>Est.</span><span>${est.toFixed(2)}</span>`;
     overlay.appendChild(estRow);
   }
