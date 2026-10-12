@@ -1273,7 +1273,9 @@ function botDecision() {
   decision.getBack = new Map();
   const getBack = getBackTerms(p, available, pre, roleAfter, decision.getBack);
   const parts = new Map(available.map(a => [a, personalParts(a, p, getBack.get(a))]));
-  const personal = new Map(available.map(a => [a, parts.get(a).personal]));
+  // Scarcity and role scarcity rank by personal score without Get-back, so a
+  // combo partner isn't counted twice (once in Get-back, again in the gap).
+  const personal = new Map(available.map(a => [a, parts.get(a).personal - parts.get(a).getBack]));
   const bonuses = categoryScarcityBonuses(p, available, personal, decision.scarcity);
   decision.personal = personal;
   decision.outlooks = new Map();
@@ -1745,7 +1747,7 @@ effect = ${isEnemy ? '+' : '−'}${w} × clamp(kept − next, 0, ${cap}), scores
       <div class="f">taken = enemy picks before next turn (1-2: all, then half rounded up), each enemy capped at its open slots
 fallback = personal score at rank taken + slots left
 bonus = +${SCARCITY_WEIGHT} × clamp(best − fallback, 0, ${cap})</div>
-      <div class="dim">personal score = base + own synergy + known combo + pool upside + get-back (higher is better)</div>`;
+      <div class="dim">personal score = base + own synergy + known combo + pool upside, without get-back so a combo isn't counted twice (higher is better)</div>`;
     for (const cat of ['model', 'ult', 'basic']) {
       const s = d.scarcity[cat];
       const mine = fromCell && categoryOf(it) === cat ? ` <span class="dim">← ${it.display_name}'s category</span>` : '';
