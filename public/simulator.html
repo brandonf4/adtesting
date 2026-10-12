@@ -845,8 +845,8 @@ function opposingPicksBefore(seat, cat) {
 // base value or pool upside - a generally strong option isn't "theirs" just
 // because they'd also like it, so a seat with no picks yet ranks everything 0),
 // how many the other team is assumed to deny before its next
-// turn, and keepIdx - the rank (0-based) of the worst option it still ends up
-// with (denied + slots left - 1, the same fallback rank category scarcity uses).
+// turn, and keepIdx - the rank (0-based) of the option it takes on its next
+// pick (= denied; only that one pick counts, even with several open slots).
 // null if the seat can't take the category or has no turn left. Cached per
 // decision in `cache`, since every candidate looks up the same 9 seats.
 function seatOutlook(seat, cat, cache) {
@@ -859,7 +859,7 @@ function seatOutlook(seat, cat, cache) {
     const opts = pool.filter(o => !o.picked && categoryOf(o) === cat)
       .map(o => ({ item: o, p: buildFitScore(o, seat) })).sort((a, b) => a.p - b.p);
     const denied = deniedCount(chances);
-    out = { seat, cat, chances, denied, slots, opts, keepIdx: denied + slots - 1 };
+    out = { seat, cat, chances, denied, slots, opts, keepIdx: denied };
   }
   if (cache) cache.set(key, out);
   return out;
@@ -884,14 +884,21 @@ function outlookLoss(out, item) {
   return { rank, kept, next, loss: Math.min(Math.max(next - kept, 0), SCARCITY_CAP) * SCARCITY_WEIGHT };
 }
 
-// Enemy denial: for each enemy who can still take this category, how much worse
-// their result in it gets if this seat takes the item now. If our team has 1 pick
-// before their turn and the item is one of their two best, they'd lose their 2nd
-// best and drop to their 3rd, so the gap between those is what taking it denies.
-// Pulls the item earlier (negative), summed over enemies.
+// Enemy denial (simplified 2026-10-12): for each enemy who can still take this
+// category, if the item is their best option in it (by fit with what they
+// hold), taking it costs them the gap to their next best. Our teammates' picks
+// before their turn aren't assumed to deny anything. Weighted and capped like
+// scarcity; pulls the item earlier (negative), summed over enemies.
+function denialLoss(out, item) {
+  if (!out) return { rank: -1, loss: 0 };
+  const rank = out.opts.findIndex(x => x.item === item);
+  if (rank !== 0) return { rank, loss: 0 };
+  const best = out.opts[0].p, next = out.opts.length > 1 ? out.opts[1].p : Infinity;
+  return { rank, best, next, loss: Math.min(Math.max(next - best, 0), SCARCITY_CAP) * SCARCITY_WEIGHT };
+}
 function enemySynergyTerm(item, playerIdx, cache) {
   const cat = categoryOf(item);
-  return enemiesOf(playerIdx).reduce((t, e) => t + outlookLoss(seatOutlook(e, cat, cache), item).loss, 0);
+  return enemiesOf(playerIdx).reduce((t, e) => t + denialLoss(seatOutlook(e, cat, cache), item).loss, 0);
 }
 
 // Ally avoid: the mirror for teammates. If a teammate has two similar options and
@@ -1738,18 +1745,20 @@ get-back = with − without, summed, × ${GET_BACK_WEIGHT}</div>`;
       const out = seatOutlook(s, cat, cache);
       if (!out) return `<tr><td>${seatLabel(s)}</td><td colspan="4" class="dim">no picks left, skipped</td></tr>`;
       if (!picks[s].length) return `<tr><td>${seatLabel(s)}</td><td colspan="4" class="dim">no picks yet, 0</td></tr>`;
-      const l = outlookLoss(out, it);
+      const l = isEnemy ? denialLoss(out, it) : outlookLoss(out, it);
       const name = i => i < out.opts.length ? `${out.opts[i].item.display_name} ${s1(out.opts[i].p)}` : 'none left';
-      const gap = l.rank >= 0 && l.rank <= out.keepIdx
-        ? `${name(out.keepIdx)} → ${name(out.keepIdx + 1)}`
-        : `<span class="dim">outside their top ${out.keepIdx + 1}</span>`;
-      return `<tr><td>${seatLabel(s)}</td><td>${out.chances} → ${out.denied}</td><td>#${l.rank + 1}</td><td style="text-align:left;white-space:normal">${gap}</td><td>${s1((isEnemy ? -1 : 1) * l.loss)}</td></tr>`;
+      const gap = isEnemy
+        ? (l.rank === 0 ? `${name(0)} → ${name(1)}` : `<span class="dim">not their best (${name(0)})</span>`)
+        : (l.rank >= 0 && l.rank <= out.keepIdx ? `${name(out.keepIdx)} → ${name(out.keepIdx + 1)}` : `<span class="dim">outside their top ${out.keepIdx + 1}</span>`);
+      return `<tr><td>${seatLabel(s)}</td>${isEnemy ? '' : `<td>${out.chances} → ${out.denied}</td>`}<td>#${l.rank + 1}</td><td style="text-align:left;white-space:normal">${gap}</td><td>${s1((isEnemy ? -1 : 1) * l.loss)}</td></tr>`;
     });
-    const head = ['Player', isEnemy ? 'Our picks → denied' : 'Enemy picks → denied', 'Rank', 'Kept option → next', 'Effect'];
+    const head = isEnemy ? ['Player', 'Rank', 'Their best → next best', 'Effect'] : ['Player', 'Enemy picks → denied', 'Rank', 'Their next pick → next', 'Effect'];
     const w = SCARCITY_WEIGHT, cap = SCARCITY_CAP * Math.abs(DISPLAY_SCALE);
-    const formula = `<div class="f">denied = opposing picks before their turn (1-2: all, then half rounded up), each opposing player capped at its open ${CAT_LABEL[cat]} slots
-kept rank = denied + slots left; if ${it.display_name} ranks within it, losing it drops them one rank
-effect = ${isEnemy ? '+' : '−'}${w} × clamp(kept − next, 0, ${cap}), scores = their own synergy + known combo with what they hold (no base value), ${half}</div>`;
+    const formula = isEnemy ? `<div class="f">only counts if ${it.display_name} is that enemy's best ${CAT_LABEL[cat]} option: they drop to their next best
+effect = +${w} × clamp(best − next best, 0, ${cap}), scores = their own synergy + known combo with what they hold (no base value), ${half}</div>`
+      : `<div class="f">denied = enemy picks before their turn (1-2: all, then half rounded up), each enemy capped at its open ${CAT_LABEL[cat]} slots
+their next pick = rank denied + 1 (only their next pick counts); if ${it.display_name} ranks within it, losing it drops them one rank
+effect = −${w} × clamp(next pick − the one after, 0, ${cap}), scores = their own synergy + known combo with what they hold (no base value), ${half}</div>`;
     return `<h4>${isEnemy ? 'Enemy denial' : 'Ally avoid'}: ${who}</h4>${formula}
       ${tipTable(head, rows)}<div>Total ${s1(isEnemy ? row.enemy : row.ally)}</div>`;
   }
