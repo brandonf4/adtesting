@@ -6179,12 +6179,12 @@
   "tinker_rearm": {
    "ability": "Rearm",
    "hero": "Tinker",
-   "pos1": 0.457,
+   "pos1": 0.0,
    "mid": 0.985,
    "offlane": -0.843,
    "support": 0.603,
    "raw": {
-    "pos1": 0.071,
+    "pos1": -0.018,
     "mid": 2.29,
     "offlane": 13.1,
     "support": 0.117
@@ -6655,12 +6655,12 @@
   "viper_corrosive_skin": {
    "ability": "Corrosive Skin",
    "hero": "Viper",
-   "pos1": 1.286,
+   "pos1": 0.5,
    "mid": 0.368,
    "offlane": 1.356,
    "support": 0.973,
    "raw": {
-    "pos1": 0.233,
+    "pos1": 0.079,
     "mid": 0.91,
     "offlane": 43.6,
     "support": 0.184
@@ -6767,14 +6767,14 @@
   "void_spirit_aether_remnant": {
    "ability": "Aether Remnant",
    "hero": "Void Spirit",
-   "pos1": -0.734,
+   "pos1": -0.2,
    "mid": 0.735,
-   "offlane": -0.396,
+   "offlane": -0.2,
    "support": 1.249,
    "raw": {
-    "pos1": -0.162,
+    "pos1": -0.058,
     "mid": 1.73,
-    "offlane": 19.3,
+    "offlane": 22.016,
     "support": 0.234
    }
   },
