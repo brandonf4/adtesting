@@ -284,7 +284,7 @@ let MODEL_SHIFTS = {};
 // From ability_strength.json (windrun's ability-values export), per ability / hero
 // model: Strength (win-model coefficient, higher = stronger; reference only) and
 // Value (mispricing = pick rank - strength rank, about -560..+490; positive = picked
-// later than its strength suggests). Value/100 adjusts the base value.
+// later than its strength suggests). Value/VALUE_DIVISOR adjusts the base value.
 let STRENGTH = {};
 let VALUE = {};
 // From role_skew.json: ability name -> z-score per role (pos1, mid, offlane,
@@ -848,9 +848,9 @@ function allySynergyTerm(item, playerIdx, cache) {
 const DISPLAY_SCALE = -0.5;
 const SCALE_LABEL = '½';
 // Shown base: inverted high-skill pick position (50 − position, so earlier picks
-// score higher) plus windrun's Value / 100 (undervalued picks move up).
+// score higher) plus windrun's Value / VALUE_DIVISOR (undervalued picks move up).
 const BASE_PICK_OFFSET = 50;
-const VALUE_DIVISOR = 100;
+const VALUE_DIVISOR = 50;
 function shownBase(item) {
   return BASE_PICK_OFFSET - item.pickPositionHigh + (VALUE[item.name] || 0) / VALUE_DIVISOR;
 }
@@ -938,7 +938,7 @@ const ROLE_FIT_Z = 1;
 const ROLE_FIT_SPREAD = 1;
 // Off-role cost: at most this share of the ability's base value, scaled by how
 // much role fit the team loses by taking it (see roleFit / teamAssignment).
-const OFF_ROLE_CUT = 0.5;
+const OFF_ROLE_CUT = 0.6;
 // Role fit is judged against the ability's own best role, but abilities whose
 // best z is under ROLE_FIT_FLOOR (general ones, low z everywhere) are measured
 // against this floor instead, so small z differences don't count as a preference.
@@ -1737,7 +1737,7 @@ function renderBotPanel() {
       }).join('') + `</tr>`;
     });
     html += `</tbody></table>`;
-    html += `<div class="consts">Higher total = picked first. Base = 50 − high-skill pick position + windrun Value ÷ 100; every adjustment is shown at ${SCALE_LABEL} of its tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}, also used for role scarcity), off-role cut up to ${OFF_ROLE_CUT * 100}% of base × fit lost, enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
+    html += `<div class="consts">Higher total = picked first. Base = 50 − high-skill pick position + windrun Value ÷ ${VALUE_DIVISOR}; every adjustment is shown at ${SCALE_LABEL} of its tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}, also used for role scarcity), off-role cut up to ${OFF_ROLE_CUT * 100}% of base × fit lost, enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
   }
   html += `</div>`;
   panel.innerHTML = html;
