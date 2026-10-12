@@ -6978,12 +6978,12 @@
    "ability": "Windrun",
    "hero": "Windranger",
    "pos1": 0.5,
-   "mid": 0.5,
+   "mid": 0.6,
    "offlane": 0.5,
    "support": 0.5,
    "raw": {
     "pos1": 0.079,
-    "mid": 1.205,
+    "mid": 1.428,
     "offlane": 31.729,
     "support": 0.098
    }
