@@ -1280,7 +1280,11 @@ function botDecision() {
   decision.personal = personal;
   decision.outlooks = new Map();
   decision.roleScarcity = {};
-  const roleBonuses = roleScarcityBonuses(p, available, personal, decision.assignment, decision.roleScarcity);
+  // Role scarcity only applies while the seat is still choosing its role
+  // (no pick with role data yet, usually its first pick); after that,
+  // category scarcity and the off-role cut take over (2026-10-12).
+  decision.roleScarcityOff = !!seatRole(p);
+  const roleBonuses = decision.roleScarcityOff ? {} : roleScarcityBonuses(p, available, personal, decision.assignment, decision.roleScarcity);
   const roleCtx = { assignment: decision.assignment, bonuses: roleBonuses };
   decision.rows = available.map(a => ({ item: a, ...scoreParts(a, p, parts, bonuses, decision.outlooks, roleCtx) }))
     .sort((x, y) => x.total - y.total);
@@ -1805,6 +1809,7 @@ cost = ${OFF_ROLE_CUT * 100}% × base × the smaller of the two</div>
 gap = best option fitting the role − first one left after the top "taken"
 bonus = +${SCARCITY_WEIGHT} × clamp(gap, 0, ${cap}), for every option fitting that role (an option fitting several takes its largest)</div>
       <div class="dim">ranked by personal score; only roles a seat on the team still has an open slot for in that category count. Models get their bonus in the Scarcity column (within this seat's role group); the Model section below shows it.</div>`;
+    if (d.roleScarcityOff) return html + `<div>${seatLabel(seat)} already plays ${ROLE_LABEL[seatRole(seat)]}, so role scarcity is off for its picks: it only helps a seat choose its role (usually its first pick). Category scarcity and the off-role cut handle the rest.</div>`;
     const fit = itemRoles(it);
     for (const cat of ['ult', 'basic']) {
       const rows = ROLES.map(r => d.roleScarcity[cat + '|' + r]).filter(Boolean).map(x => {
