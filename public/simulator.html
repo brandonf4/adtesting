@@ -912,17 +912,17 @@ function allySynergyTerm(item, playerIdx, cache) {
 // ally-avoidance and category-scarcity terms.
 // Scores are computed as "lower = picked first", with every adjustment at the
 // scale it was tuned for. They're displayed as DISPLAY_SCALE × that: higher =
-// picked first, good effects positive, every adjustment at |DISPLAY_SCALE| of its
-// tuned size. ½ keeps the balance between adjustments and base that was last set
-// (¼ against Strength's ~23-point range), since this base spans ~49 points.
-const DISPLAY_SCALE = -0.5;
-const SCALE_LABEL = '½';
-// Shown base: inverted high-skill pick position (50 − position, so earlier picks
-// score higher) plus windrun's Value / VALUE_DIVISOR (undervalued picks move up).
-const BASE_PICK_OFFSET = 50;
-const VALUE_DIVISOR = 50;
+// picked first, good effects positive. Since 2026-10-12 the display is at full
+// tuned size (it was ½ with base 50 − position + Value ÷ 50); the base doubled
+// with it, so the balance between base and adjustments is unchanged.
+const DISPLAY_SCALE = -1;
+// Shown base: inverted high-skill pick position (100 − 2 × position, so earlier
+// picks score higher) plus windrun's Value / VALUE_DIVISOR (undervalued picks move up).
+const BASE_PICK_OFFSET = 100;
+const BASE_PICK_WEIGHT = 2;
+const VALUE_DIVISOR = 25;
 function shownBase(item) {
-  return BASE_PICK_OFFSET - item.pickPositionHigh + (VALUE[item.name] || 0) / VALUE_DIVISOR;
+  return BASE_PICK_OFFSET - BASE_PICK_WEIGHT * item.pickPositionHigh + (VALUE[item.name] || 0) / VALUE_DIVISOR;
 }
 const shown = v => v * DISPLAY_SCALE;
 // Role-based weights (added 2026-10-12). A seat's role is the one its team
@@ -1659,13 +1659,13 @@ const s1 = v => { const x = shown(v); return Number.isFinite(x) ? (x > 0.05 ? '+
 function explainColumn(col, row, d, fromCell) {
   const it = row.item, seat = d.seat, held = picks[seat];
   const who = `<b>${it.display_name}</b> for ${seatLabel(seat)}`;
-  const half = `shown at ${SCALE_LABEL} of the tuned size, good effects as +`;
+  const half = `good effects as +`;
   if (col === 'base') {
     if (!Number.isFinite(row.base)) return `<h4>Base: ${it.display_name}</h4>No high-skill pick position data, so it's picked last.`;
     const v = VALUE[it.name];
     return `<h4>Base: ${who}</h4>
-      <div class="f">base = ${BASE_PICK_OFFSET} − pick position (high skill) + windrun Value ÷ ${VALUE_DIVISOR}
-= ${BASE_PICK_OFFSET} − ${n2(it.pickPositionHigh)} + ${v == null ? '0 (no Value data)' : (v >= 0 ? '' : '−') + Math.abs(v) + ' ÷ ' + VALUE_DIVISOR} = ${n2(shown(row.base))}</div>
+      <div class="f">base = ${BASE_PICK_OFFSET} − ${BASE_PICK_WEIGHT} × pick position (high skill) + windrun Value ÷ ${VALUE_DIVISOR}
+= ${BASE_PICK_OFFSET} − ${BASE_PICK_WEIGHT} × ${n2(it.pickPositionHigh)} + ${v == null ? '0 (no Value data)' : (v >= 0 ? '' : '−') + Math.abs(v) + ' ÷ ' + VALUE_DIVISOR} = ${n2(shown(row.base))}</div>
       <div class="dim">Value = windrun pick rank − strength rank (positive = picked later than its strength suggests). Strength ${STRENGTH[it.name] == null ? 'n/a' : n2(STRENGTH[it.name])}.</div>`;
   }
   if (col === 'ownSynergy') {
@@ -1677,7 +1677,7 @@ function explainColumn(col, row, d, fromCell) {
       return `<tr><td>${i + 1}. ${h.display_name}</td><td>${n2(syn)}${est}</td><td>${w}</td><td>${s1(-syn * M * w)}</td></tr>`;
     });
     return `<h4>Own synergy: ${who}</h4>
-      <div class="f">${SCALE_LABEL} × Σ synergy × M × W(order held)
+      <div class="f">Σ synergy × M × W(order held)
 M = ${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT} × pick ${pickIndex} = ${n2(M)}</div>
       ${tipTable(['Held pick', 'Synergy', 'W', 'Effect'], rows)}<div>Total ${s1(row.ownSynergy)}</div>
       <div class="dim">est. = model + ability pair missing from windrun's pair data: ${MODEL_SHIFT_WEIGHT} × the average of the ability's winrate drop on the model's attribute and attack type (drops only), then × the seat's role weight: Carry 1.5, Offlane 1.25, Mid 1.1, Support 1.</div>`;
@@ -1690,7 +1690,7 @@ M = ${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT} × pick ${pickI
       return `<tr><td>${i + 1}. ${h.display_name}</td><td>${has ? 'yes (' + n2(synergyBetween(it.name, h.name)) + ')' : 'no'}</td><td>${w}</td><td>${s1(has ? -B * w : 0)}</td></tr>`;
     });
     return `<h4>Known combo: ${who}</h4>
-      <div class="f">${SCALE_LABEL} × Σ bonus × W, for each held pick with any pair data (windrun or edited; estimated model pairs don't count)
+      <div class="f">Σ bonus × W, for each held pick with any pair data (windrun or edited; estimated model pairs don't count)
 bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFICIENT} × ${pickIndex}² = ${n2(B)}</div>
       ${tipTable(['Held pick', 'Pair data', 'W', 'Effect'], rows)}<div>Total ${s1(row.combo)}</div>`;
   }
@@ -1701,10 +1701,10 @@ bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFIC
     const total = pos.reduce((t, x) => t + x.s, 0);
     const rows = pos.slice(0, 5).map(x => `<tr><td>${x.o.display_name} <span class="dim">· ${CAT_LABEL[categoryOf(x.o)]}</span></td><td>+${n2(x.s)}</td></tr>`);
     return `<h4>Pool upside: ${who}</h4>
-      <div class="f">${SCALE_LABEL} × (Σ positive synergy with unpicked options this player can still take after this pick) × P[picks held]
+      <div class="f">(Σ positive synergy with unpicked options this player can still take after this pick) × P[picks held]
 P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → ${P}</div>
       ${pos.length ? tipTable(['Top 5 pool synergies', 'Synergy'], rows) : '<div class="dim">No positive synergies left in the pool.</div>'}
-      <div class="f">= ${SCALE_LABEL} × ${n2(total)} (all ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${s1(row.pool)}</div>`;
+      <div class="f">= ${n2(total)} (all ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${s1(row.pool)}</div>`;
   }
   if (col === 'getBack') {
     const info = d.getBack && d.getBack.get(it);
@@ -1911,7 +1911,7 @@ function renderBotPanel() {
       }).join('') + `</tr>`;
     });
     html += `</tbody></table>`;
-    html += `<div class="consts">Higher total = picked first. Base = 50 − high-skill pick position + windrun Value ÷ ${VALUE_DIVISOR}; every adjustment is shown at ${SCALE_LABEL} of its tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, get-back weight ${GET_BACK_WEIGHT}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}, also used for role scarcity), off-role cut up to ${OFF_ROLE_CUT * 100}% of base × fit lost, enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
+    html += `<div class="consts">Higher total = picked first. Base = ${BASE_PICK_OFFSET} − ${BASE_PICK_WEIGHT} × high-skill pick position + windrun Value ÷ ${VALUE_DIVISOR}; adjustments are shown at their tuned size, good effects as +. Tuned constants now: synergy multiplier ${synergyMultiplier().toFixed(2)} (${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT}×pick), known-combo bonus ${knownComboBonus().toFixed(2)} (${KNOWN_COMBO_BONUS_COEFFICIENT}×pick²), pool upside weight ${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[d.seat].length]}, get-back weight ${GET_BACK_WEIGHT}, order weights [${SYNERGY_ORDER_WEIGHTS.join(', ')}], scarcity weight ${SCARCITY_WEIGHT} (cap ${SCARCITY_CAP}, also used for role scarcity), off-role cut up to ${OFF_ROLE_CUT * 100}% of base × fit lost, enemy denial and ally avoid use the same weight and cap, applied to how far each player's kept option drops.</div>`;
   }
   html += `</div>`;
   panel.innerHTML = html;

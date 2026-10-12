@@ -2,7 +2,7 @@
 # Usage: python3 scripts/build-model-shifts.py <windrun-repo>/src/data public/windrun/ability-hero-attributes.json public
 # For each ability: how much worse its winrate is on heroes of each primary attribute
 # (str/agi/int/uni) and attack type (melee/ranged) than its overall winrate, in winrate
-# points. Only clearly negative shifts are kept (more than 2 standard errors below the
+# points. Only negative shifts are kept (more than 1 standard error below the
 # overall winrate); positive or noisy shifts are stored as 0 (omitted). The simulator
 # uses these to estimate synergy for model + ability pairs missing from the pairs data.
 import json, sys, math
@@ -32,7 +32,7 @@ for k in st['str']:
         if not s or not s['numPicks']: continue
         p = s['wins'] / s['numPicks']
         se = math.sqrt(p * (1 - p) / s['numPicks'])
-        if p - overall < -2 * se:
+        if p - overall < -1 * se:  # was 2 SE until 2026-10-12
             shifts[g] = round((p - overall) * 100, 2)
     if shifts: abilities[AB[k]['shortName']] = shifts
 json.dump({'heroes': heroes, 'abilities': abilities}, open(outdir + '/model_ability_shifts.json', 'w'), separators=(',', ':'))
