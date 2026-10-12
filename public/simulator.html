@@ -703,7 +703,7 @@ function synergyMultiplier() {
 // separate from whether that combo happens to be good or bad. Starts at 0 and grows
 // quadratically with picks already made in the draft (across both teams), so known
 // combos barely matter early on but compound quickly later as the pool thins out.
-const KNOWN_COMBO_BONUS_COEFFICIENT = 0.008;
+const KNOWN_COMBO_BONUS_COEFFICIENT = 0.006;
 function knownComboBonus() {
   return pickIndex * pickIndex * KNOWN_COMBO_BONUS_COEFFICIENT;
 }
