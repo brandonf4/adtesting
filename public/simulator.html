@@ -305,6 +305,8 @@ let SYNERGY_OVERRIDES = new Map();
 // Orb −20 with every model but Outworld Devourer: they replace windrun's value
 // but count as estimated anti-synergy (role weight, no known combo, no model role).
 let BAKED_ESTIMATED = new Map();
+// From aghs_upgrades.json: kind ('scepter'/'shard') -> pick name -> { excess, needs }.
+let UPGRADES = { scepter: {}, shard: {} };
 function loadSynergyOverrides() {
   try {
     const raw = localStorage.getItem(SYNERGY_OVERRIDES_STORAGE_KEY);
@@ -330,7 +332,9 @@ async function loadData() {
     fetch('/model_ability_shifts.json').then(r => r.json()).catch(() => ({ heroes: {}, abilities: {} })),
     fetch('/ability_strength.json').then(r => r.json()).catch(() => ({ strength: {} })),
     fetch('/role_skew.json').then(r => r.json()).catch(() => ({ abilities: {} })),
-  ]).then(([wr, ha, syn, shifts, strength, roles]) => {
+    fetch('/aghs_upgrades.json').then(r => r.json()).catch(() => ({})),
+  ]).then(([wr, ha, syn, shifts, strength, roles, upgrades]) => {
+    UPGRADES = { scepter: upgrades.scepter || {}, shard: upgrades.shard || {} };
     ROLE = roles.abilities || {};
     STRENGTH = strength.strength || {};
     VALUE = strength.value || {};
@@ -669,6 +673,69 @@ function hasSynergyData(nameA, nameB) {
   return (SYNERGY.has(key) && !BAKED_ESTIMATED.has(key)) || SYNERGY_OVERRIDES.has(key);
 }
 
+// Scepter / shard estimate (added 2026-10-13). One Aghanim's Scepter (or Shard)
+// upgrades every pick in a build that has one, so two picks with strong
+// upgrades are worth more together. Per pick, "excess" = winrate with the
+// upgrade bought − without, minus the average for picks with no such upgrade
+// (scepter 9.7, shard 6.55; winning teams buy more items). An upgrade that
+// needs other picks (Sun Ray shard needs Supernova) only counts once all of
+// them are in the build, and counts once for the whole group. For every two
+// active upgrades in a build whose picks have no pair data:
+//   scepter: 0.02 × (smaller excess)²      shard: 0.055 × (smaller excess)², max 4
+// Pairs with pair data are already in own synergy, so they add nothing here
+// (the column shows "yes"). Never counts as a known combo.
+const UPGRADE_RULES = { scepter: { coef: 0.02, cap: Infinity }, shard: { coef: 0.055, cap: 4 } };
+function upgradeUnits(names, kind) {
+  const set = new Set(names), units = new Map();
+  for (const n of names) {
+    const u = UPGRADES[kind][n];
+    if (!u || !(u.needs || []).every(x => set.has(x))) continue;
+    const members = [n, ...(u.needs || [])].sort();
+    const id = members.join('+');
+    const prev = units.get(id);
+    if (!prev || u.excess > prev.excess) units.set(id, { id, members, excess: u.excess, name: n });
+  }
+  return [...units.values()];
+}
+function unitsHavePairData(a, b) {
+  return a.members.some(x => b.members.some(y => hasSynergyData(x, y)));
+}
+function upgradePairValue(kind, a, b) {
+  const r = UPGRADE_RULES[kind], m = Math.max(0, Math.min(a.excess, b.excess));
+  return Math.min(r.cap, r.coef * m * m);
+}
+// What adding `item` to the seat's build adds to its scepter (or shard)
+// estimate, × synergy multiplier × order weight. A pair between the item's
+// group and a held group uses the held group's weight (its latest pick); the
+// item's own group counts as just picked. Returns the signed score part
+// (lower = better) plus details for the hover.
+function upgradeTerm(item, playerIdx, kind) {
+  const held = picks[playerIdx];
+  const heldNames = held.map(h => h.name);
+  const before = new Set(upgradeUnits(heldNames, kind).map(u => u.id));
+  const units = upgradeUnits([...heldNames, item.name], kind);
+  const weightOf = u => {
+    if (u.members.includes(item.name)) return Infinity;
+    const idx = Math.max(...u.members.map(m => heldNames.indexOf(m)));
+    return SYNERGY_ORDER_WEIGHTS[idx];
+  };
+  const M = synergyMultiplier();
+  const rows = [];
+  let value = 0, known = false;
+  for (let i = 0; i < units.length; i++) {
+    for (let j = i + 1; j < units.length; j++) {
+      const a = units[i], b = units[j];
+      if (before.has(a.id) && before.has(b.id)) continue; // already counted before this pick
+      if (unitsHavePairData(a, b)) { known = true; rows.push({ a, b, known: true }); continue; }
+      const raw = upgradePairValue(kind, a, b);
+      const w = Math.min(weightOf(a), weightOf(b));
+      value += raw * M * w;
+      rows.push({ a, b, raw, w, effect: raw * M * w });
+    }
+  }
+  return { part: -value, known, rows, M, active: units.some(u => u.members.includes(item.name)) };
+}
+
 // Shared by every "positive synergy only" score component (pool, ally, enemy):
 // negative and neutral pairs are excluded entirely rather than zeroed, so a
 // pile of anti-synergies never drags a total down, only good pairings count.
@@ -868,7 +935,7 @@ function seatOutlook(seat, cat, cache) {
 // personalParts (lower = better fit); 0 when they hold nothing.
 function buildFitScore(item, seat) {
   const pp = personalParts(item, seat);
-  return pp.ownSynergy + pp.combo;
+  return pp.ownSynergy + pp.combo + pp.scepter + pp.shard;
 }
 // What it costs that seat if `item` leaves the pool now. Only matters if the
 // item is in its top keepIdx + 1 (the options it either gets or has denied):
@@ -942,7 +1009,7 @@ function allySynergyTerm(item, playerIdx, cache) {
 // enemySynergyTerm/allySynergyTerm above for why each goes the direction it does.
 // The bot's own view of an item, split into its parts. Every part is its signed
 // effect on the score (lower = better), so a good synergy shows as negative.
-// personal = base + ownSynergy + combo + pool + getBack: base value plus everything about
+// personal = base + ownSynergy + combo + scepter + shard + pool + getBack: base value plus everything about
 // how the item fits THIS seat's build, i.e. pickScore without the enemy-denial,
 // ally-avoidance and category-scarcity terms.
 // Scores are computed as "lower = picked first", with every adjustment at the
@@ -992,7 +1059,9 @@ function personalParts(item, playerIdx, getBack = 0) {
     if (knownComboApplies(item.name, held.name)) combo -= bonus * orderWeight;
   });
   const poolPart = -poolSynergyTerm(item, playerIdx);
-  return { base, ownSynergy, combo, pool: poolPart, getBack, personal: base + ownSynergy + combo + poolPart + getBack };
+  const sc = upgradeTerm(item, playerIdx, 'scepter'), sh = upgradeTerm(item, playerIdx, 'shard');
+  return { base, ownSynergy, combo, scepter: sc.part, shard: sh.part, scepterKnown: sc.known, shardKnown: sh.known, pool: poolPart, getBack,
+    personal: base + ownSynergy + combo + sc.part + sh.part + poolPart + getBack };
 }
 function personalScore(item, playerIdx) {
   return personalParts(item, playerIdx).personal;
@@ -1307,7 +1376,7 @@ function botDecision() {
     const pp = personalParts(a, p);
     const align = a.kind === 'ability' ? roleAlignmentTerm(a, p, decision.assignment, pp.base) : { cost: 0 };
     roleAfter.set(a, align.after ? align.after.roles[p] : curRole);
-    return [a, pp.base + pp.ownSynergy + pp.combo + align.cost];
+    return [a, pp.base + pp.ownSynergy + pp.combo + pp.scepter + pp.shard + align.cost];
   }));
   decision.getBack = new Map();
   const getBack = getBackTerms(p, available, pre, roleAfter, decision.getBack);
@@ -1737,6 +1806,25 @@ M = ${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT} × pick ${pickI
 bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFICIENT} × ${pickIndex}² = ${n2(B)}</div>
       ${tipTable(['Held pick', 'Pair data', 'W', 'Effect'], rows)}<div>Total ${s1(row.combo)}</div>`;
   }
+  if (col === 'scepter' || col === 'shard') {
+    const kind = col, Label = kind === 'scepter' ? 'Scepter' : 'Shard', R = UPGRADE_RULES[kind];
+    const t = upgradeTerm(it, seat, kind);
+    const up = UPGRADES[kind][it.name];
+    const nm = n => { const x = pool.find(o => o.name === n); return x ? x.display_name : n; };
+    const unitLabel = u => u.members.map(nm).join(' + ') + ` <span class="dim">(${u.excess >= 0 ? '+' : ''}${n1(u.excess)})</span>`;
+    let html = `<h4>${Label}: ${who}</h4>
+      <div class="f">for each two ${kind}s that would be active with ${it.display_name} in the build, and whose picks have no pair data:
+${R.coef} × (smaller excess)²${Number.isFinite(R.cap) ? ', max ' + R.cap : ''} × M × W
+M = ${n2(t.M)}, W = order weight of the held pick (latest pick of a group)</div>
+      <div class="dim">excess = winrate with the ${kind} bought − without, minus the average for picks with no ${kind} upgrade (winning teams buy more items). An upgrade that needs other picks only counts once they're all in the build.</div>`;
+    if (!up) return html + `<div>${it.display_name} has no ${kind} upgrade in Ability Draft: 0.</div>`;
+    html += `<div>${it.display_name}: excess ${up.excess >= 0 ? '+' : ''}${n1(up.excess)}${up.needs ? ', needs ' + up.needs.map(nm).join(', ') : ''}${t.active ? '' : ' (not active yet)'}</div>`;
+    if (!t.rows.length) return html + `<div class="dim">No other active ${kind} in the build to pair with: no.</div>`;
+    const rows = t.rows.map(r => r.known
+      ? `<tr><td>${unitLabel(r.a)}</td><td>${unitLabel(r.b)}</td><td colspan="3" class="dim">yes: pair data exists, counted in own synergy</td></tr>`
+      : `<tr><td>${unitLabel(r.a)}</td><td>${unitLabel(r.b)}</td><td>+${n2(r.raw)}</td><td>${r.w}</td><td>${s1(-r.effect)}</td></tr>`);
+    return html + tipTable(['Upgrade', 'With', 'Estimate', 'W', 'Effect'], rows) + `<div>Total ${s1(row[kind])}</div>`;
+  }
   if (col === 'pool') {
     const P = POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[held.length];
     const pos = poolPartnersFor(it, seat)
@@ -1872,8 +1960,8 @@ bonus = +${SCARCITY_WEIGHT} × clamp(gap, 0, ${cap}), for options fitting that r
     return html;
   }
   if (col === 'total') {
-    const parts = [['Base', row.base], ['Own synergy', row.ownSynergy], ['Known combo', row.combo], ['Pool upside', row.pool], ['Get-back', row.getBack], ['Enemy denial', row.enemy], ['Ally avoid', row.ally], ['Scarcity', row.scarcity], ['Off-role', row.role], ['Role scarcity', row.roleScarcity]];
-    return `<h4>Total: ${who}</h4><div class="f">base + own synergy + known combo + pool upside + get-back + enemy denial + ally avoid + scarcity + off-role + role scarcity (higher is picked first)</div>
+    const parts = [['Base', row.base], ['Own synergy', row.ownSynergy], ['Known combo', row.combo], ['Scepter', row.scepter], ['Shard', row.shard], ['Pool upside', row.pool], ['Get-back', row.getBack], ['Enemy denial', row.enemy], ['Ally avoid', row.ally], ['Scarcity', row.scarcity], ['Off-role', row.role], ['Role scarcity', row.roleScarcity]];
+    return `<h4>Total: ${who}</h4><div class="f">base + own synergy + known combo + scepter + shard + pool upside + get-back + enemy denial + ally avoid + scarcity + off-role + role scarcity (higher is picked first)</div>
       ${tipTable(['Term', 'Value'], parts.map(([l, v]) => `<tr><td>${l}</td><td>${l === 'Base' ? n2(shown(v)) : s1(v)}</td></tr>`))}<div>Total ${n1(shown(row.total))}</div>`;
   }
   return '';
@@ -1925,7 +2013,7 @@ function renderBotPanel() {
     if (d.undeferredCats && d.undeferredCats.length) {
       html += `<div style="margin-bottom:6px;color:#9ec3ff">Not deferred: ${d.undeferredCats.map(c => catLabel[c]).join(' and ')} are both filled by every enemy picking before the next turn (${(d.enemiesBeforeNext || []).map(e => 'P' + (e + 1)).join(', ')}), but not by all 5 enemies, so either is allowed and scarcity decides.</div>`;
     }
-    const cols = [['base', 'Base'], ['ownSynergy', 'Own synergy'], ['combo', 'Known combo'], ['pool', 'Pool upside'], ['getBack', 'Get-back'], ['enemy', 'Enemy denial'], ['ally', 'Ally avoid'], ['scarcity', 'Scarcity'], ['role', 'Off-role'], ['roleScarcity', 'Role scarcity'], ['total', 'Total']];
+    const cols = [['base', 'Base'], ['ownSynergy', 'Own synergy'], ['combo', 'Known combo'], ['scepter', 'Scepter'], ['shard', 'Shard'], ['pool', 'Pool upside'], ['getBack', 'Get-back'], ['enemy', 'Enemy denial'], ['ally', 'Ally avoid'], ['scarcity', 'Scarcity'], ['role', 'Off-role'], ['roleScarcity', 'Role scarcity'], ['total', 'Total']];
     const ra = d.assignment;
     if (ra) html += `<div style="margin-bottom:6px">Team roles now: ${teamSeats(d.seat).map(s => `${s === d.seat ? '<b>' : ''}${seatLabel(s)} ${picks[s].some(x => roleData(x)) ? ROLE_LABEL[ra.roles[s]] : '<span style="color:#888">open</span>'}${s === d.seat ? '</b>' : ''}`).join(' · ')}${ra.lost > 0.005 ? ` <span style="color:#888">(fit lost ${ra.lost.toFixed(2)})</span>` : ''}</div>`;
     html += `<table><thead><tr><th>Option (top ${Math.min(10, d.rows.length)} of ${d.rows.length})</th>${cols.map(([k, l]) => `<th data-col="${k}">${l}</th>`).join('')}</tr></thead><tbody>`;
@@ -1938,6 +2026,7 @@ function renderBotPanel() {
         const at = `data-col="${k}" data-row="${ri}"`;
         if (k === 'base') return `<td ${at}>${Number.isFinite(r.base) ? shown(r.base).toFixed(1) : 'no data'}</td>`;
         if (k === 'total') return `<td class="total" ${at}>${Number.isFinite(r.total) ? shown(r.total).toFixed(1) : '—'}</td>`;
+        if ((k === 'scepter' || k === 'shard') && Math.abs(r[k]) < 0.05) return `<td class="zero" ${at}>${r[k + 'Known'] ? 'yes' : 'no'}</td>`;
         const f = fmtPart(r[k]);
         return `<td class="${f.cls}" ${at}>${f.text}</td>`;
       }).join('') + `</tr>`;

@@ -8,7 +8,14 @@
   "phantom_assassin_immaterial|tinker_rearm": -5,
   "phantom_assassin_phantom_strike|tinker_rearm": -5,
   "phantom_assassin_stifling_dagger|tinker_rearm": -5,
-  "tinker_rearm|viper_corrosive_skin": -5
+  "tinker_rearm|viper_corrosive_skin": -5,
+  "broodmother_incapacitating_bite|rubick_arcane_supremacy": -5,
+  "broodmother_insatiable_hunger|rubick_arcane_supremacy": -7,
+  "earth_spirit|earth_spirit_boulder_smash": 3,
+  "gyrocopter_flak_cannon|terrorblade_metamorphosis": 7.7,
+  "medusa_split_shot|nevermore": 3,
+  "medusa_split_shot|rubick_arcane_supremacy": -7,
+  "monkey_king_wukongs_command|nevermore": 8
  },
  "readable": [
   {
@@ -1179,6 +1186,41 @@
    "value": -20,
    "windrun": null,
    "estimated": true
+  },
+  {
+   "pair": "Incapacitating Bite (Broodmother) + Arcane Supremacy (Rubick)",
+   "value": -5,
+   "windrun": null
+  },
+  {
+   "pair": "Insatiable Hunger (Broodmother) + Arcane Supremacy (Rubick)",
+   "value": -7,
+   "windrun": null
+  },
+  {
+   "pair": "Earth Spirit (model) + Boulder Smash (Earth Spirit)",
+   "value": 3,
+   "windrun": 0.3
+  },
+  {
+   "pair": "Flak Cannon (Gyrocopter) + Metamorphosis (Terrorblade)",
+   "value": 7.7,
+   "windrun": null
+  },
+  {
+   "pair": "Split Shot (Medusa) + Shadow Fiend (model)",
+   "value": 3,
+   "windrun": null
+  },
+  {
+   "pair": "Split Shot (Medusa) + Arcane Supremacy (Rubick)",
+   "value": -7,
+   "windrun": null
+  },
+  {
+   "pair": "Wukong's Command (Monkey King) + Shadow Fiend (model)",
+   "value": 8,
+   "windrun": null
   }
  ],
  "estimated": {
