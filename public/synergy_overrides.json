@@ -1,5 +1,5 @@
 {
- "updated": "2026-10-12",
+ "updated": "2026-10-15",
  "description": "Synergy edits baked into the site; they replace windrun pair values for every browser. Keys are ability/model names sorted alphabetically, joined by |. 'estimated' pairs are blanket model rules treated like estimated anti-synergy: no known-combo bonus, the seat's role weight applies, and they don't feed model roles.",
  "overrides": {
   "antimage_blink|queenofpain_blink": -9,
@@ -15,7 +15,8 @@
   "gyrocopter_flak_cannon|terrorblade_metamorphosis": 7.7,
   "medusa_split_shot|nevermore": 3,
   "medusa_split_shot|rubick_arcane_supremacy": -7,
-  "monkey_king_wukongs_command|nevermore": 8
+  "monkey_king_wukongs_command|nevermore": 8,
+  "invoker_tornado_ad|tinker_rearm": 10
  },
  "readable": [
   {
@@ -1220,6 +1221,11 @@
   {
    "pair": "Wukong's Command (Monkey King) + Shadow Fiend (model)",
    "value": 8,
+   "windrun": null
+  },
+  {
+   "pair": "Tornado (Invoker) + Rearm (Tinker)",
+   "value": 10,
    "windrun": null
   }
  ],
