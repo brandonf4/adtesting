@@ -942,12 +942,21 @@ function buildFitScore(item, seat) {
 // hold), taking it costs them the gap to their next best. Our teammates' picks
 // before their turn aren't assumed to deny anything. Weighted and capped like
 // scarcity; pulls the item earlier (negative), summed over enemies.
+// Denying a carry model (its best tentative role is Carry) is worth this much
+// more, for every seat (2026-10-16).
+const CARRY_MODEL_DENY_WEIGHT = 1.5;
+function isCarryModel(item) {
+  if (item.kind !== 'model' || !roleData(item)) return false;
+  const best = Math.max(...ROLES.map(r => roleZ(item, r)));
+  return roleZ(item, 'pos1') >= best;
+}
 function denialLoss(out, item) {
   if (!out) return { rank: -1, loss: 0 };
   const rank = out.opts.findIndex(x => x.item === item);
   if (rank !== 0) return { rank, loss: 0 };
   const best = out.opts[0].p, next = out.opts.length > 1 ? out.opts[1].p : Infinity;
-  return { rank, best, next, loss: Math.min(Math.max(next - best, 0), SCARCITY_CAP) * SCARCITY_WEIGHT };
+  const carry = isCarryModel(item) ? CARRY_MODEL_DENY_WEIGHT : 1;
+  return { rank, best, next, carry, loss: Math.min(Math.max(next - best, 0), SCARCITY_CAP) * SCARCITY_WEIGHT * carry };
 }
 // No denial if a teammate who picks before that enemy's next turn has the item
 // as their clear best option in the category (by fit with what they hold): they'll
@@ -1274,6 +1283,9 @@ function teamAssignment(seat, extra) {
 // nothing), while a support or offlaner taking a core spell is penalized more.
 const ROLE_KEEP_Z = { pos1: 0, mid: 0, offlane: 1, support: 1 };
 const ROLE_KEEP_SPAN = 3;
+// A seat that's currently a support takes off-role models with only this
+// share of the cut: supports can play almost any hero (2026-10-16).
+const SUPPORT_MODEL_ROLE_CUT = 0.25;
 function roleAlignmentTerm(item, seat, before, baseInternal) {
   if (!roleData(item) || !Number.isFinite(baseInternal)) return { cost: 0 };
   const full = Math.max(0, -baseInternal) * OFF_ROLE_CUT;
@@ -1284,7 +1296,8 @@ function roleAlignmentTerm(item, seat, before, baseInternal) {
   const keepLost = hasRole ? Math.min(1, Math.max(0, (ROLE_KEEP_Z[keepRole] - seatRoleZ(item, keepRole)) / ROLE_KEEP_SPAN)) : Infinity;
   const keep = keepLost <= shiftLost;
   const lost = keep ? keepLost : shiftLost;
-  return { cost: full * lost, after: keep ? before : after, lost, mode: keep ? 'keep' : 'shift', keepRole, keepLost, shiftLost, shiftAfter: after };
+  const supportModel = item.kind === 'model' && hasRole && before.roles[seat] === 'support' ? SUPPORT_MODEL_ROLE_CUT : 1;
+  return { cost: full * lost * supportModel, after: keep ? before : after, lost, mode: keep ? 'keep' : 'shift', keepRole, keepLost, shiftLost, shiftAfter: after, supportModel };
 }
 // Enemy picks strictly between now and our team's next pick (any seat on our
 // team), capped per enemy at its open slots in `cat`, like opposingPicksBefore.
@@ -1893,7 +1906,7 @@ get-back = with − without, summed, × ${GET_BACK_WEIGHT}</div>`;
     const w = SCARCITY_WEIGHT, cap = SCARCITY_CAP * Math.abs(DISPLAY_SCALE);
     const formula = isEnemy ? `<div class="f">only counts if ${it.display_name} is that enemy's best ${CAT_LABEL[cat]} option: they drop to their next best
 0 if a teammate who picks before that enemy has it as their own best option (they'll take it anyway)
-effect = +${w} × clamp(best − next best, 0, ${cap}), scores = their own synergy + known combo with what they hold (no base value), ${half}</div>`
+effect = +${w} × clamp(best − next best, 0, ${cap})${isCarryModel(it) ? ` × ${CARRY_MODEL_DENY_WEIGHT} (carry model)` : ''}, scores = their own synergy + known combo with what they hold (no base value), ${half}</div>`
       : `<div class="f">denied = enemy picks before their turn (1-2: all, then half rounded up), each enemy capped at its open ${CAT_LABEL[cat]} slots
 counts if ${it.display_name} is in their top denied + 1: worst case, the enemies take their other top options and they'd end up with ${it.display_name}, so losing it drops them to rank denied + 2
 0 if an enemy who picks before them has it as their own best option (it was going to be taken anyway)
@@ -1951,12 +1964,12 @@ groups = z ≥ ${ROLE_FIT_Z} or within ${ROLE_FIT_SPREAD} of its best role (same
 team roles = the assignment of Carry, Mid, Offlane, Support, Support to the 5 seats with the highest summed fit of held abilities
 keep (seat keeps its role) = clamp((bar − z in that role) ÷ ${ROLE_KEEP_SPAN}, 0, 1), bar = ${ROLES.map(r => ROLE_LABEL[r] + ' ' + ROLE_KEEP_Z[r]).join(', ')}; on Offlane, z = max(Offlane z, Support z − ${OFFLANE_SUPPORT_DISCOUNT})
 shift (roles re-solved) = relative fit the team loses after this pick (max 1)
-cost = ${OFF_ROLE_CUT * 100}% × base × the smaller of the two</div>
+cost = ${OFF_ROLE_CUT * 100}% × base × the smaller of the two, × ${SUPPORT_MODEL_ROLE_CUT} for a model on a seat that's currently Support</div>
       <div>z: ${zs} <br>role groups (z ≥ ${ROLE_FIT_Z} or within ${ROLE_FIT_SPREAD} of best): <b>${fit.map(r => ROLE_LABEL[r]).join(', ')}</b></div>
       <div>Before: ${fmtRoles(before)} <span class="dim">(fit lost ${n2(before.lost)})</span></div>
       <div>Keep: ${row.roleInfo && row.roleInfo.keepRole ? `${seatLabel(seat)} stays ${ROLE_LABEL[row.roleInfo.keepRole]}, z ${n2(seatRoleZ(it, row.roleInfo.keepRole))} → ${n2(row.roleInfo.keepLost)}` : '<span class="dim">seat has no role yet</span>'}</div>
       <div>Shift: ${row.roleInfo ? `${fmtRoles(row.roleInfo.shiftAfter)} <span class="dim">(fit lost ${n2(row.roleInfo.shiftAfter.lost)})</span> → ${n2(row.roleInfo.shiftLost)}` : '—'}</div>
-      <div class="f">${OFF_ROLE_CUT * 100}% × base ${n2(shown(row.base))} × ${row.roleInfo ? n2(row.roleInfo.lost) + ' (' + row.roleInfo.mode + ')' : '0'} = ${s1(row.role)}</div>
+      <div class="f">${OFF_ROLE_CUT * 100}% × base ${n2(shown(row.base))} × ${row.roleInfo ? n2(row.roleInfo.lost) + ' (' + row.roleInfo.mode + ')' : '0'}${row.roleInfo && row.roleInfo.supportModel < 1 ? ` × ${SUPPORT_MODEL_ROLE_CUT} (support taking a model)` : ''} = ${s1(row.role)}</div>
       <div class="dim">z-scores only pick the groups; the cost is in base points.</div>`;
   }
   if (col === 'roleScarcity') {
