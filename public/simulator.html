@@ -1154,7 +1154,8 @@ function heroMatchupRows(hero, kind) {
 }
 function heroMetricSum(hero, kind) {
   const d = draftHeroes(), key = hero + '|' + kind;
-  if (!d.sums.has(key)) d.sums.set(key, heroMatchupRows(hero, kind).reduce((t, r) => t + r.v, 0));
+  // Hero combos only count good duos; negative synergies are ignored (2026-10-20).
+  if (!d.sums.has(key)) d.sums.set(key, heroMatchupRows(hero, kind).reduce((t, r) => t + (kind === 'with' ? Math.max(0, r.v) : r.v), 0));
   return d.sums.get(key);
 }
 function heroMetricTerms(item) {
@@ -1943,7 +1944,7 @@ bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFIC
     return `<h4>${title}: ${who}</h4>
       <div class="f">${vs ? `${heroName(h)}'s winrate advantage against` : `${heroName(h)}'s synergy alongside`} each other hero in this draft (STRATZ, normal Dota, % points)
 draft heroes = the 12 with models in the pool + heroes of backfilled abilities with base above ${HERO_METRIC_MIN_BASE}
-effect = ${W} × sum = ${W} × ${n2(sum)}, the same for ${heroName(h)}'s model and every counted ability</div>
+effect = ${W} × sum${vs ? '' : ' of the positive ones'} = ${W} × ${n2(sum)}, the same for ${heroName(h)}'s model and every counted ability</div>
       ${tipTable(['Hero', vs ? 'Against' : 'With'], rows)}<div>Total ${s1(vs ? row.heroCounters : row.heroCombos)}</div>`;
   }
   if (col === 'scepter' || col === 'shard') {
