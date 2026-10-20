@@ -811,14 +811,38 @@ const SYNERGY_ORDER_WEIGHTS = [1.4, 1, 0.8, 0.6];
 // Get-back (below) was added, to limit double counting. It still pays for
 // forcing the enemy to spend a pick denying a partner.
 const POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE = [0.35, 0.105, 0.07, 0.07, 0];
+// Same-hero partners (2026-10-20): windrun's base comes from games where a
+// hero's model and abilities are always in the pool together, so the base
+// already counts on them. Pool upside skips partners from the item's own hero.
+// A backfilled ability (its hero has no model in the pool) is missing those
+// partners, so it loses what pool upside would have given for each missing one
+// (same weight, same slot rule): a missing sibling costs exactly what a
+// present one would have added.
+function sameHero(a, b) {
+  const h = itemHero(a);
+  return !!h && h === itemHero(b);
+}
+function canStillTake(o, item, playerIdx) {
+  return slotsLeftFor(playerIdx, categoryOf(o)) - (categoryOf(o) === categoryOf(item) ? 1 : 0) > 0;
+}
 function poolPartnersFor(item, playerIdx) {
-  const own = categoryOf(item);
-  return pool.filter(o => o !== item && !o.picked &&
-    slotsLeftFor(playerIdx, categoryOf(o)) - (categoryOf(o) === own ? 1 : 0) > 0);
+  return pool.filter(o => o !== item && !o.picked && !sameHero(item, o) && canStillTake(o, item, playerIdx));
+}
+// Siblings a backfilled ability would normally have in the pool but doesn't:
+// its hero's model and other abilities, as { name, kind, isUlt, display_name }.
+function missingSiblingsFor(item, playerIdx) {
+  const h = item.kind === 'ability' ? itemHero(item) : null;
+  if (!h || pool.some(o => o.kind === 'model' && o.name === h)) return [];
+  const hero = ALL_HEROES.find(x => x.name === h);
+  if (!hero) return [];
+  const sibs = [{ name: hero.name, kind: 'model', isUlt: false, display_name: hero.display_name + ' (model)' },
+    ...hero.abilities.filter(a => a.name !== item.name).map(a => ({ name: a.name, kind: 'ability', isUlt: a.is_ultimate, display_name: a.display_name }))];
+  return sibs.filter(o => !pool.some(p => p.name === o.name) && canStillTake(o, item, playerIdx));
 }
 function poolSynergyTerm(item, playerIdx) {
   const weight = POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE[picks[playerIdx].length];
-  return sumPositiveSynergy(item.name, poolPartnersFor(item, playerIdx)) * weight;
+  return (sumPositiveSynergy(item.name, poolPartnersFor(item, playerIdx))
+    - sumPositiveSynergy(item.name, missingSiblingsFor(item, playerIdx))) * weight;
 }
 
 // Get-back (added 2026-10-12): what this item lets the seat get back.
@@ -1941,11 +1965,17 @@ M = ${n2(t.M)}, W = order weight of the held pick (latest pick of a group)</div>
       .map(o => ({ o, s: synergyBetween(it.name, o.name) })).filter(x => x.s > 0).sort((a, b) => b.s - a.s);
     const total = pos.reduce((t, x) => t + x.s, 0);
     const rows = pos.slice(0, 5).map(x => `<tr><td>${x.o.display_name} <span class="dim">· ${CAT_LABEL[categoryOf(x.o)]}</span></td><td>+${n2(x.s)}</td></tr>`);
+    const miss = missingSiblingsFor(it, seat)
+      .map(o => ({ o, s: synergyBetween(it.name, o.name) })).filter(x => x.s > 0).sort((a, b) => b.s - a.s);
+    const missTotal = miss.reduce((t, x) => t + x.s, 0);
+    const missRows = miss.map(x => `<tr><td>${x.o.display_name} <span class="dim">· ${CAT_LABEL[categoryOf(x.o)]}</span></td><td>−${n2(x.s)}</td></tr>`);
     return `<h4>Pool upside: ${who}</h4>
-      <div class="f">(Σ positive synergy with unpicked options this player can still take after this pick) × P[picks held]
+      <div class="f">(Σ positive synergy with unpicked options this player can still take after this pick − Σ positive synergy with missing same-hero partners) × P[picks held]
+partners from ${it.display_name}'s own hero don't count: the base already assumes they're in the pool
 P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → ${P}</div>
       ${pos.length ? tipTable(['Top 5 pool synergies', 'Synergy'], rows) : '<div class="dim">No positive synergies left in the pool.</div>'}
-      <div class="f">= ${n2(total)} (all ${pos.length} positive pair${pos.length === 1 ? '' : 's'}) × ${P} = ${s1(row.pool)}</div>`;
+      ${miss.length ? `<div class="f">${it.display_name} is a backfill: its hero isn't in the pool, so these partners its base counts on are missing</div>` + tipTable(['Missing same-hero partner', 'Synergy'], missRows) : ''}
+      <div class="f">= (${n2(total)}${miss.length ? ' − ' + n2(missTotal) : ''}) × ${P} = ${s1(row.pool)}</div>`;
   }
   if (col === 'getBack') {
     const info = d.getBack && d.getBack.get(it);
