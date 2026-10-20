@@ -95,7 +95,7 @@
     .bot-pick-btn { padding: 4px 12px; font-size: 12px; background: #1e3a5f; color: #7eb8f7; border: 1px solid #5a7abf; border-radius: 6px; cursor: pointer; font-weight: 500; }
     .bot-pick-btn:disabled { background: transparent; color: #555; border-color: #333; cursor: default; }
     .header-right { display: flex; align-items: center; gap: 8px; }
-    .bot-panel { position: fixed; top: 8px; left: 50%; transform: translateX(-50%); z-index: 20; width: min(980px, 96vw); max-height: 48vh; overflow-y: auto; background: rgba(17,17,34,0.97); border: 1px solid #5a7abf; border-radius: 8px; padding: 10px 12px; box-shadow: 0 6px 24px rgba(0,0,0,0.5); font-size: 12px; }
+    .bot-panel { position: fixed; top: 8px; left: 50%; transform: translateX(-50%); z-index: 20; width: min(1180px, 98vw); max-height: 48vh; overflow: auto; background: rgba(17,17,34,0.97); border: 1px solid #5a7abf; border-radius: 8px; padding: 10px 12px; box-shadow: 0 6px 24px rgba(0,0,0,0.5); font-size: 12px; }
     .bot-panel.collapsed .bot-panel-body { display: none; }
     .bot-panel-head { display: flex; align-items: center; gap: 10px; }
     .bot-panel-head img { width: 34px; height: 34px; object-fit: cover; border-radius: 4px; border: 1px solid #444; }
@@ -104,8 +104,8 @@
     .bot-panel-body { margin-top: 8px; }
     .bot-panel table { width: 100%; border-collapse: collapse; }
     .bot-panel th, .bot-panel td { padding: 3px 6px; text-align: right; border-bottom: 1px solid #252540; white-space: nowrap; }
-    .bot-panel th:first-child, .bot-panel td:first-child { text-align: left; white-space: normal; }
-    .bot-panel th { color: #888; font-weight: 500; font-size: 11px; }
+    .bot-panel th:first-child, .bot-panel td:first-child { text-align: left; white-space: normal; min-width: 180px; max-width: 280px; }
+    .bot-panel th { color: #888; font-weight: 500; font-size: 11px; white-space: normal; min-width: 44px; }
     .bot-panel tr.chosen td { background: #1e3a5f; color: #fff; }
     .bot-panel td.good { color: #7ef7b8; }
     .bot-panel td.bad { color: #f08a8a; }
@@ -851,9 +851,11 @@ function poolSynergyTerm(item, playerIdx) {
 // ranked by value now (base + own synergy + known combo + off-role cut; models
 // limited to the role group the seat would have after taking this item), with the top
 // deniedCount(enemy picks before this seat's next turn) assumed gone. Then:
-//   with    = best leftover counting its synergy (and known combo) with this
-//             item, weighted as this item will be once held: × synergy
-//             multiplier × its own order weight
+//   with    = worst case (2026-10-20): rank the options counting their synergy
+//             (and known combo) with this item, weighted as this item will be
+//             once held (× synergy multiplier × its own order weight), assume
+//             the top ones are gone, and take the best leftover. So a partner
+//             that's only best because of this item can still be taken.
 //   without = best leftover ignoring this item
 // Estimated model pairs use that same after-pick role's penalty weight.
 // get-back = with − without, summed over the categories, × GET_BACK_WEIGHT.
@@ -885,19 +887,19 @@ function getBackTerms(playerIdx, available, pre, roleAfter, details) {
     for (const c of Object.values(cats)) {
       if (slotsLeftFor(playerIdx, c.cat) - (c.cat === own ? 1 : 0) <= 0) continue;
       const group = c.cat === 'model' && role ? role : null;
-      const left = c.opts.filter(o => o !== x && (!group || fitsRole(o, group))).slice(c.taken);
+      const ranked = c.opts.filter(o => o !== x && (!group || fitsRole(o, group)));
+      const gone = ranked.slice(0, c.taken).map(o => ({ item: o, v: pre.get(o) })), left = ranked.slice(c.taken);
       if (!left.length) { rows.push({ ...c, group, left, delta: 0 }); continue; }
       const without = left[0];
-      let withX = null;
-      for (const y of left) {
+      const withRanked = ranked.map(y => {
         const raw = synergyBetween(x.name, y.name);
         const syn = synergyIsEstimated(x.name, y.name) ? raw * estW : raw;
-        const v = pre.get(y) - syn * M * W - (knownComboApplies(x.name, y.name) ? B * W : 0);
-        if (!withX || v < withX.v) withX = { item: y, v, syn };
-      }
+        return { item: y, v: pre.get(y) - syn * M * W - (knownComboApplies(x.name, y.name) ? B * W : 0), syn };
+      }).sort((a, b) => a.v - b.v);
+      const goneWith = withRanked.slice(0, c.taken), withX = withRanked[c.taken];
       const delta = withX.v - pre.get(without);
       total += delta;
-      rows.push({ ...c, group, left, without: { item: without, v: pre.get(without) }, withX, delta });
+      rows.push({ ...c, group, gone, goneWith, left, without: { item: without, v: pre.get(without) }, withX, delta });
     }
     out.set(x, total * GET_BACK_WEIGHT);
     if (details) details.set(x, { rows, M, B, W, role, estW });
@@ -1980,15 +1982,16 @@ P = [${POOL_SYNERGY_WEIGHTS_BY_PICKS_MADE.join(', ')}], ${held.length} held → 
   if (col === 'getBack') {
     const info = d.getBack && d.getBack.get(it);
     const head = `<h4>Get-back: ${who}</h4>
-      <div class="f">for each category this player still needs after this pick: rank its options by value now (base + own synergy + known combo + off-role cut${info && info.role ? '; models: ' + ROLE_LABEL[info.role] + ' group only, the role ' + seatLabel(seat) + ' would have after this pick' : ''}), assume the top (enemy picks before next turn → taken) are gone
-with = best leftover counting its synergy with ${it.display_name} × multiplier × W (+ known combo × W)
-without = best leftover ignoring ${it.display_name}
+      <div class="f">for each category this player still needs after this pick: rank its options by value now (base + own synergy + known combo + off-role cut${info && info.role ? '; models: ' + ROLE_LABEL[info.role] + ' group only, the role ' + seatLabel(seat) + ' would have after this pick' : ''}), assume the top (enemy picks before next turn → taken) are gone, worst case each way
+with = rank counting synergy with ${it.display_name} × multiplier × W (+ known combo × W), drop the top ones, best leftover
+without = rank ignoring ${it.display_name}, drop the top ones, best leftover
 get-back = with − without, summed, × ${GET_BACK_WEIGHT}</div>`;
     if (!info) return head + '<div class="dim">Last pick, nothing to come back to: 0.</div>';
     const name = v => v ? v.item.display_name : '';
+    const goneList = g => g && g.length ? `<br><span class="dim">gone: ${g.map(x => x.item.display_name + ' ' + n1(shown(x.v))).join(', ')}</span>` : '';
     const rows = info.rows.map(r => !r.left.length
       ? `<tr><td>${CAT_LABEL[r.cat]}</td><td>${r.enemyPicks} → ${r.taken}</td><td colspan="3" class="dim">nothing expected to be left</td></tr>`
-      : `<tr><td>${CAT_LABEL[r.cat]}${r.group ? ' <span class="dim">(' + ROLE_LABEL[r.group] + ')</span>' : ''}</td><td>${r.enemyPicks} → ${r.taken}</td><td>${name(r.without)} ${n1(shown(r.without.v))}</td><td>${name(r.withX)} ${n1(shown(r.withX.v))} <span class="dim">(syn ${r.withX.syn >= 0 ? '+' : ''}${n2(r.withX.syn)})</span></td><td>${s1(r.delta * GET_BACK_WEIGHT)}</td></tr>`);
+      : `<tr><td>${CAT_LABEL[r.cat]}${r.group ? ' <span class="dim">(' + ROLE_LABEL[r.group] + ')</span>' : ''}</td><td>${r.enemyPicks} → ${r.taken}</td><td>${name(r.without)} ${n1(shown(r.without.v))}${goneList(r.gone)}</td><td>${name(r.withX)} ${n1(shown(r.withX.v))} <span class="dim">(syn ${r.withX.syn >= 0 ? '+' : ''}${n2(r.withX.syn)})</span>${goneList(r.goneWith)}</td><td>${s1(r.delta * GET_BACK_WEIGHT)}</td></tr>`);
     return head + `<div class="f">multiplier ${n2(info.M)}, W = order weight ${it.display_name} would get as pick ${held.length + 1} = ${info.W}, combo bonus ${n2(info.B)}, estimated model pairs × ${info.estW}${info.role ? ' (' + ROLE_LABEL[info.role] + ')' : ''}</div>
       ${rows.length ? tipTable(['Needs', 'Enemy picks → taken', 'Best left without', 'Best left with', 'Effect'], rows) : '<div class="dim">No other category left to fill.</div>'}
       <div>Total ${s1(row.getBack)}</div>`;
