@@ -307,6 +307,11 @@ let SYNERGY_OVERRIDES = new Map();
 let BAKED_ESTIMATED = new Map();
 // From aghs_upgrades.json: kind ('scepter'/'shard') -> pick name -> { excess, needs }.
 let UPGRADES = { scepter: {}, shard: {} };
+// From hero_matchups.json (STRATZ, normal Dota): hero matchup and duo synergy
+// matrices for the Hero counters / Hero combos terms. ABILITY_HERO maps each
+// ability to its hero's internal name.
+let HERO_MATCHUPS = null;
+let ABILITY_HERO = new Map();
 function loadSynergyOverrides() {
   try {
     const raw = localStorage.getItem(SYNERGY_OVERRIDES_STORAGE_KEY);
@@ -333,7 +338,12 @@ async function loadData() {
     fetch('/ability_strength.json').then(r => r.json()).catch(() => ({ strength: {} })),
     fetch('/role_skew.json').then(r => r.json()).catch(() => ({ abilities: {} })),
     fetch('/aghs_upgrades.json').then(r => r.json()).catch(() => ({})),
-  ]).then(([wr, ha, syn, shifts, strength, roles, upgrades]) => {
+    fetch('/hero_matchups.json').then(r => r.json()).catch(() => null),
+  ]).then(([wr, ha, syn, shifts, strength, roles, upgrades, matchups]) => {
+    if (matchups) {
+      const idx = new Map(matchups.heroes.map((h, i) => [h, i]));
+      HERO_MATCHUPS = { idx, vs: matchups.vs, with: matchups.with };
+    }
     UPGRADES = { scepter: upgrades.scepter || {}, shard: upgrades.shard || {} };
     ROLE = roles.abilities || {};
     STRENGTH = strength.strength || {};
@@ -367,6 +377,7 @@ async function loadData() {
       })),
     }))
     .filter(h => h.abilities.length > 0);
+  ABILITY_HERO = new Map(ALL_HEROES.flatMap(h => h.abilities.map(a => [a.name, h.name])));
 
   // Reference-only: Valve's own kit order (Q, W, E, ...) per hero, used purely to
   // sort a hero's chosen basics for display. "_ad" variants aren't listed there
@@ -1075,6 +1086,56 @@ function botSynergy(nameA, nameB, seat) {
   const syn = synergyBetween(nameA, nameB);
   return synergyIsEstimated(nameA, nameB) ? syn * estimatedPenaltyWeight(seat) : syn;
 }
+// Hero counters / Hero combos (2026-10-20): how well each hero in this draft
+// does against (counters) and alongside (combos) every other hero in it, from
+// STRATZ's normal-Dota matchups. The draft's heroes are the 12 with models in
+// the pool, plus the hero of any backfilled ability (its hero isn't in the
+// pool) whose shown base is above HERO_METRIC_MIN_BASE. Every model and
+// ability of a counted hero gets weight × the hero's summed matchups; a
+// backfilled ability at or below the bar gets neither. Fixed for the whole
+// draft (picked or not doesn't matter).
+const HERO_COUNTERS_WEIGHT = 0.5;
+const HERO_COMBOS_WEIGHT = 0.5;
+const HERO_METRIC_MIN_BASE = 60;
+let heroMetricCache = { pool: null };
+function itemHero(item) {
+  return item.kind === 'model' ? item.name : (ABILITY_HERO.get(item.name) || null);
+}
+function draftHeroes() {
+  if (heroMetricCache.pool === pool) return heroMetricCache;
+  const models = new Set(pool.filter(a => a.kind === 'model').map(a => a.name));
+  const heroes = new Set(models);
+  for (const a of pool) {
+    const h = a.kind === 'ability' ? itemHero(a) : null;
+    if (h && !models.has(h) && a.pickPositionHigh != null && shownBase(a) > HERO_METRIC_MIN_BASE) heroes.add(h);
+  }
+  heroMetricCache = { pool, models, heroes, sums: new Map() };
+  return heroMetricCache;
+}
+// The hero whose matchups count for this item, or null if they don't apply.
+function heroMetricHero(item) {
+  const h = itemHero(item);
+  if (!h || !HERO_MATCHUPS || !HERO_MATCHUPS.idx.has(h)) return null;
+  const d = draftHeroes();
+  if (d.models.has(h)) return h;
+  return item.kind === 'ability' && item.pickPositionHigh != null && shownBase(item) > HERO_METRIC_MIN_BASE ? h : null;
+}
+// Each other draft hero's matchup value with `hero`, for 'vs' or 'with'.
+function heroMatchupRows(hero, kind) {
+  const i = HERO_MATCHUPS.idx.get(hero);
+  return [...draftHeroes().heroes].filter(x => x !== hero && HERO_MATCHUPS.idx.has(x))
+    .map(x => ({ hero: x, v: HERO_MATCHUPS[kind][i][HERO_MATCHUPS.idx.get(x)] || 0 }));
+}
+function heroMetricSum(hero, kind) {
+  const d = draftHeroes(), key = hero + '|' + kind;
+  if (!d.sums.has(key)) d.sums.set(key, heroMatchupRows(hero, kind).reduce((t, r) => t + r.v, 0));
+  return d.sums.get(key);
+}
+function heroMetricTerms(item) {
+  const h = heroMetricHero(item);
+  if (!h) return { heroCounters: 0, heroCombos: 0 };
+  return { heroCounters: -HERO_COUNTERS_WEIGHT * heroMetricSum(h, 'vs'), heroCombos: -HERO_COMBOS_WEIGHT * heroMetricSum(h, 'with') };
+}
 function personalParts(item, playerIdx, getBack = 0) {
   const base = item.pickPositionHigh == null ? Infinity : shownBase(item) / DISPLAY_SCALE;
   const multiplier = synergyMultiplier();
@@ -1087,8 +1148,9 @@ function personalParts(item, playerIdx, getBack = 0) {
   });
   const poolPart = -poolSynergyTerm(item, playerIdx);
   const sc = upgradeTerm(item, playerIdx, 'scepter'), sh = upgradeTerm(item, playerIdx, 'shard');
-  return { base, ownSynergy, combo, scepter: sc.part, shard: sh.part, scepterKnown: sc.known, shardKnown: sh.known, pool: poolPart, getBack,
-    personal: base + ownSynergy + combo + sc.part + sh.part + poolPart + getBack };
+  const { heroCounters, heroCombos } = heroMetricTerms(item);
+  return { base, ownSynergy, combo, scepter: sc.part, shard: sh.part, scepterKnown: sc.known, shardKnown: sh.known, heroCounters, heroCombos, pool: poolPart, getBack,
+    personal: base + ownSynergy + combo + sc.part + sh.part + heroCounters + heroCombos + poolPart + getBack };
 }
 function personalScore(item, playerIdx) {
   return personalParts(item, playerIdx).personal;
@@ -1408,7 +1470,7 @@ function botDecision() {
     const pp = personalParts(a, p);
     const align = a.kind === 'ability' ? roleAlignmentTerm(a, p, decision.assignment, pp.base) : { cost: 0 };
     roleAfter.set(a, align.after ? align.after.roles[p] : curRole);
-    return [a, pp.base + pp.ownSynergy + pp.combo + pp.scepter + pp.shard + align.cost];
+    return [a, pp.base + pp.ownSynergy + pp.combo + pp.scepter + pp.shard + pp.heroCounters + pp.heroCombos + align.cost];
   }));
   decision.getBack = new Map();
   const getBack = getBackTerms(p, available, pre, roleAfter, decision.getBack);
@@ -1838,6 +1900,22 @@ M = ${SYNERGY_MULTIPLIER_BASE} + ${SYNERGY_MULTIPLIER_INCREMENT} × pick ${pickI
 bonus = ${KNOWN_COMBO_BONUS_COEFFICIENT} × pick² = ${KNOWN_COMBO_BONUS_COEFFICIENT} × ${pickIndex}² = ${n2(B)}</div>
       ${tipTable(['Held pick', 'Pair data', 'W', 'Effect'], rows)}<div>Total ${s1(row.combo)}</div>`;
   }
+  if (col === 'heroCounters' || col === 'heroCombos') {
+    const vs = col === 'heroCounters', kind = vs ? 'vs' : 'with', W = vs ? HERO_COUNTERS_WEIGHT : HERO_COMBOS_WEIGHT;
+    const title = vs ? 'Hero counters' : 'Hero combos';
+    const h = itemHero(it), heroName = n => { const x = ALL_HEROES.find(o => o.name === n); return x ? x.display_name : n; };
+    if (!HERO_MATCHUPS) return `<h4>${title}: ${who}</h4>No hero matchup data loaded, so 0.`;
+    if (!h) return `<h4>${title}: ${who}</h4>No hero for this pick, so 0.`;
+    if (!heroMetricHero(it)) return `<h4>${title}: ${who}</h4>${heroName(h)} isn't in this draft and ${it.display_name}'s base ${n2(shownBase(it))} isn't above ${HERO_METRIC_MIN_BASE}, so 0.`;
+    const rows = heroMatchupRows(h, kind).sort((a, b) => b.v - a.v)
+      .map(r => `<tr><td>${heroName(r.hero)}</td><td>${r.v >= 0 ? '+' : ''}${n2(r.v)}</td></tr>`);
+    const sum = heroMetricSum(h, kind);
+    return `<h4>${title}: ${who}</h4>
+      <div class="f">${vs ? `${heroName(h)}'s winrate advantage against` : `${heroName(h)}'s synergy alongside`} each other hero in this draft (STRATZ, normal Dota, % points)
+draft heroes = the 12 with models in the pool + heroes of backfilled abilities with base above ${HERO_METRIC_MIN_BASE}
+effect = ${W} × sum = ${W} × ${n2(sum)}, the same for ${heroName(h)}'s model and every counted ability</div>
+      ${tipTable(['Hero', vs ? 'Against' : 'With'], rows)}<div>Total ${s1(vs ? row.heroCounters : row.heroCombos)}</div>`;
+  }
   if (col === 'scepter' || col === 'shard') {
     const kind = col, Label = kind === 'scepter' ? 'Scepter' : 'Shard', R = UPGRADE_RULES[kind];
     const t = upgradeTerm(it, seat, kind);
@@ -1993,8 +2071,8 @@ bonus = +${SCARCITY_WEIGHT} × clamp(gap, 0, ${cap}), for options fitting that r
     return html;
   }
   if (col === 'total') {
-    const parts = [['Base', row.base], ['Own synergy', row.ownSynergy], ['Known combo', row.combo], ['Scepter', row.scepter], ['Shard', row.shard], ['Pool upside', row.pool], ['Get-back', row.getBack], ['Enemy denial', row.enemy], ['Ally avoid', row.ally], ['Scarcity', row.scarcity], ['Off-role', row.role], ['Role scarcity', row.roleScarcity]];
-    return `<h4>Total: ${who}</h4><div class="f">base + own synergy + known combo + scepter + shard + pool upside + get-back + enemy denial + ally avoid + scarcity + off-role + role scarcity (higher is picked first)</div>
+    const parts = [['Base', row.base], ['Own synergy', row.ownSynergy], ['Known combo', row.combo], ['Scepter', row.scepter], ['Shard', row.shard], ['Hero counters', row.heroCounters], ['Hero combos', row.heroCombos], ['Pool upside', row.pool], ['Get-back', row.getBack], ['Enemy denial', row.enemy], ['Ally avoid', row.ally], ['Scarcity', row.scarcity], ['Off-role', row.role], ['Role scarcity', row.roleScarcity]];
+    return `<h4>Total: ${who}</h4><div class="f">base + own synergy + known combo + scepter + shard + hero counters + hero combos + pool upside + get-back + enemy denial + ally avoid + scarcity + off-role + role scarcity (higher is picked first)</div>
       ${tipTable(['Term', 'Value'], parts.map(([l, v]) => `<tr><td>${l}</td><td>${l === 'Base' ? n2(shown(v)) : s1(v)}</td></tr>`))}<div>Total ${n1(shown(row.total))}</div>`;
   }
   return '';
@@ -2046,7 +2124,7 @@ function renderBotPanel() {
     if (d.undeferredCats && d.undeferredCats.length) {
       html += `<div style="margin-bottom:6px;color:#9ec3ff">Not deferred: ${d.undeferredCats.map(c => catLabel[c]).join(' and ')} are both filled by every enemy picking before the next turn (${(d.enemiesBeforeNext || []).map(e => 'P' + (e + 1)).join(', ')}), but not by all 5 enemies, so either is allowed and scarcity decides.</div>`;
     }
-    const cols = [['base', 'Base'], ['ownSynergy', 'Own synergy'], ['combo', 'Known combo'], ['scepter', 'Scepter'], ['shard', 'Shard'], ['pool', 'Pool upside'], ['getBack', 'Get-back'], ['enemy', 'Enemy denial'], ['ally', 'Ally avoid'], ['scarcity', 'Scarcity'], ['role', 'Off-role'], ['roleScarcity', 'Role scarcity'], ['total', 'Total']];
+    const cols = [['base', 'Base'], ['ownSynergy', 'Own synergy'], ['combo', 'Known combo'], ['scepter', 'Scepter'], ['shard', 'Shard'], ['heroCounters', 'Hero counters'], ['heroCombos', 'Hero combos'], ['pool', 'Pool upside'], ['getBack', 'Get-back'], ['enemy', 'Enemy denial'], ['ally', 'Ally avoid'], ['scarcity', 'Scarcity'], ['role', 'Off-role'], ['roleScarcity', 'Role scarcity'], ['total', 'Total']];
     const ra = d.assignment;
     if (ra) html += `<div style="margin-bottom:6px">Team roles now: ${teamSeats(d.seat).map(s => `${s === d.seat ? '<b>' : ''}${seatLabel(s)} ${picks[s].some(x => roleData(x)) ? ROLE_LABEL[ra.roles[s]] : '<span style="color:#888">open</span>'}${s === d.seat ? '</b>' : ''}`).join(' · ')}${ra.lost > 0.005 ? ` <span style="color:#888">(fit lost ${ra.lost.toFixed(2)})</span>` : ''}</div>`;
     html += `<table><thead><tr><th>Option (top ${Math.min(10, d.rows.length)} of ${d.rows.length})</th>${cols.map(([k, l]) => `<th data-col="${k}">${l}</th>`).join('')}</tr></thead><tbody>`;
