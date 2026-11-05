@@ -25,9 +25,17 @@
   .seat .top { display:flex; justify-content:space-between; gap:8px; }
   .seat .model { font-weight:600; }
   .seat .role { font-size:12px; color:var(--muted); }
-  .seat ul { margin:4px 0 0; padding-left:18px; }
-  .seat li.ult { font-weight:600; }
-  .seat .hero { color:var(--muted); font-size:12px; }
+  .seat .row-icons { display:flex; gap:6px; margin-top:6px; align-items:flex-start; }
+  .seat .portrait { width:96px; height:54px; border-radius:4px; object-fit:cover; background:#333; flex:none; }
+  .ab { width:64px; text-align:center; font-size:11px; line-height:1.2; }
+  .ab img, .ab .ph { width:48px; height:48px; border-radius:4px; display:block; margin:0 auto 2px; background:#333; }
+  .ab.ult img, .ab.ult .ph { outline:2px solid #c9a227; outline-offset:-2px; }
+  .ab .hero { color:var(--muted); display:block; }
+  .pool-icons { display:grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap:8px; }
+  .pool-icons .h { display:flex; gap:4px; align-items:center; }
+  .pool-icons img { width:36px; height:36px; border-radius:3px; }
+  .pool-icons img.m { width:64px; height:36px; object-fit:cover; }
+  .pool-icons img.gone { opacity:.25; filter:grayscale(1); }
   .panel { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-top:14px; }
   .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:6px 0; }
   .chip { border:1px solid var(--line); background:none; color:inherit; border-radius:999px; padding:5px 12px; cursor:pointer; font:inherit; }
@@ -62,21 +70,24 @@
 const ROLE_LABEL = { pos1: 'Carry', mid: 'Mid', offlane: 'Offlane', support: 'Support' };
 const TAGS = ['Counters', 'Wave clear', 'Initiation', 'Saves', 'Teamfight', 'Pickoff', 'Scaling / late game', 'Laning', 'Role balance', 'Combos on one hero', 'Bad model fit', 'Other'];
 const CONF = [['slight', 'Slight edge'], ['clear', 'Clear win'], ['stomp', 'Stomp']];
+let ICONS = {};
 let BATCH = null, db = null, current = 0, saved = {}, notes = [];
 let form = null;
 
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
 
+function icon(name, cls = '', title = '') { const src = ICONS[name]; return src ? `<img class="${cls}" src="${src}" alt="" title="${esc(title)}">` : `<span class="ph ${cls}" title="${esc(title)}"></span>`; }
 function seatHtml(d, s) {
   const items = d.seats[s];
   const model = items.find(i => i.kind === 'model');
   const ult = items.find(i => i.ult);
   const basics = items.filter(i => i.kind !== 'model' && !i.ult);
   const pickNo = d.order.map(([seat, n], i) => seat === s ? i + 1 : null).filter(Boolean);
-  const li = (i, cls = '') => `<li class="${cls}">${esc(i.display)} <span class="hero">${i.hero && model && i.hero !== model.hero ? esc(i.hero) : ''}</span></li>`;
-  return `<div class="seat"><div class="top"><span class="model">${model ? esc(model.display.replace(' (model)', '')) : '?'}</span>
+  const modelName = model ? model.display.replace(' (model)', '') : '?';
+  const ab = (i, cls = '') => `<div class="ab ${cls}">${icon(i.name, '', i.display + ' (' + i.hero + ')')}${esc(i.display)}${i.hero && model && i.hero !== model.hero ? `<span class="hero">${esc(i.hero)}</span>` : ''}</div>`;
+  return `<div class="seat"><div class="top"><span class="model">${esc(modelName)}</span>
     <span class="role">P${s + 1} · ${ROLE_LABEL[d.roles[s]] || ''} · picks ${pickNo.join(', ')}</span></div>
-    <ul>${ult ? li(ult, 'ult') : ''}${basics.map(b => li(b)).join('')}</ul></div>`;
+    <div class="row-icons">${model ? icon(model.name, 'portrait', modelName) : ''}${basics.map(b => ab(b)).join('')}${ult ? ab(ult, 'ult') : ''}</div></div>`;
 }
 
 function renderList() {
@@ -120,9 +131,9 @@ function render() {
     </div>
     <details><summary>Pick order</summary><ol class="order">${d.order.map(([s, n]) => {
       const it = d.pool.find(p => p.name === n); return `<li>P${s + 1}: ${esc(it ? it.display : n)}</li>`; }).join('')}</ol></details>
-    <details><summary>Full pool</summary><div class="pool">${[...byHero].map(([h, its]) =>
-      `<div class="h"><b>${esc(h)}</b><br>${its.map(i => `<span class="${taken.has(i.name) ? '' : 'taken'}">${esc(i.kind === 'model' ? 'Model' : i.display)}${i.ult ? ' (ult)' : ''}</span>`).join(', ')}</div>`).join('')}</div>
-      <p class="muted">Struck through = nobody picked it.</p></details>`;
+    <details><summary>Full pool</summary><div class="pool-icons">${[...byHero].map(([h, its]) =>
+      `<div class="h">${its.map(i => icon(i.name, (i.kind === 'model' ? 'm ' : '') + (taken.has(i.name) ? '' : 'gone'), (i.kind === 'model' ? h + ' (model)' : i.display) + (i.ult ? ' (ult)' : ''))).join('')}</div>`).join('')}</div>
+      <p class="muted">Faded = nobody picked it. Hover an icon for its name.</p></details>`;
   const paint = () => {
     v.querySelectorAll('[data-w]').forEach(b => b.classList.toggle('on', form.winner === b.dataset.w));
     v.querySelectorAll('[data-c]').forEach(b => b.classList.toggle('on', form.confidence === b.dataset.c));
@@ -170,6 +181,7 @@ async function start() {
   try { BATCH = await (await fetch('batch.json')).json(); }
   catch (e) { document.getElementById('view').innerHTML = '<p>Could not load the batch.</p>'; return; }
   render();
+  fetch('icons.json').then(r => r.json()).then(x => { ICONS = x; if (current !== -1) render(); }).catch(() => {});
   const status = document.getElementById('db-status');
   status.textContent = 'Connecting to saved verdicts…';
   const timer = setTimeout(() => { status.textContent = "Saved verdicts can't be reached yet."; }, 10000);
