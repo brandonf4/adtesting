@@ -1,0 +1,13 @@
+{
+  "version": "v0",
+  "note": "Hand-set starting weights. Each feature is Radiant minus Dire, roughly in winrate points. fit-judge.js refits these from your judgments.",
+  "scale": 10,
+  "weights": {
+    "strength": 1.0,
+    "synergy": 1.0,
+    "aghs": 1.0,
+    "roleFitLost": -3.0,
+    "heroCounters": 0.1,
+    "abilityCounters": 0.3
+  }
+}

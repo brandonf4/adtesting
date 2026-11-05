@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AD Draft Lab: judge drafts</title>
+<style>
+  :root { --bg:#f7f7f5; --card:#fff; --ink:#1f2328; --muted:#6b7280; --line:#e5e7eb; --rad:#2f7d4f; --dire:#a33b2b; --acc:#2563eb; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#15171a; --card:#1e2125; --ink:#e8eaed; --muted:#9aa0a6; --line:#2e3238; --rad:#5fbf86; --dire:#e07a68; --acc:#7aa7ff; } }
+  * { box-sizing: border-box; }
+  body { margin:0; font: 14px/1.45 system-ui, -apple-system, Segoe UI, sans-serif; background:var(--bg); color:var(--ink); }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:16px; margin:0; }
+  .muted { color:var(--muted); }
+  main { display:grid; grid-template-columns: 220px 1fr; gap:0; min-height: calc(100vh - 56px); }
+  nav { border-right:1px solid var(--line); padding:10px; overflow:auto; }
+  nav button { display:flex; justify-content:space-between; width:100%; text-align:left; padding:6px 8px; margin:2px 0; border:1px solid transparent; border-radius:6px; background:none; color:inherit; cursor:pointer; font:inherit; }
+  nav button.on { border-color:var(--acc); }
+  nav .tick { color:var(--rad); }
+  section { padding:16px 20px; overflow:auto; }
+  .teams { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .team h2 { font-size:15px; margin:0 0 8px; }
+  .team.radiant h2 { color:var(--rad); } .team.dire h2 { color:var(--dire); }
+  .seat { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:8px; }
+  .seat .top { display:flex; justify-content:space-between; gap:8px; }
+  .seat .model { font-weight:600; }
+  .seat .role { font-size:12px; color:var(--muted); }
+  .seat ul { margin:4px 0 0; padding-left:18px; }
+  .seat li.ult { font-weight:600; }
+  .seat .hero { color:var(--muted); font-size:12px; }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-top:14px; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:6px 0; }
+  .chip { border:1px solid var(--line); background:none; color:inherit; border-radius:999px; padding:5px 12px; cursor:pointer; font:inherit; }
+  .chip.on { background:var(--acc); border-color:var(--acc); color:#fff; }
+  .chip.rad.on { background:var(--rad); border-color:var(--rad); }
+  .chip.dire.on { background:var(--dire); border-color:var(--dire); }
+  textarea { width:100%; min-height:70px; font:inherit; padding:8px; border-radius:6px; border:1px solid var(--line); background:var(--bg); color:inherit; }
+  .btn { background:var(--acc); color:#fff; border:none; border-radius:6px; padding:8px 14px; font:inherit; cursor:pointer; }
+  .btn.ghost { background:none; color:inherit; border:1px solid var(--line); }
+  .status { font-size:13px; }
+  details { margin-top:10px; }
+  summary { cursor:pointer; color:var(--muted); }
+  .pool { columns: 3 220px; font-size:13px; }
+  .pool .h { break-inside:avoid; margin-bottom:6px; }
+  .taken { text-decoration: line-through; color:var(--muted); }
+  ol.order { columns: 2 260px; font-size:13px; }
+  .note-item { border-top:1px solid var(--line); padding:6px 0; font-size:13px; white-space:pre-wrap; }
+  @media (max-width: 760px) { main { grid-template-columns:1fr; } nav { border-right:none; border-bottom:1px solid var(--line); display:flex; overflow-x:auto; } nav button { width:auto; } .teams { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>AD Draft Lab: judge drafts</h1>
+  <span class="muted" id="batch-info">Loading…</span>
+  <span class="status muted" id="db-status"></span>
+</header>
+<main>
+  <nav id="list"></nav>
+  <section id="view"><p class="muted">Loading the batch…</p></section>
+</main>
+<script>
+const ROLE_LABEL = { pos1: 'Carry', mid: 'Mid', offlane: 'Offlane', support: 'Support' };
+const TAGS = ['Counters', 'Wave clear', 'Initiation', 'Saves', 'Teamfight', 'Pickoff', 'Scaling / late game', 'Laning', 'Role balance', 'Combos on one hero', 'Bad model fit', 'Other'];
+const CONF = [['slight', 'Slight edge'], ['clear', 'Clear win'], ['stomp', 'Stomp']];
+let BATCH = null, db = null, current = 0, saved = {}, notes = [];
+let form = null;
+
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+function seatHtml(d, s) {
+  const items = d.seats[s];
+  const model = items.find(i => i.kind === 'model');
+  const ult = items.find(i => i.ult);
+  const basics = items.filter(i => i.kind !== 'model' && !i.ult);
+  const pickNo = d.order.map(([seat, n], i) => seat === s ? i + 1 : null).filter(Boolean);
+  const li = (i, cls = '') => `<li class="${cls}">${esc(i.display)} <span class="hero">${i.hero && model && i.hero !== model.hero ? esc(i.hero) : ''}</span></li>`;
+  return `<div class="seat"><div class="top"><span class="model">${model ? esc(model.display.replace(' (model)', '')) : '?'}</span>
+    <span class="role">P${s + 1} · ${ROLE_LABEL[d.roles[s]] || ''} · picks ${pickNo.join(', ')}</span></div>
+    <ul>${ult ? li(ult, 'ult') : ''}${basics.map(b => li(b)).join('')}</ul></div>`;
+}
+
+function renderList() {
+  document.getElementById('list').innerHTML = BATCH.drafts.map((d, i) =>
+    `<button class="${i === current ? 'on' : ''}" onclick="go(${i})"><span>Draft ${i + 1}</span><span class="tick">${saved[d.id] ? '✓' : ''}</span></button>`).join('')
+    + `<button class="${current === -1 ? 'on' : ''}" onclick="go(-1)"><span>General notes</span><span class="tick">${notes.length || ''}</span></button>`;
+  const done = BATCH.drafts.filter(d => saved[d.id]).length;
+  document.getElementById('batch-info').textContent = `${BATCH.batch}: ${done} of ${BATCH.drafts.length} judged`;
+}
+
+function go(i) { current = i; render(); window.scrollTo(0, 0); }
+
+function render() {
+  renderList();
+  const v = document.getElementById('view');
+  if (current === -1) return renderNotes(v);
+  const d = BATCH.drafts[current];
+  const prev = saved[d.id];
+  form = prev ? { winner: prev.winner, confidence: prev.confidence, tags: [...(prev.tags || [])], note: prev.note || '' } : { winner: null, confidence: null, tags: [], note: '' };
+  const byHero = new Map();
+  for (const it of d.pool) { if (!byHero.has(it.hero)) byHero.set(it.hero, []); byHero.get(it.hero).push(it); }
+  const taken = new Set(d.seats.flat().map(i => i.name));
+  v.innerHTML = `
+    <div class="teams">
+      <div class="team radiant"><h2>Radiant</h2>${[0, 1, 2, 3, 4].map(s => seatHtml(d, s)).join('')}</div>
+      <div class="team dire"><h2>Dire</h2>${[5, 6, 7, 8, 9].map(s => seatHtml(d, s)).join('')}</div>
+    </div>
+    <div class="panel">
+      <div class="row"><b>Who wins?</b>
+        <button class="chip rad" data-w="radiant">Radiant</button>
+        <button class="chip dire" data-w="dire">Dire</button>
+        <button class="chip" data-w="even">Even</button>
+        <button class="chip" data-w="skip">Can't tell</button></div>
+      <div class="row"><b>How sure?</b>${CONF.map(([k, l]) => `<button class="chip" data-c="${k}">${l}</button>`).join('')}</div>
+      <div class="row"><b>Why?</b> <span class="muted">(optional, pick any)</span></div>
+      <div class="row">${TAGS.map(t => `<button class="chip" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+      <textarea id="note" placeholder="Anything else: what decided it, what a team should have drafted instead, a pick you'd change…">${esc(form.note)}</textarea>
+      <div class="row"><button class="btn" id="save">Save and next</button>
+        <button class="btn ghost" onclick="go(${Math.max(0, current - 1)})">Back</button>
+        <span class="status" id="save-status">${prev ? 'Saved' : ''}</span></div>
+    </div>
+    <details><summary>Pick order</summary><ol class="order">${d.order.map(([s, n]) => {
+      const it = d.pool.find(p => p.name === n); return `<li>P${s + 1}: ${esc(it ? it.display : n)}</li>`; }).join('')}</ol></details>
+    <details><summary>Full pool</summary><div class="pool">${[...byHero].map(([h, its]) =>
+      `<div class="h"><b>${esc(h)}</b><br>${its.map(i => `<span class="${taken.has(i.name) ? '' : 'taken'}">${esc(i.kind === 'model' ? 'Model' : i.display)}${i.ult ? ' (ult)' : ''}</span>`).join(', ')}</div>`).join('')}</div>
+      <p class="muted">Struck through = nobody picked it.</p></details>`;
+  const paint = () => {
+    v.querySelectorAll('[data-w]').forEach(b => b.classList.toggle('on', form.winner === b.dataset.w));
+    v.querySelectorAll('[data-c]').forEach(b => b.classList.toggle('on', form.confidence === b.dataset.c));
+    v.querySelectorAll('[data-t]').forEach(b => b.classList.toggle('on', form.tags.includes(b.dataset.t)));
+  };
+  v.querySelectorAll('[data-w]').forEach(b => b.onclick = () => { form.winner = b.dataset.w; paint(); });
+  v.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { form.confidence = b.dataset.c; paint(); });
+  v.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { const t = b.dataset.t; form.tags = form.tags.includes(t) ? form.tags.filter(x => x !== t) : [...form.tags, t]; paint(); });
+  paint();
+  document.getElementById('save').onclick = () => save(d);
+}
+
+async function save(d) {
+  const st = document.getElementById('save-status');
+  form.note = document.getElementById('note').value.trim();
+  if (!form.winner) { st.textContent = 'Pick who wins first (or "Can\'t tell").'; return; }
+  if (!db) { st.textContent = 'Saving is unavailable here, so this verdict was not saved.'; return; }
+  const body = { batch: BATCH.batch, draft: d.id, winner: form.winner, confidence: form.confidence, tags: form.tags, note: form.note, at: new Date().toISOString() };
+  st.textContent = 'Saving…';
+  try {
+    await db.doc(`judgments/${d.id}`).set(body);
+    saved[d.id] = body;
+    const nextIdx = BATCH.drafts.findIndex((x, i) => i > current && !saved[x.id]);
+    go(nextIdx === -1 ? current : nextIdx);
+  } catch (e) { st.textContent = 'Not saved: ' + (e && e.message || e); }
+}
+
+function renderNotes(v) {
+  v.innerHTML = `<h2 style="font-size:15px;margin-top:0">General notes</h2>
+    <p class="muted">Anything about drafting that isn't tied to one draft: a strategy, a pair that's over- or under-rated, a rule of thumb. Claude reads these and turns them into checks or saved scenarios.</p>
+    <textarea id="gnote" placeholder="e.g. Fury Swipes and Anchor Smash are much worse on melee models…"></textarea>
+    <div class="row"><button class="btn" id="gsave">Save note</button><span class="status" id="gstatus"></span></div>
+    <div>${notes.map(n => `<div class="note-item"><span class="muted">${esc((n.at || '').slice(0, 10))}</span> ${esc(n.text)}</div>`).join('')}</div>`;
+  document.getElementById('gsave').onclick = async () => {
+    const text = document.getElementById('gnote').value.trim(), st = document.getElementById('gstatus');
+    if (!text) return;
+    if (!db) { st.textContent = 'Saving is unavailable here, so this note was not saved.'; return; }
+    st.textContent = 'Saving…';
+    try { await db.collection('notes').add({ text, at: new Date().toISOString(), batch: BATCH.batch }); st.textContent = 'Saved'; }
+    catch (e) { st.textContent = 'Not saved: ' + (e && e.message || e); }
+  };
+}
+
+async function start() {
+  try { BATCH = await (await fetch('batch.json')).json(); }
+  catch (e) { document.getElementById('view').innerHTML = '<p>Could not load the batch.</p>'; return; }
+  render();
+  const status = document.getElementById('db-status');
+  status.textContent = 'Connecting to saved verdicts…';
+  const timer = setTimeout(() => { status.textContent = "Saved verdicts can't be reached yet."; }, 10000);
+  db = window.claude && window.claude.use ? await window.claude.use('db') : null;
+  if (!db) { clearTimeout(timer); status.textContent = 'Saving is unavailable in this view.'; return; }
+  db.collection('judgments').where('batch', '==', BATCH.batch).onSnapshot(snap => {
+    clearTimeout(timer); status.textContent = '';
+    saved = {}; snap.docs.forEach(x => { saved[x.data().draft] = x.data(); });
+    if (current !== -1) renderList(); else render();
+  }, e => { clearTimeout(timer); status.textContent = 'Saved verdicts unavailable: ' + e.code; });
+  db.collection('notes').orderBy('at', 'desc').limit(100).onSnapshot(snap => {
+    notes = snap.docs.map(x => x.data());
+    if (current === -1) render(); else renderList();
+  }, () => {});
+}
+start();
+</script>
+</body>
+</html>
