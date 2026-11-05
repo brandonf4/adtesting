@@ -12,12 +12,12 @@
   header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
   header h1 { font-size:16px; margin:0; }
   .muted { color:var(--muted); }
-  main { display:grid; grid-template-columns: 220px 1fr; gap:0; min-height: calc(100vh - 56px); }
+  main { display:grid; grid-template-columns: 170px 1fr; gap:0; min-height: calc(100vh - 56px); }
   nav { border-right:1px solid var(--line); padding:10px; overflow:auto; }
   nav button { display:flex; justify-content:space-between; width:100%; text-align:left; padding:6px 8px; margin:2px 0; border:1px solid transparent; border-radius:6px; background:none; color:inherit; cursor:pointer; font:inherit; }
   nav button.on { border-color:var(--acc); }
   nav .tick { color:var(--rad); }
-  section { padding:16px 20px; overflow:auto; }
+  section { padding:14px 14px; overflow:auto; }
   .teams { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
   .team h2 { font-size:15px; margin:0 0 8px; }
   .team.radiant h2 { color:var(--rad); } .team.dire h2 { color:var(--dire); }
@@ -53,6 +53,29 @@
   .taken { text-decoration: line-through; color:var(--muted); }
   ol.order { columns: 2 260px; font-size:13px; }
   .note-item { border-top:1px solid var(--line); padding:6px 0; font-size:13px; white-space:pre-wrap; }
+  .replay { display:grid; grid-template-columns: auto 1fr auto; gap:14px; align-items:start; }
+  .rp-team h2 { font-size:15px; margin:0 0 6px; }
+  .rp-team.radiant h2 { color:var(--rad); } .rp-team.dire h2 { color:var(--dire); }
+  .rp-seat { display:flex; align-items:center; gap:5px; padding:5px 6px; border:1px solid var(--line); border-radius:8px; background:var(--card); margin-bottom:6px; }
+  .rp-seat.picking { border-color:var(--acc); box-shadow:0 0 0 2px var(--acc) inset; }
+  .rp-seat .lbl { width:44px; font-size:11px; color:var(--muted); line-height:1.25; }
+  .rp-seat .lbl b { color:var(--ink); font-size:12px; }
+  .slot { width:40px; height:40px; border-radius:5px; background:var(--bg); border:1px dashed var(--line); flex:none; overflow:hidden; position:relative; }
+  .slot img { width:100%; height:100%; object-fit:cover; display:block; }
+  .slot.ult { outline:2px solid #c9a227; outline-offset:-2px; }
+  .slot.just, .pi.just { box-shadow:0 0 0 3px #f5c542; }
+  .rp-pool { display:flex; gap:10px; justify-content:center; background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px; }
+  .rp-pool h4 { margin:0 0 6px; font-size:12px; color:var(--muted); font-weight:600; text-align:center; }
+  .pg { display:grid; gap:4px; }
+  .pi { width:36px; height:36px; border-radius:4px; overflow:hidden; position:relative; background:#333; }
+  .pi img { width:100%; height:100%; object-fit:cover; display:block; }
+  .pi.taken img { opacity:.18; filter:grayscale(1); }
+  .pi .n { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--ink); }
+  .rp-ctl { display:flex; gap:8px; align-items:center; justify-content:center; margin-top:10px; flex-wrap:wrap; }
+  .rp-ctl input[type=range] { width:min(520px, 90%); }
+  .rp-cap { text-align:center; margin-top:6px; min-height:20px; }
+  .rp-help { text-align:center; font-size:12px; }
+  @media (max-width: 1250px) { .replay { grid-template-columns: 1fr 1fr; } .rp-center { grid-column: 1 / -1; order:-1; } }
   @media (max-width: 760px) { main { grid-template-columns:1fr; } nav { border-right:none; border-bottom:1px solid var(--line); display:flex; overflow-x:auto; } nav button { width:auto; } .teams { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -90,6 +113,90 @@ function seatHtml(d, s) {
     <div class="row-icons">${model ? icon(model.name, 'portrait', modelName) : ''}${basics.map(b => ab(b)).join('')}${ult ? ab(ult, 'ult') : ''}</div></div>`;
 }
 
+let step = 50, replayDraft = null;
+function teamOrder(d, team) {
+  // Seats in the order they first picked, like windrun.
+  const seats = team === 'radiant' ? [0, 1, 2, 3, 4] : [5, 6, 7, 8, 9];
+  return seats.sort((a, b) => d.order.findIndex(o => o[0] === a) - d.order.findIndex(o => o[0] === b));
+}
+function renderReplay() {
+  const d = replayDraft, el = document.getElementById('replay');
+  if (!d || !el) return;
+  const byName = new Map(d.pool.map(i => [i.name, i]));
+  const pickNo = new Map(d.order.slice(0, step).map(([s, n], i) => [n, i + 1]));
+  const held = Array.from({ length: 10 }, () => []);
+  d.order.slice(0, step).forEach(([s, n]) => held[s].push(byName.get(n)));
+  const justName = step > 0 ? d.order[step - 1][1] : null;
+  const picking = step < d.order.length ? d.order[step][0] : null;
+  const seatRow = (s, team) => {
+    const items = held[s];
+    const slots = [];
+    for (let i = 0; i < 5; i++) {
+      const it = items[i];
+      if (!it) { slots.push('<span class="slot"></span>'); continue; }
+      const t = it.kind === 'model' ? it.display : `${it.display} (${it.hero})`;
+      slots.push(`<span class="slot ${it.kind === 'model' ? 'm' : ''} ${it.ult ? 'ult' : ''} ${it.name === justName ? 'just' : ''}" title="${esc(t)} · pick ${pickNo.get(it.name)}">${ICONS[it.name] ? `<img src="${ICONS[it.name]}" alt="">` : ''}</span>`);
+    }
+    return `<div class="rp-seat ${s === picking ? 'picking' : ''}"><span class="lbl"><b>P${s + 1}</b><br>${ROLE_LABEL[d.roles[s]] || ''}</span>${slots.join('')}</div>`;
+  };
+  const cell = (it) => {
+    const n = pickNo.get(it.name);
+    const t = (it.kind === 'model' ? it.display : `${it.display} (${it.hero})`) + (n ? ` · pick ${n}` : '');
+    return `<span class="pi ${it.kind === 'model' ? 'm' : ''} ${n ? 'taken' : ''} ${it.name === justName ? 'just' : ''}" title="${esc(t)}">${ICONS[it.name] ? `<img src="${ICONS[it.name]}" alt="">` : ''}${n ? `<span class="n">${n}</span>` : ''}</span>`;
+  };
+  // Group the pool by hero so each row reads model, basics, ult.
+  const heroes = [...new Set(d.pool.map(i => i.hero))];
+  const col = (f) => heroes.flatMap(h => d.pool.filter(i => i.hero === h && f(i)));
+  const ults = col(i => i.ult), spells = col(i => i.kind !== 'model' && !i.ult), models = col(i => i.kind === 'model');
+  let cap = 'Start of the draft. Scroll or use the arrow keys to step through it.';
+  if (step > 0) {
+    const [s, n] = d.order[step - 1], it = byName.get(n);
+    cap = `<b>Pick ${step}</b>: P${s + 1} (${s < 5 ? 'Radiant' : 'Dire'}) took <b>${esc(it.display)}</b>${it.kind === 'model' ? '' : ` (${esc(it.hero)})`}`;
+  }
+  el.innerHTML = `<div class="replay">
+    <div class="rp-team radiant"><h2>Radiant</h2>${teamOrder(d, 'radiant').map(s => seatRow(s)).join('')}</div>
+    <div class="rp-center">
+      <div class="rp-pool" id="rp-pool">
+        <div><h4>Ultimates</h4><div class="pg" style="grid-template-columns:repeat(2,36px)">${ults.map(cell).join('')}</div></div>
+        <div><h4>Spells</h4><div class="pg" style="grid-template-columns:repeat(6,36px)">${spells.map(cell).join('')}</div></div>
+        <div><h4>Heroes</h4><div class="pg" style="grid-template-columns:repeat(2,36px)">${models.map(cell).join('')}</div></div>
+      </div>
+      <div class="rp-ctl">
+        <button class="btn ghost" data-st="0">Start</button><button class="btn ghost" data-st="-1">Prev</button>
+        <span>Pick ${step} / ${d.order.length}</span>
+        <button class="btn ghost" data-st="+1">Next</button><button class="btn ghost" data-st="end">End</button>
+      </div>
+      <div class="rp-ctl"><input type="range" id="rp-range" min="0" max="${d.order.length}" value="${step}"></div>
+      <div class="rp-cap">${cap}</div>
+      <div class="rp-help muted">Scroll over the board, drag the slider, or use ← → to step. Hover an icon for its name.</div>
+    </div>
+    <div class="rp-team dire"><h2>Dire</h2>${teamOrder(d, 'dire').map(s => seatRow(s)).join('')}</div>
+  </div>`;
+  el.querySelectorAll('[data-st]').forEach(b => b.onclick = () => {
+    const v = b.dataset.st;
+    setStep(v === '0' ? 0 : v === 'end' ? d.order.length : step + Number(v));
+  });
+  document.getElementById('rp-range').oninput = e => setStep(Number(e.target.value));
+}
+function setStep(v) {
+  if (!replayDraft) return;
+  const n = Math.max(0, Math.min(replayDraft.order.length, v));
+  if (n !== step) { step = n; renderReplay(); }
+}
+let wheelAcc = 0;
+document.addEventListener('wheel', e => {
+  const r = document.getElementById('replay');
+  if (!r || !r.contains(e.target) || !replayDraft) return;
+  e.preventDefault();
+  wheelAcc += e.deltaY;
+  while (Math.abs(wheelAcc) >= 60) { setStep(step + Math.sign(wheelAcc)); wheelAcc -= 60 * Math.sign(wheelAcc); }
+}, { passive: false });
+document.addEventListener('keydown', e => {
+  if (!replayDraft || /INPUT|TEXTAREA/.test((e.target || {}).tagName || '') && e.target.type !== 'range') return;
+  if (e.key === 'ArrowRight') { setStep(step + 1); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') { setStep(step - 1); e.preventDefault(); }
+});
+
 function renderList() {
   document.getElementById('list').innerHTML = BATCH.drafts.map((d, i) =>
     `<button class="${i === current ? 'on' : ''}" onclick="go(${i})"><span>Draft ${i + 1}</span><span class="tick">${saved[d.id] ? '✓' : ''}</span></button>`).join('')
@@ -103,18 +210,13 @@ function go(i) { current = i; render(); window.scrollTo(0, 0); }
 function render() {
   renderList();
   const v = document.getElementById('view');
-  if (current === -1) return renderNotes(v);
+  if (current === -1) { replayDraft = null; return renderNotes(v); }
   const d = BATCH.drafts[current];
+  if (replayDraft !== d) { replayDraft = d; step = d.order.length; }
   const prev = saved[d.id];
   form = prev ? { winner: prev.winner, confidence: prev.confidence, tags: [...(prev.tags || [])], note: prev.note || '' } : { winner: null, confidence: null, tags: [], note: '' };
-  const byHero = new Map();
-  for (const it of d.pool) { if (!byHero.has(it.hero)) byHero.set(it.hero, []); byHero.get(it.hero).push(it); }
-  const taken = new Set(d.seats.flat().map(i => i.name));
   v.innerHTML = `
-    <div class="teams">
-      <div class="team radiant"><h2>Radiant</h2>${[0, 1, 2, 3, 4].map(s => seatHtml(d, s)).join('')}</div>
-      <div class="team dire"><h2>Dire</h2>${[5, 6, 7, 8, 9].map(s => seatHtml(d, s)).join('')}</div>
-    </div>
+    <div id="replay"></div>
     <div class="panel">
       <div class="row"><b>Who wins?</b>
         <button class="chip rad" data-w="radiant">Radiant</button>
@@ -129,11 +231,7 @@ function render() {
         <button class="btn ghost" onclick="go(${Math.max(0, current - 1)})">Back</button>
         <span class="status" id="save-status">${prev ? 'Saved' : ''}</span></div>
     </div>
-    <details><summary>Pick order</summary><ol class="order">${d.order.map(([s, n]) => {
-      const it = d.pool.find(p => p.name === n); return `<li>P${s + 1}: ${esc(it ? it.display : n)}</li>`; }).join('')}</ol></details>
-    <details><summary>Full pool</summary><div class="pool-icons">${[...byHero].map(([h, its]) =>
-      `<div class="h">${its.map(i => icon(i.name, (i.kind === 'model' ? 'm ' : '') + (taken.has(i.name) ? '' : 'gone'), (i.kind === 'model' ? h + ' (model)' : i.display) + (i.ult ? ' (ult)' : ''))).join('')}</div>`).join('')}</div>
-      <p class="muted">Faded = nobody picked it. Hover an icon for its name.</p></details>`;
+    `;
   const paint = () => {
     v.querySelectorAll('[data-w]').forEach(b => b.classList.toggle('on', form.winner === b.dataset.w));
     v.querySelectorAll('[data-c]').forEach(b => b.classList.toggle('on', form.confidence === b.dataset.c));
@@ -143,6 +241,7 @@ function render() {
   v.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { form.confidence = b.dataset.c; paint(); });
   v.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { const t = b.dataset.t; form.tags = form.tags.includes(t) ? form.tags.filter(x => x !== t) : [...form.tags, t]; paint(); });
   paint();
+  renderReplay();
   document.getElementById('save').onclick = () => save(d);
 }
 
