@@ -423,7 +423,8 @@
 ],
 "chaos_knight_phantasm": [
 "summ",
-"sdispel"
+"sdispel",
+"antiphys"
 ],
 "chen_penitence": [
 "slow",
@@ -1443,7 +1444,8 @@
 "naga_siren_mirror_image": [
 "summ",
 "push",
-"sdispel"
+"sdispel",
+"antiphys"
 ],
 "naga_siren_ensnare": [
 "dis",
@@ -1651,7 +1653,8 @@
 "antiphys"
 ],
 "phantom_lancer_juxtapose": [
-"summ"
+"summ",
+"antiphys"
 ],
 "phantom_lancer_doppelwalk": [
 "mob",
@@ -2625,6 +2628,18 @@
 "zuus_heavenly_jump": [
 "mob",
 "magical"
+],
+"model_morphling": [
+"antiphys"
+],
+"model_dragon_knight": [
+"antiphys"
+],
+"model_terrorblade": [
+"antiphys"
+],
+"model_naga_siren": [
+"antiphys"
 ]
 },
 "heroes": [
@@ -2632,6 +2647,12 @@
 "name": "abaddon",
 "display": "Abaddon",
 "abilities": [
+{
+"name": "model_abaddon",
+"display": "Model",
+"ult": false,
+"icon": "abaddon"
+},
 {
 "name": "abaddon_frostmourne",
 "display": "Curse of Avernus",
@@ -2659,6 +2680,12 @@
 "display": "Underlord",
 "abilities": [
 {
+"name": "model_abyssal_underlord",
+"display": "Model",
+"ult": false,
+"icon": "abyssal_underlord"
+},
+{
 "name": "abyssal_underlord_atrophy_aura",
 "display": "Atrophy Aura",
 "ult": false
@@ -2684,6 +2711,12 @@
 "name": "alchemist",
 "display": "Alchemist",
 "abilities": [
+{
+"name": "model_alchemist",
+"display": "Model",
+"ult": false,
+"icon": "alchemist"
+},
 {
 "name": "alchemist_chemical_rage",
 "display": "Chemical Rage",
@@ -2711,6 +2744,12 @@
 "display": "Ancient Apparition",
 "abilities": [
 {
+"name": "model_ancient_apparition",
+"display": "Model",
+"ult": false,
+"icon": "ancient_apparition"
+},
+{
 "name": "ancient_apparition_chilling_touch",
 "display": "Chilling Touch",
 "ult": false
@@ -2736,6 +2775,12 @@
 "name": "antimage",
 "display": "Anti-Mage",
 "abilities": [
+{
+"name": "model_antimage",
+"display": "Model",
+"ult": false,
+"icon": "antimage"
+},
 {
 "name": "antimage_blink",
 "display": "Blink",
@@ -2763,6 +2808,12 @@
 "display": "Arc Warden",
 "abilities": [
 {
+"name": "model_arc_warden",
+"display": "Model",
+"ult": false,
+"icon": "arc_warden"
+},
+{
 "name": "arc_warden_flux",
 "display": "Flux",
 "ult": false
@@ -2783,6 +2834,12 @@
 "name": "axe",
 "display": "Axe",
 "abilities": [
+{
+"name": "model_axe",
+"display": "Model",
+"ult": false,
+"icon": "axe"
+},
 {
 "name": "axe_counter_helix",
 "display": "Counter Helix",
@@ -2810,6 +2867,12 @@
 "display": "Bane",
 "abilities": [
 {
+"name": "model_bane",
+"display": "Model",
+"ult": false,
+"icon": "bane"
+},
+{
 "name": "bane_fiends_grip",
 "display": "Fiend's Grip",
 "ult": true
@@ -2835,6 +2898,12 @@
 "name": "batrider",
 "display": "Batrider",
 "abilities": [
+{
+"name": "model_batrider",
+"display": "Model",
+"ult": false,
+"icon": "batrider"
+},
 {
 "name": "batrider_sticky_napalm",
 "display": "Sticky Napalm",
@@ -2862,6 +2931,12 @@
 "display": "Beastmaster",
 "abilities": [
 {
+"name": "model_beastmaster",
+"display": "Model",
+"ult": false,
+"icon": "beastmaster"
+},
+{
 "name": "beastmaster_wild_axes",
 "display": "Wild Axes",
 "ult": false
@@ -2887,6 +2962,12 @@
 "name": "bloodseeker",
 "display": "Bloodseeker",
 "abilities": [
+{
+"name": "model_bloodseeker",
+"display": "Model",
+"ult": false,
+"icon": "bloodseeker"
+},
 {
 "name": "bloodseeker_thirst",
 "display": "Thirst",
@@ -2914,6 +2995,12 @@
 "display": "Bounty Hunter",
 "abilities": [
 {
+"name": "model_bounty_hunter",
+"display": "Model",
+"ult": false,
+"icon": "bounty_hunter"
+},
+{
 "name": "bounty_hunter_jinada",
 "display": "Jinada",
 "ult": false
@@ -2939,6 +3026,12 @@
 "name": "brewmaster",
 "display": "Brewmaster",
 "abilities": [
+{
+"name": "model_brewmaster",
+"display": "Model",
+"ult": false,
+"icon": "brewmaster"
+},
 {
 "name": "brewmaster_drunken_brawler",
 "display": "Drunken Brawler",
@@ -2966,6 +3059,12 @@
 "display": "Bristleback",
 "abilities": [
 {
+"name": "model_bristleback",
+"display": "Model",
+"ult": false,
+"icon": "bristleback"
+},
+{
 "name": "bristleback_quill_spray",
 "display": "Quill Spray",
 "ult": false
@@ -2991,6 +3090,12 @@
 "name": "broodmother",
 "display": "Broodmother",
 "abilities": [
+{
+"name": "model_broodmother",
+"display": "Model",
+"ult": false,
+"icon": "broodmother"
+},
 {
 "name": "broodmother_insatiable_hunger",
 "display": "Insatiable Hunger",
@@ -3018,6 +3123,12 @@
 "display": "Centaur Warrunner",
 "abilities": [
 {
+"name": "model_centaur",
+"display": "Model",
+"ult": false,
+"icon": "centaur"
+},
+{
 "name": "centaur_return",
 "display": "Retaliate",
 "ult": false
@@ -3043,6 +3154,12 @@
 "name": "chaos_knight",
 "display": "Chaos Knight",
 "abilities": [
+{
+"name": "model_chaos_knight",
+"display": "Model",
+"ult": false,
+"icon": "chaos_knight"
+},
 {
 "name": "chaos_knight_chaos_strike",
 "display": "Chaos Strike",
@@ -3070,6 +3187,12 @@
 "display": "Chen",
 "abilities": [
 {
+"name": "model_chen",
+"display": "Model",
+"ult": false,
+"icon": "chen"
+},
+{
 "name": "chen_penitence",
 "display": "Penitence",
 "ult": false
@@ -3095,6 +3218,12 @@
 "name": "clinkz",
 "display": "Clinkz",
 "abilities": [
+{
+"name": "model_clinkz",
+"display": "Model",
+"ult": false,
+"icon": "clinkz"
+},
 {
 "name": "clinkz_strafe",
 "display": "Strafe",
@@ -3122,6 +3251,12 @@
 "display": "Crystal Maiden",
 "abilities": [
 {
+"name": "model_crystal_maiden",
+"display": "Model",
+"ult": false,
+"icon": "crystal_maiden"
+},
+{
 "name": "crystal_maiden_frostbite",
 "display": "Frostbite",
 "ult": false
@@ -3142,6 +3277,12 @@
 "name": "dark_seer",
 "display": "Dark Seer",
 "abilities": [
+{
+"name": "model_dark_seer",
+"display": "Model",
+"ult": false,
+"icon": "dark_seer"
+},
 {
 "name": "dark_seer_ion_shell",
 "display": "Ion Shell",
@@ -3169,6 +3310,12 @@
 "display": "Dark Willow",
 "abilities": [
 {
+"name": "model_dark_willow",
+"display": "Model",
+"ult": false,
+"icon": "dark_willow"
+},
+{
 "name": "dark_willow_shadow_realm",
 "display": "Shadow Realm",
 "ult": false
@@ -3194,6 +3341,12 @@
 "name": "dawnbreaker",
 "display": "Dawnbreaker",
 "abilities": [
+{
+"name": "model_dawnbreaker",
+"display": "Model",
+"ult": false,
+"icon": "dawnbreaker"
+},
 {
 "name": "dawnbreaker_luminosity",
 "display": "Luminosity",
@@ -3221,6 +3374,12 @@
 "display": "Dazzle",
 "abilities": [
 {
+"name": "model_dazzle",
+"display": "Model",
+"ult": false,
+"icon": "dazzle"
+},
+{
 "name": "dazzle_poison_touch",
 "display": "Poison Touch",
 "ult": false
@@ -3246,6 +3405,12 @@
 "name": "death_prophet",
 "display": "Death Prophet",
 "abilities": [
+{
+"name": "model_death_prophet",
+"display": "Model",
+"ult": false,
+"icon": "death_prophet"
+},
 {
 "name": "death_prophet_exorcism",
 "display": "Exorcism",
@@ -3273,6 +3438,12 @@
 "display": "Disruptor",
 "abilities": [
 {
+"name": "model_disruptor",
+"display": "Model",
+"ult": false,
+"icon": "disruptor"
+},
+{
 "name": "disruptor_glimpse",
 "display": "Glimpse",
 "ult": false
@@ -3298,6 +3469,12 @@
 "name": "doom_bringer",
 "display": "Doom",
 "abilities": [
+{
+"name": "model_doom_bringer",
+"display": "Model",
+"ult": false,
+"icon": "doom_bringer"
+},
 {
 "name": "doom_bringer_infernal_blade",
 "display": "Infernal Blade",
@@ -3325,6 +3502,12 @@
 "display": "Dragon Knight",
 "abilities": [
 {
+"name": "model_dragon_knight",
+"display": "Model",
+"ult": false,
+"icon": "dragon_knight"
+},
+{
 "name": "dragon_knight_elder_dragon_form",
 "display": "Elder Dragon Form",
 "ult": true
@@ -3350,6 +3533,12 @@
 "name": "drow_ranger",
 "display": "Drow Ranger",
 "abilities": [
+{
+"name": "model_drow_ranger",
+"display": "Model",
+"ult": false,
+"icon": "drow_ranger"
+},
 {
 "name": "drow_ranger_frost_arrows",
 "display": "Frost Arrows",
@@ -3377,6 +3566,12 @@
 "display": "Earth Spirit",
 "abilities": [
 {
+"name": "model_earth_spirit",
+"display": "Model",
+"ult": false,
+"icon": "earth_spirit"
+},
+{
 "name": "earth_spirit_rolling_boulder",
 "display": "Rolling Boulder",
 "ult": false
@@ -3402,6 +3597,12 @@
 "name": "earthshaker",
 "display": "Earthshaker",
 "abilities": [
+{
+"name": "model_earthshaker",
+"display": "Model",
+"ult": false,
+"icon": "earthshaker"
+},
 {
 "name": "earthshaker_enchant_totem",
 "display": "Enchant Totem",
@@ -3429,6 +3630,12 @@
 "display": "Elder Titan",
 "abilities": [
 {
+"name": "model_elder_titan",
+"display": "Model",
+"ult": false,
+"icon": "elder_titan"
+},
+{
 "name": "elder_titan_natural_order",
 "display": "Natural Order",
 "ult": false
@@ -3454,6 +3661,12 @@
 "name": "ember_spirit",
 "display": "Ember Spirit",
 "abilities": [
+{
+"name": "model_ember_spirit",
+"display": "Model",
+"ult": false,
+"icon": "ember_spirit"
+},
 {
 "name": "ember_spirit_sleight_of_fist",
 "display": "Sleight of Fist",
@@ -3481,6 +3694,12 @@
 "display": "Enchantress",
 "abilities": [
 {
+"name": "model_enchantress",
+"display": "Model",
+"ult": false,
+"icon": "enchantress"
+},
+{
 "name": "enchantress_impetus",
 "display": "Impetus",
 "ult": false
@@ -3506,6 +3725,12 @@
 "name": "enigma",
 "display": "Enigma",
 "abilities": [
+{
+"name": "model_enigma",
+"display": "Model",
+"ult": false,
+"icon": "enigma"
+},
 {
 "name": "enigma_black_hole",
 "display": "Black Hole",
@@ -3533,6 +3758,12 @@
 "display": "Faceless Void",
 "abilities": [
 {
+"name": "model_faceless_void",
+"display": "Model",
+"ult": false,
+"icon": "faceless_void"
+},
+{
 "name": "faceless_void_time_walk",
 "display": "Time Walk",
 "ult": false
@@ -3558,6 +3789,12 @@
 "name": "furion",
 "display": "Nature's Prophet",
 "abilities": [
+{
+"name": "model_furion",
+"display": "Model",
+"ult": false,
+"icon": "furion"
+},
 {
 "name": "furion_teleportation",
 "display": "Teleportation",
@@ -3585,6 +3822,12 @@
 "display": "Grimstroke",
 "abilities": [
 {
+"name": "model_grimstroke",
+"display": "Model",
+"ult": false,
+"icon": "grimstroke"
+},
+{
 "name": "grimstroke_ink_creature",
 "display": "Phantom's Embrace",
 "ult": false
@@ -3610,6 +3853,12 @@
 "name": "gyrocopter",
 "display": "Gyrocopter",
 "abilities": [
+{
+"name": "model_gyrocopter",
+"display": "Model",
+"ult": false,
+"icon": "gyrocopter"
+},
 {
 "name": "gyrocopter_flak_cannon",
 "display": "Flak Cannon",
@@ -3637,6 +3886,12 @@
 "display": "Hoodwink",
 "abilities": [
 {
+"name": "model_hoodwink",
+"display": "Model",
+"ult": false,
+"icon": "hoodwink"
+},
+{
 "name": "hoodwink_acorn_shot",
 "display": "Acorn Shot",
 "ult": false
@@ -3663,6 +3918,12 @@
 "display": "Huskar",
 "abilities": [
 {
+"name": "model_huskar",
+"display": "Model",
+"ult": false,
+"icon": "huskar"
+},
+{
 "name": "huskar_berserkers_blood",
 "display": "Berserker's Blood",
 "ult": false
@@ -3688,6 +3949,12 @@
 "name": "invoker",
 "display": "Invoker",
 "abilities": [
+{
+"name": "model_invoker",
+"display": "Model",
+"ult": false,
+"icon": "invoker"
+},
 {
 "name": "invoker_sun_strike_ad",
 "display": "Sun Strike (AD)",
@@ -3745,6 +4012,12 @@
 "display": "Jakiro",
 "abilities": [
 {
+"name": "model_jakiro",
+"display": "Model",
+"ult": false,
+"icon": "jakiro"
+},
+{
 "name": "jakiro_liquid_fire",
 "display": "Liquid Fire",
 "ult": false
@@ -3776,6 +4049,12 @@
 "display": "Juggernaut",
 "abilities": [
 {
+"name": "model_juggernaut",
+"display": "Model",
+"ult": false,
+"icon": "juggernaut"
+},
+{
 "name": "juggernaut_blade_fury",
 "display": "Blade Fury",
 "ult": false
@@ -3802,6 +4081,12 @@
 "display": "Keeper of the Light",
 "abilities": [
 {
+"name": "model_keeper_of_the_light",
+"display": "Model",
+"ult": false,
+"icon": "keeper_of_the_light"
+},
+{
 "name": "keeper_of_the_light_chakra_magic",
 "display": "Chakra Magic",
 "ult": false
@@ -3827,6 +4112,12 @@
 "name": "kez",
 "display": "Kez",
 "abilities": [
+{
+"name": "model_kez",
+"display": "Model",
+"ult": false,
+"icon": "kez"
+},
 {
 "name": "kez_falcon_rush_ad",
 "display": "Falcon Rush",
@@ -3874,6 +4165,12 @@
 "display": "Kunkka",
 "abilities": [
 {
+"name": "model_kunkka",
+"display": "Model",
+"ult": false,
+"icon": "kunkka"
+},
+{
 "name": "kunkka_tidebringer",
 "display": "Tidebringer",
 "ult": false
@@ -3899,6 +4196,12 @@
 "name": "largo",
 "display": "Largo",
 "abilities": [
+{
+"name": "model_largo",
+"display": "Model",
+"ult": false,
+"icon": "largo"
+},
 {
 "name": "largo_catchy_lick",
 "display": "Catchy Lick",
@@ -3926,6 +4229,12 @@
 "display": "Legion Commander",
 "abilities": [
 {
+"name": "model_legion_commander",
+"display": "Model",
+"ult": false,
+"icon": "legion_commander"
+},
+{
 "name": "legion_commander_duel",
 "display": "Duel",
 "ult": true
@@ -3951,6 +4260,12 @@
 "name": "leshrac",
 "display": "Leshrac",
 "abilities": [
+{
+"name": "model_leshrac",
+"display": "Model",
+"ult": false,
+"icon": "leshrac"
+},
 {
 "name": "leshrac_split_earth",
 "display": "Split Earth",
@@ -3978,6 +4293,12 @@
 "display": "Lich",
 "abilities": [
 {
+"name": "model_lich",
+"display": "Model",
+"ult": false,
+"icon": "lich"
+},
+{
 "name": "lich_chain_frost",
 "display": "Chain Frost",
 "ult": true
@@ -4003,6 +4324,12 @@
 "name": "life_stealer",
 "display": "Lifestealer",
 "abilities": [
+{
+"name": "model_life_stealer",
+"display": "Model",
+"ult": false,
+"icon": "life_stealer"
+},
 {
 "name": "life_stealer_feast",
 "display": "Feast",
@@ -4030,6 +4357,12 @@
 "display": "Lina",
 "abilities": [
 {
+"name": "model_lina",
+"display": "Model",
+"ult": false,
+"icon": "lina"
+},
+{
 "name": "lina_fiery_soul",
 "display": "Fiery Soul",
 "ult": false
@@ -4055,6 +4388,12 @@
 "name": "lion",
 "display": "Lion",
 "abilities": [
+{
+"name": "model_lion",
+"display": "Model",
+"ult": false,
+"icon": "lion"
+},
 {
 "name": "lion_finger_of_death",
 "display": "Finger of Death",
@@ -4082,6 +4421,12 @@
 "display": "Lone Druid",
 "abilities": [
 {
+"name": "model_lone_druid",
+"display": "Model",
+"ult": false,
+"icon": "lone_druid"
+},
+{
 "name": "lone_druid_entangle",
 "display": "Entangle",
 "ult": false
@@ -4107,6 +4452,12 @@
 "name": "luna",
 "display": "Luna",
 "abilities": [
+{
+"name": "model_luna",
+"display": "Model",
+"ult": false,
+"icon": "luna"
+},
 {
 "name": "luna_moon_glaive",
 "display": "Moon Glaives",
@@ -4134,6 +4485,12 @@
 "display": "Lycan",
 "abilities": [
 {
+"name": "model_lycan",
+"display": "Model",
+"ult": false,
+"icon": "lycan"
+},
+{
 "name": "lycan_feral_impulse",
 "display": "Feral Impulse",
 "ult": false
@@ -4159,6 +4516,12 @@
 "name": "magnataur",
 "display": "Magnus",
 "abilities": [
+{
+"name": "model_magnataur",
+"display": "Model",
+"ult": false,
+"icon": "magnataur"
+},
 {
 "name": "magnataur_empower",
 "display": "Empower",
@@ -4186,6 +4549,12 @@
 "display": "Marci",
 "abilities": [
 {
+"name": "model_marci",
+"display": "Model",
+"ult": false,
+"icon": "marci"
+},
+{
 "name": "marci_unleash",
 "display": "Unleash",
 "ult": true
@@ -4211,6 +4580,12 @@
 "name": "mars",
 "display": "Mars",
 "abilities": [
+{
+"name": "model_mars",
+"display": "Model",
+"ult": false,
+"icon": "mars"
+},
 {
 "name": "mars_gods_rebuke",
 "display": "God's Rebuke",
@@ -4238,6 +4613,12 @@
 "display": "Medusa",
 "abilities": [
 {
+"name": "model_medusa",
+"display": "Model",
+"ult": false,
+"icon": "medusa"
+},
+{
 "name": "medusa_split_shot",
 "display": "Split Shot",
 "ult": false
@@ -4264,6 +4645,12 @@
 "display": "Meepo",
 "abilities": [
 {
+"name": "model_meepo",
+"display": "Model",
+"ult": false,
+"icon": "meepo"
+},
+{
 "name": "meepo_ransack",
 "display": "Ransack",
 "ult": false
@@ -4284,6 +4671,12 @@
 "name": "mirana",
 "display": "Mirana",
 "abilities": [
+{
+"name": "model_mirana",
+"display": "Model",
+"ult": false,
+"icon": "mirana"
+},
 {
 "name": "mirana_leap",
 "display": "Leap",
@@ -4311,6 +4704,12 @@
 "display": "Monkey King",
 "abilities": [
 {
+"name": "model_monkey_king",
+"display": "Model",
+"ult": false,
+"icon": "monkey_king"
+},
+{
 "name": "monkey_king_jingu_mastery",
 "display": "Jingu Mastery",
 "ult": false
@@ -4337,6 +4736,12 @@
 "display": "Morphling",
 "abilities": [
 {
+"name": "model_morphling",
+"display": "Model",
+"ult": false,
+"icon": "morphling"
+},
+{
 "name": "morphling_waveform",
 "display": "Waveform",
 "ult": false
@@ -4352,6 +4757,12 @@
 "name": "muerta",
 "display": "Muerta",
 "abilities": [
+{
+"name": "model_muerta",
+"display": "Model",
+"ult": false,
+"icon": "muerta"
+},
 {
 "name": "muerta_gunslinger",
 "display": "Gunslinger",
@@ -4379,6 +4790,12 @@
 "display": "Naga Siren",
 "abilities": [
 {
+"name": "model_naga_siren",
+"display": "Model",
+"ult": false,
+"icon": "naga_siren"
+},
+{
 "name": "naga_siren_mirror_image",
 "display": "Mirror Image",
 "ult": false
@@ -4404,6 +4821,12 @@
 "name": "necrolyte",
 "display": "Necrophos",
 "abilities": [
+{
+"name": "model_necrolyte",
+"display": "Model",
+"ult": false,
+"icon": "necrolyte"
+},
 {
 "name": "necrolyte_reapers_scythe",
 "display": "Reaper's Scythe",
@@ -4431,6 +4854,12 @@
 "display": "Shadow Fiend",
 "abilities": [
 {
+"name": "model_nevermore",
+"display": "Model",
+"ult": false,
+"icon": "nevermore"
+},
+{
 "name": "nevermore_dark_lord",
 "display": "Presence of the Dark Lord",
 "ult": false
@@ -4456,6 +4885,12 @@
 "name": "night_stalker",
 "display": "Night Stalker",
 "abilities": [
+{
+"name": "model_night_stalker",
+"display": "Model",
+"ult": false,
+"icon": "night_stalker"
+},
 {
 "name": "night_stalker_darkness",
 "display": "Dark Ascension",
@@ -4483,6 +4918,12 @@
 "display": "Nyx Assassin",
 "abilities": [
 {
+"name": "model_nyx_assassin",
+"display": "Model",
+"ult": false,
+"icon": "nyx_assassin"
+},
+{
 "name": "nyx_assassin_vendetta",
 "display": "Vendetta",
 "ult": true
@@ -4508,6 +4949,12 @@
 "name": "obsidian_destroyer",
 "display": "Outworld Devourer",
 "abilities": [
+{
+"name": "model_obsidian_destroyer",
+"display": "Model",
+"ult": false,
+"icon": "obsidian_destroyer"
+},
 {
 "name": "obsidian_destroyer_astral_imprisonment",
 "display": "Astral Imprisonment",
@@ -4535,6 +4982,12 @@
 "display": "Ogre Magi",
 "abilities": [
 {
+"name": "model_ogre_magi",
+"display": "Model",
+"ult": false,
+"icon": "ogre_magi"
+},
+{
 "name": "ogre_magi_bloodlust",
 "display": "Bloodlust",
 "ult": false
@@ -4555,6 +5008,12 @@
 "name": "omniknight",
 "display": "Omniknight",
 "abilities": [
+{
+"name": "model_omniknight",
+"display": "Model",
+"ult": false,
+"icon": "omniknight"
+},
 {
 "name": "omniknight_hammer_of_purity",
 "display": "Hammer of Purity",
@@ -4582,6 +5041,12 @@
 "display": "Oracle",
 "abilities": [
 {
+"name": "model_oracle",
+"display": "Model",
+"ult": false,
+"icon": "oracle"
+},
+{
 "name": "oracle_fortunes_end",
 "display": "Fortune's End",
 "ult": false
@@ -4607,6 +5072,12 @@
 "name": "pangolier",
 "display": "Pangolier",
 "abilities": [
+{
+"name": "model_pangolier",
+"display": "Model",
+"ult": false,
+"icon": "pangolier"
+},
 {
 "name": "pangolier_swashbuckle",
 "display": "Swashbuckle",
@@ -4634,6 +5105,12 @@
 "display": "Phantom Assassin",
 "abilities": [
 {
+"name": "model_phantom_assassin",
+"display": "Model",
+"ult": false,
+"icon": "phantom_assassin"
+},
+{
 "name": "phantom_assassin_phantom_strike",
 "display": "Phantom Strike",
 "ult": false
@@ -4659,6 +5136,12 @@
 "name": "phantom_lancer",
 "display": "Phantom Lancer",
 "abilities": [
+{
+"name": "model_phantom_lancer",
+"display": "Model",
+"ult": false,
+"icon": "phantom_lancer"
+},
 {
 "name": "phantom_lancer_juxtapose",
 "display": "Juxtapose",
@@ -4686,6 +5169,12 @@
 "display": "Phoenix",
 "abilities": [
 {
+"name": "model_phoenix",
+"display": "Model",
+"ult": false,
+"icon": "phoenix"
+},
+{
 "name": "phoenix_icarus_dive",
 "display": "Icarus Dive",
 "ult": false
@@ -4711,6 +5200,12 @@
 "name": "primal_beast",
 "display": "Primal Beast",
 "abilities": [
+{
+"name": "model_primal_beast",
+"display": "Model",
+"ult": false,
+"icon": "primal_beast"
+},
 {
 "name": "primal_beast_uproar",
 "display": "Uproar",
@@ -4738,6 +5233,12 @@
 "display": "Puck",
 "abilities": [
 {
+"name": "model_puck",
+"display": "Model",
+"ult": false,
+"icon": "puck"
+},
+{
 "name": "puck_dream_coil",
 "display": "Dream Coil",
 "ult": true
@@ -4763,6 +5264,12 @@
 "name": "pudge",
 "display": "Pudge",
 "abilities": [
+{
+"name": "model_pudge",
+"display": "Model",
+"ult": false,
+"icon": "pudge"
+},
 {
 "name": "pudge_meat_hook",
 "display": "Meat Hook",
@@ -4790,6 +5297,12 @@
 "display": "Pugna",
 "abilities": [
 {
+"name": "model_pugna",
+"display": "Model",
+"ult": false,
+"icon": "pugna"
+},
+{
 "name": "pugna_nether_blast",
 "display": "Nether Blast",
 "ult": false
@@ -4815,6 +5328,12 @@
 "name": "queenofpain",
 "display": "Queen of Pain",
 "abilities": [
+{
+"name": "model_queenofpain",
+"display": "Model",
+"ult": false,
+"icon": "queenofpain"
+},
 {
 "name": "queenofpain_blink",
 "display": "Blink",
@@ -4842,6 +5361,12 @@
 "display": "Clockwerk",
 "abilities": [
 {
+"name": "model_rattletrap",
+"display": "Model",
+"ult": false,
+"icon": "rattletrap"
+},
+{
 "name": "rattletrap_battery_assault",
 "display": "Battery Assault",
 "ult": false
@@ -4867,6 +5392,12 @@
 "name": "razor",
 "display": "Razor",
 "abilities": [
+{
+"name": "model_razor",
+"display": "Model",
+"ult": false,
+"icon": "razor"
+},
 {
 "name": "razor_static_link",
 "display": "Static Link",
@@ -4894,6 +5425,12 @@
 "display": "Riki",
 "abilities": [
 {
+"name": "model_riki",
+"display": "Model",
+"ult": false,
+"icon": "riki"
+},
+{
 "name": "riki_backstab",
 "display": "Cloak and Dagger",
 "ult": true
@@ -4919,6 +5456,12 @@
 "name": "ringmaster",
 "display": "Ringmaster",
 "abilities": [
+{
+"name": "model_ringmaster",
+"display": "Model",
+"ult": false,
+"icon": "ringmaster"
+},
 {
 "name": "ringmaster_tame_the_beasts",
 "display": "Tame the Beasts",
@@ -4946,6 +5489,12 @@
 "display": "Rubick",
 "abilities": [
 {
+"name": "model_rubick",
+"display": "Model",
+"ult": false,
+"icon": "rubick"
+},
+{
 "name": "rubick_arcane_supremacy",
 "display": "Arcane Supremacy",
 "ult": false
@@ -4966,6 +5515,12 @@
 "name": "sand_king",
 "display": "Sand King",
 "abilities": [
+{
+"name": "model_sand_king",
+"display": "Model",
+"ult": false,
+"icon": "sand_king"
+},
 {
 "name": "sandking_burrowstrike",
 "display": "Burrowstrike",
@@ -4993,6 +5548,12 @@
 "display": "Shadow Demon",
 "abilities": [
 {
+"name": "model_shadow_demon",
+"display": "Model",
+"ult": false,
+"icon": "shadow_demon"
+},
+{
 "name": "shadow_demon_disruption",
 "display": "Disruption",
 "ult": false
@@ -5018,6 +5579,12 @@
 "name": "shadow_shaman",
 "display": "Shadow Shaman",
 "abilities": [
+{
+"name": "model_shadow_shaman",
+"display": "Model",
+"ult": false,
+"icon": "shadow_shaman"
+},
 {
 "name": "shadow_shaman_shackles",
 "display": "Shackles",
@@ -5045,6 +5612,12 @@
 "display": "Timbersaw",
 "abilities": [
 {
+"name": "model_shredder",
+"display": "Model",
+"ult": false,
+"icon": "shredder"
+},
+{
 "name": "shredder_reactive_armor",
 "display": "Reactive Armor",
 "ult": false
@@ -5070,6 +5643,12 @@
 "name": "silencer",
 "display": "Silencer",
 "abilities": [
+{
+"name": "model_silencer",
+"display": "Model",
+"ult": false,
+"icon": "silencer"
+},
 {
 "name": "silencer_glaives_of_wisdom",
 "display": "Glaives of Wisdom",
@@ -5097,6 +5676,12 @@
 "display": "Wraith King",
 "abilities": [
 {
+"name": "model_skeleton_king",
+"display": "Model",
+"ult": false,
+"icon": "skeleton_king"
+},
+{
 "name": "skeleton_king_mortal_strike",
 "display": "Mortal Strike",
 "ult": false
@@ -5122,6 +5707,12 @@
 "name": "skywrath_mage",
 "display": "Skywrath Mage",
 "abilities": [
+{
+"name": "model_skywrath_mage",
+"display": "Model",
+"ult": false,
+"icon": "skywrath_mage"
+},
 {
 "name": "skywrath_mage_concussive_shot",
 "display": "Concussive Shot",
@@ -5149,6 +5740,12 @@
 "display": "Slardar",
 "abilities": [
 {
+"name": "model_slardar",
+"display": "Model",
+"ult": false,
+"icon": "slardar"
+},
+{
 "name": "slardar_bash",
 "display": "Bash of the Deep",
 "ult": false
@@ -5174,6 +5771,12 @@
 "name": "slark",
 "display": "Slark",
 "abilities": [
+{
+"name": "model_slark",
+"display": "Model",
+"ult": false,
+"icon": "slark"
+},
 {
 "name": "slark_shadow_dance",
 "display": "Shadow Dance",
@@ -5201,6 +5804,12 @@
 "display": "Snapfire",
 "abilities": [
 {
+"name": "model_snapfire",
+"display": "Model",
+"ult": false,
+"icon": "snapfire"
+},
+{
 "name": "snapfire_lil_shredder",
 "display": "Lil' Shredder",
 "ult": false
@@ -5226,6 +5835,12 @@
 "name": "sniper",
 "display": "Sniper",
 "abilities": [
+{
+"name": "model_sniper",
+"display": "Model",
+"ult": false,
+"icon": "sniper"
+},
 {
 "name": "sniper_take_aim",
 "display": "Take Aim",
@@ -5253,6 +5868,12 @@
 "display": "Spectre",
 "abilities": [
 {
+"name": "model_spectre",
+"display": "Model",
+"ult": false,
+"icon": "spectre"
+},
+{
 "name": "spectre_dispersion",
 "display": "Dispersion",
 "ult": false
@@ -5278,6 +5899,12 @@
 "name": "spirit_breaker",
 "display": "Spirit Breaker",
 "abilities": [
+{
+"name": "model_spirit_breaker",
+"display": "Model",
+"ult": false,
+"icon": "spirit_breaker"
+},
 {
 "name": "spirit_breaker_greater_bash",
 "display": "Greater Bash",
@@ -5305,6 +5932,12 @@
 "display": "Storm Spirit",
 "abilities": [
 {
+"name": "model_storm_spirit",
+"display": "Model",
+"ult": false,
+"icon": "storm_spirit"
+},
+{
 "name": "storm_spirit_ball_lightning",
 "display": "Ball Lightning",
 "ult": true
@@ -5330,6 +5963,12 @@
 "name": "sven",
 "display": "Sven",
 "abilities": [
+{
+"name": "model_sven",
+"display": "Model",
+"ult": false,
+"icon": "sven"
+},
 {
 "name": "sven_storm_bolt",
 "display": "Storm Hammer",
@@ -5357,6 +5996,12 @@
 "display": "Techies",
 "abilities": [
 {
+"name": "model_techies",
+"display": "Model",
+"ult": false,
+"icon": "techies"
+},
+{
 "name": "techies_suicide",
 "display": "Blast Off!",
 "ult": false
@@ -5382,6 +6027,12 @@
 "name": "templar_assassin",
 "display": "Templar Assassin",
 "abilities": [
+{
+"name": "model_templar_assassin",
+"display": "Model",
+"ult": false,
+"icon": "templar_assassin"
+},
 {
 "name": "templar_assassin_psi_blades",
 "display": "Psi Blades",
@@ -5409,6 +6060,12 @@
 "display": "Terrorblade",
 "abilities": [
 {
+"name": "model_terrorblade",
+"display": "Model",
+"ult": false,
+"icon": "terrorblade"
+},
+{
 "name": "terrorblade_metamorphosis",
 "display": "Metamorphosis",
 "ult": false
@@ -5434,6 +6091,12 @@
 "name": "tidehunter",
 "display": "Tidehunter",
 "abilities": [
+{
+"name": "model_tidehunter",
+"display": "Model",
+"ult": false,
+"icon": "tidehunter"
+},
 {
 "name": "tidehunter_anchor_smash",
 "display": "Anchor Smash",
@@ -5461,6 +6124,12 @@
 "display": "Tinker",
 "abilities": [
 {
+"name": "model_tinker",
+"display": "Model",
+"ult": false,
+"icon": "tinker"
+},
+{
 "name": "tinker_rearm",
 "display": "Rearm",
 "ult": true
@@ -5486,6 +6155,12 @@
 "name": "tiny",
 "display": "Tiny",
 "abilities": [
+{
+"name": "model_tiny",
+"display": "Model",
+"ult": false,
+"icon": "tiny"
+},
 {
 "name": "tiny_avalanche",
 "display": "Avalanche",
@@ -5513,6 +6188,12 @@
 "display": "Treant Protector",
 "abilities": [
 {
+"name": "model_treant",
+"display": "Model",
+"ult": false,
+"icon": "treant"
+},
+{
 "name": "treant_leech_seed",
 "display": "Leech Seed",
 "ult": false
@@ -5538,6 +6219,12 @@
 "name": "troll_warlord",
 "display": "Troll Warlord",
 "abilities": [
+{
+"name": "model_troll_warlord",
+"display": "Model",
+"ult": false,
+"icon": "troll_warlord"
+},
 {
 "name": "troll_warlord_fervor",
 "display": "Fervor",
@@ -5570,6 +6257,12 @@
 "display": "Tusk",
 "abilities": [
 {
+"name": "model_tusk",
+"display": "Model",
+"ult": false,
+"icon": "tusk"
+},
+{
 "name": "tusk_walrus_punch",
 "display": "Walrus PUNCH!",
 "ult": true
@@ -5595,6 +6288,12 @@
 "name": "undying",
 "display": "Undying",
 "abilities": [
+{
+"name": "model_undying",
+"display": "Model",
+"ult": false,
+"icon": "undying"
+},
 {
 "name": "undying_decay",
 "display": "Decay",
@@ -5622,6 +6321,12 @@
 "display": "Ursa",
 "abilities": [
 {
+"name": "model_ursa",
+"display": "Model",
+"ult": false,
+"icon": "ursa"
+},
+{
 "name": "ursa_fury_swipes",
 "display": "Fury Swipes",
 "ult": false
@@ -5647,6 +6352,12 @@
 "name": "vengefulspirit",
 "display": "Vengeful Spirit",
 "abilities": [
+{
+"name": "model_vengefulspirit",
+"display": "Model",
+"ult": false,
+"icon": "vengefulspirit"
+},
 {
 "name": "vengefulspirit_command_aura",
 "display": "Vengeance Aura",
@@ -5674,6 +6385,12 @@
 "display": "Venomancer",
 "abilities": [
 {
+"name": "model_venomancer",
+"display": "Model",
+"ult": false,
+"icon": "venomancer"
+},
+{
 "name": "venomancer_noxious_plague",
 "display": "Noxious Plague",
 "ult": true
@@ -5699,6 +6416,12 @@
 "name": "viper",
 "display": "Viper",
 "abilities": [
+{
+"name": "model_viper",
+"display": "Model",
+"ult": false,
+"icon": "viper"
+},
 {
 "name": "viper_poison_attack",
 "display": "Poison Attack",
@@ -5726,6 +6449,12 @@
 "display": "Visage",
 "abilities": [
 {
+"name": "model_visage",
+"display": "Model",
+"ult": false,
+"icon": "visage"
+},
+{
 "name": "visage_soul_assumption",
 "display": "Soul Assumption",
 "ult": false
@@ -5751,6 +6480,12 @@
 "name": "void_spirit",
 "display": "Void Spirit",
 "abilities": [
+{
+"name": "model_void_spirit",
+"display": "Model",
+"ult": false,
+"icon": "void_spirit"
+},
 {
 "name": "void_spirit_astral_step",
 "display": "Astral Step",
@@ -5778,6 +6513,12 @@
 "display": "Warlock",
 "abilities": [
 {
+"name": "model_warlock",
+"display": "Model",
+"ult": false,
+"icon": "warlock"
+},
+{
 "name": "warlock_fatal_bonds",
 "display": "Fatal Bonds",
 "ult": false
@@ -5803,6 +6544,12 @@
 "name": "weaver",
 "display": "Weaver",
 "abilities": [
+{
+"name": "model_weaver",
+"display": "Model",
+"ult": false,
+"icon": "weaver"
+},
 {
 "name": "weaver_shukuchi",
 "display": "Shukuchi",
@@ -5830,6 +6577,12 @@
 "display": "Windranger",
 "abilities": [
 {
+"name": "model_windrunner",
+"display": "Model",
+"ult": false,
+"icon": "windrunner"
+},
+{
 "name": "windrunner_windrun",
 "display": "Windrun",
 "ult": false
@@ -5855,6 +6608,12 @@
 "name": "winter_wyvern",
 "display": "Winter Wyvern",
 "abilities": [
+{
+"name": "model_winter_wyvern",
+"display": "Model",
+"ult": false,
+"icon": "winter_wyvern"
+},
 {
 "name": "winter_wyvern_arctic_burn",
 "display": "Arctic Burn",
@@ -5882,6 +6641,12 @@
 "display": "Io",
 "abilities": [
 {
+"name": "model_wisp",
+"display": "Model",
+"ult": false,
+"icon": "wisp"
+},
+{
 "name": "wisp_spirits",
 "display": "Spirits",
 "ult": false
@@ -5908,6 +6673,12 @@
 "display": "Witch Doctor",
 "abilities": [
 {
+"name": "model_witch_doctor",
+"display": "Model",
+"ult": false,
+"icon": "witch_doctor"
+},
+{
 "name": "witch_doctor_maledict",
 "display": "Maledict",
 "ult": false
@@ -5933,6 +6704,12 @@
 "name": "zuus",
 "display": "Zeus",
 "abilities": [
+{
+"name": "model_zuus",
+"display": "Model",
+"ult": false,
+"icon": "zuus"
+},
 {
 "name": "zuus_arc_lightning",
 "display": "Arc Lightning",

@@ -23,7 +23,7 @@ function profile(items) {
   const model = items.find(i => i.kind === 'model');
   const s = (model && STATS[model.name]) || {};
   const tags = {};
-  for (const i of items) if (i.kind !== 'model') for (const t of TAGS[i.name] || []) tags[t] = (tags[t] || 0) + 1;
+  for (const i of items) for (const t of TAGS[i.kind === 'model' ? 'model_' + i.name : i.name] || []) tags[t] = (tags[t] || 0) + 1;
   const has = (...ts) => ts.some(t => tags[t]);
   const count = (...ts) => ts.reduce((n, t) => n + (tags[t] || 0), 0);
   const ranged = !!s.ranged;

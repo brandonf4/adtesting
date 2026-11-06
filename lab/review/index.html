@@ -222,7 +222,7 @@ function renderTags(v) {
     <span class="status muted" id="tg-status"></span>
     <div style="margin-top:10px">${heroes.map(h => `<div class="tg-hero"><h3>${esc(h.display)}</h3>${h.abilities.map(a => {
       const t = tagsFor(a.name);
-      return `<div class="tg-row">${ICONS[a.name] ? `<img src="${ICONS[a.name]}" alt="">` : '<span class="ph"></span>'}
+      return `<div class="tg-row">${ICONS[a.icon || a.name] ? `<img src="${ICONS[a.icon || a.name]}" alt="">` : '<span class="ph"></span>'}
         <span class="nm">${esc(a.display)}${a.ult ? ' <span class="muted">(ult)</span>' : ''}</span>
         ${t.map(x => `<button class="tg-chip" data-ab="${a.name}" data-rm="${x}" title="Remove">${esc(L[x] || x)}</button>`).join('')}
         <select data-ab="${a.name}"><option value="">add…</option>${Object.entries(L).filter(([k]) => !t.includes(k)).map(([k, l]) => `<option value="${k}">${esc(l)}</option>`).join('')}</select>
