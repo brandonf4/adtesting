@@ -2742,7 +2742,8 @@
 "mt_rcast"
 ],
 "model_shadow_demon": [
-"mt_rcast"
+"mt_rcast",
+"mt_rclick"
 ],
 "model_batrider": [
 "mt_rclick",
