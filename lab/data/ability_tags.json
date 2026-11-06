@@ -300,8 +300,7 @@
 "bounty_hunter_wind_walk": [
 "invis",
 "mob",
-"physical",
-"odisp"
+"physical"
 ],
 "bounty_hunter_track": [
 "vis",
@@ -437,8 +436,7 @@
 ],
 "clinkz_wind_walk": [
 "invis",
-"mob",
-"odisp"
+"mob"
 ],
 "clinkz_searing_arrows": [
 "atk",
@@ -1355,8 +1353,7 @@
 "invis",
 "save",
 "mob",
-"global",
-"odisp"
+"global"
 ],
 "monkey_king_jingu_mastery": [
 "atk",
