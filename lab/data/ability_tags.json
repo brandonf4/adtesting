@@ -38,7 +38,8 @@
 "hdispel": "Hard dispel (self/ally)",
 "odispel": "Offensive dispel",
 "odisp": "Offensively dispellable (buff)",
-"ddisp": "Defensively dispellable (debuff)"
+"ddisp": "Defensively dispellable (debuff)",
+"antiphys": "Anti physical damage"
 },
 "tags": {
 "abaddon_frostmourne": [
@@ -70,7 +71,8 @@
 "abyssal_underlord_atrophy_aura": [
 "atk",
 "debuff",
-"physical"
+"physical",
+"antiphys"
 ],
 "abyssal_underlord_firestorm": [
 "wc",
@@ -160,7 +162,8 @@
 "def",
 "aspd",
 "buff",
-"push"
+"push",
+"antiphys"
 ],
 "arc_warden_spark_wraith": [
 "burst",
@@ -172,14 +175,16 @@
 "dot",
 "wc",
 "def",
-"pure"
+"pure",
+"antiphys"
 ],
 "axe_berserkers_call": [
 "aoed",
 "init",
 "def",
 "bkb",
-"tf"
+"tf",
+"antiphys"
 ],
 "axe_battle_hunger": [
 "dot",
@@ -214,7 +219,8 @@
 "debuff",
 "def",
 "pure",
-"ddisp"
+"ddisp",
+"antiphys"
 ],
 "batrider_sticky_napalm": [
 "debuff",
@@ -313,7 +319,8 @@
 ],
 "brewmaster_drunken_brawler": [
 "def",
-"atk"
+"atk",
+"antiphys"
 ],
 "brewmaster_primal_split": [
 "summ",
@@ -340,7 +347,8 @@
 "physical"
 ],
 "bristleback_bristleback": [
-"def"
+"def",
+"antiphys"
 ],
 "bristleback_warpath": [
 "atk",
@@ -375,7 +383,8 @@
 "centaur_return": [
 "def",
 "dot",
-"physical"
+"physical",
+"antiphys"
 ],
 "centaur_hoof_stomp": [
 "aoed",
@@ -631,7 +640,8 @@
 "burst",
 "wc",
 "debuff",
-"magical"
+"magical",
+"antiphys"
 ],
 "drow_ranger_frost_arrows": [
 "orb",
@@ -744,7 +754,8 @@
 "pure"
 ],
 "enchantress_untouchable": [
-"def"
+"def",
+"antiphys"
 ],
 "enchantress_enchant": [
 "summ",
@@ -874,7 +885,8 @@
 ],
 "hoodwink_scurry": [
 "mob",
-"def"
+"def",
+"antiphys"
 ],
 "huskar_berserkers_blood": [
 "sus",
@@ -937,7 +949,8 @@
 ],
 "invoker_deafening_blast_ad": [
 "aoed",
-"burst"
+"burst",
+"antiphys"
 ],
 "jakiro_liquid_fire": [
 "aspd",
@@ -1006,7 +1019,8 @@
 "keeper_of_the_light_blinding_light": [
 "def",
 "save",
-"magical"
+"magical",
+"antiphys"
 ],
 "kez_falcon_rush_ad": [
 "aspd",
@@ -1021,7 +1035,8 @@
 "mob"
 ],
 "kez_shodo_sai_ad": [
-"def"
+"def",
+"antiphys"
 ],
 "kez_echo_slash": [
 "burst",
@@ -1108,7 +1123,8 @@
 "dot",
 "wc",
 "magical",
-"tf"
+"tf",
+"antiphys"
 ],
 "leshrac_diabolic_edict": [
 "dot",
@@ -1133,7 +1149,8 @@
 "def",
 "save",
 "lane",
-"magical"
+"magical",
+"antiphys"
 ],
 "lich_frost_nova": [
 "burst",
@@ -1237,7 +1254,8 @@
 "mob"
 ],
 "lycan_howl": [
-"debuff"
+"debuff",
+"antiphys"
 ],
 "lycan_summon_wolves": [
 "summ",
@@ -1275,7 +1293,8 @@
 ],
 "marci_bodyguard": [
 "def",
-"save"
+"save",
+"antiphys"
 ],
 "marci_companion_run": [
 "mob",
@@ -1297,13 +1316,15 @@
 "magical"
 ],
 "mars_bulwark": [
-"def"
+"def",
+"antiphys"
 ],
 "mars_arena_of_blood": [
 "aoed",
 "init",
 "magical",
-"tf"
+"tf",
+"antiphys"
 ],
 "medusa_split_shot": [
 "wc",
@@ -1394,7 +1415,8 @@
 "muerta_pierce_the_veil": [
 "atk",
 "magical",
-"sdispel"
+"sdispel",
+"antiphys"
 ],
 "muerta_dead_shot": [
 "dis",
@@ -1442,7 +1464,8 @@
 ],
 "necrolyte_ghost_shroud": [
 "def",
-"sus"
+"sus",
+"antiphys"
 ],
 "nevermore_dark_lord": [
 "debuff"
@@ -1488,7 +1511,8 @@
 ],
 "nyx_assassin_spiked_carapace": [
 "def",
-"dis"
+"dis",
+"antiphys"
 ],
 "nyx_assassin_jolt": [
 "burst",
@@ -1546,7 +1570,8 @@
 ],
 "omniknight_guardian_angel": [
 "save",
-"tf"
+"tf",
+"antiphys"
 ],
 "oracle_fortunes_end": [
 "dis",
@@ -1566,7 +1591,8 @@
 "magical"
 ],
 "oracle_fates_edict": [
-"save"
+"save",
+"antiphys"
 ],
 "pangolier_swashbuckle": [
 "mob",
@@ -1604,7 +1630,8 @@
 "ddisp"
 ],
 "phantom_assassin_immaterial": [
-"def"
+"def",
+"antiphys"
 ],
 "phantom_lancer_juxtapose": [
 "summ"
@@ -1651,7 +1678,8 @@
 "magical"
 ],
 "primal_beast_uproar": [
-"def"
+"def",
+"antiphys"
 ],
 "primal_beast_trample": [
 "dot",
@@ -1675,7 +1703,8 @@
 "tf"
 ],
 "puck_phase_shift": [
-"def"
+"def",
+"antiphys"
 ],
 "puck_illusory_orb": [
 "mob",
@@ -1727,7 +1756,8 @@
 "pugna_decrepify": [
 "save",
 "debuff",
-"ddisp"
+"ddisp",
+"antiphys"
 ],
 "queenofpain_blink": [
 "mob"
@@ -1771,7 +1801,8 @@
 "magical"
 ],
 "razor_static_link": [
-"atk"
+"atk",
+"antiphys"
 ],
 "razor_plasma_field": [
 "slow",
@@ -1797,7 +1828,8 @@
 ],
 "riki_smoke_screen": [
 "silence",
-"aoed"
+"aoed",
+"antiphys"
 ],
 "riki_tricks_of_the_trade": [
 "def",
@@ -1894,7 +1926,8 @@
 "shredder_reactive_armor": [
 "def",
 "sus",
-"magical"
+"magical",
+"antiphys"
 ],
 "shredder_whirling_death": [
 "burst",
@@ -2047,7 +2080,8 @@
 "magical"
 ],
 "spectre_dispersion": [
-"def"
+"def",
+"antiphys"
 ],
 "spectre_haunt": [
 "gap",
@@ -2116,7 +2150,8 @@
 ],
 "sven_warcry": [
 "def",
-"buff"
+"buff",
+"antiphys"
 ],
 "techies_suicide": [
 "burst",
@@ -2144,7 +2179,8 @@
 "templar_assassin_refraction": [
 "def",
 "atk",
-"physical"
+"physical",
+"antiphys"
 ],
 "templar_assassin_meld": [
 "atk",
@@ -2175,11 +2211,13 @@
 "tidehunter_anchor_smash": [
 "wc",
 "debuff",
-"physical"
+"physical",
+"antiphys"
 ],
 "tidehunter_kraken_shell": [
 "def",
-"hdispel"
+"hdispel",
+"antiphys"
 ],
 "tidehunter_gush": [
 "debuff",
@@ -2197,7 +2235,8 @@
 ],
 "tinker_laser": [
 "burst",
-"pure"
+"pure",
+"antiphys"
 ],
 "tinker_march_of_the_machines": [
 "wc",
@@ -2247,7 +2286,8 @@
 "save",
 "def",
 "global",
-"odisp"
+"odisp",
+"antiphys"
 ],
 "troll_warlord_fervor": [
 "aspd"
@@ -2265,7 +2305,8 @@
 "troll_warlord_whirling_axes_melee": [
 "slow",
 "burst",
-"magical"
+"magical",
+"antiphys"
 ],
 "troll_warlord_whirling_axes_ranged": [
 "slow",
@@ -2324,7 +2365,8 @@
 ],
 "ursa_enrage": [
 "def",
-"hdispel"
+"hdispel",
+"antiphys"
 ],
 "ursa_earthshock": [
 "slow",
@@ -2360,7 +2402,8 @@
 "venomancer_snakebite": [
 "dot",
 "lane",
-"magical"
+"magical",
+"antiphys"
 ],
 "venomancer_plague_ward": [
 "summ",
@@ -2376,7 +2419,8 @@
 ],
 "viper_corrosive_skin": [
 "def",
-"magical"
+"magical",
+"antiphys"
 ],
 "viper_viper_strike": [
 "slow",
@@ -2394,7 +2438,8 @@
 "magical"
 ],
 "visage_gravekeepers_cloak": [
-"def"
+"def",
+"antiphys"
 ],
 "visage_grave_chill": [
 "slow",
@@ -2471,7 +2516,8 @@
 "windrunner_windrun": [
 "mob",
 "def",
-"odisp"
+"odisp",
+"antiphys"
 ],
 "windrunner_focusfire": [
 "aspd"
@@ -2498,7 +2544,8 @@
 "odispel"
 ],
 "winter_wyvern_cold_embrace": [
-"save"
+"save",
+"antiphys"
 ],
 "winter_wyvern_splinter_blast": [
 "burst",
