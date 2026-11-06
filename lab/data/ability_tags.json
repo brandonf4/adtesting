@@ -33,7 +33,11 @@
 "magical": "Magical damage",
 "pure": "Pure damage",
 "bkb": "BKB-piercing disable",
-"tf": "Teamfight"
+"tf": "Teamfight",
+"sdispel": "Soft dispel (self/ally)",
+"hdispel": "Hard dispel (self/ally)",
+"odispel": "Offensive dispel",
+"dispellable": "Dispellable"
 },
 "tags": {
 "abaddon_frostmourne": [
@@ -45,13 +49,15 @@
 "abaddon_borrowed_time": [
 "life",
 "def",
-"tf"
+"tf",
+"hdispel"
 ],
 "abaddon_aphotic_shield": [
 "save",
 "def",
 "lane",
-"magical"
+"magical",
+"hdispel"
 ],
 "abaddon_death_coil": [
 "heal",
@@ -83,7 +89,8 @@
 "alchemist_chemical_rage": [
 "aspd",
 "sus",
-"def"
+"def",
+"sdispel"
 ],
 "alchemist_corrosive_weaponry": [
 "orb",
@@ -261,7 +268,8 @@
 "aspd",
 "buff",
 "sus",
-"pure"
+"pure",
+"dispellable"
 ],
 "bloodseeker_rupture": [
 "dot",
@@ -284,7 +292,8 @@
 "bounty_hunter_wind_walk": [
 "invis",
 "mob",
-"physical"
+"physical",
+"dispellable"
 ],
 "bounty_hunter_track": [
 "vis",
@@ -303,7 +312,8 @@
 "summ",
 "life",
 "init",
-"tf"
+"tf",
+"odispel"
 ],
 "brewmaster_cinder_brew": [
 "slow",
@@ -390,7 +400,8 @@
 "debuff"
 ],
 "chaos_knight_phantasm": [
-"summ"
+"summ",
+"sdispel"
 ],
 "chen_penitence": [
 "slow",
@@ -416,7 +427,8 @@
 ],
 "clinkz_wind_walk": [
 "invis",
-"mob"
+"mob",
+"dispellable"
 ],
 "clinkz_searing_arrows": [
 "atk",
@@ -448,7 +460,8 @@
 "wc",
 "dot",
 "lane",
-"magical"
+"magical",
+"dispellable"
 ],
 "dark_seer_wall_of_replica": [
 "summ",
@@ -463,7 +476,8 @@
 "dark_seer_surge": [
 "mob",
 "buff",
-"save"
+"save",
+"dispellable"
 ],
 "dark_willow_shadow_realm": [
 "burst",
@@ -579,7 +593,8 @@
 "silence",
 "dis",
 "pure",
-"bkb"
+"bkb",
+"odispel"
 ],
 "doom_bringer_scorched_earth": [
 "dot",
@@ -706,7 +721,8 @@
 "ember_spirit_flame_guard": [
 "def",
 "dot",
-"magical"
+"magical",
+"dispellable"
 ],
 "enchantress_impetus": [
 "atk",
@@ -718,7 +734,8 @@
 ],
 "enchantress_enchant": [
 "summ",
-"slow"
+"slow",
+"odispel"
 ],
 "enchantress_natures_attendants": [
 "heal"
@@ -847,7 +864,8 @@
 ],
 "huskar_berserkers_blood": [
 "sus",
-"aspd"
+"aspd",
+"sdispel"
 ],
 "huskar_burning_spear": [
 "orb",
@@ -865,7 +883,8 @@
 "gap",
 "burst",
 "slow",
-"magical"
+"magical",
+"sdispel"
 ],
 "invoker_sun_strike_ad": [
 "burst",
@@ -884,7 +903,8 @@
 ],
 "invoker_tornado_ad": [
 "aoed",
-"init"
+"init",
+"odispel"
 ],
 "invoker_forge_spirit_ad": [
 "summ",
@@ -948,7 +968,8 @@
 "juggernaut_omni_slash": [
 "burst",
 "def",
-"physical"
+"physical",
+"sdispel"
 ],
 "juggernaut_healing_ward": [
 "heal",
@@ -1026,7 +1047,8 @@
 "largo_catchy_lick": [
 "save",
 "heal",
-"magical"
+"magical",
+"odispel"
 ],
 "largo_frogstomp": [
 "aoed",
@@ -1060,7 +1082,9 @@
 "legion_commander_press_the_attack": [
 "save",
 "buff",
-"heal"
+"heal",
+"hdispel",
+"dispellable"
 ],
 "leshrac_split_earth": [
 "aoed",
@@ -1109,13 +1133,15 @@
 "physical"
 ],
 "life_stealer_rage": [
-"def"
+"def",
+"sdispel"
 ],
 "life_stealer_infest": [
 "mob",
 "save",
 "gap",
-"magical"
+"magical",
+"sdispel"
 ],
 "life_stealer_open_wounds": [
 "slow",
@@ -1158,7 +1184,8 @@
 "dis",
 "orb",
 "magical",
-"bkb"
+"bkb",
+"dispellable"
 ],
 "lone_druid_true_form": [
 "def"
@@ -1169,7 +1196,8 @@
 ],
 "lone_druid_savage_roar": [
 "aoed",
-"save"
+"save",
+"sdispel"
 ],
 "luna_moon_glaive": [
 "wc",
@@ -1228,7 +1256,8 @@
 "marci_unleash": [
 "aspd",
 "burst",
-"magical"
+"magical",
+"sdispel"
 ],
 "marci_bodyguard": [
 "def",
@@ -1309,12 +1338,14 @@
 "invis",
 "save",
 "mob",
-"global"
+"global",
+"dispellable"
 ],
 "monkey_king_jingu_mastery": [
 "atk",
 "sus",
-"physical"
+"physical",
+"dispellable"
 ],
 "monkey_king_boundless_strike": [
 "dis",
@@ -1348,7 +1379,8 @@
 ],
 "muerta_pierce_the_veil": [
 "atk",
-"magical"
+"magical",
+"sdispel"
 ],
 "muerta_dead_shot": [
 "dis",
@@ -1361,7 +1393,8 @@
 ],
 "naga_siren_mirror_image": [
 "summ",
-"push"
+"push",
+"sdispel"
 ],
 "naga_siren_ensnare": [
 "dis"
@@ -1467,7 +1500,8 @@
 "ogre_magi_bloodlust": [
 "aspd",
 "buff",
-"lane"
+"lane",
+"dispellable"
 ],
 "ogre_magi_fireblast": [
 "dis",
@@ -1500,10 +1534,13 @@
 ],
 "oracle_fortunes_end": [
 "dis",
-"magical"
+"magical",
+"sdispel",
+"odispel"
 ],
 "oracle_false_promise": [
-"save"
+"save",
+"hdispel"
 ],
 "oracle_purifying_flames": [
 "heal",
@@ -1532,7 +1569,8 @@
 "init",
 "mob",
 "physical",
-"tf"
+"tf",
+"sdispel"
 ],
 "phantom_assassin_phantom_strike": [
 "gap",
@@ -1555,7 +1593,8 @@
 ],
 "phantom_lancer_doppelwalk": [
 "mob",
-"summ"
+"summ",
+"sdispel"
 ],
 "phantom_lancer_phantom_edge": [
 "gap",
@@ -1578,7 +1617,8 @@
 "life",
 "magical",
 "bkb",
-"tf"
+"tf",
+"hdispel"
 ],
 "phoenix_fire_spirits": [
 "dot",
@@ -1796,11 +1836,14 @@
 ],
 "shadow_demon_disruption": [
 "save",
-"dis"
+"dis",
+"sdispel",
+"odispel"
 ],
 "shadow_demon_demonic_purge": [
 "slow",
-"magical"
+"magical",
+"odispel"
 ],
 "shadow_demon_disseminate": [
 "debuff"
@@ -1913,7 +1956,8 @@
 "vis"
 ],
 "slardar_sprint": [
-"mob"
+"mob",
+"dispellable"
 ],
 "slark_shadow_dance": [
 "def",
@@ -1932,11 +1976,13 @@
 "slark_dark_pact": [
 "def",
 "burst",
-"magical"
+"magical",
+"hdispel"
 ],
 "snapfire_lil_shredder": [
 "aspd",
-"physical"
+"physical",
+"dispellable"
 ],
 "snapfire_scatterblast": [
 "slow",
@@ -2005,7 +2051,8 @@
 ],
 "spirit_breaker_bulldoze": [
 "mob",
-"def"
+"def",
+"dispellable"
 ],
 "spirit_breaker_nether_strike": [
 "gap",
@@ -2106,7 +2153,8 @@
 "physical"
 ],
 "tidehunter_kraken_shell": [
-"def"
+"def",
+"hdispel"
 ],
 "tidehunter_gush": [
 "debuff",
@@ -2172,14 +2220,16 @@
 "heal",
 "save",
 "def",
-"global"
+"global",
+"dispellable"
 ],
 "troll_warlord_fervor": [
 "aspd"
 ],
 "troll_warlord_battle_trance": [
 "aspd",
-"sus"
+"sus",
+"sdispel"
 ],
 "troll_warlord_berserkers_rage": [
 "dis",
@@ -2243,10 +2293,12 @@
 "physical"
 ],
 "ursa_overpower": [
-"aspd"
+"aspd",
+"dispellable"
 ],
 "ursa_enrage": [
-"def"
+"def",
+"hdispel"
 ],
 "ursa_earthshock": [
 "slow",
@@ -2381,11 +2433,13 @@
 ],
 "weaver_time_lapse": [
 "life",
-"save"
+"save",
+"hdispel"
 ],
 "windrunner_windrun": [
 "mob",
-"def"
+"def",
+"dispellable"
 ],
 "windrunner_focusfire": [
 "aspd"
@@ -2402,12 +2456,14 @@
 "rng",
 "dot",
 "mob",
-"magical"
+"magical",
+"dispellable"
 ],
 "winter_wyvern_winters_curse": [
 "aoed",
 "bkb",
-"tf"
+"tf",
+"odispel"
 ],
 "winter_wyvern_cold_embrace": [
 "save"
@@ -2423,7 +2479,8 @@
 ],
 "wisp_overcharge": [
 "buff",
-"sus"
+"sus",
+"dispellable"
 ],
 "wisp_tether": [
 "heal",
