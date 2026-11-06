@@ -227,6 +227,7 @@ function render() {
       <div class="row"><b>Why?</b> <span class="muted">(optional, pick any)</span></div>
       <div class="row">${TAGS.map(t => `<button class="chip" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
       <textarea id="note" placeholder="Anything else: what decided it, what a team should have drafted instead, a pick you'd change…">${esc(form.note)}</textarea>
+      <div class="muted" style="font-size:12px;margin-top:4px">To dictate: click in the box, then press Windows + H (on a phone, use the keyboard's mic button).</div>
       <div class="row"><button class="btn" id="save">Save and next</button>
         <button class="btn ghost" onclick="go(${Math.max(0, current - 1)})">Back</button>
         <span class="status" id="save-status">${prev ? 'Saved' : ''}</span></div>
@@ -264,6 +265,7 @@ function renderNotes(v) {
   v.innerHTML = `<h2 style="font-size:15px;margin-top:0">General notes</h2>
     <p class="muted">Anything about drafting that isn't tied to one draft: a strategy, a pair that's over- or under-rated, a rule of thumb. Claude reads these and turns them into checks or saved scenarios.</p>
     <textarea id="gnote" placeholder="e.g. Fury Swipes and Anchor Smash are much worse on melee models…"></textarea>
+    <div class="muted" style="font-size:12px;margin-top:4px">To dictate: click in the box, then press Windows + H (on a phone, use the keyboard's mic button).</div>
     <div class="row"><button class="btn" id="gsave">Save note</button><span class="status" id="gstatus"></span></div>
     <div>${notes.map(n => `<div class="note-item"><span class="muted">${esc((n.at || '').slice(0, 10))}</span> ${esc(n.text)}</div>`).join('')}</div>`;
   document.getElementById('gsave').onclick = async () => {
