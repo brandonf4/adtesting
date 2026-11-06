@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AD Draft Lab: judge drafts</title>
+<style>
+  :root { --bg:#f7f7f5; --card:#fff; --ink:#1f2328; --muted:#6b7280; --line:#e5e7eb; --rad:#2f7d4f; --dire:#a33b2b; --acc:#2563eb; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#15171a; --card:#1e2125; --ink:#e8eaed; --muted:#9aa0a6; --line:#2e3238; --rad:#5fbf86; --dire:#e07a68; --acc:#7aa7ff; } }
+  * { box-sizing: border-box; }
+  body { margin:0; font: 14px/1.45 system-ui, -apple-system, Segoe UI, sans-serif; background:var(--bg); color:var(--ink); }
+  header { padding:14px 20px; border-bottom:1px solid var(--line); display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  header h1 { font-size:16px; margin:0; }
+  .muted { color:var(--muted); }
+  main { display:grid; grid-template-columns: 170px 1fr; gap:0; min-height: calc(100vh - 56px); }
+  nav { border-right:1px solid var(--line); padding:10px; overflow:auto; }
+  nav button { display:flex; justify-content:space-between; width:100%; text-align:left; padding:6px 8px; margin:2px 0; border:1px solid transparent; border-radius:6px; background:none; color:inherit; cursor:pointer; font:inherit; }
+  nav button.on { border-color:var(--acc); }
+  nav .tick { color:var(--rad); }
+  section { padding:14px 14px; overflow:auto; }
+  .teams { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .team h2 { font-size:15px; margin:0 0 8px; }
+  .team.radiant h2 { color:var(--rad); } .team.dire h2 { color:var(--dire); }
+  .seat { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:8px; }
+  .seat .top { display:flex; justify-content:space-between; gap:8px; }
+  .seat .model { font-weight:600; }
+  .seat .role { font-size:12px; color:var(--muted); }
+  .seat .row-icons { display:flex; gap:6px; margin-top:6px; align-items:flex-start; }
+  .seat .portrait { width:96px; height:54px; border-radius:4px; object-fit:cover; background:#333; flex:none; }
+  .ab { width:64px; text-align:center; font-size:11px; line-height:1.2; }
+  .ab img, .ab .ph { width:48px; height:48px; border-radius:4px; display:block; margin:0 auto 2px; background:#333; }
+  .ab.ult img, .ab.ult .ph { outline:2px solid #c9a227; outline-offset:-2px; }
+  .ab .hero { color:var(--muted); display:block; }
+  .pool-icons { display:grid; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); gap:8px; }
+  .pool-icons .h { display:flex; gap:4px; align-items:center; }
+  .pool-icons img { width:36px; height:36px; border-radius:3px; }
+  .pool-icons img.m { width:64px; height:36px; object-fit:cover; }
+  .pool-icons img.gone { opacity:.25; filter:grayscale(1); }
+  .panel { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-top:14px; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:6px 0; }
+  .chip { border:1px solid var(--line); background:none; color:inherit; border-radius:999px; padding:5px 12px; cursor:pointer; font:inherit; }
+  .chip.on { background:var(--acc); border-color:var(--acc); color:#fff; }
+  .chip.rad.on { background:var(--rad); border-color:var(--rad); }
+  .chip.dire.on { background:var(--dire); border-color:var(--dire); }
+  textarea { width:100%; min-height:70px; font:inherit; padding:8px; border-radius:6px; border:1px solid var(--line); background:var(--bg); color:inherit; }
+  .btn { background:var(--acc); color:#fff; border:none; border-radius:6px; padding:8px 14px; font:inherit; cursor:pointer; }
+  .btn.ghost { background:none; color:inherit; border:1px solid var(--line); }
+  .status { font-size:13px; }
+  details { margin-top:10px; }
+  summary { cursor:pointer; color:var(--muted); }
+  .pool { columns: 3 220px; font-size:13px; }
+  .pool .h { break-inside:avoid; margin-bottom:6px; }
+  .taken { text-decoration: line-through; color:var(--muted); }
+  ol.order { columns: 2 260px; font-size:13px; }
+  .note-item { border-top:1px solid var(--line); padding:6px 0; font-size:13px; white-space:pre-wrap; }
+  .replay { display:grid; grid-template-columns: auto 1fr auto; gap:14px; align-items:start; }
+  .rp-team h2 { font-size:15px; margin:0 0 6px; }
+  .rp-team.radiant h2 { color:var(--rad); } .rp-team.dire h2 { color:var(--dire); }
+  .rp-seat { display:flex; align-items:center; gap:5px; padding:5px 6px; border:1px solid var(--line); border-radius:8px; background:var(--card); margin-bottom:6px; }
+  .rp-seat.picking { border-color:var(--acc); box-shadow:0 0 0 2px var(--acc) inset; }
+  .rp-seat .lbl { width:44px; font-size:11px; color:var(--muted); line-height:1.25; }
+  .rp-seat .lbl b { color:var(--ink); font-size:12px; }
+  .slot { width:40px; height:40px; border-radius:5px; background:var(--bg); border:1px dashed var(--line); flex:none; overflow:hidden; position:relative; }
+  .slot img { width:100%; height:100%; object-fit:cover; display:block; }
+  .slot.ult { outline:2px solid #c9a227; outline-offset:-2px; }
+  .slot.just, .pi.just { box-shadow:0 0 0 3px #f5c542; }
+  .rp-pool { display:flex; gap:10px; justify-content:center; background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px; }
+  .rp-pool h4 { margin:0 0 6px; font-size:12px; color:var(--muted); font-weight:600; text-align:center; }
+  .pg { display:grid; gap:4px; }
+  .pi { width:36px; height:36px; border-radius:4px; overflow:hidden; position:relative; background:#333; }
+  .pi img { width:100%; height:100%; object-fit:cover; display:block; }
+  .pi.taken img { opacity:.18; filter:grayscale(1); }
+  .pi .n { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; color:var(--ink); }
+  .rp-ctl { display:flex; gap:8px; align-items:center; justify-content:center; margin-top:10px; flex-wrap:wrap; }
+  .rp-ctl input[type=range] { width:min(520px, 90%); }
+  .rp-cap { text-align:center; margin-top:6px; min-height:20px; }
+  .rp-help { text-align:center; font-size:12px; }
+  @media (max-width: 1250px) { .replay { grid-template-columns: 1fr 1fr; } .rp-center { grid-column: 1 / -1; order:-1; } }
+  .tg-legend { display:flex; flex-wrap:wrap; gap:4px 10px; font-size:12px; margin:6px 0 12px; }
+  .tg-hero { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:8px; }
+  .tg-hero h3 { margin:0 0 6px; font-size:14px; }
+  .tg-row { display:flex; align-items:center; gap:8px; padding:4px 0; border-top:1px solid var(--line); flex-wrap:wrap; }
+  .tg-row:first-of-type { border-top:none; }
+  .tg-row img, .tg-row .ph { width:32px; height:32px; border-radius:4px; }
+  .tg-row .nm { width:170px; font-size:13px; }
+  .tg-chip { font-size:12px; border:1px solid var(--acc); color:var(--acc); background:none; border-radius:999px; padding:2px 8px; cursor:pointer; }
+  .tg-chip:hover { text-decoration: line-through; }
+  .tg-row select { font-size:12px; }
+  .tg-row .edited { font-size:11px; color:var(--rad); }
+  .judge-call { border-left:3px solid var(--acc); }
+  .judge-call ul { margin:6px 0 0 18px; padding:0; }
+  .judge-call .seatfit { font-size:12px; margin-top:8px; display:grid; grid-template-columns:1fr 1fr; gap:2px 16px; }
+  nav h5 { margin:12px 4px 4px; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+  .pair { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .pair h2 { font-size:15px; margin:0 0 6px; }
+  .mtags { font-size:12px; color:var(--muted); margin-top:4px; }
+  @media (max-width: 760px) { main { grid-template-columns:1fr; } nav { border-right:none; border-bottom:1px solid var(--line); display:flex; overflow-x:auto; } nav button { width:auto; } .teams { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>AD Draft Lab: judge drafts</h1>
+  <span class="muted" id="batch-info">Loading…</span>
+  <span class="status muted" id="db-status"></span>
+</header>
+<main>
+  <nav id="list"></nav>
+  <section id="view"><p class="muted">Loading the batch…</p></section>
+</main>
+<script>
+const ROLE_LABEL = { pos1: 'Carry', mid: 'Mid', offlane: 'Offlane', support: 'Support' };
+const TAGS = ['Counters', 'Wave clear', 'Initiation', 'Saves', 'Teamfight', 'Pickoff', 'Scaling / late game', 'Laning', 'Role balance', 'Combos on one hero', 'Bad model fit', 'Other'];
+const CONF = [['slight', 'Slight edge'], ['clear', 'Clear win'], ['stomp', 'Stomp']];
+let ICONS = {};
+let TAGS_DATA = null, tagEdits = {}, tagFilter = '';
+let BATCH = null, db = null, current = 0, saved = {}, notes = [];
+let form = null;
+let CARRIES = null, cSaved = {};
+const CTAGS = ['Farming speed', 'Damage output', 'Survivability', 'Mobility / gap close', 'Scaling / late game', 'Laning', 'Model fit', 'Combos', 'Other'];
+const MT_ORDER = ['mt_rclick', 'mt_rcast', 'mt_mclick', 'mt_mcast', 'mt_front'];
+
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+function icon(name, cls = '', title = '') { const src = ICONS[name]; return src ? `<img class="${cls}" src="${src}" alt="" title="${esc(title)}">` : `<span class="ph ${cls}" title="${esc(title)}"></span>`; }
+function seatHtml(d, s) {
+  const items = d.seats[s];
+  const model = items.find(i => i.kind === 'model');
+  const ult = items.find(i => i.ult);
+  const basics = items.filter(i => i.kind !== 'model' && !i.ult);
+  const pickNo = d.order.map(([seat, n], i) => seat === s ? i + 1 : null).filter(Boolean);
+  const modelName = model ? model.display.replace(' (model)', '') : '?';
+  const ab = (i, cls = '') => `<div class="ab ${cls}">${icon(i.name, '', i.display + ' (' + i.hero + ')')}${esc(i.display)}${i.hero && model && i.hero !== model.hero ? `<span class="hero">${esc(i.hero)}</span>` : ''}</div>`;
+  return `<div class="seat"><div class="top"><span class="model">${esc(modelName)}</span>
+    <span class="role">P${s + 1} · ${ROLE_LABEL[d.roles[s]] || ''} · picks ${pickNo.join(', ')}</span></div>
+    <div class="row-icons">${model ? icon(model.name, 'portrait', modelName) : ''}${basics.map(b => ab(b)).join('')}${ult ? ab(ult, 'ult') : ''}</div></div>`;
+}
+
+let step = 50, replayDraft = null;
+function teamOrder(d, team) {
+  // Seats in the order they first picked, like windrun.
+  const seats = team === 'radiant' ? [0, 1, 2, 3, 4] : [5, 6, 7, 8, 9];
+  return seats.sort((a, b) => d.order.findIndex(o => o[0] === a) - d.order.findIndex(o => o[0] === b));
+}
+function renderReplay() {
+  const d = replayDraft, el = document.getElementById('replay');
+  if (!d || !el) return;
+  const byName = new Map(d.pool.map(i => [i.name, i]));
+  const pickNo = new Map(d.order.slice(0, step).map(([s, n], i) => [n, i + 1]));
+  const held = Array.from({ length: 10 }, () => []);
+  d.order.slice(0, step).forEach(([s, n]) => held[s].push(byName.get(n)));
+  const justName = step > 0 ? d.order[step - 1][1] : null;
+  const picking = step < d.order.length ? d.order[step][0] : null;
+  const seatRow = (s, team) => {
+    const items = held[s];
+    const slots = [];
+    for (let i = 0; i < 5; i++) {
+      const it = items[i];
+      if (!it) { slots.push('<span class="slot"></span>'); continue; }
+      const t = it.kind === 'model' ? it.display : `${it.display} (${it.hero})`;
+      slots.push(`<span class="slot ${it.kind === 'model' ? 'm' : ''} ${it.ult ? 'ult' : ''} ${it.name === justName ? 'just' : ''}" title="${esc(t)} · pick ${pickNo.get(it.name)}">${ICONS[it.name] ? `<img src="${ICONS[it.name]}" alt="">` : ''}</span>`);
+    }
+    return `<div class="rp-seat ${s === picking ? 'picking' : ''}"><span class="lbl"><b>P${s + 1}</b><br>${ROLE_LABEL[d.roles[s]] || ''}</span>${slots.join('')}</div>`;
+  };
+  const cell = (it) => {
+    const n = pickNo.get(it.name);
+    const t = (it.kind === 'model' ? it.display : `${it.display} (${it.hero})`) + (n ? ` · pick ${n}` : '');
+    return `<span class="pi ${it.kind === 'model' ? 'm' : ''} ${n ? 'taken' : ''} ${it.name === justName ? 'just' : ''}" title="${esc(t)}">${ICONS[it.name] ? `<img src="${ICONS[it.name]}" alt="">` : ''}${n ? `<span class="n">${n}</span>` : ''}</span>`;
+  };
+  // Group the pool by hero so each row reads model, basics, ult.
+  const heroes = [...new Set(d.pool.map(i => i.hero))];
+  const col = (f) => heroes.flatMap(h => d.pool.filter(i => i.hero === h && f(i)));
+  const ults = col(i => i.ult), spells = col(i => i.kind !== 'model' && !i.ult), models = col(i => i.kind === 'model');
+  let cap = 'Start of the draft. Scroll or use the arrow keys to step through it.';
+  if (step > 0) {
+    const [s, n] = d.order[step - 1], it = byName.get(n);
+    cap = `<b>Pick ${step}</b>: P${s + 1} (${s < 5 ? 'Radiant' : 'Dire'}) took <b>${esc(it.display)}</b>${it.kind === 'model' ? '' : ` (${esc(it.hero)})`}`;
+  }
+  el.innerHTML = `<div class="replay">
+    <div class="rp-team radiant"><h2>Radiant</h2>${teamOrder(d, 'radiant').map(s => seatRow(s)).join('')}</div>
+    <div class="rp-center">
+      <div class="rp-pool" id="rp-pool">
+        <div><h4>Ultimates</h4><div class="pg" style="grid-template-columns:repeat(2,36px)">${ults.map(cell).join('')}</div></div>
+        <div><h4>Spells</h4><div class="pg" style="grid-template-columns:repeat(6,36px)">${spells.map(cell).join('')}</div></div>
+        <div><h4>Heroes</h4><div class="pg" style="grid-template-columns:repeat(2,36px)">${models.map(cell).join('')}</div></div>
+      </div>
+      <div class="rp-ctl">
+        <button class="btn ghost" data-st="0">Start</button><button class="btn ghost" data-st="-1">Prev</button>
+        <span>Pick ${step} / ${d.order.length}</span>
+        <button class="btn ghost" data-st="+1">Next</button><button class="btn ghost" data-st="end">End</button>
+      </div>
+      <div class="rp-ctl"><input type="range" id="rp-range" min="0" max="${d.order.length}" value="${step}"></div>
+      <div class="rp-cap">${cap}</div>
+      <div class="rp-help muted">Scroll over the board, drag the slider, or use ← → to step. Hover an icon for its name.</div>
+    </div>
+    <div class="rp-team dire"><h2>Dire</h2>${teamOrder(d, 'dire').map(s => seatRow(s)).join('')}</div>
+  </div>`;
+  el.querySelectorAll('[data-st]').forEach(b => b.onclick = () => {
+    const v = b.dataset.st;
+    setStep(v === '0' ? 0 : v === 'end' ? d.order.length : step + Number(v));
+  });
+  document.getElementById('rp-range').oninput = e => setStep(Number(e.target.value));
+}
+function setStep(v) {
+  if (!replayDraft) return;
+  const n = Math.max(0, Math.min(replayDraft.order.length, v));
+  if (n !== step) { step = n; renderReplay(); }
+}
+let wheelAcc = 0;
+document.addEventListener('wheel', e => {
+  const r = document.getElementById('replay');
+  if (!r || !r.contains(e.target) || !replayDraft) return;
+  e.preventDefault();
+  wheelAcc += e.deltaY;
+  while (Math.abs(wheelAcc) >= 60) { setStep(step + Math.sign(wheelAcc)); wheelAcc -= 60 * Math.sign(wheelAcc); }
+}, { passive: false });
+document.addEventListener('keydown', e => {
+  if (!replayDraft || /INPUT|TEXTAREA/.test((e.target || {}).tagName || '') && e.target.type !== 'range') return;
+  if (e.key === 'ArrowRight') { setStep(step + 1); e.preventDefault(); }
+  if (e.key === 'ArrowLeft') { setStep(step - 1); e.preventDefault(); }
+});
+
+function tagsFor(name) { return tagEdits[name] ? tagEdits[name].tags : (TAGS_DATA.tags[name] || []); }
+function renderTags(v) {
+  if (!TAGS_DATA) { v.innerHTML = '<p class="muted">Loading tags…</p>'; return; }
+  const L = TAGS_DATA.legend;
+  const q = tagFilter.toLowerCase();
+  const heroes = TAGS_DATA.heroes.filter(h => !q || h.display.toLowerCase().includes(q) || h.abilities.some(a => a.display.toLowerCase().includes(q) || tagsFor(a.name).some(t => (L[t] || t).toLowerCase().includes(q))));
+  v.innerHTML = `<h2 style="font-size:15px;margin-top:0">Ability tags</h2>
+    <p class="muted">My first draft of what each spell does for a build. Click a tag to remove it, or use "add" to add one. Every change saves for me right away, and the judge will use your version.</p>
+    <div class="tg-legend">${Object.entries(L).map(([k, l]) => `<span><b>${esc(l)}</b></span>`).join('')}</div>
+    <input id="tg-q" placeholder="Filter by hero, spell or tag" value="${esc(tagFilter)}" style="width:280px;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit">
+    <span class="status muted" id="tg-status"></span>
+    <div style="margin-top:10px">${heroes.map(h => `<div class="tg-hero"><h3>${esc(h.display)}</h3>${h.abilities.map(a => {
+      const t = tagsFor(a.name);
+      return `<div class="tg-row">${ICONS[a.icon || a.name] ? `<img src="${ICONS[a.icon || a.name]}" alt="">` : '<span class="ph"></span>'}
+        <span class="nm">${esc(a.display)}${a.ult ? ' <span class="muted">(ult)</span>' : ''}</span>
+        ${t.map(x => `<button class="tg-chip" data-ab="${a.name}" data-rm="${x}" title="Remove">${esc(L[x] || x)}</button>`).join('')}
+        <select data-ab="${a.name}"><option value="">add…</option>${Object.entries(L).filter(([k]) => !t.includes(k)).map(([k, l]) => `<option value="${k}">${esc(l)}</option>`).join('')}</select>
+        ${tagEdits[a.name] ? '<span class="edited">edited</span>' : ''}</div>`; }).join('')}</div>`).join('')}</div>`;
+  const qi = document.getElementById('tg-q');
+  qi.oninput = () => { tagFilter = qi.value; const pos = qi.selectionStart; renderTags(v); const n = document.getElementById('tg-q'); n.focus(); n.setSelectionRange(pos, pos); };
+  v.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => saveTags(b.dataset.ab, tagsFor(b.dataset.ab).filter(x => x !== b.dataset.rm)));
+  v.querySelectorAll('select[data-ab]').forEach(sel => sel.onchange = () => { if (sel.value) saveTags(sel.dataset.ab, [...tagsFor(sel.dataset.ab), sel.value]); });
+}
+async function saveTags(name, tags) {
+  const st = document.getElementById('tg-status');
+  if (!db) { st.textContent = 'Saving is unavailable here, so this change was not saved.'; return; }
+  const body = { ability: name, tags, at: new Date().toISOString() };
+  tagEdits[name] = body;
+  renderTags(document.getElementById('view'));
+  try { await db.doc(`tags/${name}`).set(body); document.getElementById('tg-status').textContent = 'Saved'; }
+  catch (e) { document.getElementById('tg-status').textContent = 'Not saved: ' + (e && e.message || e); }
+}
+
+function renderList() {
+  document.getElementById('list').innerHTML = '<h5>Team drafts</h5>' + BATCH.drafts.map((d, i) =>
+    `<button class="${i === current ? 'on' : ''}" onclick="go(${i})"><span>Draft ${i + 1}</span><span class="tick">${saved[d.id] ? '✓' : ''}</span></button>`).join('')
+    + (CARRIES ? CARRIES.pairs.map((p, i) => `${i === 0 || CARRIES.pairs[i - 1].batch !== p.batch ? `<h5>Carry vs carry · ${esc(String(p.batch).replace('carries-', ''))}</h5>` : ''}<button class="${current === 1000 + i ? 'on' : ''}" onclick="go(${1000 + i})"><span>Pair ${pairNo(i)}</span><span class="tick">${cSaved[p.id] ? '✓' : ''}</span></button>`).join('') : '')
+    + '<h5>Other</h5>'
+    + `<button class="${current === -1 ? 'on' : ''}" onclick="go(-1)"><span>General notes</span><span class="tick">${notes.length || ''}</span></button>`
+    + `<button class="${current === -2 ? 'on' : ''}" onclick="go(-2)"><span>Ability tags</span><span class="tick">${Object.keys(tagEdits).length || ''}</span></button>`;
+  const done = BATCH.drafts.filter(d => saved[d.id]).length;
+  document.getElementById('batch-info').textContent = `${BATCH.batch}: ${done} of ${BATCH.drafts.length} judged` + (CARRIES ? ` · carry pairs: ${CARRIES.pairs.filter(p => cSaved[p.id]).length} of ${CARRIES.pairs.length}` : '');
+}
+
+function go(i) { current = i; render(); window.scrollTo(0, 0); }
+
+function render() {
+  renderList();
+  const v = document.getElementById('view');
+  if (current === -1) { replayDraft = null; return renderNotes(v); }
+  if (current === -2) { replayDraft = null; return renderTags(v); }
+  if (current >= 1000) { replayDraft = null; return renderPair(v, current - 1000); }
+  const d = BATCH.drafts[current];
+  if (replayDraft !== d) { replayDraft = d; step = d.order.length; }
+  const prev = saved[d.id];
+  form = prev ? { winner: prev.winner, confidence: prev.confidence, tags: [...(prev.tags || [])], note: prev.note || '' } : { winner: null, confidence: null, tags: [], note: '' };
+  v.innerHTML = `
+    <div id="replay"></div>
+    ${judgeTeamHtml(d)}
+    <div class="panel">
+      <div class="row"><b>Who wins?</b>
+        <button class="chip rad" data-w="radiant">Radiant</button>
+        <button class="chip dire" data-w="dire">Dire</button>
+        <button class="chip" data-w="even">Even</button>
+        <button class="chip" data-w="skip">Can't tell</button></div>
+      <div class="row"><b>How sure?</b>${CONF.map(([k, l]) => `<button class="chip" data-c="${k}">${l}</button>`).join('')}</div>
+      <div class="row"><b>Why?</b> <span class="muted">(optional, pick any)</span></div>
+      <div class="row">${TAGS.map(t => `<button class="chip" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+      <textarea id="note" placeholder="Anything else: what decided it, what a team should have drafted instead, a pick you'd change…">${esc(form.note)}</textarea>
+      <div class="muted" style="font-size:12px;margin-top:4px">To dictate: click in the box, then press Windows + H (on a phone, use the keyboard's mic button).</div>
+      <div class="row"><button class="btn" id="save">Save and next</button>
+        <button class="btn ghost" onclick="go(${Math.max(0, current - 1)})">Back</button>
+        <span class="status" id="save-status">${prev ? 'Saved' : ''}</span></div>
+    </div>
+    `;
+  const paint = () => {
+    v.querySelectorAll('[data-w]').forEach(b => b.classList.toggle('on', form.winner === b.dataset.w));
+    v.querySelectorAll('[data-c]').forEach(b => b.classList.toggle('on', form.confidence === b.dataset.c));
+    v.querySelectorAll('[data-t]').forEach(b => b.classList.toggle('on', form.tags.includes(b.dataset.t)));
+  };
+  v.querySelectorAll('[data-w]').forEach(b => b.onclick = () => { form.winner = b.dataset.w; paint(); });
+  v.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { form.confidence = b.dataset.c; paint(); });
+  v.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { const t = b.dataset.t; form.tags = form.tags.includes(t) ? form.tags.filter(x => x !== t) : [...form.tags, t]; paint(); });
+  paint();
+  renderReplay();
+  document.getElementById('save').onclick = () => save(d);
+}
+
+async function save(d) {
+  const st = document.getElementById('save-status');
+  form.note = document.getElementById('note').value.trim();
+  if (!form.winner) { st.textContent = 'Pick who wins first (or "Can\'t tell").'; return; }
+  if (!db) { st.textContent = 'Saving is unavailable here, so this verdict was not saved.'; return; }
+  const body = { batch: BATCH.batch, draft: d.id, winner: form.winner, confidence: form.confidence, tags: form.tags, note: form.note, at: new Date().toISOString() };
+  st.textContent = 'Saving…';
+  try {
+    await db.doc(`judgments/${d.id}`).set(body);
+    saved[d.id] = body;
+    const nextIdx = BATCH.drafts.findIndex((x, i) => i > current && !saved[x.id]);
+    go(nextIdx === -1 ? current : nextIdx);
+  } catch (e) { st.textContent = 'Not saved: ' + (e && e.message || e); }
+}
+
+function judgeTeamHtml(d) {
+  const j = d.judge;
+  if (!j) return '';
+  const name = s => { const m = d.seats[s].find(i => i.kind === 'model'); return m ? m.display.replace(' (model)', '') : 'P' + (s + 1); };
+  const fit = (side, off) => j[side].map((x, i) => `<div><b>${esc(name(off + i))}</b>: ${esc(x.pos)}, ${esc(x.archetype)}${x.missing.length ? ` <span class="muted">· missing ${esc(x.missing.join(', '))}</span>` : ''}</div>`).join('');
+  return `<div class="panel judge-call"><b>The judge's call: ${j.pick === 'radiant' ? 'Radiant' : 'Dire'} (${j.pct}%)</b>
+    <span class="muted">· judge ${esc(BATCH.judgeVersion || '')}. Points are rough winrate points.</span>
+    <ul>${j.why.map(w => `<li>${esc(w)}</li>`).join('')}</ul>
+    <details><summary>How it reads each build</summary><div class="seatfit"><div><b style="color:var(--rad)">Radiant</b>${fit('radiant', 0)}</div><div><b style="color:var(--dire)">Dire</b>${fit('dire', 5)}</div></div></details></div>`;
+}
+
+function buildHtml(items) {
+  const model = items.find(i => i.kind === 'model');
+  const ult = items.find(i => i.ult);
+  const basics = items.filter(i => i.kind !== 'model' && !i.ult);
+  const modelName = model ? model.display.replace(' (model)', '') : '?';
+  const ab = (i, cls = '') => `<div class="ab ${cls}">${icon(i.name, '', i.display + ' (' + i.hero + ')')}${esc(i.display)}${i.hero && model && i.hero !== model.hero ? `<span class="hero">${esc(i.hero)}</span>` : ''}</div>`;
+  const L = TAGS_DATA ? TAGS_DATA.legend : {};
+  const mt = model && TAGS_DATA ? (TAGS_DATA.tags['model_' + model.name] || []).filter(t => MT_ORDER.includes(t)).map(t => (L[t] || t).replace('Model: ', '')) : [];
+  return `<div class="seat"><div class="top"><span class="model">${esc(modelName)}</span></div>
+    <div class="row-icons">${model ? icon(model.name, 'portrait', modelName) : ''}${basics.map(b => ab(b)).join('')}${ult ? ab(ult, 'ult') : ''}</div>
+    ${mt.length ? `<div class="mtags">${esc(mt.join(' · '))}</div>` : ''}</div>`;
+}
+
+function pairNo(i) { const p = CARRIES.pairs[i]; return +String(p.id).split('-').pop(); }
+function renderPair(v, i) {
+  const p = CARRIES.pairs[i], j = p.judge;
+  const prev = cSaved[p.id];
+  form = prev ? { winner: prev.winner, confidence: prev.confidence, tags: [...(prev.tags || [])], note: prev.note || '' } : { winner: null, confidence: null, tags: [], note: '' };
+  const fitLine = (k, x) => `<div><b>${k}</b>: ${esc(x.archetype)}${x.missing.length ? ` <span class="muted">· missing ${esc(x.missing.join(', '))}</span>` : ' <span class="muted">· nothing missing</span>'}</div>`;
+  v.innerHTML = `<h2 style="font-size:15px;margin-top:0">Pair ${pairNo(i)} (${esc(p.batch)}): which is the better pos 1 build?</h2>
+    <p class="muted" style="margin-top:0">In a general sense, as a baseline. The rest of the team and the enemy don't count here.</p>
+    <div class="pair"><div><h2>A</h2>${buildHtml(p.a)}</div><div><h2>B</h2>${buildHtml(p.b)}</div></div>
+    <div class="panel judge-call"><b>The judge's call: ${j.pick.toUpperCase()} (${Math.round(100 * Math.max(j.pA, 1 - j.pA))}%)</b>
+      <span class="muted">· judge ${esc(CARRIES.judgeVersion || '')} · score A ${j.a.score}, B ${j.b.score}${prev ? ` · you picked ${prev.winner === 'skip' ? "can't tell" : prev.winner.toUpperCase()}` : ''}</span>
+      <ul>${j.why.slice(0, -1).map(w => `<li>${esc(w)}</li>`).join('')}</ul>
+      <div class="seatfit">${fitLine('A', j.a)}${fitLine('B', j.b)}</div></div>
+    <div class="panel">
+      <div class="row"><b>Which is better?</b>
+        <button class="chip" data-w="a">A</button>
+        <button class="chip" data-w="b">B</button>
+        <button class="chip" data-w="even">Even</button>
+        <button class="chip" data-w="skip">Can't tell</button></div>
+      <div class="row"><b>How sure?</b>${CONF.map(([k, l]) => `<button class="chip" data-c="${k}">${l}</button>`).join('')}</div>
+      <div class="row"><b>Why?</b> <span class="muted">(optional, pick any)</span></div>
+      <div class="row">${CTAGS.map(t => `<button class="chip" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+      <textarea id="note" placeholder="What makes the better one better, and where the judge's reasons are wrong…">${esc(form.note)}</textarea>
+      <div class="muted" style="font-size:12px;margin-top:4px">To dictate: click in the box, then press Windows + H (on a phone, use the keyboard's mic button).</div>
+      <div class="row"><button class="btn" id="save">Save and next</button>
+        <button class="btn ghost" onclick="go(${i > 0 ? 1000 + i - 1 : 1000})">Back</button>
+        <span class="status" id="save-status">${prev ? 'Saved' : ''}</span></div>
+    </div>`;
+  const paint = () => {
+    v.querySelectorAll('[data-w]').forEach(b => b.classList.toggle('on', form.winner === b.dataset.w));
+    v.querySelectorAll('[data-c]').forEach(b => b.classList.toggle('on', form.confidence === b.dataset.c));
+    v.querySelectorAll('[data-t]').forEach(b => b.classList.toggle('on', form.tags.includes(b.dataset.t)));
+  };
+  v.querySelectorAll('[data-w]').forEach(b => b.onclick = () => { form.winner = b.dataset.w; paint(); });
+  v.querySelectorAll('[data-c]').forEach(b => b.onclick = () => { form.confidence = b.dataset.c; paint(); });
+  v.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { const t = b.dataset.t; form.tags = form.tags.includes(t) ? form.tags.filter(x => x !== t) : [...form.tags, t]; paint(); });
+  paint();
+  document.getElementById('save').onclick = async () => {
+    const st = document.getElementById('save-status');
+    form.note = document.getElementById('note').value.trim();
+    if (!form.winner) { st.textContent = 'Pick which is better first (or "Can\'t tell").'; return; }
+    if (!db) { st.textContent = 'Saving is unavailable here, so this verdict was not saved.'; return; }
+    const body = { batch: p.batch || CARRIES.batch, pair: p.id, winner: form.winner, confidence: form.confidence, tags: form.tags, note: form.note, judgePick: j.pick, at: new Date().toISOString() };
+    st.textContent = 'Saving…';
+    try {
+      await db.doc(`carryJudgments/${p.id}`).set(body);
+      cSaved[p.id] = body;
+      const next = CARRIES.pairs.findIndex((x, k) => k > i && !cSaved[x.id]);
+      go(next === -1 ? 1000 + i : 1000 + next);
+    } catch (e) { st.textContent = 'Not saved: ' + (e && e.message || e); }
+  };
+}
+
+function renderNotes(v) {
+  v.innerHTML = `<h2 style="font-size:15px;margin-top:0">General notes</h2>
+    <p class="muted">Anything about drafting that isn't tied to one draft: a strategy, a pair that's over- or under-rated, a rule of thumb. Claude reads these and turns them into checks or saved scenarios.</p>
+    <textarea id="gnote" placeholder="e.g. Fury Swipes and Anchor Smash are much worse on melee models…"></textarea>
+    <div class="muted" style="font-size:12px;margin-top:4px">To dictate: click in the box, then press Windows + H (on a phone, use the keyboard's mic button).</div>
+    <div class="row"><button class="btn" id="gsave">Save note</button><span class="status" id="gstatus"></span></div>
+    <div>${notes.map(n => `<div class="note-item"><span class="muted">${esc((n.at || '').slice(0, 10))}</span> ${esc(n.text)}</div>`).join('')}</div>`;
+  document.getElementById('gsave').onclick = async () => {
+    const text = document.getElementById('gnote').value.trim(), st = document.getElementById('gstatus');
+    if (!text) return;
+    if (!db) { st.textContent = 'Saving is unavailable here, so this note was not saved.'; return; }
+    st.textContent = 'Saving…';
+    try { await db.collection('notes').add({ text, at: new Date().toISOString(), batch: BATCH.batch }); st.textContent = 'Saved'; }
+    catch (e) { st.textContent = 'Not saved: ' + (e && e.message || e); }
+  };
+}
+
+async function start() {
+  try { BATCH = await (await fetch('batch.json')).json(); }
+  catch (e) { document.getElementById('view').innerHTML = '<p>Could not load the batch.</p>'; return; }
+  render();
+  fetch('icons.json').then(r => r.json()).then(x => { ICONS = x; if (current !== -1) render(); }).catch(() => {});
+  fetch('tags.json').then(r => r.json()).then(x => { TAGS_DATA = x; if (current === -2 || current >= 1000) render(); }).catch(() => {});
+  fetch('carries.json').then(r => r.json()).then(x => { CARRIES = x; render(); }).catch(() => {});
+  const status = document.getElementById('db-status');
+  status.textContent = 'Connecting to saved verdicts…';
+  const timer = setTimeout(() => { status.textContent = "Saved verdicts can't be reached yet."; }, 10000);
+  db = window.claude && window.claude.use ? await window.claude.use('db') : null;
+  if (!db) { clearTimeout(timer); status.textContent = 'Saving is unavailable in this view.'; return; }
+  db.collection('judgments').where('batch', '==', BATCH.batch).onSnapshot(snap => {
+    clearTimeout(timer); status.textContent = '';
+    saved = {}; snap.docs.forEach(x => { saved[x.data().draft] = x.data(); });
+    if (current !== -1) renderList(); else render();
+  }, e => { clearTimeout(timer); status.textContent = 'Saved verdicts unavailable: ' + e.code; });
+  db.collection('carryJudgments').onSnapshot(snap => {
+    cSaved = {}; snap.docs.forEach(x => { cSaved[x.data().pair] = x.data(); });
+    if (current >= 1000) render(); else renderList();
+  }, () => {});
+  db.collection('tags').onSnapshot(snap => {
+    tagEdits = {}; snap.docs.forEach(x => { tagEdits[x.data().ability] = x.data(); });
+    if (current === -2) render(); else renderList();
+  }, () => {});
+  db.collection('notes').orderBy('at', 'desc').limit(100).onSnapshot(snap => {
+    notes = snap.docs.map(x => x.data());
+    if (current === -1) render(); else renderList();
+  }, () => {});
+}
+start();
+</script>
+</body>
+</html>

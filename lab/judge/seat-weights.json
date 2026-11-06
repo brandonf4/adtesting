@@ -1,0 +1,12 @@
+{
+  "version": "v2",
+  "note": "Stand-in judge for single builds at one position. v1 (2026-11-06): carry lessons from carries-001 added to the right-click archetype and note rules; general ability strength cut to 0.25 because it isn't carry-specific (grid over Brandon's 24 decided carry pairs). v2 (2026-11-06): damage need, Flak Cannon/Grow/Fury Swipes model rules, Pangolier tagged melee right-clicker, from carries-002. Weights refit on 45 decided pairs: strength 0.25, synergy 0.5, fit 1 (42/45; leave-one-out 40/45).",
+  "scale": 3,
+  "weights": {
+    "strength": 0.25,
+    "synergy": 0.5,
+    "aghs": 1.0,
+    "notes": 1.0,
+    "fit": 1
+  }
+}

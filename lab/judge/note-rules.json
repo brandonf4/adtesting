@@ -1,0 +1,100 @@
+{
+  "note": "Judge-only, context-dependent rules from Brandon's verdict notes (lab only, never the site bot). Flat model and pair value edits were removed on 2026-11-06 at Brandon's request: notes describe build context, which is being modeled as archetypes, needs and what covers them.",
+  "pairs": [],
+  "conditional": [
+    {
+      "item": "phantom_lancer_juxtapose",
+      "modelAttack": "melee",
+      "unlessAny": [
+        "phantom_lancer_doppelwalk",
+        "phantom_lancer_phantom_edge"
+      ],
+      "value": -6,
+      "from": "batch-001-1000: Juxtapose on a melee hero without Doppelganger or Phantom Rush is always bad"
+    },
+    {
+      "item": "abaddon_borrowed_time",
+      "modelAttr": "int",
+      "modelAttack": "ranged",
+      "value": -4,
+      "from": "batch-001-1000: Borrowed Time is mostly wasted on a squishy intelligence hero that sits in the back"
+    },
+    {
+      "item": "lina_fiery_soul",
+      "unlessTagAny": [
+        "magical",
+        "pure"
+      ],
+      "value": -5,
+      "from": "carries-001-14: Fiery Soul needs spells that deal damage to proc; without one the build is useless"
+    },
+    {
+      "item": "naga_siren_mirror_image",
+      "modelAttack": "melee",
+      "unlessAny": [
+        "naga_siren_rip_tide"
+      ],
+      "value": -4,
+      "from": "carries-001-25: Mirror Image on a melee hero without Rip Tide is weak and farms slowly"
+    },
+    {
+      "item": "centaur_return",
+      "modelAttack": "ranged",
+      "value": -3,
+      "from": "carries-001-13: Retaliate is not good on a ranged (Dark Willow) model"
+    },
+    {
+      "item": "tidehunter_anchor_smash",
+      "modelAttack": "melee",
+      "value": -3,
+      "from": "carries-001-1: melee Anchor Smash is bad"
+    },
+    {
+      "item": "medusa",
+      "unlessAny": [
+        "medusa_mystic_snake"
+      ],
+      "value": -2,
+      "from": "carries-001-12: Medusa without Mystic Snake is weak early and farms slower"
+    },
+    {
+      "item": "gyrocopter_flak_cannon",
+      "modelAttack": "melee",
+      "value": -4,
+      "from": "carries-002-13: melee Flak Cannon is very bad"
+    },
+    {
+      "item": "tiny_grow",
+      "modelAttr": "agi",
+      "value": -3,
+      "from": "carries-002-19: Grow on an agility carry is generally detrimental"
+    },
+    {
+      "item": "ursa_fury_swipes",
+      "modelAttack": "melee",
+      "value": -3,
+      "from": "2026-11-05 note and carries-002-12: Fury Swipes is much better on ranged models"
+    },
+    {
+      "item": "ursa_fury_swipes",
+      "modelAttack": "ranged",
+      "value": 2,
+      "from": "carries-002-12: ranged Fury Swipes (with Chaos Strike) is very strong"
+    }
+  ],
+  "models": [],
+  "counters": [
+    {
+      "counter": "viper_viper_strike",
+      "countered": "huskar_berserkers_blood",
+      "value": 8,
+      "from": "batch-001-1002: Viper Strike completely counters Berserker's Blood"
+    },
+    {
+      "counter": "viper_viper_strike",
+      "countered": "bristleback_bristleback",
+      "value": 8,
+      "from": "batch-001-1002: Viper Strike completely counters Bristleback's passive"
+    }
+  ]
+}
