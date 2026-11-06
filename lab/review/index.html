@@ -76,6 +76,17 @@
   .rp-cap { text-align:center; margin-top:6px; min-height:20px; }
   .rp-help { text-align:center; font-size:12px; }
   @media (max-width: 1250px) { .replay { grid-template-columns: 1fr 1fr; } .rp-center { grid-column: 1 / -1; order:-1; } }
+  .tg-legend { display:flex; flex-wrap:wrap; gap:4px 10px; font-size:12px; margin:6px 0 12px; }
+  .tg-hero { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:8px; }
+  .tg-hero h3 { margin:0 0 6px; font-size:14px; }
+  .tg-row { display:flex; align-items:center; gap:8px; padding:4px 0; border-top:1px solid var(--line); flex-wrap:wrap; }
+  .tg-row:first-of-type { border-top:none; }
+  .tg-row img, .tg-row .ph { width:32px; height:32px; border-radius:4px; }
+  .tg-row .nm { width:170px; font-size:13px; }
+  .tg-chip { font-size:12px; border:1px solid var(--acc); color:var(--acc); background:none; border-radius:999px; padding:2px 8px; cursor:pointer; }
+  .tg-chip:hover { text-decoration: line-through; }
+  .tg-row select { font-size:12px; }
+  .tg-row .edited { font-size:11px; color:var(--rad); }
   @media (max-width: 760px) { main { grid-template-columns:1fr; } nav { border-right:none; border-bottom:1px solid var(--line); display:flex; overflow-x:auto; } nav button { width:auto; } .teams { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -94,6 +105,7 @@ const ROLE_LABEL = { pos1: 'Carry', mid: 'Mid', offlane: 'Offlane', support: 'Su
 const TAGS = ['Counters', 'Wave clear', 'Initiation', 'Saves', 'Teamfight', 'Pickoff', 'Scaling / late game', 'Laning', 'Role balance', 'Combos on one hero', 'Bad model fit', 'Other'];
 const CONF = [['slight', 'Slight edge'], ['clear', 'Clear win'], ['stomp', 'Stomp']];
 let ICONS = {};
+let TAGS_DATA = null, tagEdits = {}, tagFilter = '';
 let BATCH = null, db = null, current = 0, saved = {}, notes = [];
 let form = null;
 
@@ -197,10 +209,44 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft') { setStep(step - 1); e.preventDefault(); }
 });
 
+function tagsFor(name) { return tagEdits[name] ? tagEdits[name].tags : (TAGS_DATA.tags[name] || []); }
+function renderTags(v) {
+  if (!TAGS_DATA) { v.innerHTML = '<p class="muted">Loading tags…</p>'; return; }
+  const L = TAGS_DATA.legend;
+  const q = tagFilter.toLowerCase();
+  const heroes = TAGS_DATA.heroes.filter(h => !q || h.display.toLowerCase().includes(q) || h.abilities.some(a => a.display.toLowerCase().includes(q) || tagsFor(a.name).some(t => (L[t] || t).toLowerCase().includes(q))));
+  v.innerHTML = `<h2 style="font-size:15px;margin-top:0">Ability tags</h2>
+    <p class="muted">My first draft of what each spell does for a build. Click a tag to remove it, or use "add" to add one. Every change saves for me right away, and the judge will use your version.</p>
+    <div class="tg-legend">${Object.entries(L).map(([k, l]) => `<span><b>${esc(l)}</b></span>`).join('')}</div>
+    <input id="tg-q" placeholder="Filter by hero, spell or tag" value="${esc(tagFilter)}" style="width:280px;padding:6px 8px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:inherit;font:inherit">
+    <span class="status muted" id="tg-status"></span>
+    <div style="margin-top:10px">${heroes.map(h => `<div class="tg-hero"><h3>${esc(h.display)}</h3>${h.abilities.map(a => {
+      const t = tagsFor(a.name);
+      return `<div class="tg-row">${ICONS[a.name] ? `<img src="${ICONS[a.name]}" alt="">` : '<span class="ph"></span>'}
+        <span class="nm">${esc(a.display)}${a.ult ? ' <span class="muted">(ult)</span>' : ''}</span>
+        ${t.map(x => `<button class="tg-chip" data-ab="${a.name}" data-rm="${x}" title="Remove">${esc(L[x] || x)}</button>`).join('')}
+        <select data-ab="${a.name}"><option value="">add…</option>${Object.entries(L).filter(([k]) => !t.includes(k)).map(([k, l]) => `<option value="${k}">${esc(l)}</option>`).join('')}</select>
+        ${tagEdits[a.name] ? '<span class="edited">edited</span>' : ''}</div>`; }).join('')}</div>`).join('')}</div>`;
+  const qi = document.getElementById('tg-q');
+  qi.oninput = () => { tagFilter = qi.value; const pos = qi.selectionStart; renderTags(v); const n = document.getElementById('tg-q'); n.focus(); n.setSelectionRange(pos, pos); };
+  v.querySelectorAll('[data-rm]').forEach(b => b.onclick = () => saveTags(b.dataset.ab, tagsFor(b.dataset.ab).filter(x => x !== b.dataset.rm)));
+  v.querySelectorAll('select[data-ab]').forEach(sel => sel.onchange = () => { if (sel.value) saveTags(sel.dataset.ab, [...tagsFor(sel.dataset.ab), sel.value]); });
+}
+async function saveTags(name, tags) {
+  const st = document.getElementById('tg-status');
+  if (!db) { st.textContent = 'Saving is unavailable here, so this change was not saved.'; return; }
+  const body = { ability: name, tags, at: new Date().toISOString() };
+  tagEdits[name] = body;
+  renderTags(document.getElementById('view'));
+  try { await db.doc(`tags/${name}`).set(body); document.getElementById('tg-status').textContent = 'Saved'; }
+  catch (e) { document.getElementById('tg-status').textContent = 'Not saved: ' + (e && e.message || e); }
+}
+
 function renderList() {
   document.getElementById('list').innerHTML = BATCH.drafts.map((d, i) =>
     `<button class="${i === current ? 'on' : ''}" onclick="go(${i})"><span>Draft ${i + 1}</span><span class="tick">${saved[d.id] ? '✓' : ''}</span></button>`).join('')
-    + `<button class="${current === -1 ? 'on' : ''}" onclick="go(-1)"><span>General notes</span><span class="tick">${notes.length || ''}</span></button>`;
+    + `<button class="${current === -1 ? 'on' : ''}" onclick="go(-1)"><span>General notes</span><span class="tick">${notes.length || ''}</span></button>`
+    + `<button class="${current === -2 ? 'on' : ''}" onclick="go(-2)"><span>Ability tags</span><span class="tick">${Object.keys(tagEdits).length || ''}</span></button>`;
   const done = BATCH.drafts.filter(d => saved[d.id]).length;
   document.getElementById('batch-info').textContent = `${BATCH.batch}: ${done} of ${BATCH.drafts.length} judged`;
 }
@@ -211,6 +257,7 @@ function render() {
   renderList();
   const v = document.getElementById('view');
   if (current === -1) { replayDraft = null; return renderNotes(v); }
+  if (current === -2) { replayDraft = null; return renderTags(v); }
   const d = BATCH.drafts[current];
   if (replayDraft !== d) { replayDraft = d; step = d.order.length; }
   const prev = saved[d.id];
@@ -283,6 +330,7 @@ async function start() {
   catch (e) { document.getElementById('view').innerHTML = '<p>Could not load the batch.</p>'; return; }
   render();
   fetch('icons.json').then(r => r.json()).then(x => { ICONS = x; if (current !== -1) render(); }).catch(() => {});
+  fetch('tags.json').then(r => r.json()).then(x => { TAGS_DATA = x; if (current === -2) render(); }).catch(() => {});
   const status = document.getElementById('db-status');
   status.textContent = 'Connecting to saved verdicts…';
   const timer = setTimeout(() => { status.textContent = "Saved verdicts can't be reached yet."; }, 10000);
@@ -293,6 +341,10 @@ async function start() {
     saved = {}; snap.docs.forEach(x => { saved[x.data().draft] = x.data(); });
     if (current !== -1) renderList(); else render();
   }, e => { clearTimeout(timer); status.textContent = 'Saved verdicts unavailable: ' + e.code; });
+  db.collection('tags').onSnapshot(snap => {
+    tagEdits = {}; snap.docs.forEach(x => { tagEdits[x.data().ability] = x.data(); });
+    if (current === -2) render(); else renderList();
+  }, () => {});
   db.collection('notes').orderBy('at', 'desc').limit(100).onSnapshot(snap => {
     notes = snap.docs.map(x => x.data());
     if (current === -1) render(); else renderList();
