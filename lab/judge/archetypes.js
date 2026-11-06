@@ -154,4 +154,4 @@ function teamFit(team) {
   return { value: best.value + team_, seats };
 }
 
-module.exports = { teamFit, profile, ARCHETYPES, POSITIONS };
+module.exports = { teamFit, profile, seatAt, ARCHETYPES, POSITIONS };

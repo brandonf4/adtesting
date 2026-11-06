@@ -99,4 +99,4 @@ function judge(engine, weights = loadWeights()) {
   return { pRadiant: 1 / (1 + Math.exp(-z / weights.scale)), margin: z, radiant: fr, dire: fd, diff };
 }
 
-module.exports = { judge, loadWeights, teamFeatures, WEIGHTS_FILE };
+module.exports = { judge, loadWeights, teamFeatures, seatFeatures, WEIGHTS_FILE };

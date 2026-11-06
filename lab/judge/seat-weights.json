@@ -1,0 +1,6 @@
+{
+  "version": "v0",
+  "note": "Stand-in judge for single builds at one position (carry pairs first). Hand-set to match the team judge's weights; refit from Brandon's pair verdicts.",
+  "scale": 6,
+  "weights": { "strength": 1.0, "synergy": 1.0, "aghs": 1.0, "notes": 1.0, "fit": 3.0 }
+}
