@@ -2713,7 +2713,7 @@
 "mt_rclick"
 ],
 "model_huskar": [
-"mt_rclick"
+"mt_rcast"
 ],
 "model_drow_ranger": [
 "mt_rclick"
@@ -2858,8 +2858,8 @@
 "mt_front"
 ],
 "model_tiny": [
-"mt_mclick",
-"mt_front"
+"mt_front",
+"mt_mcast"
 ],
 "model_chaos_knight": [
 "mt_mclick",
@@ -2968,8 +2968,8 @@
 "mt_front"
 ],
 "model_beastmaster": [
-"mt_mcast",
-"mt_front"
+"mt_front",
+"mt_mclick"
 ],
 "model_primal_beast": [
 "mt_mcast",
@@ -3051,8 +3051,8 @@
 "mt_mcast"
 ],
 "model_brewmaster": [
-"mt_mcast",
-"mt_front"
+"mt_front",
+"mt_mclick"
 ],
 "model_omniknight": [
 "mt_mcast",
