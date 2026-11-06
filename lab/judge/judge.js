@@ -3,6 +3,7 @@
 // Features are kept readable on purpose, so you can see why it likes a draft.
 'use strict';
 const fs = require('fs');
+const { teamFit } = require('./archetypes');
 const path = require('path');
 
 const WEIGHTS_FILE = path.join(__dirname, 'weights.json');
@@ -69,6 +70,10 @@ function teamFeatures(engine, team, enemy, firstSeat) {
   const lab = engine.lab, f = { strength: 0, synergy: 0, aghs: 0, notes: 0 };
   for (const seat of team) { const s = seatFeatures(engine, seat); for (const k in s) f[k] += s[k]; }
   f.roleFitLost = lab.teamAssignment(firstSeat).lost;
+  // Build context: archetypes, positions, needs and holes.
+  const fit = teamFit(team);
+  f.buildFit = fit.value;
+  f.buildSeats = fit.seats;
   // Hero counters: STRATZ normal-Dota matchup of each of our models vs theirs.
   f.heroCounters = 0;
   const M = lab.HERO_MATCHUPS;
@@ -90,7 +95,7 @@ function judge(engine, weights = loadWeights()) {
   const fr = teamFeatures(engine, rad, dire, 0), fd = teamFeatures(engine, dire, rad, 5);
   const diff = {};
   let z = 0;
-  for (const [k, w] of Object.entries(weights.weights)) { diff[k] = fr[k] - fd[k]; z += w * diff[k]; }
+  for (const [k, w] of Object.entries(weights.weights)) { diff[k] = (fr[k] || 0) - (fd[k] || 0); z += w * diff[k]; }
   return { pRadiant: 1 / (1 + Math.exp(-z / weights.scale)), margin: z, radiant: fr, dire: fd, diff };
 }
 
