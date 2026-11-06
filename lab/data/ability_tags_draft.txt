@@ -6,6 +6,7 @@
 #   dis single-target disable · aoed AoE disable · slow slow/root-lite · init initiation · burst nuke
 #   dot sustained or damage-over-time · wc wave clear · lane laning spell (harass/lane control/lane sustain)
 #   summ summons/illusions · vis vision/scouting · push tower pressure · mana mana help · silence silence
+#   global global presence (added 2026-11-06 at Brandon's request; the JSON files carry it)
 abaddon: ~frostmourne=atk slow orb | ~borrowed_time=life def | ~aphotic_shield=save def lane | ~death_coil=heal burst lane
 abyssal_underlord: ~atrophy_aura=atk debuff | ~firestorm=wc dot lane | ~pit_of_malice=aoed | ~dark_portal=mob buff
 alchemist: ~chemical_rage=aspd sus def | ~corrosive_weaponry=orb slow | ~acid_spray=wc dot debuff | ~unstable_concoction=dis

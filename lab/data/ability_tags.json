@@ -27,7 +27,8 @@
 "summ": "Summons / illusions",
 "vis": "Vision / scouting",
 "push": "Tower pressure",
-"mana": "Mana help"
+"mana": "Mana help",
+"global": "Global presence"
 },
 "tags": {
 "abaddon_frostmourne": [
@@ -63,7 +64,8 @@
 ],
 "abyssal_underlord_dark_portal": [
 "mob",
-"buff"
+"buff",
+"global"
 ],
 "alchemist_chemical_rage": [
 "aspd",
@@ -89,7 +91,8 @@
 ],
 "ancient_apparition_ice_blast": [
 "dot",
-"debuff"
+"debuff",
+"global"
 ],
 "ancient_apparition_cold_feet": [
 "dis",
@@ -208,7 +211,8 @@
 "bloodseeker_thirst": [
 "mob",
 "vis",
-"atk"
+"atk",
+"global"
 ],
 "bloodseeker_bloodrage": [
 "aspd",
@@ -332,7 +336,8 @@
 ],
 "chen_hand_of_god": [
 "heal",
-"save"
+"save",
+"global"
 ],
 "chen_divine_favor": [
 "heal",
@@ -631,10 +636,12 @@
 ],
 "furion_teleportation": [
 "mob",
-"push"
+"push",
+"global"
 ],
 "furion_wrath_of_nature": [
-"wc"
+"wc",
+"global"
 ],
 "furion_sprout": [
 "dis"
@@ -712,7 +719,8 @@
 "slow"
 ],
 "invoker_sun_strike_ad": [
-"burst"
+"burst",
+"global"
 ],
 "invoker_alacrity_ad": [
 "aspd",
@@ -1088,7 +1096,8 @@
 "mirana_invis": [
 "invis",
 "save",
-"mob"
+"mob",
+"global"
 ],
 "monkey_king_jingu_mastery": [
 "atk",
@@ -1536,7 +1545,8 @@
 "orb"
 ],
 "silencer_global_silence": [
-"silence"
+"silence",
+"global"
 ],
 "silencer_curse_of_the_silent": [
 "dot"
@@ -1638,7 +1648,8 @@
 ],
 "spectre_haunt": [
 "gap",
-"summ"
+"summ",
+"global"
 ],
 "spectre_spectral_dagger": [
 "mob",
@@ -1654,7 +1665,8 @@
 "spirit_breaker_charge_of_darkness": [
 "gap",
 "dis",
-"init"
+"init",
+"global"
 ],
 "spirit_breaker_bulldoze": [
 "mob",
@@ -1793,7 +1805,8 @@
 "treant_living_armor": [
 "heal",
 "save",
-"def"
+"def",
+"global"
 ],
 "troll_warlord_fervor": [
 "aspd"
@@ -2004,7 +2017,8 @@
 ],
 "wisp_relocate": [
 "save",
-"mob"
+"mob",
+"global"
 ],
 "witch_doctor_maledict": [
 "dot"
@@ -2029,7 +2043,8 @@
 ],
 "zuus_thundergods_wrath": [
 "burst",
-"vis"
+"vis",
+"global"
 ],
 "zuus_heavenly_jump": [
 "mob"
