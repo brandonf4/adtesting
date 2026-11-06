@@ -25,12 +25,14 @@ function profile(items) {
   const tags = {};
   for (const i of items) for (const t of TAGS[i.kind === 'model' ? 'model_' + i.name : i.name] || []) tags[t] = (tags[t] || 0) + 1;
   const has = (...ts) => ts.some(t => tags[t]);
+  const USEFUL = ['atk', 'aspd', 'orb', 'rng', 'gap', 'mob', 'invis', 'def', 'sus', 'life', 'dis', 'aoed', 'silence', 'slow', 'burst', 'dot', 'wc', 'summ', 'antiphys', 'antimag', 'debuff'];
+  const dead = items.filter(i => i.kind !== 'model' && !(TAGS[i.name] || []).some(t => USEFUL.includes(t))).length;
   const count = (...ts) => ts.reduce((n, t) => n + (tags[t] || 0), 0);
   const ranged = !!s.ranged;
   const tanky = s.attr === 'str' || (s.ArmorPhysical || 0) >= 3;
   const squishy = ranged && (s.attr === 'int' || s.attr === 'uni') && (s.ArmorPhysical || 0) <= 1;
   return {
-    model: model && model.name, s, tags, has, count, ranged, tanky, squishy,
+    model: model && model.name, s, tags, has, count, ranged, tanky, squishy, dead,
     slowAttacker: (s.AttackRate || 1.7) >= 1.8,
     slowMover: (s.MovementSpeed || 300) < 290,
     intModel: s.attr === 'int',
@@ -41,14 +43,20 @@ function profile(items) {
 const ARCHETYPES = {
   rightClick: {
     label: 'Right-click carry',
-    strength: p => p.count(...CARRY_TAGS),
+    // Carry notes (carries-001): the model is the first filter; ranged
+    // agility clickers are generally best, all else equal.
+    strength: p => p.count(...CARRY_TAGS) + (p.has('mt_rclick') ? 1 : 0) + (p.s.attr === 'agi' ? 0.5 : 0),
     needs: p => [
-      ['attack output', p.count(...CARRY_TAGS) >= 2],
-      // A melee right-clicker needs a real gap close (Brandon, batch-001-1005:
-      // melee right-click is generally bad unless there's a good reason).
-      ['reach (ranged, or a gap close for melee)', p.ranged || p.has('gap')],
+      // The model is the first filter, so this counts double.
+      ['a right-click model', p.has('mt_rclick', 'mt_mclick')],
+      ['a right-click model', p.has('mt_rclick', 'mt_mclick')],
+      ['attack steroid', p.has('atk', 'aspd')],
+      // A melee right-clicker needs a real gap close and survivability
+      // (batch-001-1005, carries-001-3).
+      ['reach (ranged, or a gap close for melee)', p.ranged || p.has('gap') || (p.tanky && p.count('def', 'sus', 'life', 'antiphys') >= 2)],
       ['attack rate', !p.slowAttacker || p.has('aspd')],
-      ['survive while attacking', p.has('def', 'sus', 'life') || p.tanky],
+      ['survive while attacking', p.has('def', 'sus', 'life', 'antiphys') || (p.tanky && !p.ranged)],
+      ['a slow or disable to stick to targets', p.has('slow', 'dis', 'aoed')],
       ['move around', !p.slowMover || p.has('mob', 'gap')],
     ],
   },
@@ -109,7 +117,8 @@ const POSITIONS = {
     ['mobility', p.has('mob', 'gap', 'invis')],
     ['wave clear', p.has('wc')],
   ] },
-  pos1: { label: 'Pos 1', archetypes: ['rightClick'], needs: p => [['farming speed (wave clear)', p.has('wc')]] },
+  // Farming speed decides most carry pairs (carries-001), so it counts double.
+  pos1: { label: 'Pos 1', archetypes: ['rightClick'], needs: p => [['farming speed (wave clear)', p.has('wc')], ['farming speed (wave clear)', p.has('wc')]] },
   offlane: { label: 'Offlane', archetypes: ['brawler', 'spellBurst'], needs: p => [['survive the hard lane', p.has('def', 'sus', 'life', 'mob') || p.tanky]] },
   pos4: { label: 'Pos 4', archetypes: ['meleeSupport', 'harassSupport'], needs: () => [] },
   pos5: { label: 'Pos 5', archetypes: ['backlineSupport', 'meleeSupport'], needs: () => [] },
@@ -124,8 +133,11 @@ function seatAt(p, pos) {
     const holes = [...A.needs(p), ...POSITIONS[pos].needs(p)].filter(([, ok]) => !ok).map(([l]) => l);
     // Carry-only spells on a support are mostly wasted.
     const waste = SUPPORT_POS.has(pos) ? p.count(...CARRY_TAGS) : 0;
-    const value = Math.min(3, A.strength(p)) - holes.length - 0.5 * waste;
-    if (!best || value > best.value) best = { archetype: a, label: A.label, holes, waste, value };
+    // A carry with support spells is a confused build; spells that help
+    // neither farming nor fighting are dead slots (carries-001-8, -25).
+    const confused = pos === 'pos1' ? p.count('heal', 'save') + p.dead : 0;
+    const value = Math.min(3, A.strength(p)) - new Set(holes).size - (holes.length - new Set(holes).size) - 0.5 * waste - 0.5 * confused;
+    if (!best || value > best.value) best = { archetype: a, label: A.label, holes: [...new Set(holes)], waste, value };
   }
   return best;
 }
@@ -154,4 +166,4 @@ function teamFit(team) {
   return { value: best.value + team_, seats };
 }
 
-module.exports = { teamFit, profile, seatAt, ARCHETYPES, POSITIONS };
+module.exports = { teamFit, profile, seatAt, ARCHETYPES, POSITIONS, TAGS };

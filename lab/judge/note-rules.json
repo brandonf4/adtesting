@@ -18,6 +18,44 @@
       "modelAttack": "ranged",
       "value": -4,
       "from": "batch-001-1000: Borrowed Time is mostly wasted on a squishy intelligence hero that sits in the back"
+    },
+    {
+      "item": "lina_fiery_soul",
+      "unlessTagAny": [
+        "magical",
+        "pure"
+      ],
+      "value": -5,
+      "from": "carries-001-14: Fiery Soul needs spells that deal damage to proc; without one the build is useless"
+    },
+    {
+      "item": "naga_siren_mirror_image",
+      "modelAttack": "melee",
+      "unlessAny": [
+        "naga_siren_rip_tide"
+      ],
+      "value": -4,
+      "from": "carries-001-25: Mirror Image on a melee hero without Rip Tide is weak and farms slowly"
+    },
+    {
+      "item": "centaur_return",
+      "modelAttack": "ranged",
+      "value": -3,
+      "from": "carries-001-13: Retaliate is not good on a ranged (Dark Willow) model"
+    },
+    {
+      "item": "tidehunter_anchor_smash",
+      "modelAttack": "melee",
+      "value": -3,
+      "from": "carries-001-1: melee Anchor Smash is bad"
+    },
+    {
+      "item": "medusa",
+      "unlessAny": [
+        "medusa_mystic_snake"
+      ],
+      "value": -2,
+      "from": "carries-001-12: Medusa without Mystic Snake is weak early and farms slower"
     }
   ],
   "models": [],

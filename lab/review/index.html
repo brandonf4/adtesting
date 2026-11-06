@@ -255,7 +255,7 @@ async function saveTags(name, tags) {
 function renderList() {
   document.getElementById('list').innerHTML = '<h5>Team drafts</h5>' + BATCH.drafts.map((d, i) =>
     `<button class="${i === current ? 'on' : ''}" onclick="go(${i})"><span>Draft ${i + 1}</span><span class="tick">${saved[d.id] ? '✓' : ''}</span></button>`).join('')
-    + (CARRIES ? '<h5>Carry vs carry</h5>' + CARRIES.pairs.map((p, i) => `<button class="${current === 1000 + i ? 'on' : ''}" onclick="go(${1000 + i})"><span>Pair ${i + 1}</span><span class="tick">${cSaved[p.id] ? '✓' : ''}</span></button>`).join('') : '')
+    + (CARRIES ? CARRIES.pairs.map((p, i) => `${i === 0 || CARRIES.pairs[i - 1].batch !== p.batch ? `<h5>Carry vs carry · ${esc(String(p.batch).replace('carries-', ''))}</h5>` : ''}<button class="${current === 1000 + i ? 'on' : ''}" onclick="go(${1000 + i})"><span>Pair ${pairNo(i)}</span><span class="tick">${cSaved[p.id] ? '✓' : ''}</span></button>`).join('') : '')
     + '<h5>Other</h5>'
     + `<button class="${current === -1 ? 'on' : ''}" onclick="go(-1)"><span>General notes</span><span class="tick">${notes.length || ''}</span></button>`
     + `<button class="${current === -2 ? 'on' : ''}" onclick="go(-2)"><span>Ability tags</span><span class="tick">${Object.keys(tagEdits).length || ''}</span></button>`;
@@ -346,16 +346,17 @@ function buildHtml(items) {
     ${mt.length ? `<div class="mtags">${esc(mt.join(' · '))}</div>` : ''}</div>`;
 }
 
+function pairNo(i) { const p = CARRIES.pairs[i]; return +String(p.id).split('-').pop(); }
 function renderPair(v, i) {
   const p = CARRIES.pairs[i], j = p.judge;
   const prev = cSaved[p.id];
   form = prev ? { winner: prev.winner, confidence: prev.confidence, tags: [...(prev.tags || [])], note: prev.note || '' } : { winner: null, confidence: null, tags: [], note: '' };
   const fitLine = (k, x) => `<div><b>${k}</b>: ${esc(x.archetype)}${x.missing.length ? ` <span class="muted">· missing ${esc(x.missing.join(', '))}</span>` : ' <span class="muted">· nothing missing</span>'}</div>`;
-  v.innerHTML = `<h2 style="font-size:15px;margin-top:0">Pair ${i + 1}: which is the better pos 1 build?</h2>
+  v.innerHTML = `<h2 style="font-size:15px;margin-top:0">Pair ${pairNo(i)} (${esc(p.batch)}): which is the better pos 1 build?</h2>
     <p class="muted" style="margin-top:0">In a general sense, as a baseline. The rest of the team and the enemy don't count here.</p>
     <div class="pair"><div><h2>A</h2>${buildHtml(p.a)}</div><div><h2>B</h2>${buildHtml(p.b)}</div></div>
     <div class="panel judge-call"><b>The judge's call: ${j.pick.toUpperCase()} (${Math.round(100 * Math.max(j.pA, 1 - j.pA))}%)</b>
-      <span class="muted">· score A ${j.a.score}, B ${j.b.score}</span>
+      <span class="muted">· judge ${esc(CARRIES.judgeVersion || '')} · score A ${j.a.score}, B ${j.b.score}${prev ? ` · you picked ${prev.winner === 'skip' ? "can't tell" : prev.winner.toUpperCase()}` : ''}</span>
       <ul>${j.why.slice(0, -1).map(w => `<li>${esc(w)}</li>`).join('')}</ul>
       <div class="seatfit">${fitLine('A', j.a)}${fitLine('B', j.b)}</div></div>
     <div class="panel">
@@ -387,7 +388,7 @@ function renderPair(v, i) {
     form.note = document.getElementById('note').value.trim();
     if (!form.winner) { st.textContent = 'Pick which is better first (or "Can\'t tell").'; return; }
     if (!db) { st.textContent = 'Saving is unavailable here, so this verdict was not saved.'; return; }
-    const body = { batch: CARRIES.batch, pair: p.id, winner: form.winner, confidence: form.confidence, tags: form.tags, note: form.note, judgePick: j.pick, at: new Date().toISOString() };
+    const body = { batch: p.batch || CARRIES.batch, pair: p.id, winner: form.winner, confidence: form.confidence, tags: form.tags, note: form.note, judgePick: j.pick, at: new Date().toISOString() };
     st.textContent = 'Saving…';
     try {
       await db.doc(`carryJudgments/${p.id}`).set(body);

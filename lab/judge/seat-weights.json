@@ -1,6 +1,12 @@
 {
-  "version": "v0",
-  "note": "Stand-in judge for single builds at one position (carry pairs first). Hand-set to match the team judge's weights; refit from Brandon's pair verdicts.",
+  "version": "v1",
+  "note": "Stand-in judge for single builds at one position. v1 (2026-11-06): carry lessons from carries-001 added to the right-click archetype and note rules; general ability strength cut to 0.25 because it isn't carry-specific (grid over Brandon's 24 decided carry pairs).",
   "scale": 6,
-  "weights": { "strength": 1.0, "synergy": 1.0, "aghs": 1.0, "notes": 1.0, "fit": 3.0 }
+  "weights": {
+    "strength": 0.25,
+    "synergy": 1.0,
+    "aghs": 1.0,
+    "notes": 1.0,
+    "fit": 3.0
+  }
 }

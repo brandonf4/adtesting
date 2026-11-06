@@ -3,7 +3,7 @@
 // Features are kept readable on purpose, so you can see why it likes a draft.
 'use strict';
 const fs = require('fs');
-const { teamFit } = require('./archetypes');
+const { teamFit, TAGS } = require('./archetypes');
 const path = require('path');
 
 const WEIGHTS_FILE = path.join(__dirname, 'weights.json');
@@ -60,6 +60,8 @@ function seatFeatures(engine, items) {
     if (r.modelAttack && r.modelAttack !== attack) continue;
     if (r.modelAttr && r.modelAttr !== attr) continue;
     if ((r.unlessAny || []).some(n => names.includes(n))) continue;
+    // Needs another item with one of these tags (e.g. Fiery Soul needs a damaging spell).
+    if (r.unlessTagAny && names.some(n => n !== r.item && (TAGS[n] || []).some(t => r.unlessTagAny.includes(t)))) continue;
     notes += r.value;
   }
   for (const r of RULES.models || []) if (model && model.name === r.model) notes += r.value;

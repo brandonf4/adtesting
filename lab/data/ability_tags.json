@@ -2971,7 +2971,8 @@
 ],
 "model_ogre_magi": [
 "mt_mcast",
-"mt_front"
+"mt_front",
+"mt_mclick"
 ],
 "model_dawnbreaker": [
 "mt_mcast",
