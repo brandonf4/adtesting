@@ -32,7 +32,8 @@
 "physical": "Physical damage",
 "magical": "Magical damage",
 "pure": "Pure damage",
-"bkb": "BKB-piercing disable"
+"bkb": "BKB-piercing disable",
+"tf": "Teamfight"
 },
 "tags": {
 "abaddon_frostmourne": [
@@ -43,7 +44,8 @@
 ],
 "abaddon_borrowed_time": [
 "life",
-"def"
+"def",
+"tf"
 ],
 "abaddon_aphotic_shield": [
 "save",
@@ -70,7 +72,8 @@
 ],
 "abyssal_underlord_pit_of_malice": [
 "aoed",
-"magical"
+"magical",
+"tf"
 ],
 "abyssal_underlord_dark_portal": [
 "mob",
@@ -106,7 +109,8 @@
 "dot",
 "debuff",
 "global",
-"magical"
+"magical",
+"tf"
 ],
 "ancient_apparition_cold_feet": [
 "dis",
@@ -163,7 +167,8 @@
 "aoed",
 "init",
 "def",
-"bkb"
+"bkb",
+"tf"
 ],
 "axe_battle_hunger": [
 "dot",
@@ -297,7 +302,8 @@
 "brewmaster_primal_split": [
 "summ",
 "life",
-"init"
+"init",
+"tf"
 ],
 "brewmaster_cinder_brew": [
 "slow",
@@ -367,7 +373,8 @@
 "mob",
 "init",
 "save",
-"magical"
+"magical",
+"tf"
 ],
 "chaos_knight_chaos_strike": [
 "atk",
@@ -427,7 +434,8 @@
 "crystal_maiden_freezing_field": [
 "dot",
 "slow",
-"magical"
+"magical",
+"tf"
 ],
 "crystal_maiden_crystal_nova": [
 "slow",
@@ -440,15 +448,18 @@
 "wc",
 "dot",
 "lane",
-"magical"
+"magical",
+"tf"
 ],
 "dark_seer_wall_of_replica": [
-"summ"
+"summ",
+"tf"
 ],
 "dark_seer_vacuum": [
 "aoed",
 "init",
-"magical"
+"magical",
+"tf"
 ],
 "dark_seer_surge": [
 "mob",
@@ -543,7 +554,8 @@
 "disruptor_static_storm": [
 "silence",
 "aoed",
-"magical"
+"magical",
+"tf"
 ],
 "disruptor_thunder_strike": [
 "dot",
@@ -552,7 +564,8 @@
 "magical"
 ],
 "disruptor_kinetic_field": [
-"aoed"
+"aoed",
+"tf"
 ],
 "doom_bringer_infernal_blade": [
 "atk",
@@ -622,7 +635,8 @@
 "earth_spirit_magnetize": [
 "dot",
 "silence",
-"magical"
+"magical",
+"tf"
 ],
 "earth_spirit_boulder_smash": [
 "dis",
@@ -640,7 +654,8 @@
 ],
 "earthshaker_aftershock": [
 "aoed",
-"magical"
+"magical",
+"tf"
 ],
 "earthshaker_fissure": [
 "aoed",
@@ -651,7 +666,8 @@
 "burst",
 "aoed",
 "init",
-"magical"
+"magical",
+"tf"
 ],
 "elder_titan_natural_order": [
 "debuff"
@@ -664,11 +680,13 @@
 "elder_titan_earth_splitter": [
 "slow",
 "burst",
-"magical"
+"magical",
+"tf"
 ],
 "elder_titan_echo_stomp": [
 "aoed",
-"physical"
+"physical",
+"tf"
 ],
 "ember_spirit_sleight_of_fist": [
 "atk",
@@ -709,7 +727,8 @@
 "aoed",
 "init",
 "pure",
-"bkb"
+"bkb",
+"tf"
 ],
 "enigma_malefice": [
 "dis",
@@ -717,7 +736,8 @@
 ],
 "enigma_midnight_pulse": [
 "dot",
-"magical"
+"magical",
+"tf"
 ],
 "enigma_demonic_conversion": [
 "summ",
@@ -738,7 +758,8 @@
 "faceless_void_chronosphere": [
 "aoed",
 "init",
-"bkb"
+"bkb",
+"tf"
 ],
 "faceless_void_time_dilation": [
 "slow",
@@ -897,12 +918,14 @@
 ],
 "jakiro_ice_path": [
 "aoed",
-"magical"
+"magical",
+"tf"
 ],
 "jakiro_macropyre": [
 "dot",
 "wc",
-"magical"
+"magical",
+"tf"
 ],
 "jakiro_dual_breath": [
 "burst",
@@ -929,7 +952,8 @@
 ],
 "juggernaut_healing_ward": [
 "heal",
-"push"
+"push",
+"tf"
 ],
 "keeper_of_the_light_chakra_magic": [
 "mana",
@@ -1045,7 +1069,8 @@
 "leshrac_pulse_nova": [
 "dot",
 "wc",
-"magical"
+"magical",
+"tf"
 ],
 "leshrac_diabolic_edict": [
 "dot",
@@ -1060,7 +1085,8 @@
 ],
 "lich_chain_frost": [
 "burst",
-"magical"
+"magical",
+"tf"
 ],
 "lich_sinister_gaze": [
 "dis"
@@ -1190,7 +1216,8 @@
 "magnataur_reverse_polarity": [
 "aoed",
 "init",
-"bkb"
+"bkb",
+"tf"
 ],
 "magnataur_shockwave": [
 "burst",
@@ -1232,7 +1259,8 @@
 "mars_arena_of_blood": [
 "aoed",
 "init",
-"magical"
+"magical",
+"tf"
 ],
 "medusa_split_shot": [
 "wc",
@@ -1296,7 +1324,8 @@
 "monkey_king_wukongs_command": [
 "aoed",
 "atk",
-"physical"
+"physical",
+"tf"
 ],
 "monkey_king_tree_dance": [
 "mob",
@@ -1344,7 +1373,8 @@
 ],
 "naga_siren_song_of_the_siren": [
 "aoed",
-"save"
+"save",
+"tf"
 ],
 "necrolyte_reapers_scythe": [
 "burst",
@@ -1380,7 +1410,8 @@
 "nevermore_requiem": [
 "burst",
 "slow",
-"magical"
+"magical",
+"tf"
 ],
 "night_stalker_darkness": [
 "vis",
@@ -1464,7 +1495,8 @@
 "pure"
 ],
 "omniknight_guardian_angel": [
-"save"
+"save",
+"tf"
 ],
 "oracle_fortunes_end": [
 "dis",
@@ -1499,7 +1531,8 @@
 "aoed",
 "init",
 "mob",
-"physical"
+"physical",
+"tf"
 ],
 "phantom_assassin_phantom_strike": [
 "gap",
@@ -1544,7 +1577,8 @@
 "aoed",
 "life",
 "magical",
-"bkb"
+"bkb",
+"tf"
 ],
 "phoenix_fire_spirits": [
 "dot",
@@ -1578,7 +1612,8 @@
 ],
 "puck_dream_coil": [
 "aoed",
-"magical"
+"magical",
+"tf"
 ],
 "puck_phase_shift": [
 "def"
@@ -1627,7 +1662,8 @@
 ],
 "pugna_nether_ward": [
 "dot",
-"magical"
+"magical",
+"tf"
 ],
 "pugna_decrepify": [
 "save",
@@ -1750,7 +1786,8 @@
 "sandking_epicenter": [
 "aoed",
 "dot",
-"magical"
+"magical",
+"tf"
 ],
 "sandking_scorpion_strike": [
 "burst",
@@ -1783,7 +1820,8 @@
 "shadow_shaman_mass_serpent_ward": [
 "push",
 "dot",
-"physical"
+"physical",
+"tf"
 ],
 "shadow_shaman_ether_shock": [
 "burst",
@@ -1818,7 +1856,8 @@
 "silencer_global_silence": [
 "silence",
 "global",
-"bkb"
+"bkb",
+"tf"
 ],
 "silencer_curse_of_the_silent": [
 "dot",
@@ -1832,7 +1871,8 @@
 "atk"
 ],
 "skeleton_king_reincarnation": [
-"life"
+"life",
+"tf"
 ],
 "skeleton_king_hellfire_blast": [
 "dis",
@@ -1908,7 +1948,8 @@
 "snapfire_mortimer_kisses": [
 "dot",
 "slow",
-"magical"
+"magical",
+"tf"
 ],
 "snapfire_firesnap_cookie": [
 "dis",
@@ -2076,7 +2117,8 @@
 "tidehunter_ravage": [
 "aoed",
 "init",
-"magical"
+"magical",
+"tf"
 ],
 "tinker_rearm": [
 "mana"
@@ -2120,7 +2162,8 @@
 "treant_overgrowth": [
 "aoed",
 "magical",
-"bkb"
+"bkb",
+"tf"
 ],
 "treant_natures_grasp": [
 "slow",
@@ -2184,7 +2227,8 @@
 ],
 "undying_tombstone": [
 "summ",
-"physical"
+"physical",
+"tf"
 ],
 "undying_flesh_golem": [
 "atk",
@@ -2228,7 +2272,8 @@
 ],
 "venomancer_noxious_plague": [
 "dot",
-"magical"
+"magical",
+"tf"
 ],
 "venomancer_venomous_gale": [
 "slow",
@@ -2302,16 +2347,19 @@
 ],
 "warlock_fatal_bonds": [
 "dot",
-"debuff"
+"debuff",
+"tf"
 ],
 "warlock_rain_of_chaos": [
 "aoed",
 "summ",
-"bkb"
+"bkb",
+"tf"
 ],
 "warlock_upheaval": [
 "slow",
-"magical"
+"magical",
+"tf"
 ],
 "warlock_shadow_word": [
 "heal",
@@ -2359,7 +2407,8 @@
 ],
 "winter_wyvern_winters_curse": [
 "aoed",
-"bkb"
+"bkb",
+"tf"
 ],
 "winter_wyvern_cold_embrace": [
 "save"
@@ -2396,7 +2445,8 @@
 ],
 "witch_doctor_death_ward": [
 "dot",
-"pure"
+"pure",
+"tf"
 ],
 "witch_doctor_voodoo_restoration": [
 "heal",
