@@ -2763,7 +2763,8 @@
 "mt_rcast"
 ],
 "model_jakiro": [
-"mt_rcast"
+"mt_rcast",
+"mt_rclick"
 ],
 "model_chen": [
 "mt_rcast"
