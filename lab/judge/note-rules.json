@@ -1,21 +1,38 @@
 {
-  "note": "Judge-only adjustments taken from Brandon's verdict notes. Each rule says which note it came from. They change only the stand-in judge (lab), never the site bot. Values are in synergy points (winrate points).",
-  "pairs": [
-    { "a": "life_stealer_feast", "b": "juggernaut_blade_fury", "value": 4, "from": "batch-001-1001: Juggernaut with Feast is very strong, he can right-click while healing" },
-    { "a": "batrider_sticky_napalm", "b": "gyrocopter_rocket_barrage", "value": 3, "from": "batch-001-1003: Napalm + Rocket Barrage is a solid combo (windrun had -4.0)" },
-    { "a": "beastmaster_summon_raptor", "b": "tinker_rearm", "value": 4, "from": "batch-001-1001: Summon Raptors is also very good with Rearm (windrun had -5.0)" },
-    { "a": "keeper_of_the_light_spirit_form", "b": "keeper_of_the_light", "value": 6, "from": "batch-001-1007: the Keeper model is much better with Spirit Form than Lich (windrun had -0.3)" }
-  ],
+  "note": "Judge-only, context-dependent rules from Brandon's verdict notes (lab only, never the site bot). Flat model and pair value edits were removed on 2026-11-06 at Brandon's request: notes describe build context, which is being modeled as archetypes, needs and what covers them.",
+  "pairs": [],
   "conditional": [
-    { "item": "phantom_lancer_juxtapose", "modelAttack": "melee", "unlessAny": ["phantom_lancer_doppelwalk", "phantom_lancer_phantom_edge"], "value": -6, "from": "batch-001-1000: Juxtapose on a melee hero without Doppelganger or Phantom Rush is always bad" },
-    { "item": "abaddon_borrowed_time", "modelAttr": "int", "modelAttack": "ranged", "value": -4, "from": "batch-001-1000: Borrowed Time is mostly wasted on a squishy intelligence hero that sits in the back" }
+    {
+      "item": "phantom_lancer_juxtapose",
+      "modelAttack": "melee",
+      "unlessAny": [
+        "phantom_lancer_doppelwalk",
+        "phantom_lancer_phantom_edge"
+      ],
+      "value": -6,
+      "from": "batch-001-1000: Juxtapose on a melee hero without Doppelganger or Phantom Rush is always bad"
+    },
+    {
+      "item": "abaddon_borrowed_time",
+      "modelAttr": "int",
+      "modelAttack": "ranged",
+      "value": -4,
+      "from": "batch-001-1000: Borrowed Time is mostly wasted on a squishy intelligence hero that sits in the back"
+    }
   ],
-  "models": [
-    { "model": "huskar", "value": -4, "from": "batch-001-1002: Huskar is a very, very bad model" },
-    { "model": "weaver", "value": 5, "from": "batch-001-1005: should have been Weaver over Sand King; melee right-click is generally bad (windrun strength puts Weaver last, Brandon disagrees)" }
-  ],
+  "models": [],
   "counters": [
-    { "counter": "viper_viper_strike", "countered": "huskar_berserkers_blood", "value": 8, "from": "batch-001-1002: Viper Strike completely counters Berserker's Blood" },
-    { "counter": "viper_viper_strike", "countered": "bristleback_bristleback", "value": 8, "from": "batch-001-1002: Viper Strike completely counters Bristleback's passive" }
+    {
+      "counter": "viper_viper_strike",
+      "countered": "huskar_berserkers_blood",
+      "value": 8,
+      "from": "batch-001-1002: Viper Strike completely counters Berserker's Blood"
+    },
+    {
+      "counter": "viper_viper_strike",
+      "countered": "bristleback_bristleback",
+      "value": 8,
+      "from": "batch-001-1002: Viper Strike completely counters Bristleback's passive"
+    }
   ]
 }
