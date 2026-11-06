@@ -7,6 +7,10 @@ const path = require('path');
 
 const WEIGHTS_FILE = path.join(__dirname, 'weights.json');
 const COUNTERS_FILE = path.join(__dirname, 'ability-counter-pairs.json');
+const RULES_FILE = path.join(__dirname, 'note-rules.json');
+const RULES = fs.existsSync(RULES_FILE) ? JSON.parse(fs.readFileSync(RULES_FILE, 'utf8')) : { pairs: [], conditional: [], models: [], counters: [] };
+const pairKey = (a, b) => (a < b ? a + '|' + b : b + '|' + a);
+const RULE_PAIRS = new Map((RULES.pairs || []).map(r => [pairKey(r.a, r.b), r.value]));
 
 function loadWeights(file = WEIGHTS_FILE) { return JSON.parse(fs.readFileSync(file, 'utf8')); }
 
@@ -28,6 +32,10 @@ function counters(engine) {
     if (!counterIndex.has(a)) counterIndex.set(a, new Map());
     counterIndex.get(a).set(b, r.value);
   }
+  for (const r of RULES.counters || []) {
+    if (!counterIndex.has(r.counter)) counterIndex.set(r.counter, new Map());
+    counterIndex.get(r.counter).set(r.countered, r.value);
+  }
   return counterIndex;
 }
 
@@ -35,18 +43,30 @@ function seatFeatures(engine, items) {
   const lab = engine.lab, names = items.map(i => i.name);
   let strength = 0, synergy = 0, aghs = 0;
   for (const n of names) strength += lab.STRENGTH[n] || 0;
-  for (let i = 0; i < names.length; i++) for (let j = i + 1; j < names.length; j++) synergy += lab.synergyBetween(names[i], names[j]);
+  for (let i = 0; i < names.length; i++) for (let j = i + 1; j < names.length; j++) { const k = pairKey(names[i], names[j]); synergy += RULE_PAIRS.has(k) ? RULE_PAIRS.get(k) : lab.synergyBetween(names[i], names[j]); }
   for (const kind of ['scepter', 'shard']) {
     const units = lab.upgradeUnits(names, kind);
     for (let i = 0; i < units.length; i++) for (let j = i + 1; j < units.length; j++) {
       if (!lab.unitsHavePairData(units[i], units[j])) aghs += lab.upgradePairValue(kind, units[i], units[j]);
     }
   }
-  return { strength, synergy, aghs };
+  // Brandon's note rules: conditional item fits and model adjustments.
+  let notes = 0;
+  const model = items.find(i => i.kind === 'model');
+  const [attr, attack] = (model && lab.MODEL_TYPES.get(model.name)) || [];
+  for (const r of RULES.conditional || []) {
+    if (!names.includes(r.item) || !model) continue;
+    if (r.modelAttack && r.modelAttack !== attack) continue;
+    if (r.modelAttr && r.modelAttr !== attr) continue;
+    if ((r.unlessAny || []).some(n => names.includes(n))) continue;
+    notes += r.value;
+  }
+  for (const r of RULES.models || []) if (model && model.name === r.model) notes += r.value;
+  return { strength, synergy, aghs, notes };
 }
 
 function teamFeatures(engine, team, enemy, firstSeat) {
-  const lab = engine.lab, f = { strength: 0, synergy: 0, aghs: 0 };
+  const lab = engine.lab, f = { strength: 0, synergy: 0, aghs: 0, notes: 0 };
   for (const seat of team) { const s = seatFeatures(engine, seat); for (const k in s) f[k] += s[k]; }
   f.roleFitLost = lab.teamAssignment(firstSeat).lost;
   // Hero counters: STRATZ normal-Dota matchup of each of our models vs theirs.

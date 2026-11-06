@@ -1,6 +1,6 @@
 {
-  "version": "v0",
-  "note": "Hand-set starting weights. Each feature is Radiant minus Dire, roughly in winrate points. fit-judge.js refits these from your judgments.",
+  "version": "v0.1",
+  "note": "Hand-set starting weights (v0) plus Brandon's note rules (note-rules.json) as the 'notes' feature. Each feature is Radiant minus Dire, roughly in winrate points. fit-judge.js refits these from Brandon's verdicts once there are enough.",
   "scale": 10,
   "weights": {
     "strength": 1.0,
@@ -8,6 +8,7 @@
     "aghs": 1.0,
     "roleFitLost": -3.0,
     "heroCounters": 0.1,
-    "abilityCounters": 0.3
+    "abilityCounters": 0.3,
+    "notes": 1.0
   }
 }

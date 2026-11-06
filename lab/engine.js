@@ -56,6 +56,7 @@ globalThis.__lab = {
   get done() { return done; }, set done(v) { done = v; },
   get ALL_HEROES() { return ALL_HEROES; },
   get STRENGTH() { return STRENGTH; },
+  get MODEL_TYPES() { return MODEL_TYPES; },
   get HERO_MATCHUPS() { return HERO_MATCHUPS; },
   get ABILITY_HERO() { return ABILITY_HERO; },
   resetCache() { botDecisionCache = null; },
