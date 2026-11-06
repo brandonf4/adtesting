@@ -2728,7 +2728,8 @@
 "mt_rcast"
 ],
 "model_dark_willow": [
-"mt_rcast"
+"mt_rcast",
+"mt_rclick"
 ],
 "model_shadow_shaman": [
 "mt_rcast"
