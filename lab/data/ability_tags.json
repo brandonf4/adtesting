@@ -353,8 +353,7 @@
 "physical"
 ],
 "bristleback_bristleback": [
-"def",
-"antiphys"
+"def"
 ],
 "bristleback_warpath": [
 "atk",
@@ -1308,8 +1307,7 @@
 ],
 "marci_bodyguard": [
 "def",
-"save",
-"antiphys"
+"save"
 ],
 "marci_companion_run": [
 "mob",
@@ -1528,7 +1526,6 @@
 "nyx_assassin_spiked_carapace": [
 "def",
 "dis",
-"antiphys",
 "antimag"
 ],
 "nyx_assassin_jolt": [
@@ -1723,8 +1720,7 @@
 "tf"
 ],
 "puck_phase_shift": [
-"def",
-"antiphys"
+"def"
 ],
 "puck_illusory_orb": [
 "mob",
@@ -2105,8 +2101,7 @@
 "magical"
 ],
 "spectre_dispersion": [
-"def",
-"antiphys"
+"def"
 ],
 "spectre_haunt": [
 "gap",
@@ -2204,8 +2199,7 @@
 "templar_assassin_refraction": [
 "def",
 "atk",
-"physical",
-"antiphys"
+"physical"
 ],
 "templar_assassin_meld": [
 "atk",
@@ -2463,8 +2457,7 @@
 "magical"
 ],
 "visage_gravekeepers_cloak": [
-"def",
-"antiphys"
+"def"
 ],
 "visage_grave_chill": [
 "slow",
