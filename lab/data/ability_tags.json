@@ -448,8 +448,7 @@
 "wc",
 "dot",
 "lane",
-"magical",
-"tf"
+"magical"
 ],
 "dark_seer_wall_of_replica": [
 "summ",
@@ -528,7 +527,8 @@
 "death_prophet_exorcism": [
 "dot",
 "push",
-"physical"
+"physical",
+"tf"
 ],
 "death_prophet_spirit_siphon": [
 "sus",
@@ -1820,8 +1820,7 @@
 "shadow_shaman_mass_serpent_ward": [
 "push",
 "dot",
-"physical",
-"tf"
+"physical"
 ],
 "shadow_shaman_ether_shock": [
 "burst",
