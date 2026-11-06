@@ -39,7 +39,8 @@
 "odispel": "Offensive dispel",
 "odisp": "Offensively dispellable (buff)",
 "ddisp": "Defensively dispellable (debuff)",
-"antiphys": "Anti physical damage"
+"antiphys": "Anti physical damage",
+"antimag": "Anti magic damage"
 },
 "tags": {
 "abaddon_frostmourne": [
@@ -53,14 +54,16 @@
 "life",
 "def",
 "tf",
-"hdispel"
+"hdispel",
+"antimag"
 ],
 "abaddon_aphotic_shield": [
 "save",
 "def",
 "lane",
 "magical",
-"hdispel"
+"hdispel",
+"antimag"
 ],
 "abaddon_death_coil": [
 "heal",
@@ -143,14 +146,17 @@
 "antimage_mana_break": [
 "orb",
 "mana",
-"physical"
+"physical",
+"antimag"
 ],
 "antimage_counterspell": [
-"def"
+"def",
+"antimag"
 ],
 "antimage_mana_void": [
 "burst",
-"magical"
+"magical",
+"antimag"
 ],
 "arc_warden_flux": [
 "slow",
@@ -296,7 +302,8 @@
 "aoed",
 "burst",
 "sus",
-"pure"
+"pure",
+"antimag"
 ],
 "bounty_hunter_jinada": [
 "atk",
@@ -320,7 +327,8 @@
 "brewmaster_drunken_brawler": [
 "def",
 "atk",
-"antiphys"
+"antiphys",
+"antimag"
 ],
 "brewmaster_primal_split": [
 "summ",
@@ -552,7 +560,8 @@
 ],
 "dazzle_shallow_grave": [
 "save",
-"life"
+"life",
+"antimag"
 ],
 "dazzle_nothl_projection": [
 "heal",
@@ -579,7 +588,8 @@
 "death_prophet_silence": [
 "silence",
 "aoed",
-"ddisp"
+"ddisp",
+"antimag"
 ],
 "disruptor_glimpse": [
 "save",
@@ -590,7 +600,8 @@
 "silence",
 "aoed",
 "magical",
-"tf"
+"tf",
+"antimag"
 ],
 "disruptor_thunder_strike": [
 "dot",
@@ -615,7 +626,8 @@
 "dis",
 "pure",
 "bkb",
-"odispel"
+"odispel",
+"antimag"
 ],
 "doom_bringer_scorched_earth": [
 "dot",
@@ -656,7 +668,8 @@
 ],
 "drow_ranger_wave_of_silence": [
 "silence",
-"save"
+"save",
+"antimag"
 ],
 "drow_ranger_multishot": [
 "dot",
@@ -746,7 +759,8 @@
 "def",
 "dot",
 "magical",
-"odisp"
+"odisp",
+"antimag"
 ],
 "enchantress_impetus": [
 "atk",
@@ -891,7 +905,8 @@
 "huskar_berserkers_blood": [
 "sus",
 "aspd",
-"sdispel"
+"sdispel",
+"antimag"
 ],
 "huskar_burning_spear": [
 "orb",
@@ -942,7 +957,8 @@
 ],
 "invoker_emp_ad": [
 "burst",
-"mana"
+"mana",
+"antimag"
 ],
 "invoker_ice_wall_ad": [
 "slow"
@@ -986,7 +1002,8 @@
 "mob",
 "wc",
 "dot",
-"magical"
+"magical",
+"antimag"
 ],
 "juggernaut_blade_dance": [
 "atk",
@@ -1165,7 +1182,8 @@
 ],
 "life_stealer_rage": [
 "def",
-"sdispel"
+"sdispel",
+"antimag"
 ],
 "life_stealer_infest": [
 "mob",
@@ -1490,7 +1508,8 @@
 ],
 "night_stalker_crippling_fear": [
 "silence",
-"magical"
+"magical",
+"antimag"
 ],
 "night_stalker_midnight_feast": [
 "sus"
@@ -1512,12 +1531,14 @@
 "nyx_assassin_spiked_carapace": [
 "def",
 "dis",
-"antiphys"
+"antiphys",
+"antimag"
 ],
 "nyx_assassin_jolt": [
 "burst",
 "mana",
-"magical"
+"magical",
+"antimag"
 ],
 "obsidian_destroyer_astral_imprisonment": [
 "save",
@@ -1560,7 +1581,8 @@
 ],
 "omniknight_martyr": [
 "save",
-"def"
+"def",
+"antimag"
 ],
 "omniknight_purification": [
 "heal",
@@ -1582,7 +1604,8 @@
 ],
 "oracle_false_promise": [
 "save",
-"hdispel"
+"hdispel",
+"antimag"
 ],
 "oracle_purifying_flames": [
 "heal",
@@ -1592,7 +1615,8 @@
 ],
 "oracle_fates_edict": [
 "save",
-"antiphys"
+"antiphys",
+"antimag"
 ],
 "pangolier_swashbuckle": [
 "mob",
@@ -1751,7 +1775,8 @@
 "pugna_nether_ward": [
 "dot",
 "magical",
-"tf"
+"tf",
+"antimag"
 ],
 "pugna_decrepify": [
 "save",
@@ -1953,17 +1978,20 @@
 "silence",
 "global",
 "bkb",
-"tf"
+"tf",
+"antimag"
 ],
 "silencer_curse_of_the_silent": [
 "dot",
 "magical",
-"ddisp"
+"ddisp",
+"antimag"
 ],
 "silencer_last_word": [
 "silence",
 "magical",
-"ddisp"
+"ddisp",
+"antimag"
 ],
 "skeleton_king_mortal_strike": [
 "atk"
@@ -1988,7 +2016,8 @@
 "skywrath_mage_ancient_seal": [
 "silence",
 "debuff",
-"ddisp"
+"ddisp",
+"antimag"
 ],
 "skywrath_mage_mystic_flare": [
 "burst",
@@ -2081,7 +2110,8 @@
 ],
 "spectre_dispersion": [
 "def",
-"antiphys"
+"antiphys",
+"antimag"
 ],
 "spectre_haunt": [
 "gap",
@@ -2180,7 +2210,8 @@
 "def",
 "atk",
 "physical",
-"antiphys"
+"antiphys",
+"antimag"
 ],
 "templar_assassin_meld": [
 "atk",
@@ -2439,7 +2470,8 @@
 ],
 "visage_gravekeepers_cloak": [
 "def",
-"antiphys"
+"antiphys",
+"antimag"
 ],
 "visage_grave_chill": [
 "slow",
