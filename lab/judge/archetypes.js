@@ -51,6 +51,8 @@ const ARCHETYPES = {
       ['a right-click model', p.has('mt_rclick', 'mt_mclick')],
       ['a right-click model', p.has('mt_rclick', 'mt_mclick')],
       ['attack steroid', p.has('atk', 'aspd')],
+      // "Lacks damage" (carries-002-12, -18): two or more attack spells.
+      ['damage (two or more attack spells)', p.count(...CARRY_TAGS) >= 2],
       // A melee right-clicker needs a real gap close and survivability
       // (batch-001-1005, carries-001-3).
       ['reach (ranged, or a gap close for melee)', p.ranged || p.has('gap') || (p.tanky && p.count('def', 'sus', 'life', 'antiphys') >= 2)],

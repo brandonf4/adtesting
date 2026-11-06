@@ -56,6 +56,30 @@
       ],
       "value": -2,
       "from": "carries-001-12: Medusa without Mystic Snake is weak early and farms slower"
+    },
+    {
+      "item": "gyrocopter_flak_cannon",
+      "modelAttack": "melee",
+      "value": -4,
+      "from": "carries-002-13: melee Flak Cannon is very bad"
+    },
+    {
+      "item": "tiny_grow",
+      "modelAttr": "agi",
+      "value": -3,
+      "from": "carries-002-19: Grow on an agility carry is generally detrimental"
+    },
+    {
+      "item": "ursa_fury_swipes",
+      "modelAttack": "melee",
+      "value": -3,
+      "from": "2026-11-05 note and carries-002-12: Fury Swipes is much better on ranged models"
+    },
+    {
+      "item": "ursa_fury_swipes",
+      "modelAttack": "ranged",
+      "value": 2,
+      "from": "carries-002-12: ranged Fury Swipes (with Chaos Strike) is very strong"
     }
   ],
   "models": [],

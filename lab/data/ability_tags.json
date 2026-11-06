@@ -3065,7 +3065,8 @@
 ],
 "model_pangolier": [
 "mt_mcast",
-"mt_front"
+"mt_front",
+"mt_mclick"
 ],
 "model_centaur": [
 "mt_mcast",
