@@ -200,7 +200,8 @@
 "axe_culling_blade": [
 "burst",
 "mob",
-"pure"
+"pure",
+"antiphys"
 ],
 "bane_fiends_grip": [
 "dis",
