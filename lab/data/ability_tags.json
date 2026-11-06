@@ -28,13 +28,18 @@
 "vis": "Vision / scouting",
 "push": "Tower pressure",
 "mana": "Mana help",
-"global": "Global presence"
+"global": "Global presence",
+"physical": "Physical damage",
+"magical": "Magical damage",
+"pure": "Pure damage",
+"bkb": "BKB-piercing disable"
 },
 "tags": {
 "abaddon_frostmourne": [
 "atk",
 "slow",
-"orb"
+"orb",
+"magical"
 ],
 "abaddon_borrowed_time": [
 "life",
@@ -43,24 +48,29 @@
 "abaddon_aphotic_shield": [
 "save",
 "def",
-"lane"
+"lane",
+"magical"
 ],
 "abaddon_death_coil": [
 "heal",
 "burst",
-"lane"
+"lane",
+"magical"
 ],
 "abyssal_underlord_atrophy_aura": [
 "atk",
-"debuff"
+"debuff",
+"physical"
 ],
 "abyssal_underlord_firestorm": [
 "wc",
 "dot",
-"lane"
+"lane",
+"magical"
 ],
 "abyssal_underlord_pit_of_malice": [
-"aoed"
+"aoed",
+"magical"
 ],
 "abyssal_underlord_dark_portal": [
 "mob",
@@ -79,29 +89,35 @@
 "alchemist_acid_spray": [
 "wc",
 "dot",
-"debuff"
+"debuff",
+"physical"
 ],
 "alchemist_unstable_concoction": [
-"dis"
+"dis",
+"physical"
 ],
 "ancient_apparition_chilling_touch": [
 "burst",
 "lane",
-"rng"
+"rng",
+"magical"
 ],
 "ancient_apparition_ice_blast": [
 "dot",
 "debuff",
-"global"
+"global",
+"magical"
 ],
 "ancient_apparition_cold_feet": [
 "dis",
-"lane"
+"lane",
+"magical"
 ],
 "ancient_apparition_ice_vortex": [
 "slow",
 "debuff",
-"lane"
+"lane",
+"magical"
 ],
 "antimage_blink": [
 "mob",
@@ -109,18 +125,21 @@
 ],
 "antimage_mana_break": [
 "orb",
-"mana"
+"mana",
+"physical"
 ],
 "antimage_counterspell": [
 "def"
 ],
 "antimage_mana_void": [
-"burst"
+"burst",
+"magical"
 ],
 "arc_warden_flux": [
 "slow",
 "dot",
-"lane"
+"lane",
+"magical"
 ],
 "arc_warden_magnetic_field": [
 "def",
@@ -131,35 +150,43 @@
 "arc_warden_spark_wraith": [
 "burst",
 "wc",
-"lane"
+"lane",
+"magical"
 ],
 "axe_counter_helix": [
 "dot",
 "wc",
-"def"
+"def",
+"pure"
 ],
 "axe_berserkers_call": [
 "aoed",
 "init",
-"def"
+"def",
+"bkb"
 ],
 "axe_battle_hunger": [
 "dot",
 "slow",
-"lane"
+"lane",
+"pure"
 ],
 "axe_culling_blade": [
 "burst",
-"mob"
+"mob",
+"pure"
 ],
 "bane_fiends_grip": [
 "dis",
-"dot"
+"dot",
+"pure",
+"bkb"
 ],
 "bane_brain_sap": [
 "burst",
 "sus",
-"lane"
+"lane",
+"pure"
 ],
 "bane_nightmare": [
 "dis",
@@ -167,46 +194,57 @@
 ],
 "bane_enfeeble": [
 "debuff",
-"def"
+"def",
+"pure"
 ],
 "batrider_sticky_napalm": [
 "debuff",
 "dot",
-"lane"
+"lane",
+"magical"
 ],
 "batrider_firefly": [
 "mob",
 "dot",
-"wc"
+"wc",
+"magical"
 ],
 "batrider_flaming_lasso": [
 "dis",
 "init",
-"gap"
+"gap",
+"magical",
+"bkb"
 ],
 "batrider_flamebreak": [
 "burst",
 "dot",
 "slow",
-"wc"
+"wc",
+"magical"
 ],
 "beastmaster_wild_axes": [
 "wc",
 "burst",
 "debuff",
-"lane"
+"lane",
+"magical"
 ],
 "beastmaster_primal_roar": [
 "dis",
-"init"
+"init",
+"magical",
+"bkb"
 ],
 "beastmaster_summon_raptor": [
 "summ",
-"vis"
+"vis",
+"magical"
 ],
 "beastmaster_summon_razorback": [
 "summ",
-"buff"
+"buff",
+"physical"
 ],
 "bloodseeker_thirst": [
 "mob",
@@ -217,25 +255,31 @@
 "bloodseeker_bloodrage": [
 "aspd",
 "buff",
-"sus"
+"sus",
+"pure"
 ],
 "bloodseeker_rupture": [
 "dot",
-"dis"
+"dis",
+"pure",
+"bkb"
 ],
 "bloodseeker_blood_bath": [
 "silence",
 "aoed",
 "burst",
-"sus"
+"sus",
+"pure"
 ],
 "bounty_hunter_jinada": [
 "atk",
-"lane"
+"lane",
+"physical"
 ],
 "bounty_hunter_wind_walk": [
 "invis",
-"mob"
+"mob",
+"physical"
 ],
 "bounty_hunter_track": [
 "vis",
@@ -243,7 +287,8 @@
 ],
 "bounty_hunter_shuriken_toss": [
 "burst",
-"dis"
+"dis",
+"magical"
 ],
 "brewmaster_drunken_brawler": [
 "def",
@@ -256,17 +301,20 @@
 ],
 "brewmaster_cinder_brew": [
 "slow",
-"debuff"
+"debuff",
+"magical"
 ],
 "brewmaster_thunder_clap": [
 "slow",
 "wc",
-"burst"
+"burst",
+"magical"
 ],
 "bristleback_quill_spray": [
 "dot",
 "wc",
-"lane"
+"lane",
+"physical"
 ],
 "bristleback_bristleback": [
 "def"
@@ -282,7 +330,8 @@
 ],
 "broodmother_insatiable_hunger": [
 "atk",
-"sus"
+"sus",
+"physical"
 ],
 "broodmother_incapacitating_bite": [
 "orb",
@@ -296,24 +345,29 @@
 "broodmother_spawn_spiderlings": [
 "summ",
 "push",
-"wc"
+"wc",
+"magical"
 ],
 "centaur_return": [
 "def",
-"dot"
+"dot",
+"physical"
 ],
 "centaur_hoof_stomp": [
 "aoed",
-"init"
+"init",
+"magical"
 ],
 "centaur_double_edge": [
 "burst",
-"wc"
+"wc",
+"magical"
 ],
 "centaur_stampede": [
 "mob",
 "init",
-"save"
+"save",
+"magical"
 ],
 "chaos_knight_chaos_strike": [
 "atk",
@@ -321,7 +375,8 @@
 ],
 "chaos_knight_chaos_bolt": [
 "dis",
-"burst"
+"burst",
+"magical"
 ],
 "chaos_knight_reality_rift": [
 "gap",
@@ -332,7 +387,8 @@
 ],
 "chen_penitence": [
 "slow",
-"debuff"
+"debuff",
+"pure"
 ],
 "chen_hand_of_god": [
 "heal",
@@ -357,36 +413,42 @@
 ],
 "clinkz_searing_arrows": [
 "atk",
-"orb"
+"orb",
+"physical"
 ],
 "clinkz_death_pact": [
 "sus",
 "atk"
 ],
 "crystal_maiden_frostbite": [
-"dis"
+"dis",
+"magical"
 ],
 "crystal_maiden_freezing_field": [
 "dot",
-"slow"
+"slow",
+"magical"
 ],
 "crystal_maiden_crystal_nova": [
 "slow",
 "burst",
 "wc",
-"lane"
+"lane",
+"magical"
 ],
 "dark_seer_ion_shell": [
 "wc",
 "dot",
-"lane"
+"lane",
+"magical"
 ],
 "dark_seer_wall_of_replica": [
 "summ"
 ],
 "dark_seer_vacuum": [
 "aoed",
-"init"
+"init",
+"magical"
 ],
 "dark_seer_surge": [
 "mob",
@@ -396,14 +458,17 @@
 "dark_willow_shadow_realm": [
 "burst",
 "mob",
-"def"
+"def",
+"magical"
 ],
 "dark_willow_bramble_maze": [
 "aoed",
-"dot"
+"dot",
+"magical"
 ],
 "dark_willow_terrorize": [
-"aoed"
+"aoed",
+"magical"
 ],
 "dark_willow_cursed_crown": [
 "dis",
@@ -415,26 +480,31 @@
 ],
 "dawnbreaker_fire_wreath": [
 "dot",
-"slow"
+"slow",
+"physical"
 ],
 "dawnbreaker_solar_guardian": [
 "mob",
 "heal",
-"init"
+"init",
+"magical"
 ],
 "dawnbreaker_celestial_hammer": [
 "mob",
 "gap",
-"burst"
+"burst",
+"magical"
 ],
 "dazzle_poison_touch": [
 "slow",
-"lane"
+"lane",
+"physical"
 ],
 "dazzle_shadow_wave": [
 "heal",
 "burst",
-"lane"
+"lane",
+"physical"
 ],
 "dazzle_shallow_grave": [
 "save",
@@ -446,17 +516,20 @@
 ],
 "death_prophet_exorcism": [
 "dot",
-"push"
+"push",
+"physical"
 ],
 "death_prophet_spirit_siphon": [
 "sus",
 "dot",
-"lane"
+"lane",
+"magical"
 ],
 "death_prophet_carrion_swarm": [
 "wc",
 "burst",
-"lane"
+"lane",
+"magical"
 ],
 "death_prophet_silence": [
 "silence",
@@ -464,58 +537,71 @@
 ],
 "disruptor_glimpse": [
 "save",
-"dis"
+"dis",
+"magical"
 ],
 "disruptor_static_storm": [
 "silence",
-"aoed"
+"aoed",
+"magical"
 ],
 "disruptor_thunder_strike": [
 "dot",
 "lane",
-"vis"
+"vis",
+"magical"
 ],
 "disruptor_kinetic_field": [
 "aoed"
 ],
 "doom_bringer_infernal_blade": [
 "atk",
-"orb"
+"orb",
+"magical"
 ],
 "doom_bringer_devour": [
 "sus"
 ],
 "doom_bringer_doom": [
 "silence",
-"dis"
+"dis",
+"pure",
+"bkb"
 ],
 "doom_bringer_scorched_earth": [
 "dot",
 "sus",
-"mob"
+"mob",
+"magical"
 ],
 "dragon_knight_elder_dragon_form": [
 "rng",
-"atk"
+"atk",
+"magical"
 ],
 "dragon_knight_wyrms_wrath": [
-"atk"
+"atk",
+"magical"
 ],
 "dragon_knight_dragon_tail": [
-"dis"
+"dis",
+"magical"
 ],
 "dragon_knight_breathe_fire": [
 "burst",
 "wc",
-"debuff"
+"debuff",
+"magical"
 ],
 "drow_ranger_frost_arrows": [
 "orb",
 "slow",
-"lane"
+"lane",
+"physical"
 ],
 "drow_ranger_marksmanship": [
-"atk"
+"atk",
+"physical"
 ],
 "drow_ranger_wave_of_silence": [
 "silence",
@@ -523,75 +609,91 @@
 ],
 "drow_ranger_multishot": [
 "dot",
-"wc"
+"wc",
+"physical"
 ],
 "earth_spirit_rolling_boulder": [
 "gap",
 "mob",
 "dis",
-"init"
+"init",
+"magical"
 ],
 "earth_spirit_magnetize": [
 "dot",
-"silence"
+"silence",
+"magical"
 ],
 "earth_spirit_boulder_smash": [
 "dis",
-"save"
+"save",
+"magical"
 ],
 "earth_spirit_geomagnetic_grip": [
 "save",
-"silence"
+"silence",
+"magical"
 ],
 "earthshaker_enchant_totem": [
 "atk",
 "gap"
 ],
 "earthshaker_aftershock": [
-"aoed"
+"aoed",
+"magical"
 ],
 "earthshaker_fissure": [
 "aoed",
-"wc"
+"wc",
+"magical"
 ],
 "earthshaker_echo_slam": [
 "burst",
 "aoed",
-"init"
+"init",
+"magical"
 ],
 "elder_titan_natural_order": [
 "debuff"
 ],
 "elder_titan_ancestral_spirit": [
 "vis",
-"slow"
+"slow",
+"magical"
 ],
 "elder_titan_earth_splitter": [
 "slow",
-"burst"
+"burst",
+"magical"
 ],
 "elder_titan_echo_stomp": [
-"aoed"
+"aoed",
+"physical"
 ],
 "ember_spirit_sleight_of_fist": [
 "atk",
 "mob",
-"wc"
+"wc",
+"physical"
 ],
 "ember_spirit_fire_remnant": [
 "mob",
-"burst"
+"burst",
+"magical"
 ],
 "ember_spirit_searing_chains": [
-"aoed"
+"aoed",
+"magical"
 ],
 "ember_spirit_flame_guard": [
 "def",
-"dot"
+"dot",
+"magical"
 ],
 "enchantress_impetus": [
 "atk",
-"rng"
+"rng",
+"pure"
 ],
 "enchantress_untouchable": [
 "def"
@@ -605,17 +707,22 @@
 ],
 "enigma_black_hole": [
 "aoed",
-"init"
+"init",
+"pure",
+"bkb"
 ],
 "enigma_malefice": [
-"dis"
+"dis",
+"magical"
 ],
 "enigma_midnight_pulse": [
-"dot"
+"dot",
+"magical"
 ],
 "enigma_demonic_conversion": [
 "summ",
-"push"
+"push",
+"physical"
 ],
 "faceless_void_time_walk": [
 "mob",
@@ -624,27 +731,34 @@
 ],
 "faceless_void_time_lock": [
 "dis",
-"atk"
+"atk",
+"magical",
+"bkb"
 ],
 "faceless_void_chronosphere": [
 "aoed",
-"init"
+"init",
+"bkb"
 ],
 "faceless_void_time_dilation": [
 "slow",
-"debuff"
+"debuff",
+"magical"
 ],
 "furion_teleportation": [
 "mob",
 "push",
-"global"
+"global",
+"physical"
 ],
 "furion_wrath_of_nature": [
 "wc",
-"global"
+"global",
+"magical"
 ],
 "furion_sprout": [
-"dis"
+"dis",
+"magical"
 ],
 "furion_force_of_nature": [
 "summ",
@@ -653,47 +767,58 @@
 "grimstroke_ink_creature": [
 "silence",
 "burst",
-"lane"
+"lane",
+"magical"
 ],
 "grimstroke_spirit_walk": [
 "dis",
-"burst"
+"burst",
+"magical"
 ],
 "grimstroke_soul_chain": [
-"dis"
+"dis",
+"bkb"
 ],
 "grimstroke_dark_artistry": [
 "burst",
 "slow",
 "lane",
-"wc"
+"wc",
+"magical"
 ],
 "gyrocopter_flak_cannon": [
 "aspd",
-"wc"
+"wc",
+"physical"
 ],
 "gyrocopter_homing_missile": [
-"dis"
+"dis",
+"magical"
 ],
 "gyrocopter_rocket_barrage": [
 "burst",
 "lane",
-"wc"
+"wc",
+"magical"
 ],
 "gyrocopter_call_down": [
 "slow",
-"burst"
+"burst",
+"magical"
 ],
 "hoodwink_acorn_shot": [
 "burst",
 "slow",
-"lane"
+"lane",
+"physical"
 ],
 "hoodwink_bushwhack": [
-"aoed"
+"aoed",
+"magical"
 ],
 "hoodwink_sharpshooter": [
-"burst"
+"burst",
+"magical"
 ],
 "hoodwink_scurry": [
 "mob",
@@ -706,17 +831,20 @@
 "huskar_burning_spear": [
 "orb",
 "dot",
-"lane"
+"lane",
+"magical"
 ],
 "huskar_inner_fire": [
 "burst",
 "wc",
-"slow"
+"slow",
+"magical"
 ],
 "huskar_life_break": [
 "gap",
 "burst",
-"slow"
+"slow",
+"magical"
 ],
 "invoker_sun_strike_ad": [
 "burst",
@@ -759,30 +887,36 @@
 "jakiro_liquid_fire": [
 "aspd",
 "debuff",
-"push"
+"push",
+"magical"
 ],
 "jakiro_liquid_ice": [
 "dot",
-"debuff"
+"debuff",
+"magical"
 ],
 "jakiro_ice_path": [
-"aoed"
+"aoed",
+"magical"
 ],
 "jakiro_macropyre": [
 "dot",
-"wc"
+"wc",
+"magical"
 ],
 "jakiro_dual_breath": [
 "burst",
 "wc",
 "slow",
-"lane"
+"lane",
+"magical"
 ],
 "juggernaut_blade_fury": [
 "def",
 "mob",
 "wc",
-"dot"
+"dot",
+"magical"
 ],
 "juggernaut_blade_dance": [
 "atk",
@@ -790,7 +924,8 @@
 ],
 "juggernaut_omni_slash": [
 "burst",
-"def"
+"def",
+"physical"
 ],
 "juggernaut_healing_ward": [
 "heal",
@@ -806,18 +941,21 @@
 ],
 "keeper_of_the_light_illuminate": [
 "wc",
-"burst"
+"burst",
+"magical"
 ],
 "keeper_of_the_light_blinding_light": [
 "def",
-"save"
+"save",
+"magical"
 ],
 "kez_falcon_rush_ad": [
 "aspd",
 "mob"
 ],
 "kez_kazurai_katana": [
-"atk"
+"atk",
+"physical"
 ],
 "kez_grappling_claw": [
 "gap",
@@ -828,14 +966,16 @@
 ],
 "kez_echo_slash": [
 "burst",
-"wc"
+"wc",
+"physical"
 ],
 "kez_talon_toss_ad": [
 "silence"
 ],
 "kez_raptor_dance": [
 "burst",
-"sus"
+"sus",
+"pure"
 ],
 "kez_ravens_veil_ad": [
 "invis",
@@ -843,14 +983,17 @@
 ],
 "kunkka_tidebringer": [
 "atk",
-"wc"
+"wc",
+"physical"
 ],
 "kunkka_ghostship": [
 "aoed",
-"save"
+"save",
+"magical"
 ],
 "kunkka_torrent": [
-"aoed"
+"aoed",
+"magical"
 ],
 "kunkka_x_marks_the_spot": [
 "save",
@@ -858,22 +1001,27 @@
 ],
 "largo_catchy_lick": [
 "save",
-"heal"
+"heal",
+"magical"
 ],
 "largo_frogstomp": [
 "aoed",
-"burst"
+"burst",
+"magical"
 ],
 "largo_croak_of_genius": [
-"burst"
+"burst",
+"magical"
 ],
 "largo_amphibian_rhapsody": [
 "buff",
-"heal"
+"heal",
+"magical"
 ],
 "legion_commander_duel": [
 "dis",
-"atk"
+"atk",
+"bkb"
 ],
 "legion_commander_moment_of_courage": [
 "sus",
@@ -882,7 +1030,8 @@
 "legion_commander_overwhelming_odds": [
 "burst",
 "wc",
-"lane"
+"lane",
+"magical"
 ],
 "legion_commander_press_the_attack": [
 "save",
@@ -890,23 +1039,28 @@
 "heal"
 ],
 "leshrac_split_earth": [
-"aoed"
+"aoed",
+"magical"
 ],
 "leshrac_pulse_nova": [
 "dot",
-"wc"
+"wc",
+"magical"
 ],
 "leshrac_diabolic_edict": [
 "dot",
-"push"
+"push",
+"pure"
 ],
 "leshrac_lightning_storm": [
 "burst",
 "slow",
-"wc"
+"wc",
+"magical"
 ],
 "lich_chain_frost": [
-"burst"
+"burst",
+"magical"
 ],
 "lich_sinister_gaze": [
 "dis"
@@ -914,16 +1068,19 @@
 "lich_frost_shield": [
 "def",
 "save",
-"lane"
+"lane",
+"magical"
 ],
 "lich_frost_nova": [
 "burst",
 "slow",
-"lane"
+"lane",
+"magical"
 ],
 "life_stealer_feast": [
 "sus",
-"atk"
+"atk",
+"physical"
 ],
 "life_stealer_rage": [
 "def"
@@ -931,7 +1088,8 @@
 "life_stealer_infest": [
 "mob",
 "save",
-"gap"
+"gap",
+"magical"
 ],
 "life_stealer_open_wounds": [
 "slow",
@@ -942,21 +1100,26 @@
 ],
 "lina_light_strike_array": [
 "aoed",
-"burst"
+"burst",
+"magical"
 ],
 "lina_laguna_blade": [
-"burst"
+"burst",
+"magical"
 ],
 "lina_dragon_slave": [
 "burst",
 "wc",
-"lane"
+"lane",
+"magical"
 ],
 "lion_finger_of_death": [
-"burst"
+"burst",
+"magical"
 ],
 "lion_impale": [
-"aoed"
+"aoed",
+"magical"
 ],
 "lion_voodoo": [
 "dis"
@@ -967,7 +1130,9 @@
 ],
 "lone_druid_entangle": [
 "dis",
-"orb"
+"orb",
+"magical",
+"bkb"
 ],
 "lone_druid_true_form": [
 "def"
@@ -986,13 +1151,15 @@
 ],
 "luna_lucent_beam": [
 "dis",
-"burst"
+"burst",
+"magical"
 ],
 "luna_lunar_orbit": [
 "def"
 ],
 "luna_eclipse": [
-"burst"
+"burst",
+"magical"
 ],
 "lycan_feral_impulse": [
 "atk",
@@ -1017,20 +1184,24 @@
 "magnataur_skewer": [
 "mob",
 "gap",
-"init"
+"init",
+"magical"
 ],
 "magnataur_reverse_polarity": [
 "aoed",
-"init"
+"init",
+"bkb"
 ],
 "magnataur_shockwave": [
 "burst",
 "wc",
-"lane"
+"lane",
+"magical"
 ],
 "marci_unleash": [
 "aspd",
-"burst"
+"burst",
+"magical"
 ],
 "marci_bodyguard": [
 "def",
@@ -1039,24 +1210,29 @@
 "marci_companion_run": [
 "mob",
 "gap",
-"dis"
+"dis",
+"magical"
 ],
 "marci_grapple": [
-"dis"
+"dis",
+"magical"
 ],
 "mars_gods_rebuke": [
 "burst",
-"wc"
+"wc",
+"physical"
 ],
 "mars_spear": [
-"dis"
+"dis",
+"magical"
 ],
 "mars_bulwark": [
 "def"
 ],
 "mars_arena_of_blood": [
 "aoed",
-"init"
+"init",
+"magical"
 ],
 "medusa_split_shot": [
 "wc",
@@ -1064,34 +1240,42 @@
 ],
 "medusa_mystic_snake": [
 "burst",
-"mana"
+"mana",
+"magical"
 ],
 "medusa_stone_gaze": [
 "aoed",
-"def"
+"def",
+"magical",
+"bkb"
 ],
 "medusa_gorgon_grasp": [
-"aoed"
+"aoed",
+"physical"
 ],
 "meepo_ransack": [
-"sus"
+"sus",
+"pure"
 ],
 "meepo_earthbind": [
 "dis"
 ],
 "meepo_poof": [
 "mob",
-"burst"
+"burst",
+"magical"
 ],
 "mirana_leap": [
 "mob",
 "aspd"
 ],
 "mirana_arrow": [
-"dis"
+"dis",
+"magical"
 ],
 "mirana_starfall": [
-"burst"
+"burst",
+"magical"
 ],
 "mirana_invis": [
 "invis",
@@ -1101,15 +1285,18 @@
 ],
 "monkey_king_jingu_mastery": [
 "atk",
-"sus"
+"sus",
+"physical"
 ],
 "monkey_king_boundless_strike": [
 "dis",
-"wc"
+"wc",
+"physical"
 ],
 "monkey_king_wukongs_command": [
 "aoed",
-"atk"
+"atk",
+"physical"
 ],
 "monkey_king_tree_dance": [
 "mob",
@@ -1118,25 +1305,30 @@
 "morphling_waveform": [
 "mob",
 "gap",
-"burst"
+"burst",
+"magical"
 ],
 "morphling_adaptive_strike_agi": [
 "burst",
-"dis"
+"dis",
+"magical"
 ],
 "muerta_gunslinger": [
 "aspd",
 "atk"
 ],
 "muerta_pierce_the_veil": [
-"atk"
+"atk",
+"magical"
 ],
 "muerta_dead_shot": [
-"dis"
+"dis",
+"magical"
 ],
 "muerta_the_calling": [
 "silence",
-"slow"
+"slow",
+"magical"
 ],
 "naga_siren_mirror_image": [
 "summ",
@@ -1147,7 +1339,8 @@
 ],
 "naga_siren_rip_tide": [
 "debuff",
-"wc"
+"wc",
+"magical"
 ],
 "naga_siren_song_of_the_siren": [
 "aoed",
@@ -1155,16 +1348,19 @@
 ],
 "necrolyte_reapers_scythe": [
 "burst",
-"dis"
+"dis",
+"magical"
 ],
 "necrolyte_heartstopper_aura": [
-"dot"
+"dot",
+"magical"
 ],
 "necrolyte_death_pulse": [
 "heal",
 "wc",
 "lane",
-"sus"
+"sus",
+"magical"
 ],
 "necrolyte_ghost_shroud": [
 "def",
@@ -1178,31 +1374,38 @@
 ],
 "nevermore_shadowraze2": [
 "burst",
-"wc"
+"wc",
+"magical"
 ],
 "nevermore_requiem": [
 "burst",
-"slow"
+"slow",
+"magical"
 ],
 "night_stalker_darkness": [
-"vis"
+"vis",
+"physical"
 ],
 "night_stalker_crippling_fear": [
-"silence"
+"silence",
+"magical"
 ],
 "night_stalker_midnight_feast": [
 "sus"
 ],
 "night_stalker_void": [
 "dis",
-"burst"
+"burst",
+"magical"
 ],
 "nyx_assassin_vendetta": [
 "invis",
-"burst"
+"burst",
+"pure"
 ],
 "nyx_assassin_impale": [
-"aoed"
+"aoed",
+"magical"
 ],
 "nyx_assassin_spiked_carapace": [
 "def",
@@ -1210,21 +1413,25 @@
 ],
 "nyx_assassin_jolt": [
 "burst",
-"mana"
+"mana",
+"magical"
 ],
 "obsidian_destroyer_astral_imprisonment": [
 "save",
-"dis"
+"dis",
+"magical"
 ],
 "obsidian_destroyer_arcane_orb": [
 "orb",
-"burst"
+"burst",
+"pure"
 ],
 "obsidian_destroyer_objurgation": [
 "def"
 ],
 "obsidian_destroyer_sanity_eclipse": [
-"burst"
+"burst",
+"magical"
 ],
 "ogre_magi_bloodlust": [
 "aspd",
@@ -1232,16 +1439,19 @@
 "lane"
 ],
 "ogre_magi_fireblast": [
-"dis"
+"dis",
+"magical"
 ],
 "ogre_magi_ignite": [
 "slow",
 "dot",
-"lane"
+"lane",
+"magical"
 ],
 "omniknight_hammer_of_purity": [
 "atk",
-"slow"
+"slow",
+"pure"
 ],
 "omniknight_martyr": [
 "save",
@@ -1250,13 +1460,15 @@
 "omniknight_purification": [
 "heal",
 "burst",
-"save"
+"save",
+"pure"
 ],
 "omniknight_guardian_angel": [
 "save"
 ],
 "oracle_fortunes_end": [
-"dis"
+"dis",
+"magical"
 ],
 "oracle_false_promise": [
 "save"
@@ -1264,26 +1476,30 @@
 "oracle_purifying_flames": [
 "heal",
 "burst",
-"lane"
+"lane",
+"magical"
 ],
 "oracle_fates_edict": [
 "save"
 ],
 "pangolier_swashbuckle": [
 "mob",
-"atk"
+"atk",
+"physical"
 ],
 "pangolier_lucky_shot": [
 "debuff"
 ],
 "pangolier_shield_crash": [
 "mob",
-"def"
+"def",
+"physical"
 ],
 "pangolier_gyroshell": [
 "aoed",
 "init",
-"mob"
+"mob",
+"physical"
 ],
 "phantom_assassin_phantom_strike": [
 "gap",
@@ -1295,7 +1511,8 @@
 "phantom_assassin_stifling_dagger": [
 "slow",
 "burst",
-"lane"
+"lane",
+"physical"
 ],
 "phantom_assassin_immaterial": [
 "def"
@@ -1309,47 +1526,59 @@
 ],
 "phantom_lancer_phantom_edge": [
 "gap",
-"atk"
+"atk",
+"physical"
 ],
 "phantom_lancer_spirit_lance": [
 "slow",
 "burst",
-"summ"
+"summ",
+"magical"
 ],
 "phoenix_icarus_dive": [
 "mob",
-"slow"
+"slow",
+"magical"
 ],
 "phoenix_supernova": [
 "aoed",
-"life"
+"life",
+"magical",
+"bkb"
 ],
 "phoenix_fire_spirits": [
 "dot",
 "debuff",
-"lane"
+"lane",
+"magical"
 ],
 "phoenix_sun_ray": [
 "dot",
-"heal"
+"heal",
+"magical"
 ],
 "primal_beast_uproar": [
 "def"
 ],
 "primal_beast_trample": [
 "dot",
-"mob"
+"mob",
+"magical"
 ],
 "primal_beast_pulverize": [
-"dis"
+"dis",
+"magical",
+"bkb"
 ],
 "primal_beast_onslaught": [
 "gap",
 "aoed",
-"init"
+"init",
+"physical"
 ],
 "puck_dream_coil": [
-"aoed"
+"aoed",
+"magical"
 ],
 "puck_phase_shift": [
 "def"
@@ -1357,23 +1586,30 @@
 "puck_illusory_orb": [
 "mob",
 "wc",
-"burst"
+"burst",
+"magical"
 ],
 "puck_waning_rift": [
 "silence",
-"mob"
+"mob",
+"magical"
 ],
 "pudge_meat_hook": [
 "dis",
-"gap"
+"gap",
+"pure",
+"bkb"
 ],
 "pudge_rot": [
 "dot",
-"slow"
+"slow",
+"magical"
 ],
 "pudge_dismember": [
 "dis",
-"sus"
+"sus",
+"magical",
+"bkb"
 ],
 "pudge_flesh_heap": [
 "def"
@@ -1381,14 +1617,17 @@
 "pugna_nether_blast": [
 "burst",
 "push",
-"wc"
+"wc",
+"magical"
 ],
 "pugna_life_drain": [
 "sus",
-"heal"
+"heal",
+"magical"
 ],
 "pugna_nether_ward": [
-"dot"
+"dot",
+"magical"
 ],
 "pugna_decrepify": [
 "save",
@@ -1400,51 +1639,64 @@
 "queenofpain_shadow_strike": [
 "dot",
 "slow",
-"lane"
+"lane",
+"magical"
 ],
 "queenofpain_sonic_wave": [
-"burst"
+"burst",
+"pure"
 ],
 "queenofpain_scream_of_pain": [
 "burst",
-"wc"
+"wc",
+"magical"
 ],
 "rattletrap_battery_assault": [
 "dot",
-"dis"
+"dis",
+"magical"
 ],
 "rattletrap_hookshot": [
 "gap",
 "dis",
-"init"
+"init",
+"magical",
+"bkb"
 ],
 "rattletrap_power_cogs": [
-"dis"
+"dis",
+"magical",
+"bkb"
 ],
 "rattletrap_rocket_flare": [
 "vis",
-"burst"
+"burst",
+"magical"
 ],
 "razor_static_link": [
 "atk"
 ],
 "razor_plasma_field": [
 "slow",
-"wc"
+"wc",
+"magical"
 ],
 "razor_eye_of_the_storm": [
 "debuff",
-"dot"
+"dot",
+"physical"
 ],
 "razor_storm_surge": [
-"mob"
+"mob",
+"magical"
 ],
 "riki_backstab": [
 "atk"
 ],
 "riki_blink_strike": [
 "gap",
-"mob"
+"mob",
+"physical"
 ],
 "riki_smoke_screen": [
 "silence",
@@ -1452,20 +1704,24 @@
 ],
 "riki_tricks_of_the_trade": [
 "def",
-"burst"
+"burst",
+"physical"
 ],
 "ringmaster_tame_the_beasts": [
-"burst"
+"burst",
+"magical"
 ],
 "ringmaster_the_box": [
 "save"
 ],
 "ringmaster_wheel": [
-"aoed"
+"aoed",
+"magical"
 ],
 "ringmaster_impalement": [
 "burst",
-"slow"
+"slow",
+"magical"
 ],
 "rubick_arcane_supremacy": [
 "buff"
@@ -1473,7 +1729,8 @@
 "rubick_fade_bolt": [
 "burst",
 "debuff",
-"lane"
+"lane",
+"magical"
 ],
 "rubick_telekinesis": [
 "dis"
@@ -1481,78 +1738,95 @@
 "sandking_burrowstrike": [
 "gap",
 "dis",
-"init"
+"init",
+"magical"
 ],
 "sandking_sand_storm": [
 "invis",
 "wc",
-"dot"
+"dot",
+"magical"
 ],
 "sandking_epicenter": [
 "aoed",
-"dot"
+"dot",
+"magical"
 ],
 "sandking_scorpion_strike": [
 "burst",
-"slow"
+"slow",
+"physical"
 ],
 "shadow_demon_disruption": [
 "save",
 "dis"
 ],
 "shadow_demon_demonic_purge": [
-"slow"
+"slow",
+"magical"
 ],
 "shadow_demon_disseminate": [
 "debuff"
 ],
 "shadow_demon_shadow_poison": [
 "burst",
-"lane"
+"lane",
+"magical"
 ],
 "shadow_shaman_shackles": [
-"dis"
+"dis",
+"magical"
 ],
 "shadow_shaman_voodoo": [
 "dis"
 ],
 "shadow_shaman_mass_serpent_ward": [
 "push",
-"dot"
+"dot",
+"physical"
 ],
 "shadow_shaman_ether_shock": [
 "burst",
-"lane"
+"lane",
+"magical"
 ],
 "shredder_reactive_armor": [
 "def",
-"sus"
+"sus",
+"magical"
 ],
 "shredder_whirling_death": [
 "burst",
-"wc"
+"wc",
+"pure"
 ],
 "shredder_timber_chain": [
 "mob",
 "gap",
-"burst"
+"burst",
+"pure"
 ],
 "shredder_chakram": [
 "wc",
-"slow"
+"slow",
+"pure"
 ],
 "silencer_glaives_of_wisdom": [
-"orb"
+"orb",
+"magical"
 ],
 "silencer_global_silence": [
 "silence",
-"global"
+"global",
+"bkb"
 ],
 "silencer_curse_of_the_silent": [
-"dot"
+"dot",
+"magical"
 ],
 "silencer_last_word": [
-"silence"
+"silence",
+"magical"
 ],
 "skeleton_king_mortal_strike": [
 "atk"
@@ -1561,31 +1835,39 @@
 "life"
 ],
 "skeleton_king_hellfire_blast": [
-"dis"
+"dis",
+"magical"
 ],
 "skeleton_king_bone_guard": [
-"summ"
+"summ",
+"physical"
 ],
 "skywrath_mage_concussive_shot": [
-"slow"
+"slow",
+"magical"
 ],
 "skywrath_mage_ancient_seal": [
 "silence",
 "debuff"
 ],
 "skywrath_mage_mystic_flare": [
-"burst"
+"burst",
+"magical"
 ],
 "skywrath_mage_arcane_bolt": [
 "burst",
-"lane"
+"lane",
+"magical"
 ],
 "slardar_bash": [
 "dis",
-"atk"
+"atk",
+"physical",
+"bkb"
 ],
 "slardar_slithereen_crush": [
-"aoed"
+"aoed",
+"physical"
 ],
 "slardar_amplify_damage": [
 "debuff",
@@ -1601,47 +1883,57 @@
 ],
 "slark_pounce": [
 "gap",
-"dis"
+"dis",
+"magical"
 ],
 "slark_saltwater_shiv": [
-"atk"
+"atk",
+"physical"
 ],
 "slark_dark_pact": [
 "def",
-"burst"
+"burst",
+"magical"
 ],
 "snapfire_lil_shredder": [
-"aspd"
+"aspd",
+"physical"
 ],
 "snapfire_scatterblast": [
 "slow",
 "burst",
-"wc"
+"wc",
+"magical"
 ],
 "snapfire_mortimer_kisses": [
 "dot",
-"slow"
+"slow",
+"magical"
 ],
 "snapfire_firesnap_cookie": [
 "dis",
 "mob",
-"save"
+"save",
+"magical"
 ],
 "sniper_take_aim": [
 "rng"
 ],
 "sniper_headshot": [
 "dis",
-"orb"
+"orb",
+"physical"
 ],
 "sniper_assassinate": [
-"burst"
+"burst",
+"magical"
 ],
 "sniper_shrapnel": [
 "slow",
 "dot",
 "wc",
-"lane"
+"lane",
+"magical"
 ],
 "spectre_dispersion": [
 "def"
@@ -1653,14 +1945,17 @@
 ],
 "spectre_spectral_dagger": [
 "mob",
-"slow"
+"slow",
+"magical"
 ],
 "spectre_shadow_step": [
 "gap"
 ],
 "spirit_breaker_greater_bash": [
 "dis",
-"atk"
+"atk",
+"magical",
+"bkb"
 ],
 "spirit_breaker_charge_of_darkness": [
 "gap",
@@ -1674,25 +1969,31 @@
 ],
 "spirit_breaker_nether_strike": [
 "gap",
-"dis"
+"dis",
+"magical",
+"bkb"
 ],
 "storm_spirit_ball_lightning": [
 "mob",
-"gap"
+"gap",
+"magical"
 ],
 "storm_spirit_electric_vortex": [
 "dis"
 ],
 "storm_spirit_overload": [
 "atk",
-"slow"
+"slow",
+"magical"
 ],
 "storm_spirit_static_remnant": [
 "burst",
-"wc"
+"wc",
+"magical"
 ],
 "sven_storm_bolt": [
-"aoed"
+"aoed",
+"magical"
 ],
 "sven_great_cleave": [
 "wc",
@@ -1706,38 +2007,47 @@
 "buff"
 ],
 "techies_suicide": [
-"burst"
+"burst",
+"magical"
 ],
 "techies_land_mines": [
 "burst",
-"vis"
+"vis",
+"magical"
 ],
 "techies_reactive_tazer": [
-"def"
+"def",
+"magical"
 ],
 "techies_sticky_bomb": [
 "burst",
-"slow"
+"slow",
+"magical"
 ],
 "templar_assassin_psi_blades": [
 "atk",
-"rng"
+"rng",
+"pure"
 ],
 "templar_assassin_refraction": [
 "def",
-"atk"
+"atk",
+"physical"
 ],
 "templar_assassin_meld": [
 "atk",
-"invis"
+"invis",
+"physical"
 ],
 "templar_assassin_psionic_trap": [
 "slow",
-"vis"
+"vis",
+"magical"
 ],
 "terrorblade_metamorphosis": [
 "rng",
-"atk"
+"atk",
+"physical"
 ],
 "terrorblade_reflection": [
 "summ",
@@ -1752,55 +2062,69 @@
 ],
 "tidehunter_anchor_smash": [
 "wc",
-"debuff"
+"debuff",
+"physical"
 ],
 "tidehunter_kraken_shell": [
 "def"
 ],
 "tidehunter_gush": [
 "debuff",
-"slow"
+"slow",
+"magical"
 ],
 "tidehunter_ravage": [
 "aoed",
-"init"
+"init",
+"magical"
 ],
 "tinker_rearm": [
 "mana"
 ],
 "tinker_laser": [
-"burst"
+"burst",
+"pure"
 ],
 "tinker_march_of_the_machines": [
 "wc",
-"dot"
+"dot",
+"magical"
 ],
 "tinker_deploy_turrets": [
-"push"
+"push",
+"magical"
 ],
 "tiny_avalanche": [
 "aoed",
-"burst"
+"burst",
+"magical"
 ],
 "tiny_tree_grab": [
-"atk"
+"atk",
+"physical"
 ],
 "tiny_grow": [
-"atk"
+"atk",
+"physical"
 ],
 "tiny_toss": [
 "save",
-"gap"
+"gap",
+"magical"
 ],
 "treant_leech_seed": [
 "heal",
-"slow"
+"slow",
+"magical"
 ],
 "treant_overgrowth": [
-"aoed"
+"aoed",
+"magical",
+"bkb"
 ],
 "treant_natures_grasp": [
-"slow"
+"slow",
+"magical"
 ],
 "treant_living_armor": [
 "heal",
@@ -1816,51 +2140,64 @@
 "sus"
 ],
 "troll_warlord_berserkers_rage": [
-"dis"
+"dis",
+"physical",
+"bkb"
 ],
 "troll_warlord_whirling_axes_melee": [
 "slow",
-"burst"
+"burst",
+"magical"
 ],
 "troll_warlord_whirling_axes_ranged": [
 "slow",
-"burst"
+"burst",
+"magical"
 ],
 "tusk_walrus_punch": [
 "dis",
-"burst"
+"burst",
+"bkb"
 ],
 "tusk_snowball": [
 "gap",
 "dis",
 "init",
-"save"
+"save",
+"magical"
 ],
 "tusk_tag_team": [
 "atk",
 "slow",
-"lane"
+"lane",
+"physical"
 ],
 "tusk_ice_shards": [
 "dis",
-"save"
+"save",
+"magical"
 ],
 "undying_decay": [
 "burst",
-"lane"
+"lane",
+"magical"
 ],
 "undying_tombstone": [
-"summ"
+"summ",
+"physical"
 ],
 "undying_flesh_golem": [
-"atk"
+"atk",
+"magical"
 ],
 "undying_soul_rip": [
 "heal",
-"burst"
+"burst",
+"magical"
 ],
 "ursa_fury_swipes": [
-"atk"
+"atk",
+"physical"
 ],
 "ursa_overpower": [
 "aspd"
@@ -1869,54 +2206,67 @@
 "def"
 ],
 "ursa_earthshock": [
-"slow"
+"slow",
+"magical"
 ],
 "vengefulspirit_command_aura": [
 "atk",
 "buff"
 ],
 "vengefulspirit_magic_missile": [
-"dis"
+"dis",
+"magical"
 ],
 "vengefulspirit_nether_swap": [
-"save"
+"save",
+"magical"
 ],
 "vengefulspirit_wave_of_terror": [
 "vis",
-"debuff"
+"debuff",
+"magical"
 ],
 "venomancer_noxious_plague": [
-"dot"
+"dot",
+"magical"
 ],
 "venomancer_venomous_gale": [
-"slow"
+"slow",
+"magical"
 ],
 "venomancer_snakebite": [
 "dot",
-"lane"
+"lane",
+"magical"
 ],
 "venomancer_plague_ward": [
 "summ",
-"push"
+"push",
+"physical"
 ],
 "viper_poison_attack": [
 "orb",
 "slow",
-"lane"
+"lane",
+"magical"
 ],
 "viper_corrosive_skin": [
-"def"
+"def",
+"magical"
 ],
 "viper_viper_strike": [
 "slow",
-"dot"
+"dot",
+"magical"
 ],
 "viper_nethertoxin": [
-"silence"
+"silence",
+"magical"
 ],
 "visage_soul_assumption": [
 "burst",
-"lane"
+"lane",
+"magical"
 ],
 "visage_gravekeepers_cloak": [
 "def"
@@ -1927,23 +2277,28 @@
 ],
 "visage_summon_familiars": [
 "summ",
-"dis"
+"dis",
+"physical"
 ],
 "void_spirit_astral_step": [
 "mob",
 "gap",
-"burst"
+"burst",
+"magical"
 ],
 "void_spirit_resonant_pulse": [
 "def",
-"wc"
+"wc",
+"magical"
 ],
 "void_spirit_dissimilate": [
 "mob",
-"burst"
+"burst",
+"magical"
 ],
 "void_spirit_aether_remnant": [
-"dis"
+"dis",
+"magical"
 ],
 "warlock_fatal_bonds": [
 "dot",
@@ -1951,25 +2306,31 @@
 ],
 "warlock_rain_of_chaos": [
 "aoed",
-"summ"
+"summ",
+"bkb"
 ],
 "warlock_upheaval": [
-"slow"
+"slow",
+"magical"
 ],
 "warlock_shadow_word": [
 "heal",
-"dot"
+"dot",
+"magical"
 ],
 "weaver_shukuchi": [
 "mob",
-"invis"
+"invis",
+"magical"
 ],
 "weaver_geminate_attack": [
-"aspd"
+"aspd",
+"physical"
 ],
 "weaver_the_swarm": [
 "debuff",
-"vis"
+"vis",
+"physical"
 ],
 "weaver_time_lapse": [
 "life",
@@ -1984,7 +2345,8 @@
 ],
 "windrunner_powershot": [
 "burst",
-"wc"
+"wc",
+"magical"
 ],
 "windrunner_shackleshot": [
 "dis"
@@ -1992,20 +2354,24 @@
 "winter_wyvern_arctic_burn": [
 "rng",
 "dot",
-"mob"
+"mob",
+"magical"
 ],
 "winter_wyvern_winters_curse": [
-"aoed"
+"aoed",
+"bkb"
 ],
 "winter_wyvern_cold_embrace": [
 "save"
 ],
 "winter_wyvern_splinter_blast": [
 "burst",
-"slow"
+"slow",
+"magical"
 ],
 "wisp_spirits": [
-"burst"
+"burst",
+"magical"
 ],
 "wisp_overcharge": [
 "buff",
@@ -2021,33 +2387,41 @@
 "global"
 ],
 "witch_doctor_maledict": [
-"dot"
+"dot",
+"magical"
 ],
 "witch_doctor_paralyzing_cask": [
-"dis"
+"dis",
+"magical"
 ],
 "witch_doctor_death_ward": [
-"dot"
+"dot",
+"pure"
 ],
 "witch_doctor_voodoo_restoration": [
-"heal"
+"heal",
+"magical"
 ],
 "zuus_arc_lightning": [
 "wc",
 "burst",
-"lane"
+"lane",
+"magical"
 ],
 "zuus_lightning_bolt": [
 "dis",
-"vis"
+"vis",
+"magical"
 ],
 "zuus_thundergods_wrath": [
 "burst",
 "vis",
-"global"
+"global",
+"magical"
 ],
 "zuus_heavenly_jump": [
-"mob"
+"mob",
+"magical"
 ]
 },
 "heroes": [
