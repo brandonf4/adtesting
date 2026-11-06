@@ -2662,10 +2662,12 @@
 "mt_rclick"
 ],
 "model_silencer": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_windrunner": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_sniper": [
 "mt_rclick"
@@ -2674,10 +2676,12 @@
 "mt_rclick"
 ],
 "model_muerta": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_arc_warden": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_viper": [
 "mt_rclick"
@@ -2707,7 +2711,8 @@
 "mt_rclick"
 ],
 "model_obsidian_destroyer": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_hoodwink": [
 "mt_rclick"
@@ -2719,7 +2724,8 @@
 "mt_rclick"
 ],
 "model_dazzle": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_dark_willow": [
 "mt_rcast"
@@ -2731,13 +2737,15 @@
 "mt_rcast"
 ],
 "model_queenofpain": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_shadow_demon": [
 "mt_rcast"
 ],
 "model_batrider": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_grimstroke": [
 "mt_rcast"
@@ -2761,13 +2769,15 @@
 "mt_rcast"
 ],
 "model_storm_spirit": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_disruptor": [
 "mt_rcast"
 ],
 "model_furion": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_lina": [
 "mt_rcast"
@@ -2788,10 +2798,12 @@
 "mt_rcast"
 ],
 "model_leshrac": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_rubick": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_visage": [
 "mt_rcast"
@@ -2800,7 +2812,8 @@
 "mt_rcast"
 ],
 "model_death_prophet": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_wisp": [
 "mt_rcast"
@@ -2809,10 +2822,12 @@
 "mt_rcast"
 ],
 "model_tinker": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_enchantress": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_winter_wyvern": [
 "mt_rcast"
@@ -2833,10 +2848,12 @@
 "mt_rcast"
 ],
 "model_techies": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_pugna": [
-"mt_rclick"
+"mt_rclick",
+"mt_rcast"
 ],
 "model_enigma": [
 "mt_rcast"
@@ -2877,7 +2894,8 @@
 ],
 "model_abaddon": [
 "mt_mclick",
-"mt_front"
+"mt_front",
+"mt_mcast"
 ],
 "model_monkey_king": [
 "mt_mclick"
@@ -2908,7 +2926,8 @@
 "mt_front"
 ],
 "model_marci": [
-"mt_mclick"
+"mt_mclick",
+"mt_mcast"
 ],
 "model_bounty_hunter": [
 "mt_mclick"
@@ -2969,7 +2988,8 @@
 ],
 "model_beastmaster": [
 "mt_front",
-"mt_mclick"
+"mt_mclick",
+"mt_mcast"
 ],
 "model_primal_beast": [
 "mt_mcast",
@@ -3052,7 +3072,8 @@
 ],
 "model_brewmaster": [
 "mt_front",
-"mt_mclick"
+"mt_mclick",
+"mt_mcast"
 ],
 "model_omniknight": [
 "mt_mcast",
