@@ -1467,8 +1467,7 @@
 ],
 "night_stalker_crippling_fear": [
 "silence",
-"magical",
-"ddisp"
+"magical"
 ],
 "night_stalker_midnight_feast": [
 "sus"
@@ -2289,8 +2288,7 @@
 "atk",
 "slow",
 "lane",
-"physical",
-"ddisp"
+"physical"
 ],
 "tusk_ice_shards": [
 "dis",
