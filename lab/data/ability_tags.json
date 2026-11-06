@@ -54,16 +54,14 @@
 "life",
 "def",
 "tf",
-"hdispel",
-"antimag"
+"hdispel"
 ],
 "abaddon_aphotic_shield": [
 "save",
 "def",
 "lane",
 "magical",
-"hdispel",
-"antimag"
+"hdispel"
 ],
 "abaddon_death_coil": [
 "heal",
@@ -560,8 +558,7 @@
 ],
 "dazzle_shallow_grave": [
 "save",
-"life",
-"antimag"
+"life"
 ],
 "dazzle_nothl_projection": [
 "heal",
@@ -1604,8 +1601,7 @@
 ],
 "oracle_false_promise": [
 "save",
-"hdispel",
-"antimag"
+"hdispel"
 ],
 "oracle_purifying_flames": [
 "heal",
@@ -2110,8 +2106,7 @@
 ],
 "spectre_dispersion": [
 "def",
-"antiphys",
-"antimag"
+"antiphys"
 ],
 "spectre_haunt": [
 "gap",
@@ -2210,8 +2205,7 @@
 "def",
 "atk",
 "physical",
-"antiphys",
-"antimag"
+"antiphys"
 ],
 "templar_assassin_meld": [
 "atk",
@@ -2470,8 +2464,7 @@
 ],
 "visage_gravekeepers_cloak": [
 "def",
-"antiphys",
-"antimag"
+"antiphys"
 ],
 "visage_grave_chill": [
 "slow",
