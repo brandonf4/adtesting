@@ -40,7 +40,12 @@
 "odisp": "Offensively dispellable (buff)",
 "ddisp": "Defensively dispellable (debuff)",
 "antiphys": "Anti physical damage",
-"antimag": "Anti magic damage"
+"antimag": "Anti magic damage",
+"mt_rclick": "Model: ranged right-clicker",
+"mt_rcast": "Model: ranged caster",
+"mt_mclick": "Model: melee right-clicker",
+"mt_mcast": "Model: melee caster",
+"mt_front": "Model: frontline body"
 },
 "tags": {
 "abaddon_frostmourne": [
@@ -2631,16 +2636,430 @@
 "magical"
 ],
 "model_morphling": [
-"antiphys"
+"antiphys",
+"mt_rclick"
 ],
 "model_dragon_knight": [
-"antiphys"
+"antiphys",
+"mt_mclick",
+"mt_front"
 ],
 "model_terrorblade": [
-"antiphys"
+"antiphys",
+"mt_mclick"
 ],
 "model_naga_siren": [
-"antiphys"
+"antiphys",
+"mt_mclick"
+],
+"model_clinkz": [
+"mt_rclick"
+],
+"model_medusa": [
+"mt_rclick"
+],
+"model_lone_druid": [
+"mt_rclick"
+],
+"model_silencer": [
+"mt_rclick"
+],
+"model_windrunner": [
+"mt_rclick"
+],
+"model_sniper": [
+"mt_rclick"
+],
+"model_mirana": [
+"mt_rclick"
+],
+"model_muerta": [
+"mt_rclick"
+],
+"model_arc_warden": [
+"mt_rclick"
+],
+"model_viper": [
+"mt_rclick"
+],
+"model_nevermore": [
+"mt_rclick"
+],
+"model_weaver": [
+"mt_rclick"
+],
+"model_gyrocopter": [
+"mt_rclick"
+],
+"model_troll_warlord": [
+"mt_rclick"
+],
+"model_vengefulspirit": [
+"mt_rclick"
+],
+"model_razor": [
+"mt_rclick"
+],
+"model_luna": [
+"mt_rclick"
+],
+"model_templar_assassin": [
+"mt_rclick"
+],
+"model_obsidian_destroyer": [
+"mt_rclick"
+],
+"model_hoodwink": [
+"mt_rclick"
+],
+"model_huskar": [
+"mt_rclick"
+],
+"model_drow_ranger": [
+"mt_rclick"
+],
+"model_dazzle": [
+"mt_rcast"
+],
+"model_dark_willow": [
+"mt_rcast"
+],
+"model_shadow_shaman": [
+"mt_rcast"
+],
+"model_bane": [
+"mt_rcast"
+],
+"model_queenofpain": [
+"mt_rcast"
+],
+"model_shadow_demon": [
+"mt_rcast"
+],
+"model_batrider": [
+"mt_rcast"
+],
+"model_grimstroke": [
+"mt_rcast"
+],
+"model_witch_doctor": [
+"mt_rcast"
+],
+"model_phoenix": [
+"mt_rcast"
+],
+"model_lich": [
+"mt_rcast"
+],
+"model_ancient_apparition": [
+"mt_rcast"
+],
+"model_jakiro": [
+"mt_rcast"
+],
+"model_chen": [
+"mt_rcast"
+],
+"model_storm_spirit": [
+"mt_rcast"
+],
+"model_disruptor": [
+"mt_rcast"
+],
+"model_furion": [
+"mt_rcast"
+],
+"model_lina": [
+"mt_rcast"
+],
+"model_oracle": [
+"mt_rcast"
+],
+"model_venomancer": [
+"mt_rcast"
+],
+"model_puck": [
+"mt_rcast"
+],
+"model_snapfire": [
+"mt_rcast"
+],
+"model_crystal_maiden": [
+"mt_rcast"
+],
+"model_leshrac": [
+"mt_rcast"
+],
+"model_rubick": [
+"mt_rcast"
+],
+"model_visage": [
+"mt_rcast"
+],
+"model_necrolyte": [
+"mt_rcast"
+],
+"model_death_prophet": [
+"mt_rcast"
+],
+"model_wisp": [
+"mt_rcast"
+],
+"model_warlock": [
+"mt_rcast"
+],
+"model_tinker": [
+"mt_rcast"
+],
+"model_enchantress": [
+"mt_rcast"
+],
+"model_winter_wyvern": [
+"mt_rcast"
+],
+"model_invoker": [
+"mt_rcast"
+],
+"model_keeper_of_the_light": [
+"mt_rcast"
+],
+"model_lion": [
+"mt_rcast"
+],
+"model_skywrath_mage": [
+"mt_rcast"
+],
+"model_ringmaster": [
+"mt_rcast"
+],
+"model_techies": [
+"mt_rcast"
+],
+"model_pugna": [
+"mt_rcast"
+],
+"model_enigma": [
+"mt_rcast"
+],
+"model_zuus": [
+"mt_rcast"
+],
+"model_phantom_lancer": [
+"mt_mclick"
+],
+"model_kez": [
+"mt_mclick"
+],
+"model_ursa": [
+"mt_mclick"
+],
+"model_sven": [
+"mt_mclick",
+"mt_front"
+],
+"model_tiny": [
+"mt_mclick",
+"mt_front"
+],
+"model_chaos_knight": [
+"mt_mclick",
+"mt_front"
+],
+"model_slark": [
+"mt_mclick"
+],
+"model_riki": [
+"mt_mclick"
+],
+"model_legion_commander": [
+"mt_mclick",
+"mt_front"
+],
+"model_abaddon": [
+"mt_mclick",
+"mt_front"
+],
+"model_monkey_king": [
+"mt_mclick"
+],
+"model_bloodseeker": [
+"mt_mclick"
+],
+"model_meepo": [
+"mt_mclick"
+],
+"model_life_stealer": [
+"mt_mclick",
+"mt_front"
+],
+"model_spectre": [
+"mt_mclick"
+],
+"model_lycan": [
+"mt_mclick",
+"mt_front"
+],
+"model_slardar": [
+"mt_mclick",
+"mt_front"
+],
+"model_night_stalker": [
+"mt_mclick",
+"mt_front"
+],
+"model_marci": [
+"mt_mclick"
+],
+"model_bounty_hunter": [
+"mt_mclick"
+],
+"model_phantom_assassin": [
+"mt_mclick"
+],
+"model_ember_spirit": [
+"mt_mclick"
+],
+"model_alchemist": [
+"mt_mclick",
+"mt_front"
+],
+"model_faceless_void": [
+"mt_mclick"
+],
+"model_juggernaut": [
+"mt_mclick"
+],
+"model_antimage": [
+"mt_mclick"
+],
+"model_broodmother": [
+"mt_mclick"
+],
+"model_skeleton_king": [
+"mt_mclick",
+"mt_front"
+],
+"model_kunkka": [
+"mt_mclick",
+"mt_front"
+],
+"model_elder_titan": [
+"mt_mcast",
+"mt_front"
+],
+"model_ogre_magi": [
+"mt_mcast",
+"mt_front"
+],
+"model_dawnbreaker": [
+"mt_mcast",
+"mt_front"
+],
+"model_mars": [
+"mt_mcast",
+"mt_front"
+],
+"model_abyssal_underlord": [
+"mt_mcast",
+"mt_front"
+],
+"model_dark_seer": [
+"mt_mcast",
+"mt_front"
+],
+"model_beastmaster": [
+"mt_mcast",
+"mt_front"
+],
+"model_primal_beast": [
+"mt_mcast",
+"mt_front"
+],
+"model_tidehunter": [
+"mt_mcast",
+"mt_front"
+],
+"model_earth_spirit": [
+"mt_mcast",
+"mt_front"
+],
+"model_sand_king": [
+"mt_mcast",
+"mt_front"
+],
+"model_undying": [
+"mt_mcast",
+"mt_front"
+],
+"model_tusk": [
+"mt_mcast",
+"mt_front"
+],
+"model_magnataur": [
+"mt_mcast",
+"mt_front"
+],
+"model_rattletrap": [
+"mt_mcast",
+"mt_front"
+],
+"model_treant": [
+"mt_mcast",
+"mt_front"
+],
+"model_doom_bringer": [
+"mt_mcast",
+"mt_front"
+],
+"model_pudge": [
+"mt_mcast",
+"mt_front"
+],
+"model_bristleback": [
+"mt_mcast",
+"mt_front"
+],
+"model_axe": [
+"mt_mcast",
+"mt_front"
+],
+"model_earthshaker": [
+"mt_mcast",
+"mt_front"
+],
+"model_shredder": [
+"mt_mcast",
+"mt_front"
+],
+"model_spirit_breaker": [
+"mt_mcast",
+"mt_front"
+],
+"model_largo": [
+"mt_mcast",
+"mt_front"
+],
+"model_pangolier": [
+"mt_mcast",
+"mt_front"
+],
+"model_centaur": [
+"mt_mcast",
+"mt_front"
+],
+"model_void_spirit": [
+"mt_mcast"
+],
+"model_brewmaster": [
+"mt_mcast",
+"mt_front"
+],
+"model_omniknight": [
+"mt_mcast",
+"mt_front"
+],
+"model_nyx_assassin": [
+"mt_mcast"
 ]
 },
 "heroes": [
