@@ -2719,7 +2719,7 @@
 "mt_rclick"
 ],
 "model_dazzle": [
-"mt_rcast"
+"mt_rclick"
 ],
 "model_dark_willow": [
 "mt_rcast"
@@ -2731,13 +2731,13 @@
 "mt_rcast"
 ],
 "model_queenofpain": [
-"mt_rcast"
+"mt_rclick"
 ],
 "model_shadow_demon": [
 "mt_rcast"
 ],
 "model_batrider": [
-"mt_rcast"
+"mt_rclick"
 ],
 "model_grimstroke": [
 "mt_rcast"
@@ -2761,13 +2761,13 @@
 "mt_rcast"
 ],
 "model_storm_spirit": [
-"mt_rcast"
+"mt_rclick"
 ],
 "model_disruptor": [
 "mt_rcast"
 ],
 "model_furion": [
-"mt_rcast"
+"mt_rclick"
 ],
 "model_lina": [
 "mt_rcast"
@@ -2791,7 +2791,7 @@
 "mt_rcast"
 ],
 "model_rubick": [
-"mt_rcast"
+"mt_rclick"
 ],
 "model_visage": [
 "mt_rcast"
@@ -2800,7 +2800,7 @@
 "mt_rcast"
 ],
 "model_death_prophet": [
-"mt_rcast"
+"mt_rclick"
 ],
 "model_wisp": [
 "mt_rcast"
@@ -2809,10 +2809,10 @@
 "mt_rcast"
 ],
 "model_tinker": [
-"mt_rcast"
+"mt_rclick"
 ],
 "model_enchantress": [
-"mt_rcast"
+"mt_rclick"
 ],
 "model_winter_wyvern": [
 "mt_rcast"
@@ -2833,10 +2833,10 @@
 "mt_rcast"
 ],
 "model_techies": [
-"mt_rcast"
+"mt_rclick"
 ],
 "model_pugna": [
-"mt_rcast"
+"mt_rclick"
 ],
 "model_enigma": [
 "mt_rcast"
