@@ -10,11 +10,12 @@ const WEIGHTS_FILE = path.join(__dirname, 'seat-weights.json');
 const loadSeatWeights = () => JSON.parse(fs.readFileSync(WEIGHTS_FILE, 'utf8'));
 
 function seatScore(engine, items, pos, weights = loadSeatWeights()) {
+  const W = (weights.byPos && weights.byPos[pos]) || weights.weights;
   const f = seatFeatures(engine, items);
   const fit = seatAt(profile(items), pos);
   f.fit = fit.value;
   let score = 0;
-  for (const [k, w] of Object.entries(weights.weights)) score += w * (f[k] || 0);
+  for (const [k, w] of Object.entries(W)) score += w * (f[k] || 0);
   return { score, f, fit };
 }
 
@@ -28,7 +29,8 @@ function comparePair(engine, a, b, pos, weights = loadSeatWeights()) {
   const pA = 1 / (1 + Math.exp(-z / weights.scale));
   const pick = z >= 0 ? 'a' : 'b';
   const W = pick === 'a' ? A : B, L = pick === 'a' ? B : A, wn = pick.toUpperCase(), ln = pick === 'a' ? 'B' : 'A';
-  const parts = Object.entries(weights.weights).map(([k, w]) => [k, w * ((W.f[k] || 0) - (L.f[k] || 0))]).filter(([, v]) => Math.abs(v) >= 0.3).sort((x, y) => y[1] - x[1]);
+  const PW = (weights.byPos && weights.byPos[pos]) || weights.weights;
+  const parts = Object.entries(PW).map(([k, w]) => [k, w * ((W.f[k] || 0) - (L.f[k] || 0))]).filter(([, v]) => Math.abs(v) >= 0.3).sort((x, y) => y[1] - x[1]);
   const why = parts.filter(([, v]) => v > 0).map(([k, v]) => `${wn} has ${LABEL[k]} (+${r1(v)})`);
   const against = parts.filter(([, v]) => v < 0).map(([k, v]) => `${ln} has ${LABEL[k]} (+${r1(-v)} for ${ln})`);
   const holes = s => s.fit.holes.length ? s.fit.holes.join(', ') : 'nothing';

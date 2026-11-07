@@ -57,6 +57,8 @@ const ARCHETYPES = {
       // (batch-001-1005, carries-001-3).
       ['reach (ranged, or a gap close for melee)', p.ranged || p.has('gap') || (p.tanky && p.count('def', 'sus', 'life', 'antiphys') >= 2)],
       ['attack rate', !p.slowAttacker || p.has('aspd')],
+      // TA's 250 range gets kited by real ranged carries (carries-003-5).
+      ['attack range', !p.ranged || (p.s.AttackRange || 0) >= 330 || p.has('rng')],
       ['survive while attacking', p.has('def', 'sus', 'life', 'antiphys') || (p.tanky && !p.ranged)],
       ['a slow or disable to stick to targets', p.has('slow', 'dis', 'aoed')],
       ['move around', !p.slowMover || p.has('mob', 'gap')],
@@ -64,9 +66,9 @@ const ARCHETYPES = {
   },
   spellBurst: {
     label: 'Spell-burst core',
-    strength: p => p.count('burst', 'dis', 'aoed', 'silence'),
+    strength: p => p.count('burst', 'dot', 'dis', 'aoed', 'silence'),
     needs: p => [
-      ['burst or lockdown', p.count('burst', 'dis', 'aoed', 'silence') >= 2],
+      ['damage or lockdown (two or more)', p.count('burst', 'dot', 'dis', 'aoed', 'silence') >= 2],
       ['mana', p.intModel || p.has('mana')],
       ['wave clear', p.has('wc')],
       ['survive (escape or defense)', p.has('mob', 'def', 'life', 'invis')],
@@ -116,7 +118,10 @@ const ARCHETYPES = {
 const POSITIONS = {
   mid: { label: 'Mid', archetypes: ['spellBurst', 'brawler', 'rightClick'], needs: p => [
     ['survive a solo lane', p.has('lane', 'sus', 'def', 'mob') || p.ranged],
-    ['mobility', p.has('mob', 'gap', 'invis')],
+    // A fast model counts as mobility (mids-001-9: Pugna is 50 ms faster).
+    ['mobility', p.has('mob', 'gap', 'invis') || (p.s.MovementSpeed || 0) >= 315],
+    // Wave clear decides many mid pairs (mids-001-1, -23), so it counts double.
+    ['wave clear', p.has('wc')],
     ['wave clear', p.has('wc')],
   ] },
   // Farming speed decides most carry pairs (carries-001), so it counts double.
