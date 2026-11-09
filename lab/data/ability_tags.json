@@ -2316,8 +2316,7 @@
 "heal",
 "slow",
 "magical",
-"ddisp",
-"dot"
+"ddisp"
 ],
 "treant_overgrowth": [
 "aoed",
@@ -2458,8 +2457,7 @@
 "venomancer_plague_ward": [
 "summ",
 "push",
-"physical",
-"dot"
+"physical"
 ],
 "viper_poison_attack": [
 "orb",
