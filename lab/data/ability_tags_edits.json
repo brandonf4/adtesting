@@ -11,8 +11,8 @@
 "invoker_deafening_blast_ad": ["aoed", "magical", "antiphys"],
 "invoker_sun_strike_ad": ["burst", "global", "pure"],
 "invoker_tornado_ad": ["aoed", "magical", "odispel"],
-"jakiro_liquid_fire": ["aspd", "debuff", "push", "magical", "orb", "lane"],
-"jakiro_liquid_ice": ["dot", "debuff", "magical", "orb", "slow"],
+"jakiro_liquid_fire": ["aspd", "debuff", "push", "magical", "orb", "lane", "dotx"],
+"jakiro_liquid_ice": ["dot", "debuff", "magical", "orb", "slow", "dotx"],
 "juggernaut_blade_dance": ["atk"],
 "juggernaut_blade_fury": ["def", "mob", "wc", "magical", "antimag"],
 "kez_talon_toss_ad": ["silence", "physical"],
@@ -24,6 +24,6 @@
 "muerta_gunslinger": ["aspd", "atk", "wc"],
 "skeleton_king_hellfire_blast": ["magical"],
 "templar_assassin_psi_blades": ["atk", "rng", "pure", "wc"],
-"witch_doctor_maledict": ["burst", "magical"],
+"witch_doctor_maledict": ["burst", "magical", "dotx"],
 "witch_doctor_paralyzing_cask": ["dis", "aoed", "magical"]
 }
