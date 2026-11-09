@@ -60,6 +60,7 @@ function seatFeatures(engine, items) {
     if (r.modelAttack && r.modelAttack !== attack) continue;
     if (r.modelAttr && r.modelAttr !== attr) continue;
     if ((r.unlessAny || []).some(n => names.includes(n))) continue;
+    if (r.ifAny && !r.ifAny.some(n => names.includes(n))) continue;
     // Needs another item with one of these tags (e.g. Fiery Soul needs a damaging spell).
     if (r.unlessTagAny && names.some(n => n !== r.item && (TAGS[n] || []).some(t => r.unlessTagAny.includes(t)))) continue;
     notes += r.value;

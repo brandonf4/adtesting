@@ -118,6 +118,7 @@ let form = null;
 let CARRIES = null, cSaved = {};
 const CTAGS = ['Farming speed', 'Damage output', 'Survivability', 'Mobility / gap close', 'Scaling / late game', 'Laning', 'Model fit', 'Combos', 'Other'];
 const MTAGS = ['Laning', 'Wave clear', 'Kill threat / burst', 'Mobility', 'Survivability', 'Rune control / ganking', 'Scaling / late game', 'Teamfight', 'Model fit', 'Combos', 'Other'];
+const OTAGS = ['Laning', 'Survivability', 'Initiation', 'Teamfight', 'Space making', 'Auras / utility', 'Scaling / late game', 'Model fit', 'Combos', 'Other'];
 const POS_NAME = { pos1: 'pos 1', mid: 'mid', offlane: 'offlane', pos4: 'pos 4', pos5: 'pos 5' };
 const POS_HEAD = { pos1: 'Carry vs carry', mid: 'Mid vs mid', offlane: 'Offlane vs offlane', pos4: 'Pos 4 vs pos 4', pos5: 'Pos 5 vs pos 5' };
 const MT_ORDER = ['mt_rclick', 'mt_rcast', 'mt_mclick', 'mt_mcast', 'mt_front'];
@@ -370,7 +371,7 @@ function renderPair(v, i) {
         <button class="chip" data-w="skip">Can't tell</button></div>
       <div class="row"><b>How sure?</b>${CONF.map(([k, l]) => `<button class="chip" data-c="${k}">${l}</button>`).join('')}</div>
       <div class="row"><b>Why?</b> <span class="muted">(optional, pick any)</span></div>
-      <div class="row">${(p.pos === 'mid' ? MTAGS : CTAGS).map(t => `<button class="chip" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+      <div class="row">${(p.pos === 'mid' ? MTAGS : p.pos === 'offlane' ? OTAGS : CTAGS).map(t => `<button class="chip" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
       <textarea id="note" placeholder="What makes the better one better, and where the judge's reasons are wrong…">${esc(form.note)}</textarea>
       <div class="muted" style="font-size:12px;margin-top:4px">To dictate: click in the box, then press Windows + H (on a phone, use the keyboard's mic button).</div>
       <div class="row"><button class="btn" id="save">Save and next</button>

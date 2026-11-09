@@ -69,6 +69,8 @@ const ARCHETYPES = {
     strength: p => p.count('burst', 'dot', 'dis', 'aoed', 'silence'),
     needs: p => [
       ['damage or lockdown (two or more)', p.count('burst', 'dot', 'dis', 'aoed', 'silence') >= 2],
+      // A combo needs a way to set it up (mids-003-4, -20; mids-002-6).
+      ['a disable to set up the damage', p.has('dis', 'aoed')],
       ['mana', p.intModel || p.has('mana')],
       ['wave clear', p.has('wc')],
       ['survive (escape or defense)', p.has('mob', 'def', 'life', 'invis')],
@@ -143,7 +145,11 @@ function seatAt(p, pos) {
     // A carry with support spells is a confused build; spells that help
     // neither farming nor fighting are dead slots (carries-001-8, -25).
     const confused = pos === 'pos1' ? p.count('heal', 'save') + p.dead : 0;
-    const value = Math.min(3, A.strength(p)) - new Set(holes).size - (holes.length - new Set(holes).size) - 0.5 * waste - 0.5 * confused;
+    // Attack spells on a caster model are wasted (Psi Blades on Zeus,
+    // Luminosity on Skywrath, Fiery Soul on CM: mids-002-3, -6, mids-003-1).
+    const wastedAtk = p.has('mt_rclick', 'mt_mclick') ? 0 : p.count('atk', 'aspd');
+    const weak = p.has('mt_weak') ? 1 : 0;
+    const value = Math.min(3, A.strength(p)) - new Set(holes).size - (holes.length - new Set(holes).size) - 0.5 * waste - 0.5 * confused - 0.5 * wastedAtk - weak;
     if (!best || value > best.value) best = { archetype: a, label: A.label, holes: [...new Set(holes)], waste, value };
   }
   return best;
