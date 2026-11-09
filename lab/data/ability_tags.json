@@ -21,7 +21,7 @@
 "debuff": "Enemy debuff",
 "init": "Initiation",
 "burst": "Burst damage",
-"dot": "Sustained damage",
+"dot": "Damage over time (DOT)",
 "wc": "Wave clear",
 "lane": "Laning spell",
 "summ": "Summons / illusions",
@@ -45,8 +45,7 @@
 "mt_rcast": "Model: ranged caster",
 "mt_mclick": "Model: melee right-clicker",
 "mt_mcast": "Model: melee caster",
-"mt_front": "Model: frontline body",
-"dotx": "Damage over time (DOT)"
+"mt_front": "Model: frontline body"
 },
 "tags": {
 "abaddon_frostmourne": [
@@ -54,7 +53,8 @@
 "slow",
 "orb",
 "magical",
-"ddisp"
+"ddisp",
+"dot"
 ],
 "abaddon_borrowed_time": [
 "life",
@@ -112,8 +112,7 @@
 "wc",
 "dot",
 "debuff",
-"physical",
-"dotx"
+"physical"
 ],
 "alchemist_unstable_concoction": [
 "dis",
@@ -130,14 +129,14 @@
 "debuff",
 "global",
 "magical",
-"tf",
-"dotx"
+"tf"
 ],
 "ancient_apparition_cold_feet": [
 "dis",
 "lane",
 "magical",
-"ddisp"
+"ddisp",
+"dot"
 ],
 "ancient_apparition_ice_vortex": [
 "slow",
@@ -168,8 +167,7 @@
 "slow",
 "dot",
 "lane",
-"magical",
-"dotx"
+"magical"
 ],
 "arc_warden_magnetic_field": [
 "def",
@@ -204,8 +202,7 @@
 "slow",
 "lane",
 "pure",
-"ddisp",
-"dotx"
+"ddisp"
 ],
 "axe_culling_blade": [
 "burst",
@@ -217,8 +214,7 @@
 "dis",
 "dot",
 "pure",
-"bkb",
-"dotx"
+"bkb"
 ],
 "bane_brain_sap": [
 "burst",
@@ -236,7 +232,8 @@
 "def",
 "pure",
 "ddisp",
-"antiphys"
+"antiphys",
+"dot"
 ],
 "batrider_sticky_napalm": [
 "debuff",
@@ -249,8 +246,7 @@
 "mob",
 "dot",
 "wc",
-"magical",
-"dotx"
+"magical"
 ],
 "batrider_flaming_lasso": [
 "dis",
@@ -264,8 +260,7 @@
 "dot",
 "slow",
 "wc",
-"magical",
-"dotx"
+"magical"
 ],
 "beastmaster_wild_axes": [
 "wc",
@@ -307,8 +302,7 @@
 "dot",
 "dis",
 "pure",
-"bkb",
-"dotx"
+"bkb"
 ],
 "bloodseeker_blood_bath": [
 "silence",
@@ -353,7 +347,8 @@
 "brewmaster_cinder_brew": [
 "slow",
 "debuff",
-"magical"
+"magical",
+"dot"
 ],
 "brewmaster_thunder_clap": [
 "slow",
@@ -480,7 +475,8 @@
 "crystal_maiden_frostbite": [
 "dis",
 "magical",
-"ddisp"
+"ddisp",
+"dot"
 ],
 "crystal_maiden_freezing_field": [
 "dot",
@@ -527,8 +523,7 @@
 "dark_willow_bramble_maze": [
 "aoed",
 "dot",
-"magical",
-"dotx"
+"magical"
 ],
 "dark_willow_terrorize": [
 "aoed",
@@ -565,7 +560,7 @@
 "lane",
 "physical",
 "ddisp",
-"dotx"
+"dot"
 ],
 "dazzle_shadow_wave": [
 "heal",
@@ -591,8 +586,7 @@
 "sus",
 "dot",
 "lane",
-"magical",
-"dotx"
+"magical"
 ],
 "death_prophet_carrion_swarm": [
 "wc",
@@ -616,14 +610,14 @@
 "aoed",
 "magical",
 "tf",
-"antimag"
+"antimag",
+"dot"
 ],
 "disruptor_thunder_strike": [
 "dot",
 "lane",
 "vis",
-"magical",
-"dotx"
+"magical"
 ],
 "disruptor_kinetic_field": [
 "aoed",
@@ -633,7 +627,7 @@
 "atk",
 "orb",
 "magical",
-"dotx"
+"dot"
 ],
 "doom_bringer_devour": [
 "sus"
@@ -645,14 +639,13 @@
 "bkb",
 "odispel",
 "antimag",
-"dotx"
+"dot"
 ],
 "doom_bringer_scorched_earth": [
 "dot",
 "sus",
 "mob",
-"magical",
-"dotx"
+"magical"
 ],
 "dragon_knight_elder_dragon_form": [
 "rng",
@@ -773,7 +766,7 @@
 "aoed",
 "magical",
 "ddisp",
-"dotx"
+"dot"
 ],
 "ember_spirit_flame_guard": [
 "def",
@@ -813,8 +806,7 @@
 "enigma_midnight_pulse": [
 "dot",
 "magical",
-"tf",
-"dotx"
+"tf"
 ],
 "enigma_demonic_conversion": [
 "summ",
@@ -866,7 +858,8 @@
 "silence",
 "burst",
 "lane",
-"magical"
+"magical",
+"dot"
 ],
 "grimstroke_spirit_walk": [
 "dis",
@@ -897,7 +890,8 @@
 "burst",
 "lane",
 "wc",
-"magical"
+"magical",
+"dot"
 ],
 "gyrocopter_call_down": [
 "slow",
@@ -933,8 +927,7 @@
 "orb",
 "dot",
 "lane",
-"magical",
-"dotx"
+"magical"
 ],
 "huskar_inner_fire": [
 "burst",
@@ -975,8 +968,7 @@
 ],
 "invoker_chaos_meteor_ad": [
 "dot",
-"wc",
-"dotx"
+"wc"
 ],
 "invoker_emp_ad": [
 "burst",
@@ -984,7 +976,8 @@
 "antimag"
 ],
 "invoker_ice_wall_ad": [
-"slow"
+"slow",
+"dot"
 ],
 "invoker_deafening_blast_ad": [
 "aoed",
@@ -996,13 +989,12 @@
 "debuff",
 "push",
 "magical",
-"dotx"
+"dot"
 ],
 "jakiro_liquid_ice": [
 "dot",
 "debuff",
-"magical",
-"dotx"
+"magical"
 ],
 "jakiro_ice_path": [
 "aoed",
@@ -1013,8 +1005,7 @@
 "dot",
 "wc",
 "magical",
-"tf",
-"dotx"
+"tf"
 ],
 "jakiro_dual_breath": [
 "burst",
@@ -1022,7 +1013,7 @@
 "slow",
 "lane",
 "magical",
-"dotx"
+"dot"
 ],
 "juggernaut_blade_fury": [
 "def",
@@ -1194,7 +1185,8 @@
 "save",
 "lane",
 "magical",
-"antiphys"
+"antiphys",
+"dot"
 ],
 "lich_frost_nova": [
 "burst",
@@ -1498,8 +1490,7 @@
 ],
 "necrolyte_heartstopper_aura": [
 "dot",
-"magical",
-"dotx"
+"magical"
 ],
 "necrolyte_death_pulse": [
 "heal",
@@ -1599,8 +1590,7 @@
 "dot",
 "lane",
 "magical",
-"ddisp",
-"dotx"
+"ddisp"
 ],
 "omniknight_hammer_of_purity": [
 "atk",
@@ -1707,7 +1697,8 @@
 "phoenix_icarus_dive": [
 "mob",
 "slow",
-"magical"
+"magical",
+"dot"
 ],
 "phoenix_supernova": [
 "aoed",
@@ -1722,8 +1713,7 @@
 "debuff",
 "lane",
 "magical",
-"ddisp",
-"dotx"
+"ddisp"
 ],
 "phoenix_sun_ray": [
 "dot",
@@ -1799,7 +1789,7 @@
 "sus",
 "heal",
 "magical",
-"dotx"
+"dot"
 ],
 "pugna_nether_ward": [
 "dot",
@@ -1821,8 +1811,7 @@
 "slow",
 "lane",
 "magical",
-"ddisp",
-"dotx"
+"ddisp"
 ],
 "queenofpain_sonic_wave": [
 "burst",
@@ -1929,8 +1918,7 @@
 "invis",
 "wc",
 "dot",
-"magical",
-"dotx"
+"magical"
 ],
 "sandking_epicenter": [
 "aoed",
@@ -2000,7 +1988,7 @@
 "wc",
 "slow",
 "pure",
-"dotx"
+"dot"
 ],
 "silencer_glaives_of_wisdom": [
 "orb",
@@ -2017,8 +2005,7 @@
 "dot",
 "magical",
 "ddisp",
-"antimag",
-"dotx"
+"antimag"
 ],
 "silencer_last_word": [
 "silence",
@@ -2139,8 +2126,7 @@
 "dot",
 "wc",
 "lane",
-"magical",
-"dotx"
+"magical"
 ],
 "spectre_dispersion": [
 "def"
@@ -2330,13 +2316,15 @@
 "heal",
 "slow",
 "magical",
-"ddisp"
+"ddisp",
+"dot"
 ],
 "treant_overgrowth": [
 "aoed",
 "magical",
 "bkb",
-"tf"
+"tf",
+"dot"
 ],
 "treant_natures_grasp": [
 "slow",
@@ -2453,14 +2441,13 @@
 "venomancer_noxious_plague": [
 "dot",
 "magical",
-"tf",
-"dotx"
+"tf"
 ],
 "venomancer_venomous_gale": [
 "slow",
 "magical",
 "ddisp",
-"dotx"
+"dot"
 ],
 "venomancer_snakebite": [
 "dot",
@@ -2471,7 +2458,8 @@
 "venomancer_plague_ward": [
 "summ",
 "push",
-"physical"
+"physical",
+"dot"
 ],
 "viper_poison_attack": [
 "orb",
@@ -2479,20 +2467,19 @@
 "lane",
 "magical",
 "ddisp",
-"dotx"
+"dot"
 ],
 "viper_corrosive_skin": [
 "def",
 "magical",
 "antiphys",
-"dotx"
+"dot"
 ],
 "viper_viper_strike": [
 "slow",
 "dot",
 "magical",
-"ddisp",
-"dotx"
+"ddisp"
 ],
 "viper_nethertoxin": [
 "silence",
@@ -2557,8 +2544,7 @@
 "heal",
 "dot",
 "magical",
-"ddisp",
-"dotx"
+"ddisp"
 ],
 "weaver_shukuchi": [
 "mob",
@@ -2572,7 +2558,8 @@
 "weaver_the_swarm": [
 "debuff",
 "vis",
-"physical"
+"physical",
+"dot"
 ],
 "weaver_time_lapse": [
 "life",
@@ -2601,8 +2588,7 @@
 "dot",
 "mob",
 "magical",
-"ddisp",
-"dotx"
+"ddisp"
 ],
 "winter_wyvern_winters_curse": [
 "aoed",
@@ -2639,8 +2625,7 @@
 ],
 "witch_doctor_maledict": [
 "dot",
-"magical",
-"dotx"
+"magical"
 ],
 "witch_doctor_paralyzing_cask": [
 "dis",
