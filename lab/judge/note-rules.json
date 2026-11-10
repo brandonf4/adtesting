@@ -120,10 +120,11 @@
     {
       "item": "naga_siren_rip_tide",
       "unlessAny": [
-        "naga_siren_mirror_image"
+        "naga_siren_mirror_image",
+        "phantom_lancer_juxtapose"
       ],
       "value": -3,
-      "from": "mids-003-7: Rip Tide without illusions is much weaker"
+      "from": "mids-003-7: Rip Tide without illusions is much weaker; Brandon 2026-11-10: Rip Tide also works with Juxtapose"
     },
     {
       "item": "tiny_grow",
