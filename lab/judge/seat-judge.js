@@ -19,12 +19,30 @@ function seatScore(engine, items, pos, weights = loadSeatWeights()) {
   return { score, f, fit };
 }
 
+// A support duo: two builds, scored at their best pos 4 / pos 5 split.
+function duoScore(engine, seats, weights = loadSeatWeights()) {
+  let best = null;
+  for (const [p0, p1] of [['pos4', 'pos5'], ['pos5', 'pos4']]) {
+    const x = seatScore(engine, seats[0], p0, weights), y = seatScore(engine, seats[1], p1, weights);
+    if (!best || x.score + y.score > best.score) {
+      const f = {};
+      for (const k of new Set([...Object.keys(x.f), ...Object.keys(y.f)])) f[k] = (x.f[k] || 0) + (y.f[k] || 0);
+      const name = s => { const m = s.find(i => i.kind === 'model'); return m ? m.display.replace(' (model)', '') : '?'; };
+      const lbl = (pos, s, r) => `${pos === 'pos4' ? 'Pos 4' : 'Pos 5'} ${name(s)} (${r.fit.label})`;
+      const holes = [...x.fit.holes.map(h => `${name(seats[0])}: ${h}`), ...y.fit.holes.map(h => `${name(seats[1])}: ${h}`)];
+      best = { score: x.score + y.score, f, fit: { label: [lbl(p0, seats[0], x), lbl(p1, seats[1], y)].join(' + '), holes } };
+    }
+  }
+  return best;
+}
+
 const r1 = x => Math.round(x * 10) / 10;
 const LABEL = { strength: 'stronger spells on their own', synergy: 'spells that combo better', aghs: 'better Aghanim upgrades', notes: 'your note rules', fit: 'a better fit for the role' };
 
 // Compare build A and B at one position: who the judge picks, how sure, and why.
 function comparePair(engine, a, b, pos, weights = loadSeatWeights()) {
-  const A = seatScore(engine, a, pos, weights), B = seatScore(engine, b, pos, weights);
+  const score = (x) => pos === 'duo' ? duoScore(engine, x, weights) : seatScore(engine, x, pos, weights);
+  const A = score(a), B = score(b);
   const z = A.score - B.score;
   const pA = 1 / (1 + Math.exp(-z / weights.scale));
   const pick = z >= 0 ? 'a' : 'b';
@@ -42,4 +60,4 @@ function comparePair(engine, a, b, pos, weights = loadSeatWeights()) {
   };
 }
 
-module.exports = { seatScore, comparePair, loadSeatWeights, WEIGHTS_FILE };
+module.exports = { seatScore, duoScore, comparePair, loadSeatWeights, WEIGHTS_FILE };

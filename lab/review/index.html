@@ -119,8 +119,9 @@ let CARRIES = null, cSaved = {};
 const CTAGS = ['Farming speed', 'Damage output', 'Survivability', 'Mobility / gap close', 'Scaling / late game', 'Laning', 'Model fit', 'Combos', 'Other'];
 const MTAGS = ['Laning', 'Wave clear', 'Kill threat / burst', 'Mobility', 'Survivability', 'Rune control / ganking', 'Scaling / late game', 'Teamfight', 'Model fit', 'Combos', 'Other'];
 const OTAGS = ['Laning', 'Survivability', 'Initiation', 'Teamfight', 'Space making', 'Auras / utility', 'Scaling / late game', 'Model fit', 'Combos', 'Other'];
-const POS_NAME = { pos1: 'pos 1', mid: 'mid', offlane: 'offlane', pos4: 'pos 4', pos5: 'pos 5' };
-const POS_HEAD = { pos1: 'Carry vs carry', mid: 'Mid vs mid', offlane: 'Offlane vs offlane', pos4: 'Pos 4 vs pos 4', pos5: 'Pos 5 vs pos 5' };
+const STAGS = ['Laning', 'Saves', 'Disables / setup', 'Vision', 'Teamfight', 'Healing / sustain', 'Rotations / ganks', 'Scaling / late game', 'Combos', 'Other'];
+const POS_NAME = { duo: 'support duo', pos1: 'pos 1', mid: 'mid', offlane: 'offlane', pos4: 'pos 4', pos5: 'pos 5' };
+const POS_HEAD = { duo: 'Support duo vs duo', pos1: 'Carry vs carry', mid: 'Mid vs mid', offlane: 'Offlane vs offlane', pos4: 'Pos 4 vs pos 4', pos5: 'Pos 5 vs pos 5' };
 const MT_ORDER = ['mt_rclick', 'mt_rcast', 'mt_mclick', 'mt_mcast', 'mt_front'];
 
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
@@ -351,6 +352,7 @@ function buildHtml(items) {
 }
 
 function pairNo(i) { const p = CARRIES.pairs[i]; return +String(p.id).split('-').pop(); }
+function side(x) { return Array.isArray(x[0]) ? x.map(buildHtml).join('') : buildHtml(x); }
 function renderPair(v, i) {
   const p = CARRIES.pairs[i], j = p.judge;
   const prev = cSaved[p.id];
@@ -358,7 +360,7 @@ function renderPair(v, i) {
   const fitLine = (k, x) => `<div><b>${k}</b>: ${esc(x.archetype)}${x.missing.length ? ` <span class="muted">· missing ${esc(x.missing.join(', '))}</span>` : ' <span class="muted">· nothing missing</span>'}</div>`;
   v.innerHTML = `<h2 style="font-size:15px;margin-top:0">Pair ${pairNo(i)} (${esc(p.batch)}): which is the better ${POS_NAME[p.pos || 'pos1']} build?</h2>
     <p class="muted" style="margin-top:0">In a general sense, as a baseline. The rest of the team and the enemy don't count here.</p>
-    <div class="pair"><div><h2>A</h2>${buildHtml(p.a)}</div><div><h2>B</h2>${buildHtml(p.b)}</div></div>
+    <div class="pair"><div><h2>A</h2>${side(p.a)}</div><div><h2>B</h2>${side(p.b)}</div></div>
     <div class="panel judge-call"><b>The judge's call: ${j.pick.toUpperCase()} (${Math.round(100 * Math.max(j.pA, 1 - j.pA))}%)</b>
       <span class="muted">· judge ${esc(CARRIES.judgeVersion || '')} · score A ${j.a.score}, B ${j.b.score}${prev ? ` · you picked ${prev.winner === 'skip' ? "can't tell" : prev.winner.toUpperCase()}` : ''}</span>
       <ul>${j.why.slice(0, -1).map(w => `<li>${esc(w)}</li>`).join('')}</ul>
@@ -371,7 +373,7 @@ function renderPair(v, i) {
         <button class="chip" data-w="skip">Can't tell</button></div>
       <div class="row"><b>How sure?</b>${CONF.map(([k, l]) => `<button class="chip" data-c="${k}">${l}</button>`).join('')}</div>
       <div class="row"><b>Why?</b> <span class="muted">(optional, pick any)</span></div>
-      <div class="row">${(p.pos === 'mid' ? MTAGS : p.pos === 'offlane' ? OTAGS : CTAGS).map(t => `<button class="chip" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+      <div class="row">${(p.pos === 'mid' ? MTAGS : p.pos === 'offlane' ? OTAGS : p.pos === 'duo' ? STAGS : CTAGS).map(t => `<button class="chip" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
       <textarea id="note" placeholder="What makes the better one better, and where the judge's reasons are wrong…">${esc(form.note)}</textarea>
       <div class="muted" style="font-size:12px;margin-top:4px">To dictate: click in the box, then press Windows + H (on a phone, use the keyboard's mic button).</div>
       <div class="row"><button class="btn" id="save">Save and next</button>

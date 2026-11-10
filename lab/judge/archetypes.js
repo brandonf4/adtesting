@@ -128,7 +128,13 @@ const POSITIONS = {
   ] },
   // Farming speed decides most carry pairs (carries-001), so it counts double.
   pos1: { label: 'Pos 1', archetypes: ['rightClick'], needs: p => [['farming speed (wave clear)', p.has('wc')], ['farming speed (wave clear)', p.has('wc')]] },
-  offlane: { label: 'Offlane', archetypes: ['brawler', 'spellBurst'], needs: p => [['survive the hard lane', p.has('def', 'sus', 'life', 'mob') || p.tanky]] },
+  // offlanes-001: wave clear decided several pairs (Clock, Dawnbreaker,
+  // Centaur), and builds with spells that deal no damage lose (support Ogre).
+  offlane: { label: 'Offlane', archetypes: ['brawler', 'spellBurst'], needs: p => [
+    ['survive the hard lane', p.has('def', 'sus', 'life', 'mob') || p.tanky],
+    ['wave clear', p.has('wc')],
+    ['early pressure (damage spells)', p.count('burst', 'dot', 'atk') >= 2],
+  ] },
   pos4: { label: 'Pos 4', archetypes: ['meleeSupport', 'harassSupport'], needs: () => [] },
   pos5: { label: 'Pos 5', archetypes: ['backlineSupport', 'meleeSupport'], needs: () => [] },
 };

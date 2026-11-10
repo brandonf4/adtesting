@@ -16,8 +16,21 @@ const name = opt('name', 'carries-001'), nPairs = +opt('pairs', 25), seed = +opt
   const builds = [], seen = new Set();
   const kept = keep ? JSON.parse(fs.readFileSync(keep, 'utf8')) : null;
   const old = kept ? kept.pairs.map(p => ({ ...p, batch: p.batch || kept.batch, judge: comparePair(engine, p.a, p.b, p.pos || pos) })) : [];
-  for (const p of old) for (const s of [p.a, p.b]) seen.add(s.map(x => x.name).sort().join(','));
+  const keyOf = s => (Array.isArray(s[0]) ? s.flat() : s).map(x => x.name).sort().join(',');
+  for (const p of old) for (const s of [p.a, p.b]) seen.add(keyOf(s));
   for (const f of args) for (const d of JSON.parse(fs.readFileSync(f, 'utf8')).drafts) {
+    // Support duos: each team's two support seats, judged together.
+    if (pos === 'duo') {
+      for (const team of [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]]) {
+        const sup = team.filter(i => d.roles[i] === 'support');
+        if (sup.length !== 2) continue;
+        const items = sup.map(i => d.seats[i]), key = keyOf(items);
+        if (seen.has(key)) continue;
+        seen.add(key);
+        builds.push({ from: `${d.id}#${sup.join('+')}`, items });
+      }
+      continue;
+    }
     d.seats.forEach((s, i) => {
       if (d.roles[i] !== pos) return;
       const key = s.map(x => x.name).sort().join(',');
