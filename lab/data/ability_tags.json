@@ -1495,8 +1495,7 @@
 ],
 "necrolyte_heartstopper_aura": [
 "dot",
-"magical",
-"antiheal"
+"magical"
 ],
 "necrolyte_death_pulse": [
 "heal",
@@ -2488,8 +2487,7 @@
 ],
 "viper_nethertoxin": [
 "silence",
-"magical",
-"antiheal"
+"magical"
 ],
 "visage_soul_assumption": [
 "burst",
