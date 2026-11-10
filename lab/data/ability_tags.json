@@ -46,7 +46,8 @@
 "mt_mclick": "Model: melee right-clicker",
 "mt_mcast": "Model: melee caster",
 "mt_front": "Model: frontline body",
-"mt_weak": "Model: weak or slow"
+"mt_weak": "Model: weak or slow",
+"antiheal": "Anti healing / sustain"
 },
 "tags": {
 "abaddon_frostmourne": [
@@ -130,7 +131,8 @@
 "debuff",
 "global",
 "magical",
-"tf"
+"tf",
+"antiheal"
 ],
 "ancient_apparition_cold_feet": [
 "dis",
@@ -640,7 +642,8 @@
 "bkb",
 "odispel",
 "antimag",
-"dot"
+"dot",
+"antiheal"
 ],
 "doom_bringer_scorched_earth": [
 "dot",
@@ -673,7 +676,8 @@
 "slow",
 "lane",
 "physical",
-"ddisp"
+"ddisp",
+"antiheal"
 ],
 "drow_ranger_marksmanship": [
 "atk",
@@ -1491,7 +1495,8 @@
 ],
 "necrolyte_heartstopper_aura": [
 "dot",
-"magical"
+"magical",
+"antiheal"
 ],
 "necrolyte_death_pulse": [
 "heal",
@@ -1769,7 +1774,8 @@
 "pudge_rot": [
 "dot",
 "slow",
-"magical"
+"magical",
+"antiheal"
 ],
 "pudge_dismember": [
 "dis",
@@ -2482,7 +2488,8 @@
 ],
 "viper_nethertoxin": [
 "silence",
-"magical"
+"magical",
+"antiheal"
 ],
 "visage_soul_assumption": [
 "burst",
