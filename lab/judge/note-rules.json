@@ -486,7 +486,6 @@
       "ringmaster_tame_the_beasts",
       "mirana_arrow",
       "jakiro_ice_path",
-      "earthshaker_fissure",
       "sandking_burrowstrike",
       "elder_titan_echo_stomp"
     ],
@@ -495,7 +494,7 @@
       "aoed"
     ],
     "missing": -2,
-    "from": "Extension of mids-003-4 (Pugna can't land Meteor), duos-001-11 (no setup for Split Earth), duos-001-23 (no setup for the Silencer's spell), duos-001-4/6 (Torrent benefits from setup): delayed or skillshot spells need a disable from another spell"
+    "from": "Extension of mids-003-4 (Pugna can't land Meteor), duos-001-11 (no setup for Split Earth), duos-001-23 (no setup for the Silencer's spell), duos-001-4/6 (Torrent benefits from setup): delayed or skillshot spells need a disable from another spell; Brandon 2026-11-11: Fissure doesn't need setup"
   },
   "shortRangeSelfAoE": {
     "items": [
