@@ -265,7 +265,7 @@ function renderList() {
     + `<button class="${current === -1 ? 'on' : ''}" onclick="go(-1)"><span>General notes</span><span class="tick">${notes.length || ''}</span></button>`
     + `<button class="${current === -2 ? 'on' : ''}" onclick="go(-2)"><span>Ability tags</span><span class="tick">${Object.keys(tagEdits).length || ''}</span></button>`;
   const done = BATCH.drafts.filter(d => saved[d.id]).length;
-  document.getElementById('batch-info').textContent = `${BATCH.batch}: ${done} of ${BATCH.drafts.length} judged` + (CARRIES ? ` · build pairs: ${CARRIES.pairs.filter(p => cSaved[p.id]).length} of ${CARRIES.pairs.length}` : '');
+  document.getElementById('batch-info').textContent = `${BATCH.batch}: ${done} of ${BATCH.drafts.length} judged` + (CARRIES && CARRIES.pairs.length ? ` · build pairs: ${CARRIES.pairs.filter(p => cSaved[p.id]).length} of ${CARRIES.pairs.length}` : '');
 }
 
 function go(i) { current = i; render(); window.scrollTo(0, 0); }
@@ -334,7 +334,9 @@ function judgeTeamHtml(d) {
   const fit = (side, off) => j[side].map((x, i) => `<div><b>${esc(name(off + i))}</b>: ${esc(x.pos)}, ${esc(x.archetype)}${x.missing.length ? ` <span class="muted">· missing ${esc(x.missing.join(', '))}</span>` : ''}</div>`).join('');
   return `<div class="panel judge-call"><b>The judge's call: ${j.pick === 'radiant' ? 'Radiant' : 'Dire'} (${j.pct}%)</b>
     <span class="muted">· judge ${esc(BATCH.judgeVersion || '')}. Points are rough winrate points.</span>
+    ${j.summary ? `<p style="margin:6px 0">${esc(j.summary)}</p>` : ''}
     <ul>${j.why.map(w => `<li>${esc(w)}</li>`).join('')}</ul>
+    ${j.lanes ? `<div style="margin-top:8px"><b>Position by position</b>${j.lanes.map(l => `<details style="margin-top:4px"><summary><b>${esc(l.pos)}</b>: <span style="color:var(--${l.pick === 'radiant' ? 'rad' : 'dire'})">${l.pick === 'radiant' ? 'Radiant' : 'Dire'}</span> (${l.pct}%) <span class="muted">· ${esc(l.radiant)} vs ${esc(l.dire)}</span></summary><ul>${l.why.map(w => `<li>${esc(w)}</li>`).join('')}</ul></details>`).join('')}</div>` : ''}
     <details><summary>How it reads each build</summary><div class="seatfit"><div><b style="color:var(--rad)">Radiant</b>${fit('radiant', 0)}</div><div><b style="color:var(--dire)">Dire</b>${fit('dire', 5)}</div></div></details></div>`;
 }
 
