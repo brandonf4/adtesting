@@ -135,8 +135,16 @@ const POSITIONS = {
     ['wave clear', p.has('wc')],
     ['early pressure (damage spells)', p.count('burst', 'dot', 'atk') >= 2],
   ] },
-  pos4: { label: 'Pos 4', archetypes: ['meleeSupport', 'harassSupport'], needs: () => [] },
-  pos5: { label: 'Pos 5', archetypes: ['backlineSupport', 'meleeSupport'], needs: () => [] },
+  // duos-001: supports need landing spells and a hard disable to make plays
+  // (Lich's triple stuns, Slardar/Void catch); carry or pos 3 builds on a
+  // support seat lose (TB, Drow, Centaur, Magnus, Dawnbreaker).
+  pos4: { label: 'Pos 4', archetypes: ['meleeSupport', 'harassSupport'], needs: p => [
+    ['a hard disable', p.has('dis', 'aoed')],
+    ['a way to make plays (catch, gap close or mobility)', p.has('gap', 'mob', 'invis', 'init', 'dis')],
+  ] },
+  pos5: { label: 'Pos 5', archetypes: ['backlineSupport', 'meleeSupport'], needs: p => [
+    ['a hard disable', p.has('dis', 'aoed')],
+  ] },
 };
 const SUPPORT_POS = new Set(['pos4', 'pos5']);
 
@@ -155,7 +163,7 @@ function seatAt(p, pos) {
     // Luminosity on Skywrath, Fiery Soul on CM: mids-002-3, -6, mids-003-1).
     const wastedAtk = p.has('mt_rclick', 'mt_mclick') ? 0 : p.count('atk', 'aspd');
     const weak = p.has('mt_weak') ? 1 : 0;
-    const value = Math.min(3, A.strength(p)) - new Set(holes).size - (holes.length - new Set(holes).size) - 0.5 * waste - 0.5 * confused - 0.5 * wastedAtk - weak;
+    const value = Math.min(3, A.strength(p)) - new Set(holes).size - (holes.length - new Set(holes).size) - 1 * waste - 0.5 * confused - 0.5 * wastedAtk - weak;
     if (!best || value > best.value) best = { archetype: a, label: A.label, holes: [...new Set(holes)], waste, value };
   }
   return best;

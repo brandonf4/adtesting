@@ -40,6 +40,42 @@ function counters(engine) {
   return counterIndex;
 }
 
+// Brandon's note rules for one build: conditional fits, combos, and the
+// logical extensions (setup for skillshots, short-range self AoE). Returns the
+// total and the reasons, so the judge can say which rules fired.
+function noteRules(lab, items) {
+  const names = items.map(i => i.name), why = [];
+  let value = 0;
+  const add = (v, text) => { value += v; why.push(`${text} (${v > 0 ? '+' : ''}${v})`); };
+  const model = items.find(i => i.kind === 'model');
+  const [attr, attack] = (model && lab.MODEL_TYPES.get(model.name)) || [];
+  const disp = n => { const i = items.find(x => x.name === n); return i && i.display ? i.display.replace(' (model)', '') : n; };
+  for (const r of RULES.conditional || []) {
+    if (!names.includes(r.item) || !model) continue;
+    if (r.modelAttack && r.modelAttack !== attack) continue;
+    if (r.modelAttr && r.modelAttr !== attr) continue;
+    if ((r.unlessAny || []).some(n => names.includes(n))) continue;
+    if (r.ifAny && !r.ifAny.some(n => names.includes(n))) continue;
+    // Needs another item with one of these tags (e.g. Fiery Soul needs a damaging spell).
+    if (r.unlessTagAny && names.some(n => n !== r.item && (TAGS[n] || []).some(t => r.unlessTagAny.includes(t)))) continue;
+    add(r.value, r.from.replace(/^[^:]*: /, ''));
+  }
+  for (const r of RULES.models || []) if (model && model.name === r.model) add(r.value, r.from);
+  for (const c of RULES.combos || []) if (c.allOf.every(n => names.includes(n))) add(c.value, `combo: ${c.allOf.map(disp).join(' + ')}`);
+  const ns = RULES.needsSetup;
+  if (ns) for (const n of names) {
+    if (!ns.items.includes(n)) continue;
+    const setup = names.some(m => m !== n && (TAGS[m] || []).some(t => ns.setupTags.includes(t)));
+    if (!setup) add(ns.missing, `${disp(n)} has no disable to set it up`);
+  }
+  const sr = RULES.shortRangeSelfAoE;
+  if (sr && model && attack === 'ranged') {
+    const gap = names.some(m => (TAGS[m] || []).includes('gap'));
+    for (const n of names) if (sr.items.includes(n) && !gap) add(sr.value, `${disp(n)} is short range on a ranged model with no gap close`);
+  }
+  return { value, why };
+}
+
 function seatFeatures(engine, items) {
   const lab = engine.lab, names = items.map(i => i.name);
   let strength = 0, synergy = 0, aghs = 0;
@@ -51,21 +87,7 @@ function seatFeatures(engine, items) {
       if (!lab.unitsHavePairData(units[i], units[j])) aghs += lab.upgradePairValue(kind, units[i], units[j]);
     }
   }
-  // Brandon's note rules: conditional item fits and model adjustments.
-  let notes = 0;
-  const model = items.find(i => i.kind === 'model');
-  const [attr, attack] = (model && lab.MODEL_TYPES.get(model.name)) || [];
-  for (const r of RULES.conditional || []) {
-    if (!names.includes(r.item) || !model) continue;
-    if (r.modelAttack && r.modelAttack !== attack) continue;
-    if (r.modelAttr && r.modelAttr !== attr) continue;
-    if ((r.unlessAny || []).some(n => names.includes(n))) continue;
-    if (r.ifAny && !r.ifAny.some(n => names.includes(n))) continue;
-    // Needs another item with one of these tags (e.g. Fiery Soul needs a damaging spell).
-    if (r.unlessTagAny && names.some(n => n !== r.item && (TAGS[n] || []).some(t => r.unlessTagAny.includes(t)))) continue;
-    notes += r.value;
-  }
-  for (const r of RULES.models || []) if (model && model.name === r.model) notes += r.value;
+  const notes = noteRules(lab, items).value;
   return { strength, synergy, aghs, notes };
 }
 
@@ -102,4 +124,4 @@ function judge(engine, weights = loadWeights()) {
   return { pRadiant: 1 / (1 + Math.exp(-z / weights.scale)), margin: z, radiant: fr, dire: fd, diff };
 }
 
-module.exports = { judge, loadWeights, teamFeatures, seatFeatures, WEIGHTS_FILE };
+module.exports = { judge, loadWeights, teamFeatures, seatFeatures, noteRules, RULES, WEIGHTS_FILE };

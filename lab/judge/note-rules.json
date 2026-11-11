@@ -157,5 +157,360 @@
       "value": 8,
       "from": "batch-001-1002: Viper Strike completely counters Bristleback's passive"
     }
-  ]
+  ],
+  "combos": [
+    {
+      "allOf": [
+        "batrider_sticky_napalm",
+        "dark_seer_ion_shell"
+      ],
+      "value": 3,
+      "from": "mids-002-8: strong Napalm + Ion Shell combo"
+    },
+    {
+      "allOf": [
+        "pangolier_swashbuckle",
+        "pangolier_shield_crash"
+      ],
+      "value": 3,
+      "from": "mids-002-8, mids-003-10: Swashbuckle + Shield Crash"
+    },
+    {
+      "allOf": [
+        "silencer_glaives_of_wisdom",
+        "puck_phase_shift"
+      ],
+      "value": 3,
+      "from": "mids-003-11: Glaives procs extra attacks with Phase Shift"
+    },
+    {
+      "allOf": [
+        "silencer_glaives_of_wisdom",
+        "abaddon_death_coil"
+      ],
+      "value": 3,
+      "from": "mids-003-11: Glaives + Coil"
+    },
+    {
+      "allOf": [
+        "huskar_burning_spear",
+        "lina_fiery_soul"
+      ],
+      "value": 3,
+      "from": "mids-003-5: Burning Spear procs Fiery Soul"
+    },
+    {
+      "allOf": [
+        "storm_spirit_ball_lightning",
+        "huskar_berserkers_blood"
+      ],
+      "value": 3,
+      "from": "mids-002-3: Berserker's Blood sustains Ball Lightning"
+    },
+    {
+      "allOf": [
+        "pudge_rot",
+        "brewmaster_primal_split"
+      ],
+      "value": 3,
+      "from": "mids-003-15: Rot + Primal Split is very strong"
+    },
+    {
+      "allOf": [
+        "weaver_shukuchi",
+        "brewmaster_cinder_brew"
+      ],
+      "value": 3,
+      "from": "mids-003-20: Shukuchi ignites Cinder Brew, wave clear and fights"
+    },
+    {
+      "allOf": [
+        "tinker_rearm",
+        "invoker_tornado_ad"
+      ],
+      "value": 3,
+      "from": "mids-001-21: Rearm with Tornado is very OP"
+    },
+    {
+      "allOf": [
+        "tinker_rearm",
+        "muerta_the_calling"
+      ],
+      "value": 3,
+      "from": "duos-001-9: Rearm + The Calling"
+    },
+    {
+      "allOf": [
+        "luna_moon_glaive",
+        "chaos_knight_phantasm"
+      ],
+      "value": 3,
+      "from": "carries-001-12: Glaives + Phantasm"
+    },
+    {
+      "allOf": [
+        "life_stealer_feast",
+        "muerta_gunslinger"
+      ],
+      "value": 3,
+      "from": "carries-001-14: Feast + Gunslinger"
+    },
+    {
+      "allOf": [
+        "huskar_berserkers_blood",
+        "lycan_feral_impulse"
+      ],
+      "value": 3,
+      "from": "carries-001-23: raid boss Ogre"
+    },
+    {
+      "allOf": [
+        "mars_gods_rebuke",
+        "elder_titan_natural_order"
+      ],
+      "value": 3,
+      "from": "offlanes-001-20: Rebuke + Natural Order"
+    },
+    {
+      "allOf": [
+        "skywrath_mage_mystic_flare",
+        "abyssal_underlord_firestorm"
+      ],
+      "value": 3,
+      "from": "mids-003-16: setup for Mystic Flare + Firestorm"
+    },
+    {
+      "allOf": [
+        "kunkka_tidebringer",
+        "terrorblade_conjure_image"
+      ],
+      "value": 3,
+      "from": "carries-001-24: cleave + Conjure Image farms very fast"
+    },
+    {
+      "allOf": [
+        "terrorblade_conjure_image",
+        "naga_siren_rip_tide"
+      ],
+      "value": 3,
+      "from": "carries-001-24: Conjure Image + Rip Tide farms very fast"
+    },
+    {
+      "allOf": [
+        "naga_siren_ensnare",
+        "void_spirit_aether_remnant"
+      ],
+      "value": 3,
+      "from": "duos-001-10: Ensnare into Aether Remnant"
+    },
+    {
+      "allOf": [
+        "nyx_assassin_impale",
+        "ringmaster_tame_the_beasts"
+      ],
+      "value": 3,
+      "from": "duos-001-2: Impale setup into Tame the Beasts"
+    },
+    {
+      "allOf": [
+        "crystal_maiden_frostbite",
+        "ringmaster_tame_the_beasts"
+      ],
+      "value": 3,
+      "from": "duos-001-20: Frostbite into Tame the Beasts"
+    },
+    {
+      "allOf": [
+        "lion_impale",
+        "nevermore_shadowraze2"
+      ],
+      "value": 3,
+      "from": "duos-001-11: Earth Spike sets up razes"
+    },
+    {
+      "allOf": [
+        "sven_storm_bolt",
+        "kunkka_torrent"
+      ],
+      "value": 3,
+      "from": "duos-001-4: Storm Hammer into Torrent"
+    },
+    {
+      "allOf": [
+        "oracle_fortunes_end",
+        "kunkka_torrent"
+      ],
+      "value": 3,
+      "from": "duos-001-6: Fortune's End sets up Torrent"
+    },
+    {
+      "allOf": [
+        "oracle_fortunes_end",
+        "skywrath_mage_mystic_flare"
+      ],
+      "value": 3,
+      "from": "duos-001-6: Fortune's End sets up Mystic Flare"
+    },
+    {
+      "allOf": [
+        "dark_willow_bramble_maze",
+        "magnataur_skewer"
+      ],
+      "value": 3,
+      "from": "duos-001-21: Bramble + Skewer"
+    },
+    {
+      "allOf": [
+        "dark_seer_vacuum",
+        "tiny_avalanche"
+      ],
+      "value": 3,
+      "from": "duos-001-7: Vacuum into Avalanche"
+    },
+    {
+      "allOf": [
+        "dark_seer_vacuum",
+        "largo_frogstomp"
+      ],
+      "value": 3,
+      "from": "duos-001-7: Vacuum into Frogstomp"
+    },
+    {
+      "allOf": [
+        "disruptor_kinetic_field",
+        "lina_light_strike_array"
+      ],
+      "value": 3,
+      "from": "duos-001-15: Kinetic Field + LSA holds people"
+    },
+    {
+      "allOf": [
+        "disruptor_kinetic_field",
+        "undying_tombstone"
+      ],
+      "value": 3,
+      "from": "duos-001-15: Kinetic Field + Tomb"
+    },
+    {
+      "allOf": [
+        "void_spirit_astral_step",
+        "storm_spirit_electric_vortex"
+      ],
+      "value": 3,
+      "from": "duos-001-5: Astral Step into Vortex"
+    },
+    {
+      "allOf": [
+        "vengefulspirit_magic_missile",
+        "techies_suicide"
+      ],
+      "value": 3,
+      "from": "duos-001-3: Magic Missile stun into Blast Off"
+    },
+    {
+      "allOf": [
+        "weaver_the_swarm",
+        "grimstroke_ink_creature"
+      ],
+      "value": 3,
+      "from": "duos-001-19: Swarm + Phantom's Embrace"
+    },
+    {
+      "allOf": [
+        "axe_battle_hunger",
+        "venomancer_noxious_plague"
+      ],
+      "value": 3,
+      "from": "duos-001-4: Battle Hunger + Noxious Plague"
+    },
+    {
+      "allOf": [
+        "shredder_timber_chain",
+        "techies_suicide"
+      ],
+      "value": 3,
+      "from": "duos-001-24: Timber Chain then Blast Off"
+    },
+    {
+      "allOf": [
+        "techies_suicide",
+        "leshrac_split_earth"
+      ],
+      "value": 3,
+      "from": "duos-001-24: Blast Off into Split Earth"
+    },
+    {
+      "allOf": [
+        "phantom_assassin_phantom_strike",
+        "pangolier_gyroshell"
+      ],
+      "value": 3,
+      "from": "mids-002-22: Rolling Thunder with Phantom Strike"
+    },
+    {
+      "allOf": [
+        "razor_static_link",
+        "life_stealer_infest"
+      ],
+      "value": 3,
+      "from": "carries-003-12: Infest + Static Link"
+    },
+    {
+      "allOf": [
+        "enchantress_enchant",
+        "enchantress"
+      ],
+      "value": 3,
+      "from": "mids-003-6: Enchant on the Enchantress model"
+    },
+    {
+      "allOf": [
+        "dark_willow_bramble_maze",
+        "mars_spear"
+      ],
+      "value": 3,
+      "from": "duos-001-7: Bramble Maze + Spear"
+    }
+  ],
+  "needsSetup": {
+    "items": [
+      "kunkka_torrent",
+      "lina_light_strike_array",
+      "leshrac_split_earth",
+      "invoker_sun_strike_ad",
+      "invoker_chaos_meteor_ad",
+      "skywrath_mage_mystic_flare",
+      "nevermore_shadowraze2",
+      "windrunner_powershot",
+      "void_spirit_aether_remnant",
+      "ringmaster_tame_the_beasts",
+      "mirana_arrow",
+      "jakiro_ice_path",
+      "earthshaker_fissure",
+      "sandking_burrowstrike",
+      "elder_titan_echo_stomp"
+    ],
+    "setupTags": [
+      "dis",
+      "aoed"
+    ],
+    "missing": -2,
+    "from": "Extension of mids-003-4 (Pugna can't land Meteor), duos-001-11 (no setup for Split Earth), duos-001-23 (no setup for the Silencer's spell), duos-001-4/6 (Torrent benefits from setup): delayed or skillshot spells need a disable from another spell"
+  },
+  "shortRangeSelfAoE": {
+    "items": [
+      "shredder_whirling_death",
+      "axe_counter_helix",
+      "bristleback_quill_spray",
+      "juggernaut_blade_fury",
+      "brewmaster_thunder_clap",
+      "elder_titan_echo_stomp",
+      "pudge_rot",
+      "necrolyte_heartstopper_aura",
+      "dark_seer_ion_shell",
+      "sandking_burrowstrike"
+    ],
+    "value": -2,
+    "from": "Extension of mids-002-7 (Whirling Death on ranged), duos-001-23 (Blade Fury on ranged Phoenix with no gap close), duos-001-4 (Burrowstrike on a ranged hero): self-centered short-range spells want a melee or tanky model, or a gap close"
+  }
 }
