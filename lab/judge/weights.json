@@ -1,0 +1,15 @@
+{
+  "version": "v0.2",
+  "note": "Hand-set starting weights (v0) plus Brandon's note rules (note-rules.json) as the 'notes' feature. Each feature is Radiant minus Dire, roughly in winrate points. fit-judge.js refits these from Brandon's verdicts once there are enough. buildFit (archetypes, positions, needs; judge/archetypes.js) added 2026-11-06 at a hand-set weight of 3 points per unit.",
+  "scale": 10,
+  "weights": {
+    "strength": 1.0,
+    "synergy": 1.0,
+    "aghs": 1.0,
+    "roleFitLost": -3.0,
+    "heroCounters": 0.1,
+    "abilityCounters": 0.3,
+    "notes": 1.0,
+    "buildFit": 3.0
+  }
+}

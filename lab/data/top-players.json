@@ -1,0 +1,9 @@
+{
+ "note": "Top Ability Draft players whose games train the judge (Steam account ids, 32-bit), added by Brandon. 'matches' = single AD match ids to fetch too.",
+ "players": [
+  265369004
+ ],
+ "matches": [
+  9086053851
+ ]
+}

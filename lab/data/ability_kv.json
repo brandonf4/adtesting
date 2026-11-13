@@ -1,0 +1,4109 @@
+{
+"source": "Dota game files via github.com/spirit-bear-productions/dota_vpk_updates",
+"abilities": {
+"abaddon_frostmourne": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"abaddon_borrowed_time": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"abaddon_aphotic_shield": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_NO"
+}
+},
+"abaddon_death_coil": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES_ENEMIES_NO"
+}
+},
+"abyssal_underlord_atrophy_aura": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES_ENEMIES_NO"
+}
+},
+"abyssal_underlord_firestorm": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"abyssal_underlord_pit_of_malice": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"abyssal_underlord_dark_portal": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"alchemist_chemical_rage": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"alchemist_corrosive_weaponry": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"alchemist_acid_spray": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"alchemist_unstable_concoction": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"ancient_apparition_chilling_touch": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"ancient_apparition_ice_blast": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"ancient_apparition_cold_feet": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"ancient_apparition_ice_vortex": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"antimage_blink": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"antimage_mana_break": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"antimage_counterspell": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"antimage_mana_void": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"arc_warden_flux": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"arc_warden_magnetic_field": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"arc_warden_spark_wraith": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"axe_counter_helix": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"axe_berserkers_call": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"axe_battle_hunger": {
+"damage": "pure",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"axe_culling_blade": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"bane_fiends_grip": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"bane_brain_sap": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"bane_nightmare": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_NO"
+}
+},
+"bane_enfeeble": {
+"damage": "pure",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"batrider_sticky_napalm": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"batrider_firefly": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"batrider_flaming_lasso": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"batrider_flamebreak": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"beastmaster_wild_axes": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"beastmaster_primal_roar": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"beastmaster_summon_raptor": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"beastmaster_summon_razorback": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"bloodseeker_thirst": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"bloodseeker_bloodrage": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"bloodseeker_rupture": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"bloodseeker_blood_bath": {
+"damage": "pure",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"bounty_hunter_jinada": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"bounty_hunter_wind_walk": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"bounty_hunter_track": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"bounty_hunter_shuriken_toss": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"brewmaster_drunken_brawler": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"brewmaster_primal_split": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"brewmaster_cinder_brew": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"brewmaster_thunder_clap": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"bristleback_quill_spray": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"bristleback_bristleback": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"bristleback_warpath": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"bristleback_viscous_nasal_goo": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"broodmother_insatiable_hunger": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"broodmother_incapacitating_bite": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"broodmother_spin_web": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"broodmother_spawn_spiderlings": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"centaur_return": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"centaur_hoof_stomp": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"centaur_double_edge": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"centaur_stampede": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES_ENEMIES_NO"
+}
+},
+"chaos_knight_chaos_strike": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"chaos_knight_chaos_bolt": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"chaos_knight_reality_rift": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"chaos_knight_phantasm": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"chen_penitence": {
+"damage": "pure",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"chen_hand_of_god": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"chen_divine_favor": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"chen_holy_persuasion": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"clinkz_strafe": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"clinkz_wind_walk": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"clinkz_searing_arrows": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"clinkz_death_pact": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"crystal_maiden_frostbite": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"crystal_maiden_freezing_field": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"crystal_maiden_crystal_nova": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"dark_seer_ion_shell": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"dark_seer_wall_of_replica": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"dark_seer_vacuum": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"dark_seer_surge": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"dark_willow_shadow_realm": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"dark_willow_bramble_maze": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"dark_willow_terrorize": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"dark_willow_cursed_crown": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"dawnbreaker_luminosity": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"dawnbreaker_fire_wreath": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"dawnbreaker_solar_guardian": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"dawnbreaker_celestial_hammer": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"dazzle_poison_touch": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"dazzle_shadow_wave": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"dazzle_shallow_grave": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"dazzle_nothl_projection": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"death_prophet_exorcism": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"death_prophet_spirit_siphon": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"death_prophet_carrion_swarm": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"death_prophet_silence": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"disruptor_glimpse": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"disruptor_static_storm": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"disruptor_thunder_strike": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"disruptor_kinetic_field": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"doom_bringer_infernal_blade": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"doom_bringer_devour": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"doom_bringer_doom": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"doom_bringer_scorched_earth": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"dragon_knight_elder_dragon_form": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"dragon_knight_wyrms_wrath": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"dragon_knight_dragon_tail": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"dragon_knight_breathe_fire": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"drow_ranger_frost_arrows": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"drow_ranger_marksmanship": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"drow_ranger_wave_of_silence": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"drow_ranger_multishot": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"earth_spirit_rolling_boulder": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"earth_spirit_magnetize": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"earth_spirit_boulder_smash": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"earth_spirit_geomagnetic_grip": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"earthshaker_enchant_totem": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"earthshaker_aftershock": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"earthshaker_fissure": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"earthshaker_echo_slam": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"elder_titan_natural_order": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"elder_titan_ancestral_spirit": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"elder_titan_earth_splitter": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"elder_titan_echo_stomp": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"ember_spirit_sleight_of_fist": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"ember_spirit_fire_remnant": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"ember_spirit_searing_chains": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"ember_spirit_flame_guard": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"enchantress_impetus": {
+"damage": "pure",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"enchantress_untouchable": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"enchantress_enchant": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"enchantress_natures_attendants": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"enigma_black_hole": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"enigma_malefice": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"enigma_midnight_pulse": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"enigma_demonic_conversion": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"faceless_void_time_walk": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"faceless_void_time_lock": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"faceless_void_chronosphere": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"faceless_void_time_dilation": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"furion_teleportation": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"furion_wrath_of_nature": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"furion_sprout": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"furion_force_of_nature": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"grimstroke_ink_creature": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"grimstroke_spirit_walk": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES_ENEMIES_NO"
+}
+},
+"grimstroke_soul_chain": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"grimstroke_dark_artistry": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"gyrocopter_flak_cannon": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"gyrocopter_homing_missile": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"gyrocopter_rocket_barrage": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"gyrocopter_call_down": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"hoodwink_acorn_shot": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"hoodwink_bushwhack": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"hoodwink_sharpshooter": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"hoodwink_scurry": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"huskar_berserkers_blood": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"huskar_burning_spear": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"huskar_inner_fire": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"huskar_life_break": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"invoker_sun_strike_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"invoker_alacrity_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"invoker_cold_snap_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"invoker_ghost_walk_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"invoker_tornado_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"invoker_forge_spirit_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"invoker_chaos_meteor_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"invoker_emp_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"invoker_ice_wall_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"invoker_deafening_blast_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"jakiro_liquid_fire": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"jakiro_liquid_ice": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"jakiro_ice_path": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"jakiro_macropyre": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"jakiro_dual_breath": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"juggernaut_blade_fury": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"juggernaut_blade_dance": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"juggernaut_omni_slash": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"juggernaut_healing_ward": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"keeper_of_the_light_chakra_magic": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"keeper_of_the_light_spirit_form": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"keeper_of_the_light_illuminate": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"keeper_of_the_light_blinding_light": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"kez_falcon_rush_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"kez_kazurai_katana": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"kez_grappling_claw": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"kez_shodo_sai_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"kez_echo_slash": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"kez_talon_toss_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"kez_raptor_dance": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"kez_ravens_veil_ad": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"kunkka_tidebringer": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"kunkka_ghostship": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"kunkka_torrent": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"kunkka_x_marks_the_spot": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"largo_catchy_lick": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"largo_frogstomp": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"largo_croak_of_genius": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"largo_amphibian_rhapsody": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"legion_commander_duel": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"legion_commander_moment_of_courage": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"legion_commander_overwhelming_odds": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"legion_commander_press_the_attack": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_NO"
+}
+},
+"leshrac_split_earth": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"leshrac_pulse_nova": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"leshrac_diabolic_edict": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"leshrac_lightning_storm": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lich_chain_frost": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lich_sinister_gaze": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lich_frost_shield": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES_ENEMIES_NO"
+}
+},
+"lich_frost_nova": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"life_stealer_feast": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"life_stealer_rage": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"life_stealer_infest": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"life_stealer_open_wounds": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lina_fiery_soul": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"lina_light_strike_array": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lina_laguna_blade": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lina_dragon_slave": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lion_finger_of_death": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lion_impale": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lion_voodoo": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lion_mana_drain": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lone_druid_entangle": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"lone_druid_true_form": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"lone_druid_spirit_link": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"lone_druid_savage_roar": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"luna_moon_glaive": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"luna_lucent_beam": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"luna_lunar_orbit": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"luna_eclipse": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lycan_feral_impulse": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"lycan_shapeshift": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"lycan_howl": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"lycan_summon_wolves": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"magnataur_empower": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"magnataur_skewer": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"magnataur_reverse_polarity": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"magnataur_shockwave": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"marci_unleash": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"marci_bodyguard": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"marci_companion_run": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"marci_grapple": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"mars_gods_rebuke": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"mars_spear": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"mars_bulwark": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"mars_arena_of_blood": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"medusa_split_shot": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"medusa_mystic_snake": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"medusa_stone_gaze": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"medusa_gorgon_grasp": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"meepo_ransack": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"meepo_earthbind": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"meepo_poof": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"mirana_leap": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"mirana_arrow": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"mirana_starfall": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"mirana_invis": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"monkey_king_jingu_mastery": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"monkey_king_boundless_strike": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"monkey_king_wukongs_command": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"monkey_king_tree_dance": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"morphling_waveform": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"morphling_adaptive_strike_agi": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"muerta_gunslinger": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"muerta_pierce_the_veil": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"muerta_dead_shot": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"muerta_the_calling": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"naga_siren_mirror_image": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"naga_siren_ensnare": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"naga_siren_rip_tide": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"naga_siren_song_of_the_siren": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"necrolyte_reapers_scythe": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"necrolyte_heartstopper_aura": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"necrolyte_death_pulse": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES_ENEMIES_NO"
+}
+},
+"necrolyte_ghost_shroud": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"nevermore_dark_lord": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"nevermore_frenzy": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"nevermore_shadowraze2": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"nevermore_requiem": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"night_stalker_darkness": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"night_stalker_crippling_fear": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"night_stalker_midnight_feast": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"night_stalker_void": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"nyx_assassin_vendetta": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"nyx_assassin_impale": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"nyx_assassin_spiked_carapace": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"nyx_assassin_jolt": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"obsidian_destroyer_astral_imprisonment": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"obsidian_destroyer_arcane_orb": {
+"damage": "pure",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"obsidian_destroyer_objurgation": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"obsidian_destroyer_sanity_eclipse": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"ogre_magi_bloodlust": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"ogre_magi_fireblast": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"ogre_magi_ignite": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"omniknight_hammer_of_purity": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"omniknight_martyr": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"omniknight_purification": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"omniknight_guardian_angel": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"oracle_fortunes_end": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"oracle_false_promise": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"oracle_purifying_flames": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"oracle_fates_edict": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_NO"
+}
+},
+"pangolier_swashbuckle": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"pangolier_lucky_shot": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"pangolier_shield_crash": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"pangolier_gyroshell": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"phantom_assassin_phantom_strike": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"phantom_assassin_coup_de_grace": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"phantom_assassin_stifling_dagger": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"phantom_assassin_immaterial": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"phantom_lancer_juxtapose": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"phantom_lancer_doppelwalk": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"phantom_lancer_phantom_edge": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"phantom_lancer_spirit_lance": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"phoenix_icarus_dive": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"phoenix_supernova": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"phoenix_fire_spirits": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"phoenix_sun_ray": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"primal_beast_uproar": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"primal_beast_trample": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"primal_beast_pulverize": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"primal_beast_onslaught": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"puck_dream_coil": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"puck_phase_shift": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"puck_illusory_orb": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"puck_waning_rift": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"pudge_meat_hook": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"pudge_rot": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"pudge_dismember": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"pudge_flesh_heap": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"pugna_nether_blast": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"pugna_life_drain": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"pugna_nether_ward": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"pugna_decrepify": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"queenofpain_blink": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"queenofpain_shadow_strike": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"queenofpain_sonic_wave": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"queenofpain_scream_of_pain": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"rattletrap_battery_assault": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"rattletrap_hookshot": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"rattletrap_power_cogs": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"rattletrap_rocket_flare": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"razor_static_link": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"razor_plasma_field": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"razor_eye_of_the_storm": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"razor_storm_surge": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"riki_backstab": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"riki_blink_strike": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"riki_smoke_screen": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"riki_tricks_of_the_trade": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"ringmaster_tame_the_beasts": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"ringmaster_the_box": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"ringmaster_wheel": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"ringmaster_impalement": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"rubick_arcane_supremacy": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"rubick_fade_bolt": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"rubick_telekinesis": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"sandking_burrowstrike": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"sandking_sand_storm": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"sandking_epicenter": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"sandking_scorpion_strike": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"shadow_demon_disruption": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"shadow_demon_demonic_purge": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"shadow_demon_disseminate": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"shadow_demon_shadow_poison": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"shadow_shaman_shackles": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"shadow_shaman_voodoo": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"shadow_shaman_mass_serpent_ward": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"shadow_shaman_ether_shock": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"shredder_reactive_armor": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"shredder_whirling_death": {
+"damage": "pure",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"shredder_timber_chain": {
+"damage": "pure",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"shredder_chakram": {
+"damage": "pure",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"silencer_glaives_of_wisdom": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"silencer_global_silence": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"silencer_curse_of_the_silent": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"silencer_last_word": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"skeleton_king_mortal_strike": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"skeleton_king_reincarnation": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"skeleton_king_hellfire_blast": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"skeleton_king_bone_guard": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"skywrath_mage_concussive_shot": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"skywrath_mage_ancient_seal": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"skywrath_mage_mystic_flare": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"skywrath_mage_arcane_bolt": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"slardar_bash": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"slardar_slithereen_crush": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"slardar_amplify_damage": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"slardar_sprint": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"slark_shadow_dance": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"slark_pounce": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"slark_saltwater_shiv": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"slark_dark_pact": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"snapfire_lil_shredder": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"snapfire_scatterblast": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"snapfire_mortimer_kisses": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"snapfire_firesnap_cookie": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"sniper_take_aim": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"sniper_headshot": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"sniper_assassinate": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"sniper_shrapnel": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"spectre_dispersion": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"spectre_haunt": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"spectre_spectral_dagger": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"spectre_shadow_step": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"spirit_breaker_greater_bash": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"spirit_breaker_charge_of_darkness": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"spirit_breaker_bulldoze": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"spirit_breaker_nether_strike": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"storm_spirit_ball_lightning": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"storm_spirit_electric_vortex": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"storm_spirit_overload": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"storm_spirit_static_remnant": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"sven_storm_bolt": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"sven_great_cleave": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"sven_gods_strength": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"sven_warcry": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"techies_suicide": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"techies_land_mines": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"techies_reactive_tazer": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"techies_sticky_bomb": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"templar_assassin_psi_blades": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"templar_assassin_refraction": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"templar_assassin_meld": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"templar_assassin_psionic_trap": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"terrorblade_metamorphosis": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"terrorblade_reflection": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"terrorblade_sunder": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"terrorblade_conjure_image": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"tidehunter_anchor_smash": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"tidehunter_kraken_shell": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"tidehunter_gush": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"tidehunter_ravage": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"tinker_rearm": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"tinker_laser": {
+"damage": "pure",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"tinker_march_of_the_machines": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"tinker_deploy_turrets": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"tiny_avalanche": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"tiny_tree_grab": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"tiny_grow": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"tiny_toss": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"treant_leech_seed": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"treant_overgrowth": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"treant_natures_grasp": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"treant_living_armor": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"troll_warlord_fervor": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"troll_warlord_battle_trance": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"troll_warlord_berserkers_rage": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"troll_warlord_whirling_axes_melee": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"troll_warlord_whirling_axes_ranged": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"tusk_walrus_punch": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"tusk_snowball": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"tusk_tag_team": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"tusk_ice_shards": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"undying_decay": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"undying_tombstone": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"undying_flesh_golem": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"undying_soul_rip": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"ursa_fury_swipes": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"ursa_overpower": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"ursa_enrage": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"ursa_earthshock": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"vengefulspirit_command_aura": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"vengefulspirit_magic_missile": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"vengefulspirit_nether_swap": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"vengefulspirit_wave_of_terror": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"venomancer_noxious_plague": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"venomancer_venomous_gale": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"venomancer_snakebite": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": ""
+}
+},
+"venomancer_plague_ward": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"viper_poison_attack": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"viper_corrosive_skin": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"viper_viper_strike": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"viper_nethertoxin": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"visage_soul_assumption": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"visage_gravekeepers_cloak": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"visage_grave_chill": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"visage_summon_familiars": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": ""
+}
+},
+"void_spirit_astral_step": {
+"damage": "magical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"void_spirit_resonant_pulse": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"void_spirit_dissimilate": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"void_spirit_aether_remnant": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"warlock_fatal_bonds": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"warlock_rain_of_chaos": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"warlock_upheaval": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"warlock_shadow_word": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"weaver_shukuchi": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"weaver_geminate_attack": {
+"damage": "physical",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"weaver_the_swarm": {
+"damage": "physical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PHYSICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"weaver_time_lapse": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"windrunner_windrun": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"windrunner_focusfire": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"windrunner_powershot": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"windrunner_shackleshot": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"winter_wyvern_arctic_burn": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"winter_wyvern_winters_curse": {
+"damage": null,
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"winter_wyvern_cold_embrace": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"winter_wyvern_splinter_blast": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"wisp_spirits": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"wisp_overcharge": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"wisp_tether": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"wisp_relocate": {
+"damage": null,
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "",
+"SpellImmunityType": ""
+}
+},
+"witch_doctor_maledict": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"witch_doctor_paralyzing_cask": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"witch_doctor_death_ward": {
+"damage": "pure",
+"pierces": true,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_PURE",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_YES"
+}
+},
+"witch_doctor_voodoo_restoration": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ALLIES_YES"
+}
+},
+"zuus_arc_lightning": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"zuus_lightning_bolt": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"zuus_thundergods_wrath": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+},
+"zuus_heavenly_jump": {
+"damage": "magical",
+"pierces": false,
+"raw": {
+"AbilityUnitDamageType": "DAMAGE_TYPE_MAGICAL",
+"SpellImmunityType": "SPELL_IMMUNITY_ENEMIES_NO"
+}
+}
+}
+}
