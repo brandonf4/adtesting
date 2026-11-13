@@ -1,0 +1,39 @@
+name: Lab AD games
+
+# Pulls Ability Draft games for the players in lab/data/top-players.json from
+# OpenDota into lab/data/ad-games.jsonl, for training the draft lab's judge.
+# Runs when the player list, this file or the script changes, or by hand.
+# It never deploys anything.
+on:
+  push:
+    paths:
+      - .github/workflows/lab-ad-games.yml
+      - lab/tools/fetch-ad-games.py
+      - lab/data/top-players.json
+  workflow_dispatch:
+    inputs:
+      max:
+        description: Most new games to fetch
+        default: '200'
+
+concurrency: lab-ad-games
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch games
+        env:
+          OPENDOTA_API_KEY: ${{ secrets.OPENDOTA_API_KEY }}
+        run: python3 lab/tools/fetch-ad-games.py --max ${{ github.event.inputs.max || '200' }}
+      - name: Commit games
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
+          git add lab/data/ad-games.jsonl
+          git diff --cached --quiet || git commit -m "Lab: pull AD games"
+          git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}"
