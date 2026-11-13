@@ -54,6 +54,12 @@ def main():
     heroes = get('/constants/heroes') or {}
     hero_name = {int(h['id']): h['name'].replace('npc_dota_hero_', '') for h in heroes.values()}
 
+    for mid in json.load(open(os.path.join(ROOT, 'top-players.json'))).get('probe_matches', []):
+        d = get(f'/matches/{mid}') or {}
+        print('probe match', mid, 'mode', d.get('game_mode'), 'lobby', d.get('lobby_type'), 'patch', d.get('patch'), 'radiant_win', d.get('radiant_win'))
+        for p in d.get('players') or []:
+            print('   ', p.get('account_id'), hero_name.get(p.get('hero_id')), [ab_ids.get(str(u), u) for u in dict.fromkeys(p.get('ability_upgrades_arr') or [])])
+
     todo, listed = [], {}
     for pid in players:
         ms = get(f'/players/{pid}/matches?game_mode=18') or []

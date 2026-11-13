@@ -1,4 +1,9 @@
 {
-"note": "Top Ability Draft players whose games train the judge (Steam account ids, 32-bit). Added by Brandon.",
-"players": [265369004]
+ "note": "Top Ability Draft players whose games train the judge (Steam account ids, 32-bit). Added by Brandon.",
+ "players": [
+  265369004
+ ],
+ "probe_matches": [
+  9086053851
+ ]
 }
