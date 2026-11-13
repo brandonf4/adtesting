@@ -66,6 +66,11 @@ def main():
             print(f'{pid}: name={pr.get("personaname")!r} profile_found={bool(pr)} '
                   f'games_by_mode={ {k: v.get("games") for k, v in counts.items() if v.get("games")} } '
                   f'recent={[ (m.get("match_id"), m.get("game_mode")) for m in recent]}')
+            if recent:  # show one recent game's picks, to see what mode it really is
+                d = get(f'/matches/{recent[0]["match_id"]}') or {}
+                print('  sample game', d.get('match_id'), 'mode', d.get('game_mode'), 'lobby', d.get('lobby_type'))
+                for p in (d.get('players') or [])[:3]:
+                    print('   ', hero_name.get(p.get('hero_id')), [ab_ids.get(str(u), u) for u in dict.fromkeys(p.get('ability_upgrades_arr') or [])])
         for m in ms:
             if m['match_id'] not in have and m['match_id'] not in todo: todo.append(m['match_id'])
     todo.sort(reverse=True)  # newest first
