@@ -2689,7 +2689,8 @@
 "mt_rclick"
 ],
 "model_lone_druid": [
-"mt_rclick"
+"mt_rclick",
+"mt_weak"
 ],
 "model_silencer": [
 "mt_rclick",
@@ -2824,7 +2825,8 @@
 "mt_weak"
 ],
 "model_puck": [
-"mt_rcast"
+"mt_rcast",
+"mt_weak"
 ],
 "model_snapfire": [
 "mt_rcast"

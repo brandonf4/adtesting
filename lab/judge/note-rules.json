@@ -141,6 +141,24 @@
       ],
       "value": -1,
       "from": "mids-003-15: Rot is hard to farm with unless you have Meat Shield"
+    },
+    {
+      "item": "earth_spirit_boulder_smash",
+      "unlessAny": [
+        "earth_spirit",
+        "earth_spirit_magnetize"
+      ],
+      "value": -2,
+      "from": "batch-002-2014: Earth Spirit spells without the Earth Spirit model or Magnetize do little"
+    },
+    {
+      "item": "earth_spirit_geomagnetic_grip",
+      "unlessAny": [
+        "earth_spirit",
+        "earth_spirit_magnetize"
+      ],
+      "value": -1,
+      "from": "batch-002-2014: Grip without the Earth Spirit model or Magnetize is only a save"
     }
   ],
   "models": [],
@@ -470,6 +488,86 @@
       ],
       "value": 3,
       "from": "duos-001-7: Bramble Maze + Spear"
+    },
+    {
+      "allOf": [
+        "abyssal_underlord_atrophy_aura",
+        "tiny_tree_grab"
+      ],
+      "value": 3,
+      "from": "batch-002-2000: Atrophy with Tree Grab farms fast and stacks Atrophy"
+    },
+    {
+      "allOf": [
+        "ember_spirit_fire_remnant",
+        "ember_spirit_flame_guard"
+      ],
+      "value": 3,
+      "from": "batch-002-2007: Flame Guard is good with Fire Remnant"
+    },
+    {
+      "allOf": [
+        "ember_spirit",
+        "ember_spirit_flame_guard"
+      ],
+      "value": 3,
+      "from": "batch-002-2007: Flame Guard is good on the Ember model"
+    },
+    {
+      "allOf": [
+        "ember_spirit_searing_chains",
+        "void_spirit_astral_step"
+      ],
+      "value": 3,
+      "from": "batch-002-2010: Searing Chains goes well with mobility like Astral Step"
+    },
+    {
+      "allOf": [
+        "ember_spirit_searing_chains",
+        "ember_spirit_fire_remnant"
+      ],
+      "value": 3,
+      "from": "Extension of batch-002-2010: Searing Chains goes well with mobility"
+    },
+    {
+      "allOf": [
+        "ember_spirit_searing_chains",
+        "storm_spirit_ball_lightning"
+      ],
+      "value": 3,
+      "from": "Extension of batch-002-2010: Searing Chains goes well with mobility"
+    },
+    {
+      "allOf": [
+        "ursa_overpower",
+        "ursa_fury_swipes"
+      ],
+      "value": 3,
+      "from": "batch-002-2001: Overpower is solid with Fury Swipes"
+    },
+    {
+      "allOf": [
+        "silencer_glaives_of_wisdom",
+        "ursa_overpower"
+      ],
+      "value": 3,
+      "from": "batch-002-2001: Glaives of Wisdom + Overpower is really good damage"
+    },
+    {
+      "allOf": [
+        "storm_spirit_overload",
+        "storm_spirit_ball_lightning"
+      ],
+      "value": 3,
+      "from": "batch-002-2013: Overload with Ball Lightning"
+    },
+    {
+      "allOf": [
+        "life_stealer_feast",
+        "pangolier_swashbuckle"
+      ],
+      "value": 3,
+      "from": "batch-002-2012: the Feast build should have taken Swashbuckle"
     }
   ],
   "needsSetup": {
@@ -511,5 +609,13 @@
     ],
     "value": -2,
     "from": "Extension of mids-002-7 (Whirling Death on ranged), duos-001-23 (Blade Fury on ranged Phoenix with no gap close), duos-001-4 (Burrowstrike on a ranged hero): self-centered short-range spells want a melee or tanky model, or a gap close"
+  },
+  "loneAttack": {
+    "value": -2,
+    "from": "Extension of batch-002-2002 (Impetus with Pulse Nova: you run in and cast, you don't attack; crit is useless on the Skywrath build): one attack modifier in a build of damage spells is wasted"
+  },
+  "gapOnRanged": {
+    "value": -2,
+    "from": "batch-002-2009: gap-close spells on a ranged hero are weird"
   }
 }

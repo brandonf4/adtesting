@@ -73,6 +73,20 @@ function noteRules(lab, items) {
     const gap = names.some(m => (TAGS[m] || []).includes('gap'));
     for (const n of names) if (sr.items.includes(n) && !gap) add(sr.value, `${disp(n)} is short range on a ranged model with no gap close`);
   }
+  // A single attack modifier in a build of spell damage gets no use (batch-002-2002).
+  const la = RULES.loneAttack;
+  if (la) {
+    const dmgSpell = n => (TAGS[n] || []).includes('magical') && (TAGS[n] || []).some(t => ['burst', 'dot', 'wc'].includes(t));
+    const atk = names.filter(n => (TAGS[n] || []).some(t => t === 'atk' || t === 'aspd') && !(TAGS[n] || []).some(t => ['summ', 'dis', 'def', 'sus', 'mob', 'save', 'gap', 'wc'].includes(t)) && !dmgSpell(n));
+    const spells = names.filter(n => !atk.includes(n) && dmgSpell(n));
+    if (atk.length === 1 && spells.length >= 2) add(la.value, `${disp(atk[0])} is the only attack spell in a spell-damage build`);
+  }
+  // Gap-close spells (not general mobility) on a ranged model (batch-002-2009).
+  const gr = RULES.gapOnRanged;
+  if (gr && model && attack === 'ranged') for (const n of names) {
+    const t = TAGS[n] || [];
+    if (t.includes('gap') && !t.some(x => ['mob', 'dis', 'aoed', 'save'].includes(x))) add(gr.value, `${disp(n)} is a gap close on a ranged model`);
+  }
   return { value, why };
 }
 

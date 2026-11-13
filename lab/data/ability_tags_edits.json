@@ -1,29 +1,435 @@
 {
-"abaddon_frostmourne": ["atk", "slow", "orb", "lane", "magical", "ddisp", "dot"],
-"abyssal_underlord_dark_portal": ["global"],
-"bloodseeker_bloodrage": ["aspd", "pure", "atk", "odisp"],
-"chen_holy_persuasion": ["summ", "push", "lane", "vis", "wc", "buff"],
-"dark_willow_terrorize": ["aoed", "magical", "tf"],
-"dawnbreaker_solar_guardian": ["mob", "heal", "init", "global", "magical"],
-"doom_bringer_devour": ["sus", "wc"],
-"earth_spirit_magnetize": ["dot", "silence", "magical", "tf", "atk"],
-"invoker_cold_snap_ad": ["dis", "magical"],
-"invoker_deafening_blast_ad": ["aoed", "magical", "antiphys"],
-"invoker_sun_strike_ad": ["burst", "global", "pure"],
-"invoker_tornado_ad": ["aoed", "magical", "odispel"],
-"jakiro_liquid_fire": ["aspd", "debuff", "push", "magical", "orb", "lane", "dot"],
-"jakiro_liquid_ice": ["dot", "debuff", "magical", "orb", "slow"],
-"juggernaut_blade_dance": ["atk"],
-"juggernaut_blade_fury": ["def", "mob", "wc", "magical", "antimag"],
-"kez_talon_toss_ad": ["silence", "physical"],
-"kunkka_ghostship": ["aoed", "save", "magical", "tf", "buff"],
-"kunkka_x_marks_the_spot": ["dis"],
-"marci_bodyguard": ["def", "save", "atk", "sus", "buff"],
-"marci_companion_run": ["mob", "gap", "dis", "magical", "aoed"],
-"mars_spear": ["dis", "magical", "aoed"],
-"muerta_gunslinger": ["aspd", "atk", "wc"],
-"skeleton_king_hellfire_blast": ["magical"],
-"templar_assassin_psi_blades": ["atk", "rng", "pure", "wc"],
-"witch_doctor_maledict": ["burst", "magical", "dot"],
-"witch_doctor_paralyzing_cask": ["dis", "aoed", "magical"]
+"abaddon_frostmourne": [
+"atk",
+"slow",
+"orb",
+"lane",
+"magical",
+"ddisp",
+"dot"
+],
+"abyssal_underlord_dark_portal": [
+"global"
+],
+"batrider_flamebreak": [
+"dot",
+"magical",
+"gap"
+],
+"bloodseeker_bloodrage": [
+"aspd",
+"pure",
+"atk",
+"odisp"
+],
+"chen_holy_persuasion": [
+"summ",
+"push",
+"lane",
+"vis",
+"wc",
+"buff"
+],
+"clinkz_death_pact": [
+"sus"
+],
+"clinkz_strafe": [
+"aspd",
+"rng"
+],
+"crystal_maiden_frostbite": [
+"dis",
+"magical",
+"ddisp",
+"dot",
+"lane"
+],
+"dark_willow_terrorize": [
+"aoed",
+"magical",
+"tf"
+],
+"dawnbreaker_celestial_hammer": [
+"mob",
+"gap",
+"burst",
+"magical",
+"wc"
+],
+"dawnbreaker_fire_wreath": [
+"dot",
+"slow",
+"physical",
+"wc"
+],
+"dawnbreaker_solar_guardian": [
+"mob",
+"heal",
+"init",
+"global",
+"magical"
+],
+"dazzle_shadow_wave": [
+"heal",
+"burst",
+"lane",
+"physical",
+"wc"
+],
+"disruptor_glimpse": [
+"save",
+"dis",
+"magical",
+"gap"
+],
+"doom_bringer_devour": [
+"sus",
+"wc"
+],
+"doom_bringer_scorched_earth": [
+"dot",
+"sus",
+"mob",
+"magical",
+"wc"
+],
+"earth_spirit_boulder_smash": [
+"dis",
+"save",
+"magical",
+"gap",
+"wc"
+],
+"earth_spirit_magnetize": [
+"dot",
+"silence",
+"magical",
+"tf",
+"atk"
+],
+"earthshaker_aftershock": [
+"aoed",
+"magical",
+"tf",
+"wc"
+],
+"ember_spirit_flame_guard": [
+"def",
+"dot",
+"magical",
+"odisp",
+"antimag",
+"wc"
+],
+"invoker_cold_snap_ad": [
+"dis",
+"magical"
+],
+"invoker_deafening_blast_ad": [
+"aoed",
+"magical",
+"antiphys"
+],
+"invoker_sun_strike_ad": [
+"burst",
+"global",
+"pure"
+],
+"invoker_tornado_ad": [
+"aoed",
+"magical",
+"odispel"
+],
+"jakiro_liquid_fire": [
+"aspd",
+"debuff",
+"push",
+"magical",
+"orb",
+"lane",
+"dot"
+],
+"jakiro_liquid_ice": [
+"dot",
+"debuff",
+"magical",
+"orb",
+"slow"
+],
+"juggernaut_blade_dance": [
+"atk"
+],
+"juggernaut_blade_fury": [
+"def",
+"mob",
+"wc",
+"magical",
+"antimag"
+],
+"kez_talon_toss_ad": [
+"silence",
+"physical"
+],
+"kunkka_ghostship": [
+"aoed",
+"save",
+"magical",
+"tf",
+"buff"
+],
+"kunkka_x_marks_the_spot": [
+"dis"
+],
+"lion_impale": [
+"aoed",
+"magical",
+"lane"
+],
+"marci_bodyguard": [
+"def",
+"save",
+"atk",
+"sus",
+"buff"
+],
+"marci_companion_run": [
+"mob",
+"gap",
+"dis",
+"magical",
+"aoed"
+],
+"mars_gods_rebuke": [
+"burst",
+"wc",
+"physical",
+"lane"
+],
+"mars_spear": [
+"dis",
+"magical",
+"aoed"
+],
+"medusa_mystic_snake": [
+"burst",
+"mana",
+"magical",
+"lane"
+],
+"model_lone_druid": [
+"mt_rclick",
+"mt_weak"
+],
+"model_puck": [
+"mt_rcast",
+"mt_weak"
+],
+"muerta_dead_shot": [
+"dis",
+"magical",
+"lane"
+],
+"muerta_gunslinger": [
+"aspd",
+"atk",
+"wc"
+],
+"nevermore_shadowraze2": [
+"burst",
+"wc",
+"magical",
+"lane"
+],
+"omniknight_hammer_of_purity": [
+"atk",
+"slow",
+"pure",
+"lane"
+],
+"omniknight_purification": [
+"heal",
+"burst",
+"save",
+"pure",
+"lane"
+],
+"oracle_false_promise": [
+"save",
+"hdispel",
+"life"
+],
+"oracle_fortunes_end": [
+"dis",
+"magical",
+"sdispel",
+"odispel",
+"ddisp",
+"lane"
+],
+"pangolier_lucky_shot": [
+"debuff",
+"antiphys"
+],
+"pangolier_shield_crash": [
+"mob",
+"def",
+"physical",
+"wc"
+],
+"pangolier_swashbuckle": [
+"mob",
+"atk",
+"physical",
+"wc",
+"lane"
+],
+"phoenix_fire_spirits": [
+"dot",
+"debuff",
+"lane",
+"magical",
+"ddisp",
+"wc"
+],
+"primal_beast_trample": [
+"dot",
+"magical",
+"wc"
+],
+"puck_waning_rift": [
+"silence",
+"mob",
+"magical",
+"wc"
+],
+"ringmaster_impalement": [
+"burst",
+"slow",
+"magical",
+"lane"
+],
+"ringmaster_tame_the_beasts": [
+"burst",
+"magical",
+"lane"
+],
+"sandking_burrowstrike": [
+"gap",
+"dis",
+"init",
+"magical",
+"aoed"
+],
+"shadow_demon_demonic_purge": [
+"slow",
+"magical",
+"odispel",
+"sdispel"
+],
+"shadow_demon_disruption": [
+"save",
+"dis"
+],
+"skeleton_king_hellfire_blast": [
+"magical",
+"dis"
+],
+"techies_reactive_tazer": [
+"def",
+"magical",
+"antiphys"
+],
+"techies_suicide": [
+"burst",
+"magical",
+"gap",
+"aoed"
+],
+"templar_assassin_psi_blades": [
+"atk",
+"rng",
+"pure",
+"wc"
+],
+"templar_assassin_psionic_trap": [
+"slow",
+"vis"
+],
+"tusk_ice_shards": [
+"dis",
+"magical"
+],
+"tusk_walrus_punch": [
+"dis",
+"burst",
+"bkb",
+"gap"
+],
+"undying_decay": [
+"burst",
+"lane",
+"magical",
+"wc"
+],
+"vengefulspirit_magic_missile": [
+"dis",
+"magical",
+"lane"
+],
+"void_spirit_aether_remnant": [
+"dis",
+"magical",
+"wc"
+],
+"void_spirit_astral_step": [
+"mob",
+"gap",
+"burst",
+"magical",
+"wc"
+],
+"void_spirit_dissimilate": [
+"mob",
+"burst",
+"magical",
+"wc"
+],
+"winter_wyvern_cold_embrace": [
+"save",
+"antiphys",
+"heal"
+],
+"winter_wyvern_splinter_blast": [
+"burst",
+"slow",
+"magical",
+"wc"
+],
+"wisp_spirits": [
+"burst",
+"magical",
+"wc"
+],
+"witch_doctor_maledict": [
+"burst",
+"magical",
+"dot",
+"lane"
+],
+"witch_doctor_paralyzing_cask": [
+"dis",
+"aoed",
+"magical",
+"wc"
+],
+"witch_doctor_voodoo_restoration": [
+"heal",
+"lane"
+],
+"zuus_arc_lightning": [
+"wc",
+"lane",
+"magical",
+"atk"
+]
 }

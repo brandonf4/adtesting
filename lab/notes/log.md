@@ -27,3 +27,17 @@ Brandon's drafting notes and what each became in the lab.
 | 2026-11-11 | duos-001 (21 decided). Judge v4 agreed 17/21 before seeing them. | Judge v5: 39 named combos as "both in one build" bonuses (+3, also across a duo's two supports); extensions: delayed/skillshot spells (Torrent, LSA, Split Earth, Sun Strike, Meteor, Mystic Flare, razes, Powershot, Aether Remnant, Tame the Beasts, Sacred Arrow, Ice Path, Fissure, Burrowstrike, Echo Stomp) need a disable from another spell (-2), short-range self AoE (Whirling Death, Counter Helix, Quills, Blade Fury, Thunder Clap, Echo Stomp, Rot, Heartstopper, Ion Shell, Burrowstrike) on a ranged model with no gap close (-2); supports need a hard disable, pos 4 needs a way to make plays; core spells on a support cost double; a duo with one backline and one space-making support gets +1. The judge now lists which of Brandon's rules fired. Agreement: pos1 58/68, mid 58/70, offlane 21/25, duo 18/21, team drafts 7/7. Not encoded: matchup calls (Disruption vs Call + Sun Strike, Arena vs ranged, Bolt reveals Shadow Walk, Aphotic vs Arcane Curse, Ice Blast vs Largo heals, Sharpshooter break vs Dawnbreaker passives). |
 - 2026-11-11: Fissure removed from the needs-setup rule (Brandon: it doesn't really need setup).
 - 2026-11-11: Page cleared of batch-001 team drafts and all build pairs (verdicts kept in db + lab/judgments). New team batch-002 (search vs current, seeds 2000-2019); team calls now include a summary and a position-by-position build-judge call.
+
+## batch-002 team drafts (judged 2026-11-11..13, 15 verdicts, 1 can't tell)
+Encoded (judge v6):
+- Earth Spirit spells without the ES model or Magnetize: Boulder Smash -2, Grip -1 (2014; Grip on a support is still a save).
+- Combos +3: Atrophy + Tree Grab (2000); Flame Guard + Fire Remnant, Flame Guard + Ember model (2007); Searing Chains + Astral Step (2010) and, by extension, + Fire Remnant / Ball Lightning; Overpower + Fury Swipes, Glaives of Wisdom + Overpower (2001); Overload + Ball Lightning (2013); Feast + Swashbuckle (2012).
+- Extension "lone attack spell": one attack modifier in a build of magical damage spells is wasted, -2 (2002: Impetus with Pulse Nova, crit on the Skywrath build). Skips attack spells that also farm, disable, defend or move.
+- Extension "gap close on ranged": pure gap-close spells on a ranged model, -2 (2009).
+- Lone Druid and Puck models tagged weak (2009, 2014, 2001, carries-001-7).
+Logged only (matchups / draft order, for later):
+- Lina's builds should be mid (2004, 2008, 2011); SF Flak build should be the carry (2001). He judges teams by the best role split.
+- Counters: Spark Wraith/Mana Break vs Medusa, Essence Shift + mana burn vs melee Quill Spray (2006); Pierce the Veil + Static Link vs melee clicker with no mobility (2010); Legion taunts + Helix + Blade Mail vs Drow (2011); Arena of Blood and Bulwark vs ranged clickers (2014); Rupture vs Thirst (2014); Zeus can't lane vs Sniper with Chaos Strike + Mana Break (2013).
+- Team lockdown vs mobile cores: a team with few stuns can't catch Shukuchi / Fire Remnant builds (2010); Chronosphere catches mobile heroes (2013).
+- Tombstone is a lane and fight winner and a save (2011); Ion Shell secures offlane wave clear on Largo (2011); Soulbind wants single-target spells on the team (2002).
+Agreement: build pairs 155/184 (same total as v5); team calls on batch-002 7/14 (was 6/14). No team feature (or sum of build scores) beats a coin flip on these 21 verdicts yet.
