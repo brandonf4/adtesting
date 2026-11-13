@@ -58,6 +58,14 @@ def main():
     for pid in players:
         ms = get(f'/players/{pid}/matches?game_mode=18') or []
         listed[pid] = len(ms)
+        if not ms:  # say why: no profile, private data, or no AD games
+            prof = get(f'/players/{pid}') or {}
+            pr = prof.get('profile') or {}
+            counts = (get(f'/players/{pid}/counts') or {}).get('game_mode', {})
+            recent = get(f'/players/{pid}/matches?limit=5') or []
+            print(f'{pid}: name={pr.get("personaname")!r} profile_found={bool(pr)} '
+                  f'games_by_mode={ {k: v.get("games") for k, v in counts.items() if v.get("games")} } '
+                  f'recent={[ (m.get("match_id"), m.get("game_mode")) for m in recent]}')
         for m in ms:
             if m['match_id'] not in have and m['match_id'] not in todo: todo.append(m['match_id'])
     todo.sort(reverse=True)  # newest first
