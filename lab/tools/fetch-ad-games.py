@@ -17,6 +17,7 @@ API = 'https://api.opendota.com/api'
 ROOT = os.path.join(os.path.dirname(__file__), '..', 'data')
 GAMES = os.path.join(ROOT, 'ad-games.jsonl')
 KEY = os.environ.get('OPENDOTA_API_KEY', '')
+STEAM_KEY = os.environ.get('STEAM_API_KEY', '')
 calls = 0
 
 
@@ -38,6 +39,28 @@ def get(path):
         except Exception as e:  # network hiccup
             print(f'{e} for {path}', file=sys.stderr); time.sleep(5 * (attempt + 1))
     return None
+
+
+def steam_ad_matches(pid):
+    """OpenDota leaves AD games out of player histories, so list them from Steam
+    (needs STEAM_API_KEY; Steam only keeps each player's last 500 games)."""
+    ids, start = [], None
+    while True:
+        url = ('https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/v1/?key=' + STEAM_KEY +
+               f'&account_id={pid}&game_mode=18&matches_requested=100' + (f'&start_at_match_id={start}' if start else ''))
+        try:
+            with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'ad-draft-lab'}), timeout=60) as r:
+                res = json.load(r).get('result', {})
+        except Exception as e:
+            print(f'Steam error for {pid}: {e}', file=sys.stderr); break
+        if res.get('status') != 1:
+            print(f'Steam says for {pid}: {res.get("statusDetail")}', file=sys.stderr); break
+        ms = res.get('matches', [])
+        ids += [m['match_id'] for m in ms if m.get('game_mode', 18) == 18]
+        if not ms or res.get('results_remaining', 0) == 0: break
+        start = ms[-1]['match_id'] - 1
+        time.sleep(1)
+    return ids
 
 
 def main():
@@ -62,9 +85,12 @@ def main():
 
     todo, listed = [], {}
     for pid in players:
-        ms = get(f'/players/{pid}/matches?game_mode=18') or []
+        if STEAM_KEY:
+            ms = [{'match_id': m} for m in steam_ad_matches(pid)]
+        else:
+            ms = get(f'/players/{pid}/matches?game_mode=18') or []
         listed[pid] = len(ms)
-        if not ms:  # say why: no profile, private data, or no AD games
+        if not ms and not STEAM_KEY:  # say why: no profile, private data, or no AD games
             prof = get(f'/players/{pid}') or {}
             pr = prof.get('profile') or {}
             counts = (get(f'/players/{pid}/counts') or {}).get('game_mode', {})
@@ -79,6 +105,8 @@ def main():
                     print('   ', hero_name.get(p.get('hero_id')), [ab_ids.get(str(u), u) for u in dict.fromkeys(p.get('ability_upgrades_arr') or [])])
         for m in ms:
             if m['match_id'] not in have and m['match_id'] not in todo: todo.append(m['match_id'])
+    for mid in json.load(open(os.path.join(ROOT, 'top-players.json'))).get('matches', []):
+        if mid not in have and mid not in todo: todo.append(mid)
     todo.sort(reverse=True)  # newest first
     print('AD games listed per player:', listed, f'| new: {len(todo)}')
 

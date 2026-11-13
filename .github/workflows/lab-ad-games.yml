@@ -29,6 +29,7 @@ jobs:
       - name: Fetch games
         env:
           OPENDOTA_API_KEY: ${{ secrets.OPENDOTA_API_KEY }}
+          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
         run: python3 lab/tools/fetch-ad-games.py --max ${{ github.event.inputs.max || '200' }}
       - name: Commit games
         run: |
