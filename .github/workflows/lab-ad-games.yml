@@ -14,14 +14,14 @@ on:
     inputs:
       max:
         description: Most new games to fetch
-        default: '500'
+        default: '2000'
 
 concurrency: lab-ad-games
 
 jobs:
   pull:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 180
     permissions:
       contents: write
     steps:
@@ -30,7 +30,7 @@ jobs:
         env:
           OPENDOTA_API_KEY: ${{ secrets.OPENDOTA_API_KEY }}
           STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
-        run: python3 lab/tools/fetch-ad-games.py --max ${{ github.event.inputs.max || '500' }}
+        run: python3 lab/tools/fetch-ad-games.py --max ${{ github.event.inputs.max || '2000' }}
       - name: Commit games
         run: |
           git config user.name "github-actions[bot]"
