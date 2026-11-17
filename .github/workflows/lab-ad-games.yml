@@ -14,27 +14,34 @@ on:
     inputs:
       max:
         description: Most new games to fetch
-        default: '2000'
+        default: '6000'
 
 concurrency: lab-ad-games
 
 jobs:
   pull:
     runs-on: ubuntu-latest
-    timeout-minutes: 180
+    timeout-minutes: 340
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch games
+      - name: Fetch and commit games in batches of 500
         env:
           OPENDOTA_API_KEY: ${{ secrets.OPENDOTA_API_KEY }}
           STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
-        run: python3 lab/tools/fetch-ad-games.py --max ${{ github.event.inputs.max || '2000' }}
-      - name: Commit games
+          TOTAL: ${{ github.event.inputs.max || '6000' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
-          git add lab/data/ad-games.jsonl
-          git diff --cached --quiet || git commit -m "Lab: pull AD games"
-          git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}"
+          done=0
+          while [ "$done" -lt "$TOTAL" ]; do
+            out=$(python3 lab/tools/fetch-ad-games.py --max 500 | tee /dev/stderr)
+            added=$(echo "$out" | sed -n 's/^Added \([0-9]*\) games.*/\1/p')
+            git add lab/data/ad-games.jsonl
+            git diff --cached --quiet || git commit -q -m "Lab: pull AD games"
+            git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}"
+            [ "${added:-0}" -eq 0 ] && break
+            done=$((done + added))
+            echo "Total added this run: $done"
+          done
