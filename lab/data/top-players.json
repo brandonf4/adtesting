@@ -1,5 +1,5 @@
 {
- "note": "Top Ability Draft players whose games train the judge (Steam account ids, 32-bit), added by Brandon. 'matches' = single AD match ids to fetch too.",
+ "note": "Top Ability Draft players whose games train the judge (Steam account ids, 32-bit), added by Brandon. 'matches' = single AD match ids to fetch too. 'private' = players whose Steam match history is hidden (their games only come in through other players).",
  "players": [
   265369004,
   106473979,
@@ -14,5 +14,9 @@
  ],
  "matches": [
   9086053851
+ ],
+ "private": [
+  179740370,
+  94301365
  ]
 }
