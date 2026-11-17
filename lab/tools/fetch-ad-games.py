@@ -121,7 +121,7 @@ def main():
                 names = []
                 for u in ups:
                     n = ab_ids.get(str(u), str(u))
-                    if n not in names and not n.startswith('special_bonus'): names.append(n)
+                    if n not in names and not n.startswith(('special_bonus', 'ad_special_bonus')): names.append(n)
                 ps.append({'slot': p.get('player_slot'), 'radiant': p.get('isRadiant', p.get('player_slot', 0) < 128),
                            'account_id': p.get('account_id'), 'hero_id': p.get('hero_id'),
                            'hero': hero_name.get(p.get('hero_id')), 'abilities': names})
