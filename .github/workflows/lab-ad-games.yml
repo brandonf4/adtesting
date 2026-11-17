@@ -38,10 +38,13 @@ jobs:
           while [ "$done" -lt "$TOTAL" ]; do
             out=$(python3 lab/tools/fetch-ad-games.py --max 500 | tee /dev/stderr)
             added=$(echo "$out" | sed -n 's/^Added \([0-9]*\) games.*/\1/p')
-            git add lab/data/ad-games.jsonl
+            git add -A lab/data
             git diff --cached --quiet || git commit -q -m "Lab: pull AD games"
             git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}"
-            [ "${added:-0}" -eq 0 ] && break
+            left=$(echo "$out" | sed -n 's/.* \([0-9]*\) still to fetch.*/\1/p')
+            unl=$(echo "$out" | sed -n 's/.*unlisted: \([0-9]*\).*/\1/p')
+            [ "${added:-0}" -eq 0 ] && [ "${left:-0}" -eq 0 ] && [ "${unl:-0}" -eq 0 ] && break
+            [ "${added:-0}" -eq 0 ] && sleep 300
             done=$((done + added))
             echo "Total added this run: $done"
           done

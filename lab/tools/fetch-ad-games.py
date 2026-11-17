@@ -16,6 +16,7 @@ import argparse, json, os, sys, time, urllib.request, urllib.error
 API = 'https://api.opendota.com/api'
 ROOT = os.path.join(os.path.dirname(__file__), '..', 'data')
 GAMES = os.path.join(ROOT, 'ad-games.jsonl')
+LISTED = os.path.join(ROOT, 'ad-listed.json')  # each player's AD match ids from Steam
 KEY = os.environ.get('OPENDOTA_API_KEY', '')
 STEAM_KEY = os.environ.get('STEAM_API_KEY', '')
 calls = 0
@@ -44,7 +45,7 @@ def get(path):
 def steam_ad_matches(pid):
     """OpenDota leaves AD games out of player histories, so list them from Steam
     (needs STEAM_API_KEY; Steam only keeps each player's last 500 games)."""
-    ids, start = [], None
+    ids, start, fails = [], None, 0
     while True:
         url = ('https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/v1/?key=' + STEAM_KEY +
                f'&account_id={pid}&game_mode=18&matches_requested=100' + (f'&start_at_match_id={start}' if start else ''))
@@ -52,7 +53,10 @@ def steam_ad_matches(pid):
             with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': 'ad-draft-lab'}), timeout=60) as r:
                 res = json.load(r).get('result', {})
         except Exception as e:
-            print(f'Steam error for {pid}: {e}', file=sys.stderr); break
+            fails += 1
+            print(f'Steam error for {pid}: {e}', file=sys.stderr)
+            if fails > 4: return None  # give up for now; try again next run
+            time.sleep(30 * fails); continue
         if res.get('status') != 1:
             print(f'Steam says for {pid}: {res.get("statusDetail")}', file=sys.stderr); break
         ms = res.get('matches', [])
@@ -83,10 +87,19 @@ def main():
         for p in d.get('players') or []:
             print('   ', p.get('account_id'), hero_name.get(p.get('hero_id')), [ab_ids.get(str(u), u) for u in dict.fromkeys(p.get('ability_upgrades_arr') or [])])
 
+    listed_cache = json.load(open(LISTED)) if os.path.exists(LISTED) else {}
     todo, listed = [], {}
     for pid in players:
         if STEAM_KEY:
-            ms = [{'match_id': m} for m in steam_ad_matches(pid)]
+            # Each player's list is fetched once a week at most (Steam rate-limits).
+            c = listed_cache.get(str(pid))
+            if not c or time.time() - c['at'] > 7 * 86400:
+                got = steam_ad_matches(pid)
+                if got is not None:
+                    c = listed_cache[str(pid)] = {'at': int(time.time()), 'ids': got}
+                    json.dump(listed_cache, open(LISTED, 'w'))
+                time.sleep(2)
+            ms = [{'match_id': m} for m in (c['ids'] if c else [])]
         else:
             ms = get(f'/players/{pid}/matches?game_mode=18') or []
         listed[pid] = len(ms)
@@ -108,7 +121,8 @@ def main():
     for mid in json.load(open(os.path.join(ROOT, 'top-players.json'))).get('matches', []):
         if mid not in have and mid not in todo: todo.append(mid)
     todo.sort(reverse=True)  # newest first
-    print('AD games listed per player:', listed, f'| new: {len(todo)}')
+    unlisted = sum(1 for pid in players if STEAM_KEY and str(pid) not in listed_cache)
+    print('AD games listed per player:', listed, f'| new: {len(todo)} | unlisted: {unlisted}')
 
     added = no_abilities = 0
     with open(GAMES, 'a') as out:
