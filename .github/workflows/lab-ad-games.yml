@@ -14,7 +14,7 @@ on:
     inputs:
       max:
         description: Most new games to fetch
-        default: '200'
+        default: '500'
 
 concurrency: lab-ad-games
 
@@ -30,7 +30,7 @@ jobs:
         env:
           OPENDOTA_API_KEY: ${{ secrets.OPENDOTA_API_KEY }}
           STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
-        run: python3 lab/tools/fetch-ad-games.py --max ${{ github.event.inputs.max || '200' }}
+        run: python3 lab/tools/fetch-ad-games.py --max ${{ github.event.inputs.max || '500' }}
       - name: Commit games
         run: |
           git config user.name "github-actions[bot]"
