@@ -1,16 +1,17 @@
 {
-  "version": "games-2026-11-17",
-  "note": "Team judge weights fit to 451 real AD games of lost~ (265369004) from Steam/OpenDota (ridge logistic regression; 10-fold cross-validated accuracy 306/451 = 68% with a side term for lost~'s team, which is left out here). Without seeing Brandon's verdicts it agrees with 15 of his 21 decided team drafts. Compare: weights.json (hand-set v0.2) picks 302/451 real winners. Weights are per raw feature, scale 1.",
+  "version": "games-2026-11-17b",
+  "note": "Team judge weights fit to 2,419 real AD games from 10 top players (lab/data/top-players.json) via Steam/OpenDota, ridge logistic regression. 5-fold CV: 1,626/2,419 (67.2%) on the draft alone, 1,708 (70.6%) with a term for which side has more of the top players (topSide, left out here). Hand-set weights.json picks 1,610 (66.6%). Agrees with 15 of Brandon's 21 decided team drafts without seeing them. Weights are per raw feature, scale 1.",
   "scale": 1,
   "weights": {
-    "strength": 0.0213,
-    "synergy": 0.0037,
-    "aghs": 0.0021,
-    "roleFitLost": -0.0797,
-    "heroCounters": 0.0033,
-    "abilityCounters": 0.0843,
-    "notes": 0.0095,
-    "buildFit": 0.0106
+    "strength": 0.02612,
+    "synergy": 0.00421,
+    "aghs": 0.00382,
+    "roleFitLost": -0.05526,
+    "heroCounters": -0.00055,
+    "abilityCounters": 0.03517,
+    "notes": 0.01454,
+    "buildFit": 0.01634
   },
-  "buildsWeight": 0.0118
+  "buildsWeight": 0.01524,
+  "topSide": 0.58872
 }
