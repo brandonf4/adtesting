@@ -1,4 +1,4 @@
-// Turns pulled AD games (data/ad-games.jsonl) into judge features, so the
+// Turns pulled AD games (data/ad-games*.jsonl) into judge features, so the
 // judge can be tested and fit against real results.
 //   node tools/ad-games-features.js > runs/ad-games-features.json
 'use strict';
@@ -14,7 +14,10 @@ const P = perms([0, 1, 2, 3, 4]);
 (async () => {
   const e = await loadEngine(), w = loadWeights();
   const H = e.lab.ALL_HEROES, heroes = new Set(H.map(h => h.name)), abil = new Set(H.flatMap(h => h.abilities.map(a => a.name)));
-  const games = fs.readFileSync(path.join(__dirname, '../data/ad-games.jsonl'), 'utf8').trim().split('\n').map(JSON.parse);
+  const dir = path.join(__dirname, '../data'), seen = new Set();
+  const games = fs.readdirSync(dir).filter(f => /^ad-games.*\.jsonl$/.test(f)).sort()
+    .flatMap(f => fs.readFileSync(path.join(dir, f), 'utf8').split('\n').filter(Boolean).map(JSON.parse))
+    .filter(g => !seen.has(g.match_id) && seen.add(g.match_id));
   const out = [];
   for (const g of games) {
     const ps = [...g.players].sort((a, b) => a.slot - b.slot);

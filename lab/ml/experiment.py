@@ -11,8 +11,10 @@ from scipy import sparse
 
 STR = json.load(open(sys.argv[1] if len(sys.argv) > 1 else '/tmp/claude-0/s/strength.json'))
 games = {}
-for l in open('data/ad-games.jsonl'):
-    g = json.loads(l); games[g['match_id']] = g
+import glob
+for gf in sorted(glob.glob('data/ad-games*.jsonl')):
+    for l in open(gf):
+        if l.strip(): g = json.loads(l); games[g['match_id']] = g
 F = json.load(open('runs/ad-games-features.json'))
 F.sort(key=lambda f: games[f['match_id']]['start_time'])
 top = set(json.load(open('data/top-players.json'))['players'])

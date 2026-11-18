@@ -1,0 +1,26 @@
+[
+ {
+  "date": "2026-11-18",
+  "first_train": 6000,
+  "held_out_acc": 0.7188,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-18",
+  "trained_on": 5520,
+  "new_games": 1480,
+  "forward_acc": 0.7128,
+  "forward_logloss": 0.537,
+  "newest_held_out_acc": 0.6857,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-18",
+  "trained_on": 6440,
+  "new_games": 1632,
+  "forward_acc": 0.7004,
+  "forward_logloss": 0.5534,
+  "newest_held_out_acc": 0.7183,
+  "verdicts_fit": "21/21"
+ }
+]

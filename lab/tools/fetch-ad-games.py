@@ -3,7 +3,8 @@
 
 Reads lab/data/top-players.json ({"players": [account ids]}), lists each
 player's AD games, then fetches details for games not already saved and
-appends them to lab/data/ad-games.jsonl (one game per line):
+appends them to lab/data/ad-games*.jsonl (one game per line; a new numbered
+file starts when the last one passes 40 MB):
   {match_id, start_time, duration, patch, radiant_win, players: [
     {slot, radiant, account_id, hero_id, hero, abilities: [names...]}]}
 Abilities are the distinct ones each player leveled (their drafted spells).
@@ -11,11 +12,26 @@ The hero model is `hero`. OPENDOTA_API_KEY is used if set (optional).
 
   python3 lab/tools/fetch-ad-games.py --max 200
 """
-import argparse, json, os, sys, time, urllib.request, urllib.error
+import argparse, glob, json, os, sys, time, urllib.request, urllib.error
 
 API = 'https://api.opendota.com/api'
 ROOT = os.path.join(os.path.dirname(__file__), '..', 'data')
 GAMES = os.path.join(ROOT, 'ad-games.jsonl')
+SHARD_MB = 40  # GitHub refuses files over 100 MB, so games go into numbered files
+
+
+def game_files():
+    return sorted(glob.glob(os.path.join(ROOT, 'ad-games*.jsonl')))
+
+
+def out_file():
+    fs = game_files()
+    if not fs: return GAMES
+    last = max(fs, key=lambda f: (len(f), f))
+    if os.path.getsize(last) < SHARD_MB * 1e6: return last
+    k = 1
+    while os.path.exists(os.path.join(ROOT, f'ad-games-{k}.jsonl')): k += 1
+    return os.path.join(ROOT, f'ad-games-{k}.jsonl')
 LISTED = os.path.join(ROOT, 'ad-listed.json')  # each player's AD match ids from Steam
 KEY = os.environ.get('OPENDOTA_API_KEY', '')
 STEAM_KEY = os.environ.get('STEAM_API_KEY', '')
@@ -70,12 +86,27 @@ def steam_ad_matches(pid):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--max', type=int, default=200, help='most new games to fetch this run')
+    ap.add_argument('--discover', type=int, default=0,
+                    help='also list this many new players, picked from those who show up most in saved games')
     a = ap.parse_args()
-    players = json.load(open(os.path.join(ROOT, 'top-players.json')))['players']
-    have = set()
-    if os.path.exists(GAMES):
-        for line in open(GAMES):
-            if line.strip(): have.add(json.loads(line)['match_id'])
+    tp = json.load(open(os.path.join(ROOT, 'top-players.json')))
+    players = list(tp['players'])
+    have = set(); seen_with = {}
+    for gf in game_files():
+        for line in open(gf):
+            if line.strip():
+                g = json.loads(line); have.add(g['match_id'])
+                for p in g['players']:
+                    acc = p.get('account_id')
+                    if acc and acc != 4294967295: seen_with[acc] = seen_with.get(acc, 0) + 1
+    # Discovered players: everyone already listed, plus the most frequent new faces (3+ games).
+    # Players whose Steam history is hidden come back with no games and are not tried again.
+    cache0 = json.load(open(LISTED)) if os.path.exists(LISTED) else {}
+    skip = set(players) | set(tp.get('private', []))
+    found = [int(k) for k in cache0 if int(k) not in skip]
+    fresh = sorted((acc for acc, c in seen_with.items() if c >= 3 and acc not in skip and str(acc) not in cache0),
+                   key=lambda acc: -seen_with[acc])[:a.discover]
+    players += found + fresh
 
     ab_ids = get('/constants/ability_ids') or {}
     heroes = get('/constants/heroes') or {}
@@ -93,7 +124,8 @@ def main():
         if STEAM_KEY:
             # Each player's list is fetched once a week at most (Steam rate-limits).
             c = listed_cache.get(str(pid))
-            if not c or time.time() - c['at'] > 7 * 86400:
+            stale = 7 * 86400 if pid in tp['players'] else 30 * 86400  # discovered players: monthly
+            if not c or time.time() - c['at'] > stale:
                 got = steam_ad_matches(pid)
                 if got is not None:
                     c = listed_cache[str(pid)] = {'at': int(time.time()), 'ids': got}
@@ -122,10 +154,11 @@ def main():
         if mid not in have and mid not in todo: todo.append(mid)
     todo.sort(reverse=True)  # newest first
     unlisted = sum(1 for pid in players if STEAM_KEY and str(pid) not in listed_cache)
-    print('AD games listed per player:', listed, f'| new: {len(todo)} | unlisted: {unlisted}')
+    print('AD games listed per top player:', {p: listed[p] for p in tp['players'] if p in listed},
+          f'| players listed: {len(listed)} ({len(fresh)} newly discovered) | new: {len(todo)} | unlisted: {unlisted}')
 
     added = no_abilities = 0
-    with open(GAMES, 'a') as out:
+    with open(out_file(), 'a') as out:
         for mid in todo[:a.max]:
             m = get(f'/matches/{mid}')
             if not m or 'players' not in m: continue
