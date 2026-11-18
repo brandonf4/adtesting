@@ -6,7 +6,8 @@
 const fs = require('fs');
 const { loadEngine } = require('./engine');
 const { judge, loadWeights } = require('./judge/judge');
-const { comparePair } = require('./judge/seat-judge');
+const { comparePair, seatScore } = require('./judge/seat-judge');
+const path = require('path'), os = require('os'), { spawnSync } = require('child_process');
 const run = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
 const batch = require('path').basename(process.argv[2], '.json');
 const LABEL = { strength: 'stronger spells on their own', synergy: 'spells that combo better', aghs: 'better Aghanim upgrades', roleFitLost: 'a cleaner role split', heroCounters: 'better hero-model matchups', abilityCounters: 'spells that counter the other side', notes: 'your note rules', buildFit: 'builds that fit their positions better' };
@@ -45,15 +46,45 @@ function summary(j) {
   return `${W} wins (${j.pct}%). ${W} has the better ${won.length ? won.join(', ') : 'nothing position by position'}` + (lost.length ? `, and the other side has the better ${lost.join(', ')}` : '') + `. The biggest edge is ${top || 'small'}.`;
 }
 
+// The daily learner (ml/net.py) makes the call instead once it has beaten the
+// hand judge on real games neither had seen (ml/status.json says so).
+const P5 = (a => { const out = []; const go = (x, r) => x.length ? x.forEach((v, i) => go([...x.slice(0, i), ...x.slice(i + 1)], [...r, v])) : out.push(r); go(a, []); return out; })([0, 1, 2, 3, 4]);
+const POS5 = ['pos1', 'mid', 'offlane', 'pos4', 'pos5'];
+function learnerCalls(engine, inputs) {
+  let st; try { st = JSON.parse(fs.readFileSync(path.join(__dirname, 'ml/status.json'), 'utf8')); } catch { return null; }
+  if (!st.in_charge) return null;
+  const tmp = path.join(os.tmpdir(), `drafts-${process.pid}.json`);
+  fs.writeFileSync(tmp, JSON.stringify(inputs));
+  const r = spawnSync('python3', [path.join(__dirname, 'ml/net.py'), 'predict', tmp], { encoding: 'utf8' });
+  if (r.status !== 0) { process.stderr.write('learner failed, using the hand judge: ' + r.stderr.slice(-500) + '\n'); return null; }
+  return { st, p: JSON.parse(r.stdout.trim().split('\n').pop()) };
+}
+
 (async () => {
   const engine = await loadEngine(), w = loadWeights();
+  const inputs = [];
   const drafts = run.drafts.map(d => {
     engine.setPool(d.pool.map(p => p.name));
     for (const l of d.log) engine.pick(engine.item(l.item));
-    const j = call(judge(engine, w), w);
+    const raw = judge(engine, w);
+    const team = picks => { const S = picks.map(s => POS5.map(p => seatScore(engine, s, p).score)); let b = -1e9; for (const p of P5) b = Math.max(b, p.reduce((t, si, k) => t + S[si][k], 0)); return b; };
+    const picks = engine.lab.picks;
+    inputs.push({ id: d.id, diff: { ...raw.diff, builds: team(picks.slice(0, 5)) - team(picks.slice(5)) },
+      seats: d.seats.map(s => [...s.filter(x => x.kind === 'model').map(x => x.name), ...s.filter(x => x.kind !== 'model').map(x => x.name)]) });
+    const j = call(raw, w);
     j.lanes = lanes(engine, d);
-    j.summary = summary(j);
     return { id: d.id, pool: d.pool, seats: d.seats, roles: d.roles, order: d.log.map(l => [l.seat, l.item]), judge: j };
   });
-  process.stdout.write(JSON.stringify({ batch, createdAt: run.createdAt, judgeVersion: w.version, drafts }));
+  const L = learnerCalls(engine, inputs);
+  for (const d of drafts) {
+    const j = d.judge;
+    if (L && d.id in L.p) {
+      const p = L.p[d.id], pick = p >= 0.5 ? 'radiant' : 'dire';
+      j.hand = { pick: j.pick, pct: j.pct }; j.pick = pick; j.pct = Math.round(100 * Math.max(p, 1 - p)); j.by = 'learner';
+      const note = ` Called by the learning model, which was right on ${Math.round(100 * L.st.learner_acc)}% of ${L.st.forward_games} unseen real games vs ${Math.round(100 * L.st.judge_acc)}% for the hand judge.`;
+      j.summary = j.hand.pick === pick ? summary(j) + note
+        : summary(j).replace(/ The biggest edge is .*$/, '') + note + ` The hand judge would pick ${j.hand.pick === 'radiant' ? 'Radiant' : 'Dire'}, and the reasons listed are its view.`;
+    } else j.summary = summary(j);
+  }
+  process.stdout.write(JSON.stringify({ batch, createdAt: run.createdAt, judgeVersion: L ? 'learner+' + w.version : w.version, drafts }));
 })();

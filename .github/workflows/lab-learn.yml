@@ -66,6 +66,6 @@ jobs:
         run: cd lab && python3 ml/net.py train --warm
       - name: Save the model and its history
         run: |
-          git add lab/ml/model.pt lab/ml/history.json lab/runs/ad-games-features.json
+          git add lab/ml/model.pt lab/ml/history.json lab/ml/status.json lab/runs/ad-games-features.json
           git diff --cached --quiet || git commit -q -m "Lab: daily model update"
           for i in 1 2 3; do git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}" && break; sleep 10; done

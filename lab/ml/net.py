@@ -259,8 +259,13 @@ def run_train(args):
         if new:
             dn = v.encode(games, new)  # spells/players it has never seen count as unknown
             ll, acc = score(net, dn, torch.arange(len(new)))
+            # Draft-only calls (what the judging page needs: no players) vs the hand-set judge.
+            pd = predict(net, dn, torch.arange(len(new)), draft_only=True)
+            draft_ok = int(((pd > .5).float() == dn[3]).sum())
+            judge_ok = sum((f['pRadiant'] > .5) == bool(f['radiant_win']) for f in new)
             entry = dict(date=time.strftime('%Y-%m-%d'), trained_on=ck['at_games'], new_games=len(new),
-                         forward_acc=round(acc, 4), forward_logloss=round(ll, 4))
+                         forward_acc=round(acc, 4), forward_logloss=round(ll, 4),
+                         draft_only_acc=round(draft_ok / len(new), 4), judge_acc=round(judge_ok / len(new), 4))
             print('forward test on new games:', entry); hist.append(entry)
         v.grow(games, F); net.grow(len(v.items), len(v.players))
         cfg, lr, epochs = ck['cfg'], 5e-4, max(10, args.epochs // 2)
@@ -280,14 +285,42 @@ def run_train(args):
     torch.save(dict(vocab=v.state(), cfg=cfg, state=net.state_dict(), bias=net.bias,
                     seen=[f['match_id'] for f in F[:m]], at_games=m, history=hist), MODEL)
     json.dump(hist, open(os.path.join(HERE, 'history.json'), 'w'), indent=1)
+    write_status(hist)
+
+
+def write_status(hist):
+    """The learner takes over the judging page's calls once, across every forward
+    test so far (at least 500 unseen games), its draft-only calls beat the hand judge's."""
+    h = [e for e in hist if 'draft_only_acc' in e]
+    games = sum(e['new_games'] for e in h)
+    net_ok = sum(e['draft_only_acc'] * e['new_games'] for e in h); judge_ok = sum(e['judge_acc'] * e['new_games'] for e in h)
+    st = dict(in_charge=games >= 500 and net_ok > judge_ok, forward_games=games,
+              learner_acc=round(net_ok / games, 4) if games else None, judge_acc=round(judge_ok / games, 4) if games else None)
+    json.dump(st, open(os.path.join(HERE, 'status.json'), 'w'), indent=1)
+    print('status:', st)
+
+
+def run_predict(args):
+    """Draft-only win chances for drafts with no players (the judging page).
+    Input: [{id, seats: [[model, spell, ...] x10, Radiant first], diff: {judge features}}]."""
+    ck = torch.load(MODEL, weights_only=False)
+    v = Vocab(**ck['vocab']); net = make(v, **ck['cfg']); net.load_state_dict(ck['state']); net.bias = ck['bias']
+    D = json.load(open(args.file)); games, F = {}, []
+    for d in D:
+        games[d['id']] = dict(players=[dict(slot=i if i < 5 else 128 + i - 5, account_id=None, hero=s[0], abilities=s[1:])
+                                       for i, s in enumerate(d['seats'])])
+        F.append(dict(match_id=d['id'], radiant_win=False, diff={k: d['diff'].get(k, 0) for k in v.keys}))
+    p = predict(net, v.encode(games, F), torch.arange(len(F)), draft_only=True)
+    print(json.dumps({d['id']: round(float(x), 4) for d, x in zip(D, p)}))
 
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser()
-    ap.add_argument('mode', choices=['eval', 'train'])
+    ap.add_argument('mode', choices=['eval', 'train', 'predict'])
+    ap.add_argument('file', nargs='?')
     ap.add_argument('--epochs', type=int, default=40)
     ap.add_argument('--folds', action='store_true')
     ap.add_argument('--warm', action='store_true')
     ap.add_argument('--limit', type=int, default=0)
     a = ap.parse_args()
-    (run_eval if a.mode == 'eval' else run_train)(a)
+    {'eval': run_eval, 'train': run_train, 'predict': run_predict}[a.mode](a)
