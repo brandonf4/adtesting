@@ -1,17 +1,17 @@
 {
-  "version": "games-2026-11-17b",
-  "note": "Team judge weights fit to 2,419 real AD games from 10 top players (lab/data/top-players.json) via Steam/OpenDota, ridge logistic regression. 5-fold CV: 1,626/2,419 (67.2%) on the draft alone, 1,708 (70.6%) with a term for which side has more of the top players (topSide, left out here). Hand-set weights.json picks 1,610 (66.6%). Agrees with 15 of Brandon's 21 decided team drafts without seeing them. Weights are per raw feature, scale 1.",
+  "version": "games-2026-11-18",
+  "note": "Team judge weights fit to 8,072 usable real AD games (of 8,752 pulled) from 30 top players (lab/data/top-players.json) via Steam/OpenDota, logistic regression. 5-fold CV: 67.0% on the draft alone, 71.9% with a term for which side has more of the top players (topSide, left out of the draft score). Hand-set weights.json picks 66.1%. Best model in ml/experiment.py: draft features + per-player skill, 72.7% 5-fold. Agrees with 14 of Brandon's 21 decided team drafts without seeing them. Weights are per raw feature, scale 1.",
   "scale": 1,
   "weights": {
-    "strength": 0.02612,
-    "synergy": 0.00421,
-    "aghs": 0.00382,
-    "roleFitLost": -0.05526,
-    "heroCounters": -0.00055,
-    "abilityCounters": 0.03517,
-    "notes": 0.01454,
-    "buildFit": 0.01634
+    "strength": 0.02855,
+    "synergy": 0.01083,
+    "aghs": 0.02682,
+    "roleFitLost": -0.06546,
+    "heroCounters": 0.00067,
+    "abilityCounters": 0.04975,
+    "notes": 0.0181,
+    "buildFit": 0.02932
   },
-  "buildsWeight": 0.01524,
-  "topSide": 0.58872
+  "buildsWeight": 0.00208,
+  "topSide": 0.65648
 }
