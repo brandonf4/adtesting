@@ -36,10 +36,11 @@ LISTED = os.path.join(ROOT, 'ad-listed.json')  # each player's AD match ids from
 KEY = os.environ.get('OPENDOTA_API_KEY', '')
 STEAM_KEY = os.environ.get('STEAM_API_KEY', '')
 calls = 0
+limited = 0  # calls that stayed rate-limited after every retry
 
 
 def get(path):
-    global calls
+    global calls, limited
     url = API + path + (('&' if '?' in path else '?') + 'api_key=' + KEY if KEY else '')
     for attempt in range(6):
         try:
@@ -51,6 +52,8 @@ def get(path):
             return data
         except urllib.error.HTTPError as e:
             if e.code == 429 or e.code >= 500:
+                if e.code == 429 and attempt == 5:
+                    limited += 1
                 time.sleep(10 * (attempt + 1)); continue
             print(f'HTTP {e.code} for {path}', file=sys.stderr); return None
         except Exception as e:  # network hiccup
@@ -160,6 +163,8 @@ def main():
     added = no_abilities = 0
     with open(out_file(), 'a') as out:
         for mid in todo[:a.max]:
+            if limited >= 3:  # OpenDota's limit for today is used up; stop and let training run
+                print('OpenDota keeps refusing (rate limit); stopping this run early.'); break
             m = get(f'/matches/{mid}')
             if not m or 'players' not in m: continue
             ps = []
@@ -175,6 +180,7 @@ def main():
             if not any(p['abilities'] for p in ps): no_abilities += 1
             out.write(json.dumps({'match_id': mid, 'start_time': m.get('start_time'), 'duration': m.get('duration'),
                                   'patch': m.get('patch'), 'radiant_win': m.get('radiant_win'), 'players': ps}) + '\n')
+            out.flush()
             added += 1
     print(f'Added {added} games ({no_abilities} with no ability data). {len(todo) - added} still to fetch. API calls: {calls}.')
 

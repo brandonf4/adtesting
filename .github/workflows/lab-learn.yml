@@ -48,15 +48,17 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
-          done=0; disc=$DISCOVER
-          while [ "$done" -lt "$TOTAL" ]; do
-            out=$(python3 lab/tools/fetch-ad-games.py --max 500 --discover "$disc" | tee /dev/stderr)
+          done=0; disc=$DISCOVER; start=$(date +%s)
+          # Pulling stops after 2 hours (or when OpenDota's daily limit runs out) so training always runs.
+          while [ "$done" -lt "$TOTAL" ] && [ $(( $(date +%s) - start )) -lt 7200 ]; do
+            out=$(timeout 55m python3 lab/tools/fetch-ad-games.py --max 500 --discover "$disc" | tee /dev/stderr)
             disc=0
             added=$(echo "$out" | sed -n 's/^Added \([0-9]*\) games.*/\1/p')
             git add -A lab/data
             git diff --cached --quiet || git commit -q -m "Lab: pull AD games"
             git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}"
             [ "${added:-0}" -eq 0 ] && break
+            echo "$out" | grep -q "stopping this run early" && break
             done=$((done + added))
           done
           echo "Added this run: $done"
