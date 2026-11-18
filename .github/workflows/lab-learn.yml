@@ -33,7 +33,11 @@ jobs:
     permissions:
       contents: write
     steps:
+      # Start from the branch's latest commit, not the one that triggered the run:
+      # games are appended to one file, so an older start can't be rebased cleanly.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -56,7 +60,8 @@ jobs:
             added=$(echo "$out" | sed -n 's/^Added \([0-9]*\) games.*/\1/p')
             git add -A lab/data
             git diff --cached --quiet || git commit -q -m "Lab: pull AD games"
-            git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}"
+            git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}" \
+              || { git rebase --abort 2>/dev/null; git reset -q --hard "origin/${GITHUB_REF_NAME}"; echo "Could not save this batch; stopping the pull."; break; }
             [ "${added:-0}" -eq 0 ] && break
             echo "$out" | grep -q "stopping this run early" && break
             done=$((done + added))

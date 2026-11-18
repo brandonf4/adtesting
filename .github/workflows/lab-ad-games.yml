@@ -25,7 +25,11 @@ jobs:
     permissions:
       contents: write
     steps:
+      # Start from the branch's latest commit, not the one that triggered the run:
+      # games are appended to one file, so an older start can't be rebased cleanly.
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
       - name: Fetch and commit games in batches of 500
         env:
           OPENDOTA_API_KEY: ${{ secrets.OPENDOTA_API_KEY }}
