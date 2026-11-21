@@ -1,0 +1,139 @@
+# Draft ability tags (Claude, 2026-11-06), for Brandon to correct.
+# Format: ability_name: tag tag ...   (hero prefix "~" = hero name + "_")
+# Tags: atk attack steroid/attack-based damage · aspd attack rate/extra attacks · orb on-hit effect · rng attack range
+#   gap gap close · mob mobility/escape · invis invisibility · def defense/damage reduction/evasion/spell block
+#   sus self-sustain · life extra life/death delay · save ally save · heal ally heal · buff ally buff
+#   dis single-target disable · aoed AoE disable · slow slow/root-lite · init initiation · burst nuke
+#   dot sustained or damage-over-time · wc wave clear · lane laning spell (harass/lane control/lane sustain)
+#   summ summons/illusions · vis vision/scouting · push tower pressure · mana mana help · silence silence
+#   global global presence (added 2026-11-06 at Brandon's request; the JSON files carry it)
+abaddon: ~frostmourne=atk slow orb | ~borrowed_time=life def | ~aphotic_shield=save def lane | ~death_coil=heal burst lane
+abyssal_underlord: ~atrophy_aura=atk debuff | ~firestorm=wc dot lane | ~pit_of_malice=aoed | ~dark_portal=mob buff
+alchemist: ~chemical_rage=aspd sus def | ~corrosive_weaponry=orb slow | ~acid_spray=wc dot debuff | ~unstable_concoction=dis
+ancient_apparition: ~chilling_touch=burst lane rng | ~ice_blast=dot debuff | ~cold_feet=dis lane | ~ice_vortex=slow debuff lane
+antimage: ~blink=mob gap | ~mana_break=orb mana | ~counterspell=def | ~mana_void=burst
+arc_warden: ~flux=slow dot lane | ~magnetic_field=def aspd buff push | ~spark_wraith=burst wc lane
+axe: ~counter_helix=dot wc def | ~berserkers_call=aoed init def | ~battle_hunger=dot slow lane | ~culling_blade=burst mob
+bane: ~fiends_grip=dis dot | ~brain_sap=burst sus lane | ~nightmare=dis save | ~enfeeble=debuff def
+batrider: ~sticky_napalm=debuff dot lane | ~firefly=mob dot wc | ~flaming_lasso=dis init gap | ~flamebreak=burst dot slow wc
+beastmaster: ~wild_axes=wc burst debuff lane | ~primal_roar=dis init | ~summon_raptor=summ vis | ~summon_razorback=summ buff
+bloodseeker: ~thirst=mob vis atk | ~bloodrage=aspd buff sus | ~rupture=dot dis | ~blood_bath=silence aoed burst sus
+bounty_hunter: ~jinada=atk lane | ~wind_walk=invis mob | ~track=vis buff | ~shuriken_toss=burst dis
+brewmaster: ~drunken_brawler=def atk | ~primal_split=summ life init | ~cinder_brew=slow debuff | ~thunder_clap=slow wc burst
+bristleback: ~quill_spray=dot wc lane | ~bristleback=def | ~warpath=atk aspd | ~viscous_nasal_goo=slow debuff lane
+broodmother: ~insatiable_hunger=atk sus | ~incapacitating_bite=orb slow | ~spin_web=mob def vis | ~spawn_spiderlings=summ push wc
+centaur: ~return=def dot | ~hoof_stomp=aoed init | ~double_edge=burst wc | ~stampede=mob init save
+chaos_knight: ~chaos_strike=atk sus | ~chaos_bolt=dis burst | ~reality_rift=gap debuff | ~phantasm=summ
+chen: ~penitence=slow debuff | ~hand_of_god=heal save | ~divine_favor=heal buff lane | ~holy_persuasion=summ push
+clinkz: ~strafe=aspd | ~wind_walk=invis mob | ~searing_arrows=atk orb | ~death_pact=sus atk
+crystal_maiden: ~frostbite=dis | ~freezing_field=dot slow | ~crystal_nova=slow burst wc lane
+dark_seer: ~ion_shell=wc dot lane | ~wall_of_replica=summ | ~vacuum=aoed init | ~surge=mob buff save
+dark_willow: ~shadow_realm=burst mob def | ~bramble_maze=aoed dot | ~terrorize=aoed | ~cursed_crown=dis lane
+dawnbreaker: ~luminosity=atk heal | ~fire_wreath=dot slow | ~solar_guardian=mob heal init | ~celestial_hammer=mob gap burst
+dazzle: ~poison_touch=slow lane | ~shadow_wave=heal burst lane | ~shallow_grave=save life | ~nothl_projection=heal save
+death_prophet: ~exorcism=dot push | ~spirit_siphon=sus dot lane | ~carrion_swarm=wc burst lane | ~silence=silence aoed
+disruptor: ~glimpse=save dis | ~static_storm=silence aoed | ~thunder_strike=dot lane vis | ~kinetic_field=aoed
+doom_bringer: ~infernal_blade=atk orb | ~devour=sus | ~doom=silence dis | ~scorched_earth=dot sus mob
+dragon_knight: ~elder_dragon_form=rng atk | ~wyrms_wrath=atk | ~dragon_tail=dis | ~breathe_fire=burst wc debuff
+drow_ranger: ~frost_arrows=orb slow lane | ~marksmanship=atk | ~wave_of_silence=silence save | ~multishot=dot wc
+earth_spirit: ~rolling_boulder=gap mob dis init | ~magnetize=dot silence | ~boulder_smash=dis save | ~geomagnetic_grip=save silence
+earthshaker: ~enchant_totem=atk gap | ~aftershock=aoed | ~fissure=aoed wc | ~echo_slam=burst aoed init
+elder_titan: ~natural_order=debuff | ~ancestral_spirit=vis slow | ~earth_splitter=slow burst | ~echo_stomp=aoed
+ember_spirit: ~sleight_of_fist=atk mob wc | ~fire_remnant=mob burst | ~searing_chains=aoed | ~flame_guard=def dot
+enchantress: ~impetus=atk rng | ~untouchable=def | ~enchant=summ slow | ~natures_attendants=heal
+enigma: ~black_hole=aoed init | ~malefice=dis | ~midnight_pulse=dot | ~demonic_conversion=summ push
+faceless_void: ~time_walk=mob gap def | ~time_lock=dis atk | ~chronosphere=aoed init | ~time_dilation=slow debuff
+furion: ~teleportation=mob push | ~wrath_of_nature=wc | ~sprout=dis | ~force_of_nature=summ push
+grimstroke: ~ink_creature=silence burst lane | ~spirit_walk=dis burst | ~soul_chain=dis | ~dark_artistry=burst slow lane wc
+gyrocopter: ~flak_cannon=aspd wc | ~homing_missile=dis | ~rocket_barrage=burst lane wc | ~call_down=slow burst
+hoodwink: ~acorn_shot=burst slow lane | ~bushwhack=aoed | ~sharpshooter=burst | ~scurry=mob def
+huskar: ~berserkers_blood=sus aspd | ~burning_spear=orb dot lane | ~inner_fire=burst wc slow | ~life_break=gap burst slow
+invoker: ~sun_strike_ad=burst | ~alacrity_ad=aspd buff | ~cold_snap_ad=dis | ~ghost_walk_ad=invis mob | ~tornado_ad=aoed init | ~forge_spirit_ad=summ push | ~chaos_meteor_ad=dot wc | ~emp_ad=burst mana | ~ice_wall_ad=slow | ~deafening_blast_ad=aoed burst
+jakiro: ~liquid_fire=aspd debuff push | ~liquid_ice=dot debuff | ~ice_path=aoed | ~macropyre=dot wc | ~dual_breath=burst wc slow lane
+juggernaut: ~blade_fury=def mob wc dot | ~blade_dance=atk sus | ~omni_slash=burst def | ~healing_ward=heal push
+keeper_of_the_light: ~chakra_magic=mana buff | ~spirit_form=mob vis | ~illuminate=wc burst | ~blinding_light=def save
+kez: ~falcon_rush_ad=aspd mob | ~kazurai_katana=atk | ~grappling_claw=gap mob | ~shodo_sai_ad=def | ~echo_slash=burst wc | ~talon_toss_ad=silence | ~raptor_dance=burst sus | ~ravens_veil_ad=invis mob
+kunkka: ~tidebringer=atk wc | ~ghostship=aoed save | ~torrent=aoed | ~x_marks_the_spot=save dis
+largo: ~catchy_lick=save heal | ~frogstomp=aoed burst | ~croak_of_genius=burst | ~amphibian_rhapsody=buff heal
+legion_commander: ~duel=dis atk | ~moment_of_courage=sus def | ~overwhelming_odds=burst wc lane | ~press_the_attack=save buff heal
+leshrac: ~split_earth=aoed | ~pulse_nova=dot wc | ~diabolic_edict=dot push | ~lightning_storm=burst slow wc
+lich: ~chain_frost=burst | ~sinister_gaze=dis | ~frost_shield=def save lane | ~frost_nova=burst slow lane
+life_stealer: ~feast=sus atk | ~rage=def | ~infest=mob save gap | ~open_wounds=slow sus
+lina: ~fiery_soul=aspd | ~light_strike_array=aoed burst | ~laguna_blade=burst | ~dragon_slave=burst wc lane
+lion: ~finger_of_death=burst | ~impale=aoed | ~voodoo=dis | ~mana_drain=mana slow
+lone_druid: ~entangle=dis orb | ~true_form=def | ~spirit_link=sus aspd | ~savage_roar=aoed save
+luna: ~moon_glaive=wc atk | ~lucent_beam=dis burst | ~lunar_orbit=def | ~eclipse=burst
+lycan: ~feral_impulse=atk buff | ~shapeshift=mob | ~howl=debuff | ~summon_wolves=summ push vis
+magnataur: ~empower=atk buff wc | ~skewer=mob gap init | ~reverse_polarity=aoed init | ~shockwave=burst wc lane
+marci: ~unleash=aspd burst | ~bodyguard=def save | ~companion_run=mob gap dis | ~grapple=dis
+mars: ~gods_rebuke=burst wc | ~spear=dis | ~bulwark=def | ~arena_of_blood=aoed init
+medusa: ~split_shot=wc dot | ~mystic_snake=burst mana | ~stone_gaze=aoed def | ~gorgon_grasp=aoed
+meepo: ~ransack=sus | ~earthbind=dis | ~poof=mob burst
+mirana: ~leap=mob aspd | ~arrow=dis | ~starfall=burst | ~invis=invis save mob
+monkey_king: ~jingu_mastery=atk sus | ~boundless_strike=dis wc | ~wukongs_command=aoed atk | ~tree_dance=mob vis
+morphling: ~waveform=mob gap burst | ~adaptive_strike_agi=burst dis
+muerta: ~gunslinger=aspd atk | ~pierce_the_veil=atk | ~dead_shot=dis | ~the_calling=silence slow
+naga_siren: ~mirror_image=summ push | ~ensnare=dis | ~rip_tide=debuff wc | ~song_of_the_siren=aoed save
+necrolyte: ~reapers_scythe=burst dis | ~heartstopper_aura=dot | ~death_pulse=heal wc lane sus | ~ghost_shroud=def sus
+nevermore: ~dark_lord=debuff | ~frenzy=aspd | ~shadowraze2=burst wc | ~requiem=burst slow
+night_stalker: ~darkness=vis | ~crippling_fear=silence | ~midnight_feast=sus | ~void=dis burst
+nyx_assassin: ~vendetta=invis burst | ~impale=aoed | ~spiked_carapace=def dis | ~jolt=burst mana
+obsidian_destroyer: ~astral_imprisonment=save dis | ~arcane_orb=orb burst | ~objurgation=def | ~sanity_eclipse=burst
+ogre_magi: ~bloodlust=aspd buff lane | ~fireblast=dis | ~ignite=slow dot lane
+omniknight: ~hammer_of_purity=atk slow | ~martyr=save def | ~purification=heal burst save | ~guardian_angel=save
+oracle: ~fortunes_end=dis | ~false_promise=save | ~purifying_flames=heal burst lane | ~fates_edict=save
+pangolier: ~swashbuckle=mob atk | ~lucky_shot=debuff | ~shield_crash=mob def | ~gyroshell=aoed init mob
+phantom_assassin: ~phantom_strike=gap aspd | ~coup_de_grace=atk | ~stifling_dagger=slow burst lane | ~immaterial=def
+phantom_lancer: ~juxtapose=summ | ~doppelwalk=mob summ | ~phantom_edge=gap atk | ~spirit_lance=slow burst summ
+phoenix: ~icarus_dive=mob slow | ~supernova=aoed life | ~fire_spirits=dot debuff lane | ~sun_ray=dot heal
+primal_beast: ~uproar=def | ~trample=dot mob | ~pulverize=dis | ~onslaught=gap aoed init
+puck: ~dream_coil=aoed | ~phase_shift=def | ~illusory_orb=mob wc burst | ~waning_rift=silence mob
+pudge: ~meat_hook=dis gap | ~rot=dot slow | ~dismember=dis sus | ~flesh_heap=def
+pugna: ~nether_blast=burst push wc | ~life_drain=sus heal | ~nether_ward=dot | ~decrepify=save debuff
+queenofpain: ~blink=mob | ~shadow_strike=dot slow lane | ~sonic_wave=burst | ~scream_of_pain=burst wc
+rattletrap: ~battery_assault=dot dis | ~hookshot=gap dis init | ~power_cogs=dis | ~rocket_flare=vis burst
+razor: ~static_link=atk | ~plasma_field=slow wc | ~eye_of_the_storm=debuff dot | ~storm_surge=mob
+riki: ~backstab=atk | ~blink_strike=gap mob | ~smoke_screen=silence aoed | ~tricks_of_the_trade=def burst
+ringmaster: ~tame_the_beasts=burst | ~the_box=save | ~wheel=aoed | ~impalement=burst slow
+rubick: ~arcane_supremacy=buff | ~fade_bolt=burst debuff lane | ~telekinesis=dis
+sandking_burrowstrike: gap dis init
+sandking_sand_storm: invis wc dot
+sandking_epicenter: aoed dot
+sandking_scorpion_strike: burst slow
+shadow_demon: ~disruption=save dis | ~demonic_purge=slow | ~disseminate=debuff | ~shadow_poison=burst lane
+shadow_shaman: ~shackles=dis | ~voodoo=dis | ~mass_serpent_ward=push dot | ~ether_shock=burst lane
+shredder: ~reactive_armor=def sus | ~whirling_death=burst wc | ~timber_chain=mob gap burst | ~chakram=wc slow
+silencer: ~glaives_of_wisdom=orb | ~global_silence=silence | ~curse_of_the_silent=dot | ~last_word=silence
+skeleton_king: ~mortal_strike=atk | ~reincarnation=life | ~hellfire_blast=dis | ~bone_guard=summ
+skywrath_mage: ~concussive_shot=slow | ~ancient_seal=silence debuff | ~mystic_flare=burst | ~arcane_bolt=burst lane
+slardar: ~bash=dis atk | ~slithereen_crush=aoed | ~amplify_damage=debuff vis | ~sprint=mob
+slark: ~shadow_dance=def invis sus | ~pounce=gap dis | ~saltwater_shiv=atk | ~dark_pact=def burst
+snapfire: ~lil_shredder=aspd | ~scatterblast=slow burst wc | ~mortimer_kisses=dot slow | ~firesnap_cookie=dis mob save
+sniper: ~take_aim=rng | ~headshot=dis orb | ~assassinate=burst | ~shrapnel=slow dot wc lane
+spectre: ~dispersion=def | ~haunt=gap summ | ~spectral_dagger=mob slow | ~shadow_step=gap
+spirit_breaker: ~greater_bash=dis atk | ~charge_of_darkness=gap dis init | ~bulldoze=mob def | ~nether_strike=gap dis
+storm_spirit: ~ball_lightning=mob gap | ~electric_vortex=dis | ~overload=atk slow | ~static_remnant=burst wc
+sven: ~storm_bolt=aoed | ~great_cleave=wc atk | ~gods_strength=atk | ~warcry=def buff
+techies: ~suicide=burst | ~land_mines=burst vis | ~reactive_tazer=def | ~sticky_bomb=burst slow
+templar_assassin: ~psi_blades=atk rng | ~refraction=def atk | ~meld=atk invis | ~psionic_trap=slow vis
+terrorblade: ~metamorphosis=rng atk | ~reflection=summ slow | ~sunder=save | ~conjure_image=summ push
+tidehunter: ~anchor_smash=wc debuff | ~kraken_shell=def | ~gush=debuff slow | ~ravage=aoed init
+tinker: ~rearm=mana | ~laser=burst | ~march_of_the_machines=wc dot | ~deploy_turrets=push
+tiny: ~avalanche=aoed burst | ~tree_grab=atk | ~grow=atk | ~toss=save gap
+treant: ~leech_seed=heal slow | ~overgrowth=aoed | ~natures_grasp=slow | ~living_armor=heal save def
+troll_warlord: ~fervor=aspd | ~battle_trance=aspd sus | ~berserkers_rage=dis | ~whirling_axes_melee=slow burst | ~whirling_axes_ranged=slow burst
+tusk: ~walrus_punch=dis burst | ~snowball=gap dis init save | ~tag_team=atk slow lane | ~ice_shards=dis save
+undying: ~decay=burst lane | ~tombstone=summ | ~flesh_golem=atk | ~soul_rip=heal burst
+ursa: ~fury_swipes=atk | ~overpower=aspd | ~enrage=def | ~earthshock=slow
+vengefulspirit: ~command_aura=atk buff | ~magic_missile=dis | ~nether_swap=save | ~wave_of_terror=vis debuff
+venomancer: ~noxious_plague=dot | ~venomous_gale=slow | ~snakebite=dot lane | ~plague_ward=summ push
+viper: ~poison_attack=orb slow lane | ~corrosive_skin=def | ~viper_strike=slow dot | ~nethertoxin=silence
+visage: ~soul_assumption=burst lane | ~gravekeepers_cloak=def | ~grave_chill=slow atk | ~summon_familiars=summ dis
+void_spirit: ~astral_step=mob gap burst | ~resonant_pulse=def wc | ~dissimilate=mob burst | ~aether_remnant=dis
+warlock: ~fatal_bonds=dot debuff | ~rain_of_chaos=aoed summ | ~upheaval=slow | ~shadow_word=heal dot
+weaver: ~shukuchi=mob invis | ~geminate_attack=aspd | ~the_swarm=debuff vis | ~time_lapse=life save
+windrunner: ~windrun=mob def | ~focusfire=aspd | ~powershot=burst wc | ~shackleshot=dis
+winter_wyvern: ~arctic_burn=rng dot mob | ~winters_curse=aoed | ~cold_embrace=save | ~splinter_blast=burst slow
+wisp: ~spirits=burst | ~overcharge=buff sus | ~tether=heal buff | ~relocate=save mob
+witch_doctor: ~maledict=dot | ~paralyzing_cask=dis | ~death_ward=dot | ~voodoo_restoration=heal
+zuus: ~arc_lightning=wc burst lane | ~lightning_bolt=dis vis | ~thundergods_wrath=burst vis | ~heavenly_jump=mob

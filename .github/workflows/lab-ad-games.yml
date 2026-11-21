@@ -1,0 +1,54 @@
+name: Lab AD games
+
+# Pulls Ability Draft games for the players in lab/data/top-players.json from
+# OpenDota into lab/data/ad-games.jsonl, for training the draft lab's judge.
+# Runs when the player list, this file or the script changes, or by hand.
+# It never deploys anything.
+on:
+  push:
+    paths:
+      - .github/workflows/lab-ad-games.yml
+      - lab/tools/fetch-ad-games.py
+      - lab/data/top-players.json
+  workflow_dispatch:
+    inputs:
+      max:
+        description: Most new games to fetch
+        default: '6000'
+
+concurrency: lab-ad-games
+
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    permissions:
+      contents: write
+    steps:
+      # Start from the branch's latest commit, not the one that triggered the run:
+      # games are appended to one file, so an older start can't be rebased cleanly.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - name: Fetch and commit games in batches of 500
+        env:
+          OPENDOTA_API_KEY: ${{ secrets.OPENDOTA_API_KEY }}
+          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+          TOTAL: ${{ github.event.inputs.max || '6000' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
+          done=0
+          while [ "$done" -lt "$TOTAL" ]; do
+            out=$(python3 lab/tools/fetch-ad-games.py --max 500 | tee /dev/stderr)
+            added=$(echo "$out" | sed -n 's/^Added \([0-9]*\) games.*/\1/p')
+            git add -A lab/data
+            git diff --cached --quiet || git commit -q -m "Lab: pull AD games"
+            git pull -q --rebase origin "${GITHUB_REF_NAME}" && git push -q origin "HEAD:${GITHUB_REF_NAME}"
+            left=$(echo "$out" | sed -n 's/.* \([0-9]*\) still to fetch.*/\1/p')
+            unl=$(echo "$out" | sed -n 's/.*unlisted: \([0-9]*\).*/\1/p')
+            [ "${added:-0}" -eq 0 ] && [ "${left:-0}" -eq 0 ] && [ "${unl:-0}" -eq 0 ] && break
+            [ "${added:-0}" -eq 0 ] && sleep 300
+            done=$((done + added))
+            echo "Total added this run: $done"
+          done

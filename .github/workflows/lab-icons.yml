@@ -1,0 +1,27 @@
+name: Lab icons
+
+# Builds lab/review/icons.json for the draft lab's judging page. Only runs
+# when this file or the script changes; it never deploys anything.
+on:
+  push:
+    paths:
+      - .github/workflows/lab-icons.yml
+      - lab/tools/fetch-icons.py
+  workflow_dispatch:
+
+jobs:
+  icons:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get install -y imagemagick >/dev/null || true
+      - run: python3 lab/tools/fetch-icons.py
+      - name: Commit icons
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
+          git add lab/review/icons.json
+          git diff --cached --quiet || git commit -m "Update lab icons"
+          git push
