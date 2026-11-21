@@ -290,11 +290,16 @@ def run_train(args):
 
 def write_status(hist):
     """The learner takes over the judging page's calls once, across every forward
-    test so far (at least 500 unseen games), its draft-only calls beat the hand judge's."""
+    test so far (at least 500 unseen games), its draft-only calls beat the hand judge's
+    by half a point; it hands back only if it falls half a point behind."""
     h = [e for e in hist if 'draft_only_acc' in e]
     games = sum(e['new_games'] for e in h)
     net_ok = sum(e['draft_only_acc'] * e['new_games'] for e in h); judge_ok = sum(e['judge_acc'] * e['new_games'] for e in h)
-    st = dict(in_charge=games >= 500 and net_ok > judge_ok, forward_games=games,
+    # A half-point margin each way, so a tie doesn't flip the page's calls day to day.
+    try: was = json.load(open(os.path.join(HERE, 'status.json'))).get('in_charge', False)
+    except Exception: was = False
+    lead = (net_ok - judge_ok) / games if games else 0
+    st = dict(in_charge=games >= 500 and (lead > -0.005 if was else lead > 0.005), forward_games=games,
               learner_acc=round(net_ok / games, 4) if games else None, judge_acc=round(judge_ok / games, 4) if games else None)
     json.dump(st, open(os.path.join(HERE, 'status.json'), 'w'), indent=1)
     print('status:', st)
