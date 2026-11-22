@@ -1,6 +1,6 @@
 {
  "in_charge": false,
- "forward_games": 26390,
- "learner_acc": 0.6586,
- "judge_acc": 0.6585
+ "forward_games": 31548,
+ "learner_acc": 0.6592,
+ "judge_acc": 0.6583
 }
