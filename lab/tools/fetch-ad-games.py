@@ -36,6 +36,10 @@ LISTED = os.path.join(ROOT, 'ad-listed.json')  # each player's AD match ids from
 KEY = os.environ.get('OPENDOTA_API_KEY', '')
 STEAM_KEY = os.environ.get('STEAM_API_KEY', '')
 calls = 0
+# How each build did in its game (for learning build quality, not just who won).
+STATS = ['gold_per_min', 'xp_per_min', 'net_worth', 'hero_damage', 'tower_damage', 'hero_healing', 'last_hits',
+         'denies', 'kills', 'deaths', 'assists', 'level', 'lane', 'lane_role', 'is_roaming', 'lane_efficiency_pct',
+         'stuns', 'teamfight_participation', 'item_0', 'item_1', 'item_2', 'item_3', 'item_4', 'item_5', 'aghanims_scepter', 'aghanims_shard']
 limited = 0  # calls that stayed rate-limited after every retry
 
 
@@ -176,7 +180,8 @@ def main():
                     if n not in names and not n.startswith(('special_bonus', 'ad_special_bonus')): names.append(n)
                 ps.append({'slot': p.get('player_slot'), 'radiant': p.get('isRadiant', p.get('player_slot', 0) < 128),
                            'account_id': p.get('account_id'), 'hero_id': p.get('hero_id'),
-                           'hero': hero_name.get(p.get('hero_id')), 'abilities': names})
+                           'hero': hero_name.get(p.get('hero_id')), 'abilities': names,
+                           'stats': {k: p.get(k) for k in STATS}})
             if not any(p['abilities'] for p in ps): no_abilities += 1
             out.write(json.dumps({'match_id': mid, 'start_time': m.get('start_time'), 'duration': m.get('duration'),
                                   'patch': m.get('patch'), 'radiant_win': m.get('radiant_win'), 'players': ps}) + '\n')
