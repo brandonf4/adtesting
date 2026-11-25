@@ -99,5 +99,16 @@
   "judge_acc": 0.6575,
   "newest_held_out_acc": 0.6542,
   "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-25",
+  "trained_on": 34042,
+  "new_games": 8806,
+  "forward_acc": 0.6602,
+  "forward_logloss": 0.6174,
+  "draft_only_acc": 0.6602,
+  "judge_acc": 0.6548,
+  "newest_held_out_acc": 0.6677,
+  "verdicts_fit": "21/21"
  }
 ]
