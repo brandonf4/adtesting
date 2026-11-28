@@ -1,0 +1,136 @@
+[
+ {
+  "date": "2026-11-18",
+  "first_train": 6000,
+  "held_out_acc": 0.7188,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-18",
+  "trained_on": 5520,
+  "new_games": 1480,
+  "forward_acc": 0.7128,
+  "forward_logloss": 0.537,
+  "newest_held_out_acc": 0.6857,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-18",
+  "trained_on": 6440,
+  "new_games": 1632,
+  "forward_acc": 0.7004,
+  "forward_logloss": 0.5534,
+  "newest_held_out_acc": 0.7183,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-19",
+  "trained_on": 7426,
+  "new_games": 12316,
+  "forward_acc": 0.6732,
+  "forward_logloss": 0.599,
+  "draft_only_acc": 0.6587,
+  "judge_acc": 0.6682,
+  "newest_held_out_acc": 0.6892,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-19",
+  "trained_on": 18162,
+  "new_games": 4485,
+  "forward_acc": 0.664,
+  "forward_logloss": 0.6033,
+  "draft_only_acc": 0.6638,
+  "judge_acc": 0.6502,
+  "newest_held_out_acc": 0.6744,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-20",
+  "trained_on": 20835,
+  "new_games": 4762,
+  "forward_acc": 0.668,
+  "forward_logloss": 0.6079,
+  "draft_only_acc": 0.6573,
+  "judge_acc": 0.652,
+  "newest_held_out_acc": 0.6689,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-21",
+  "trained_on": 23549,
+  "new_games": 4827,
+  "forward_acc": 0.6563,
+  "forward_logloss": 0.6163,
+  "draft_only_acc": 0.6547,
+  "judge_acc": 0.648,
+  "newest_held_out_acc": 0.6636,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-22",
+  "trained_on": 26105,
+  "new_games": 5158,
+  "forward_acc": 0.6555,
+  "forward_logloss": 0.6197,
+  "draft_only_acc": 0.6625,
+  "judge_acc": 0.6574,
+  "newest_held_out_acc": 0.6495,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-23",
+  "trained_on": 28761,
+  "new_games": 5405,
+  "forward_acc": 0.6501,
+  "forward_logloss": 0.6257,
+  "draft_only_acc": 0.6579,
+  "judge_acc": 0.6549,
+  "newest_held_out_acc": 0.6595,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-24",
+  "trained_on": 31432,
+  "new_games": 5571,
+  "forward_acc": 0.6559,
+  "forward_logloss": 0.6265,
+  "draft_only_acc": 0.6561,
+  "judge_acc": 0.6575,
+  "newest_held_out_acc": 0.6542,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-25",
+  "trained_on": 34042,
+  "new_games": 8806,
+  "forward_acc": 0.6602,
+  "forward_logloss": 0.6174,
+  "draft_only_acc": 0.6602,
+  "judge_acc": 0.6548,
+  "newest_held_out_acc": 0.6677,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-26",
+  "trained_on": 39420,
+  "new_games": 5897,
+  "forward_acc": 0.6622,
+  "forward_logloss": 0.621,
+  "draft_only_acc": 0.6598,
+  "judge_acc": 0.6513,
+  "newest_held_out_acc": 0.6542,
+  "verdicts_fit": "21/21"
+ },
+ {
+  "date": "2026-11-27",
+  "trained_on": 41691,
+  "new_games": 6530,
+  "forward_acc": 0.658,
+  "forward_logloss": 0.6262,
+  "draft_only_acc": 0.6571,
+  "judge_acc": 0.6446,
+  "newest_held_out_acc": 0.6488,
+  "verdicts_fit": "21/21"
+ }
+]

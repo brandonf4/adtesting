@@ -1,0 +1,42 @@
+{
+ "note": "Top Ability Draft players whose games train the judge (Steam account ids, 32-bit), added by Brandon. 'matches' = single AD match ids to fetch too. 'private' = players whose Steam match history is hidden (their games only come in through other players).",
+ "players": [
+  265369004,
+  106473979,
+  859779450,
+  148557755,
+  402583877,
+  889714908,
+  179740370,
+  206412193,
+  54662003,
+  94301365,
+  1040540343,
+  162754597,
+  258233684,
+  332561278,
+  220371411,
+  379941199,
+  327506628,
+  118036682,
+  161075652,
+  385555939,
+  131389420,
+  178610776,
+  1688086208,
+  882261866,
+  198777674,
+  67388732,
+  47859804,
+  131834087,
+  192412922,
+  235183009
+ ],
+ "matches": [
+  9086053851
+ ],
+ "private": [
+  179740370,
+  94301365
+ ]
+}

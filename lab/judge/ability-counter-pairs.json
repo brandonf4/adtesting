@@ -1,0 +1,3390 @@
+[
+ {
+  "counter_hero": "Anti-Mage",
+  "counter": "Mana Break",
+  "countered_hero": "Medusa",
+  "countered": "Medusa (model)",
+  "value": 11.13
+ },
+ {
+  "counter_hero": "Broodmother",
+  "counter": "Spawn Spiderlings",
+  "countered_hero": "Arc Warden",
+  "countered": "Flux",
+  "value": 8.1
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Slark (model)",
+  "countered_hero": "Bristleback",
+  "countered": "Bristleback",
+  "value": 6.92
+ },
+ {
+  "counter_hero": "Earthshaker",
+  "counter": "Echo Slam",
+  "countered_hero": "Broodmother",
+  "countered": "Spawn Spiderlings",
+  "value": 5.85
+ },
+ {
+  "counter_hero": "Spirit Breaker",
+  "counter": "Charge of Darkness",
+  "countered_hero": "Broodmother",
+  "countered": "Spin Web",
+  "value": 5.39
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Summon Wolves",
+  "countered_hero": "Arc Warden",
+  "countered": "Flux",
+  "value": 5.18
+ },
+ {
+  "counter_hero": "Muerta",
+  "counter": "Pierce the Veil",
+  "countered_hero": "Necrophos",
+  "countered": "Ghost Shroud",
+  "value": 5.12
+ },
+ {
+  "counter_hero": "Muerta",
+  "counter": "Pierce the Veil",
+  "countered_hero": "Omniknight",
+  "countered": "Guardian Angel",
+  "value": 4.48
+ },
+ {
+  "counter_hero": "Nyx Assassin",
+  "counter": "Nyx Assassin (model)",
+  "countered_hero": "Medusa",
+  "countered": "Medusa (model)",
+  "value": 4.469
+ },
+ {
+  "counter_hero": "Troll Warlord",
+  "counter": "Battle Trance",
+  "countered_hero": "Marci",
+  "countered": "Unleash",
+  "value": 4.04
+ },
+ {
+  "counter_hero": "Dark Seer",
+  "counter": "Ion Shell",
+  "countered_hero": "Terrorblade",
+  "countered": "Conjure Image",
+  "value": 3.99
+ },
+ {
+  "counter_hero": "Arc Warden",
+  "counter": "Magnetic Field",
+  "countered_hero": "Viper",
+  "countered": "Poison Attack",
+  "value": 3.96
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "Fortune's End",
+  "countered_hero": "Ember Spirit",
+  "countered": "Flame Guard",
+  "value": 3.912
+ },
+ {
+  "counter_hero": "Mars",
+  "counter": "Arena Of Blood",
+  "countered_hero": "Slark",
+  "countered": "Pounce",
+  "value": 3.87
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Pounce",
+  "countered_hero": "Ember Spirit",
+  "countered": "Fire Remnant",
+  "value": 3.862
+ },
+ {
+  "counter_hero": "Anti-Mage",
+  "counter": "Mana Break",
+  "countered_hero": "Wraith King",
+  "countered": "Reincarnation",
+  "value": 3.71
+ },
+ {
+  "counter_hero": "Phantom Lancer",
+  "counter": "Juxtapose",
+  "countered_hero": "Templar Assassin",
+  "countered": "Refraction",
+  "value": 3.53
+ },
+ {
+  "counter_hero": "Medusa",
+  "counter": "Medusa (model)",
+  "countered_hero": "Bloodseeker",
+  "countered": "Rupture",
+  "value": 3.513
+ },
+ {
+  "counter_hero": "Anti-Mage",
+  "counter": "Mana Break",
+  "countered_hero": "Storm Spirit",
+  "countered": "Ball Lightning",
+  "value": 3.5
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ice Blast",
+  "countered_hero": "Dazzle",
+  "countered": "Shallow Grave",
+  "value": 3.47
+ },
+ {
+  "counter_hero": "Nyx Assassin",
+  "counter": "Mind Flare",
+  "countered_hero": "Outworld Devourer",
+  "countered": "Arcane Orb",
+  "value": 3.425
+ },
+ {
+  "counter_hero": "Terrorblade",
+  "counter": "Conjure Image",
+  "countered_hero": "Templar Assassin",
+  "countered": "Refraction",
+  "value": 3.37
+ },
+ {
+  "counter_hero": "Phantom Assassin",
+  "counter": "Immaterial",
+  "countered_hero": "Huskar",
+  "countered": "Burning Spear",
+  "value": 3.28
+ },
+ {
+  "counter_hero": "Beastmaster",
+  "counter": "Primal Roar",
+  "countered_hero": "Omniknight",
+  "countered": "Repel",
+  "value": 3.22
+ },
+ {
+  "counter_hero": "Bane",
+  "counter": "Fiend's Grip",
+  "countered_hero": "Lifestealer",
+  "countered": "Rage",
+  "value": 3.18
+ },
+ {
+  "counter_hero": "Luna",
+  "counter": "Moon Glaives",
+  "countered_hero": "Undying",
+  "countered": "Tombstone",
+  "value": 3.16
+ },
+ {
+  "counter_hero": "Grimstroke",
+  "counter": "Phantom's Embrace",
+  "countered_hero": "Slark",
+  "countered": "Dark Pact",
+  "value": 3.081
+ },
+ {
+  "counter_hero": "Viper",
+  "counter": "Viper (model)",
+  "countered_hero": "Huskar",
+  "countered": "Berserker's Blood",
+  "value": 3.08
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ice Blast",
+  "countered_hero": "Io",
+  "countered": "Tether",
+  "value": 3.05
+ },
+ {
+  "counter_hero": "Arc Warden",
+  "counter": "Magnetic Field",
+  "countered_hero": "Silencer",
+  "countered": "Glaives of Wisdom",
+  "value": 3.04
+ },
+ {
+  "counter_hero": "Pugna",
+  "counter": "Life Drain",
+  "countered_hero": "Tidehunter",
+  "countered": "Kraken Shell",
+  "value": 3.02
+ },
+ {
+  "counter_hero": "Axe",
+  "counter": "Counter Helix",
+  "countered_hero": "Terrorblade",
+  "countered": "Conjure Image",
+  "value": 3.0
+ },
+ {
+  "counter_hero": "Bloodseeker",
+  "counter": "Rupture",
+  "countered_hero": "Pangolier",
+  "countered": "Rolling Thunder",
+  "value": 2.94
+ },
+ {
+  "counter_hero": "Viper",
+  "counter": "Viper Strike",
+  "countered_hero": "Dragon Knight",
+  "countered": "Dragon Knight (model)",
+  "value": 2.938
+ },
+ {
+  "counter_hero": "Bloodseeker",
+  "counter": "Rupture",
+  "countered_hero": "Dark Seer",
+  "countered": "Surge",
+  "value": 2.87
+ },
+ {
+  "counter_hero": "Lone Druid",
+  "counter": "Lone Druid (model)",
+  "countered_hero": "Arc Warden",
+  "countered": "Flux",
+  "value": 2.82
+ },
+ {
+  "counter_hero": "Earthshaker",
+  "counter": "Echo Slam",
+  "countered_hero": "Beastmaster",
+  "countered": "Summon Razorback",
+  "value": 2.81
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ice Blast",
+  "countered_hero": "Necrophos",
+  "countered": "Death Pulse",
+  "value": 2.8
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Summon Wolves",
+  "countered_hero": "Spectre",
+  "countered": "Spectre (model)",
+  "value": 2.786
+ },
+ {
+  "counter_hero": "Bloodseeker",
+  "counter": "Rupture",
+  "countered_hero": "Timbersaw",
+  "countered": "Timber Chain",
+  "value": 2.76
+ },
+ {
+  "counter_hero": "Nyx Assassin",
+  "counter": "Mind Flare",
+  "countered_hero": "Medusa",
+  "countered": "Medusa (model)",
+  "value": 2.681
+ },
+ {
+  "counter_hero": "Timbersaw",
+  "counter": "Reactive Armor",
+  "countered_hero": "Naga Siren",
+  "countered": "Mirror Image",
+  "value": 2.664
+ },
+ {
+  "counter_hero": "Troll Warlord",
+  "counter": "Berserker's Rage",
+  "countered_hero": "Void Spirit",
+  "countered": "Astral Step",
+  "value": 2.64
+ },
+ {
+  "counter_hero": "Earthshaker",
+  "counter": "Echo Slam",
+  "countered_hero": "Naga Siren",
+  "countered": "Mirror Image",
+  "value": 2.597
+ },
+ {
+  "counter_hero": "Faceless Void",
+  "counter": "Chronosphere",
+  "countered_hero": "Weaver",
+  "countered": "Shukuchi",
+  "value": 2.594
+ },
+ {
+  "counter_hero": "Nyx Assassin",
+  "counter": "Spiked Carapace",
+  "countered_hero": "Dawnbreaker",
+  "countered": "Solar Guardian",
+  "value": 2.56
+ },
+ {
+  "counter_hero": "Dark Seer",
+  "counter": "Ion Shell",
+  "countered_hero": "Templar Assassin",
+  "countered": "Refraction",
+  "value": 2.55
+ },
+ {
+  "counter_hero": "Timbersaw",
+  "counter": "Reactive Armor",
+  "countered_hero": "Phantom Lancer",
+  "countered": "Juxtapose",
+  "value": 2.545
+ },
+ {
+  "counter_hero": "Necrophos",
+  "counter": "Heartstopper Aura",
+  "countered_hero": "Timbersaw",
+  "countered": "Reactive Armor",
+  "value": 2.52
+ },
+ {
+  "counter_hero": "Shadow Demon",
+  "counter": "Disruption",
+  "countered_hero": "Legion Commander",
+  "countered": "Duel",
+  "value": 2.513
+ },
+ {
+  "counter_hero": "Bloodseeker",
+  "counter": "Rupture",
+  "countered_hero": "Phoenix",
+  "countered": "Icarus Dive",
+  "value": 2.494
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Underlord",
+  "countered": "Pit of Malice",
+  "value": 2.475
+ },
+ {
+  "counter_hero": "Bristleback",
+  "counter": "Bristleback",
+  "countered_hero": "Riki",
+  "countered": "Riki (model)",
+  "value": 2.42
+ },
+ {
+  "counter_hero": "Enigma",
+  "counter": "Black Hole",
+  "countered_hero": "Lifestealer",
+  "countered": "Rage",
+  "value": 2.406
+ },
+ {
+  "counter_hero": "Timbersaw",
+  "counter": "Reactive Armor",
+  "countered_hero": "Shadow Demon",
+  "countered": "Disruption",
+  "value": 2.394
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Underlord",
+  "countered": "Pit of Malice",
+  "value": 2.387
+ },
+ {
+  "counter_hero": "Bristleback",
+  "counter": "Quill Spray",
+  "countered_hero": "Visage",
+  "countered": "Gravekeeper's Cloak",
+  "value": 2.382
+ },
+ {
+  "counter_hero": "Troll Warlord",
+  "counter": "Berserker's Rage",
+  "countered_hero": "Ember Spirit",
+  "countered": "Fire Remnant",
+  "value": 2.362
+ },
+ {
+  "counter_hero": "Huskar",
+  "counter": "Burning Spear",
+  "countered_hero": "Omniknight",
+  "countered": "Guardian Angel",
+  "value": 2.35
+ },
+ {
+  "counter_hero": "Zeus",
+  "counter": "Lightning Bolt",
+  "countered_hero": "Sand King",
+  "countered": "Sand Storm",
+  "value": 2.35
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "False Promise",
+  "countered_hero": "Ember Spirit",
+  "countered": "Searing Chains",
+  "value": 2.347
+ },
+ {
+  "counter_hero": "Omniknight",
+  "counter": "Guardian Angel",
+  "countered_hero": "Legion Commander",
+  "countered": "Duel",
+  "value": 2.345
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Sven",
+  "countered": "God's Strength",
+  "value": 2.33
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ice Blast",
+  "countered_hero": "Death Prophet",
+  "countered": "Spirit Siphon",
+  "value": 2.32
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Dark Pact",
+  "countered_hero": "Ember Spirit",
+  "countered": "Searing Chains",
+  "value": 2.317
+ },
+ {
+  "counter_hero": "Primal Beast",
+  "counter": "Uproar",
+  "countered_hero": "Spectre",
+  "countered": "Dispersion",
+  "value": 2.312
+ },
+ {
+  "counter_hero": "Sand King",
+  "counter": "Sand Storm",
+  "countered_hero": "Templar Assassin",
+  "countered": "Refraction",
+  "value": 2.28
+ },
+ {
+  "counter_hero": "Io",
+  "counter": "Tether",
+  "countered_hero": "Spectre",
+  "countered": "Spectre (model)",
+  "value": 2.275
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Tidehunter",
+  "countered": "Ravage",
+  "value": 2.268
+ },
+ {
+  "counter_hero": "Spectre",
+  "counter": "Haunt",
+  "countered_hero": "Sniper",
+  "countered": "Take Aim",
+  "value": 2.261
+ },
+ {
+  "counter_hero": "Storm Spirit",
+  "counter": "Ball Lightning",
+  "countered_hero": "Razor",
+  "countered": "Static Link",
+  "value": 2.23
+ },
+ {
+  "counter_hero": "Pugna",
+  "counter": "Nether Ward",
+  "countered_hero": "Necrophos",
+  "countered": "Death Pulse",
+  "value": 2.219
+ },
+ {
+  "counter_hero": "Troll Warlord",
+  "counter": "Berserker's Rage",
+  "countered_hero": "Anti-Mage",
+  "countered": "Blink",
+  "value": 2.219
+ },
+ {
+  "counter_hero": "Axe",
+  "counter": "Counter Helix",
+  "countered_hero": "Naga Siren",
+  "countered": "Mirror Image",
+  "value": 2.218
+ },
+ {
+  "counter_hero": "Timbersaw",
+  "counter": "Reactive Armor",
+  "countered_hero": "Chaos Knight",
+  "countered": "Phantasm",
+  "value": 2.2
+ },
+ {
+  "counter_hero": "Batrider",
+  "counter": "Flaming Lasso",
+  "countered_hero": "Arc Warden",
+  "countered": "Magnetic Field",
+  "value": 2.184
+ },
+ {
+  "counter_hero": "Huskar",
+  "counter": "Huskar (model)",
+  "countered_hero": "Pugna",
+  "countered": "Nether Ward",
+  "value": 2.181
+ },
+ {
+  "counter_hero": "Bloodseeker",
+  "counter": "Rupture",
+  "countered_hero": "Primal Beast",
+  "countered": "Onslaught",
+  "value": 2.18
+ },
+ {
+  "counter_hero": "Queen of Pain",
+  "counter": "Blink",
+  "countered_hero": "Razor",
+  "countered": "Static Link",
+  "value": 2.18
+ },
+ {
+  "counter_hero": "Phoenix",
+  "counter": "Fire Spirits",
+  "countered_hero": "Templar Assassin",
+  "countered": "Refraction",
+  "value": 2.15
+ },
+ {
+  "counter_hero": "Phantom Lancer",
+  "counter": "Juxtapose",
+  "countered_hero": "Arc Warden",
+  "countered": "Flux",
+  "value": 2.125
+ },
+ {
+  "counter_hero": "Wraith King",
+  "counter": "Reincarnation",
+  "countered_hero": "Doom",
+  "countered": "Doom",
+  "value": 2.11
+ },
+ {
+  "counter_hero": "Storm Spirit",
+  "counter": "Ball Lightning",
+  "countered_hero": "Mars",
+  "countered": "Arena Of Blood",
+  "value": 2.08
+ },
+ {
+  "counter_hero": "Naga Siren",
+  "counter": "Mirror Image",
+  "countered_hero": "Visage",
+  "countered": "Gravekeeper's Cloak",
+  "value": 2.07
+ },
+ {
+  "counter_hero": "Ember Spirit",
+  "counter": "Fire Remnant",
+  "countered_hero": "Mars",
+  "countered": "Arena Of Blood",
+  "value": 2.06
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ice Blast",
+  "countered_hero": "Huskar",
+  "countered": "Berserker's Blood",
+  "value": 2.059
+ },
+ {
+  "counter_hero": "Necrophos",
+  "counter": "Heartstopper Aura",
+  "countered_hero": "Spectre",
+  "countered": "Dispersion",
+  "value": 2.037
+ },
+ {
+  "counter_hero": "Medusa",
+  "counter": "Medusa (model)",
+  "countered_hero": "Witch Doctor",
+  "countered": "Maledict",
+  "value": 2.025
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Techies",
+  "countered": "Blast Off!",
+  "value": 1.981
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ice Blast",
+  "countered_hero": "Winter Wyvern",
+  "countered": "Cold Embrace",
+  "value": 1.97
+ },
+ {
+  "counter_hero": "Bloodseeker",
+  "counter": "Rupture",
+  "countered_hero": "Pangolier",
+  "countered": "Swashbuckle",
+  "value": 1.96
+ },
+ {
+  "counter_hero": "Winter Wyvern",
+  "counter": "Winter's Curse",
+  "countered_hero": "Broodmother",
+  "countered": "Spawn Spiderlings",
+  "value": 1.913
+ },
+ {
+  "counter_hero": "Storm Spirit",
+  "counter": "Ball Lightning",
+  "countered_hero": "Sniper",
+  "countered": "Take Aim",
+  "value": 1.899
+ },
+ {
+  "counter_hero": "Naga Siren",
+  "counter": "Mirror Image",
+  "countered_hero": "Ursa",
+  "countered": "Fury Swipes",
+  "value": 1.894
+ },
+ {
+  "counter_hero": "Hoodwink",
+  "counter": "Sharpshooter",
+  "countered_hero": "Bristleback",
+  "countered": "Bristleback",
+  "value": 1.89
+ },
+ {
+  "counter_hero": "Windranger",
+  "counter": "Windrun",
+  "countered_hero": "Marci",
+  "countered": "Unleash",
+  "value": 1.86
+ },
+ {
+  "counter_hero": "Phantom Lancer",
+  "counter": "Juxtapose",
+  "countered_hero": "Visage",
+  "countered": "Gravekeeper's Cloak",
+  "value": 1.854
+ },
+ {
+  "counter_hero": "Grimstroke",
+  "counter": "Soulbind",
+  "countered_hero": "Slark",
+  "countered": "Dark Pact",
+  "value": 1.849
+ },
+ {
+  "counter_hero": "Viper",
+  "counter": "Viper Strike",
+  "countered_hero": "Huskar",
+  "countered": "Berserker's Blood",
+  "value": 1.848
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Centaur Warrunner",
+  "countered": "Hoof Stomp",
+  "value": 1.828
+ },
+ {
+  "counter_hero": "Centaur Warrunner",
+  "counter": "Stampede",
+  "countered_hero": "Sniper",
+  "countered": "Take Aim",
+  "value": 1.827
+ },
+ {
+  "counter_hero": "Omniknight",
+  "counter": "Repel",
+  "countered_hero": "Shadow Shaman",
+  "countered": "Hex",
+  "value": 1.81
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Shadow Dance",
+  "countered_hero": "Troll Warlord",
+  "countered": "Fervor",
+  "value": 1.805
+ },
+ {
+  "counter_hero": "Axe",
+  "counter": "Counter Helix",
+  "countered_hero": "Troll Warlord",
+  "countered": "Battle Trance",
+  "value": 1.794
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Nyx Assassin",
+  "countered": "Impale",
+  "value": 1.792
+ },
+ {
+  "counter_hero": "Queen of Pain",
+  "counter": "Blink",
+  "countered_hero": "Mars",
+  "countered": "Arena Of Blood",
+  "value": 1.78
+ },
+ {
+  "counter_hero": "Dragon Knight",
+  "counter": "Elder Dragon Form",
+  "countered_hero": "Templar Assassin",
+  "countered": "Refraction",
+  "value": 1.775
+ },
+ {
+  "counter_hero": "Troll Warlord",
+  "counter": "Berserker's Rage",
+  "countered_hero": "Storm Spirit",
+  "countered": "Ball Lightning",
+  "value": 1.768
+ },
+ {
+  "counter_hero": "Omniknight",
+  "counter": "Guardian Angel",
+  "countered_hero": "Juggernaut",
+  "countered": "Omnislash",
+  "value": 1.758
+ },
+ {
+  "counter_hero": "Huskar",
+  "counter": "Berserker's Blood",
+  "countered_hero": "Juggernaut",
+  "countered": "Blade Fury",
+  "value": 1.757
+ },
+ {
+  "counter_hero": "Ursa",
+  "counter": "Enrage",
+  "countered_hero": "Pudge",
+  "countered": "Dismember",
+  "value": 1.756
+ },
+ {
+  "counter_hero": "Winter Wyvern",
+  "counter": "Cold Embrace",
+  "countered_hero": "Legion Commander",
+  "countered": "Duel",
+  "value": 1.728
+ },
+ {
+  "counter_hero": "Axe",
+  "counter": "Counter Helix",
+  "countered_hero": "Phantom Lancer",
+  "countered": "Juxtapose",
+  "value": 1.725
+ },
+ {
+  "counter_hero": "Enigma",
+  "counter": "Black Hole",
+  "countered_hero": "Omniknight",
+  "countered": "Repel",
+  "value": 1.708
+ },
+ {
+  "counter_hero": "Viper",
+  "counter": "Viper Strike",
+  "countered_hero": "Bristleback",
+  "countered": "Bristleback",
+  "value": 1.702
+ },
+ {
+  "counter_hero": "Silencer",
+  "counter": "Global Silence",
+  "countered_hero": "Dawnbreaker",
+  "countered": "Solar Guardian",
+  "value": 1.695
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ice Blast",
+  "countered_hero": "Monkey King",
+  "countered": "Jingu Mastery",
+  "value": 1.69
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ice Blast",
+  "countered_hero": "Necrophos",
+  "countered": "Necrophos (model)",
+  "value": 1.68
+ },
+ {
+  "counter_hero": "Bloodseeker",
+  "counter": "Thirst",
+  "countered_hero": "Riki",
+  "countered": "Cloak and Dagger",
+  "value": 1.674
+ },
+ {
+  "counter_hero": "Batrider",
+  "counter": "Firefly",
+  "countered_hero": "Treant Protector",
+  "countered": "Treant Protector (model)",
+  "value": 1.67
+ },
+ {
+  "counter_hero": "Nyx Assassin",
+  "counter": "Spiked Carapace",
+  "countered_hero": "Muerta",
+  "countered": "Dead Shot",
+  "value": 1.666
+ },
+ {
+  "counter_hero": "Razor",
+  "counter": "Static Link",
+  "countered_hero": "Troll Warlord",
+  "countered": "Fervor",
+  "value": 1.665
+ },
+ {
+  "counter_hero": "Razor",
+  "counter": "Static Link",
+  "countered_hero": "Troll Warlord",
+  "countered": "Battle Trance",
+  "value": 1.665
+ },
+ {
+  "counter_hero": "Medusa",
+  "counter": "Split Shot",
+  "countered_hero": "Shadow Shaman",
+  "countered": "Mass Serpent Ward",
+  "value": 1.659
+ },
+ {
+  "counter_hero": "Pudge",
+  "counter": "Meat Hook",
+  "countered_hero": "Sniper",
+  "countered": "Take Aim",
+  "value": 1.659
+ },
+ {
+  "counter_hero": "Tidehunter",
+  "counter": "Kraken Shell",
+  "countered_hero": "Earth Spirit",
+  "countered": "Magnetize",
+  "value": 1.645
+ },
+ {
+  "counter_hero": "Lone Druid",
+  "counter": "Entangle",
+  "countered_hero": "Storm Spirit",
+  "countered": "Ball Lightning",
+  "value": 1.638
+ },
+ {
+  "counter_hero": "Phantom Lancer",
+  "counter": "Juxtapose",
+  "countered_hero": "Mirana",
+  "countered": "Sacred Arrow",
+  "value": 1.63
+ },
+ {
+  "counter_hero": "Storm Spirit",
+  "counter": "Ball Lightning",
+  "countered_hero": "Clockwerk",
+  "countered": "Power Cogs",
+  "value": 1.63
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Crystal Maiden",
+  "countered": "Frostbite",
+  "value": 1.619
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Earthshaker",
+  "countered": "Echo Slam",
+  "value": 1.619
+ },
+ {
+  "counter_hero": "Dazzle",
+  "counter": "Shallow Grave",
+  "countered_hero": "Legion Commander",
+  "countered": "Duel",
+  "value": 1.617
+ },
+ {
+  "counter_hero": "Timbersaw",
+  "counter": "Timber Chain",
+  "countered_hero": "Enchantress",
+  "countered": "Impetus",
+  "value": 1.61
+ },
+ {
+  "counter_hero": "Tinker",
+  "counter": "March of the Machines",
+  "countered_hero": "Terrorblade",
+  "countered": "Conjure Image",
+  "value": 1.596
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Sven",
+  "countered": "Storm Hammer",
+  "value": 1.596
+ },
+ {
+  "counter_hero": "Batrider",
+  "counter": "Flaming Lasso",
+  "countered_hero": "Enchantress",
+  "countered": "Enchantress (model)",
+  "value": 1.589
+ },
+ {
+  "counter_hero": "Primal Beast",
+  "counter": "Onslaught",
+  "countered_hero": "Sniper",
+  "countered": "Take Aim",
+  "value": 1.582
+ },
+ {
+  "counter_hero": "Necrophos",
+  "counter": "Ghost Shroud",
+  "countered_hero": "Spirit Breaker",
+  "countered": "Greater Bash",
+  "value": 1.575
+ },
+ {
+  "counter_hero": "Dawnbreaker",
+  "counter": "Solar Guardian",
+  "countered_hero": "Night Stalker",
+  "countered": "Night Stalker (model)",
+  "value": 1.57
+ },
+ {
+  "counter_hero": "Tiny",
+  "counter": "Tiny (model)",
+  "countered_hero": "Axe",
+  "countered": "Berserker's Call",
+  "value": 1.569
+ },
+ {
+  "counter_hero": "Anti-Mage",
+  "counter": "Blink",
+  "countered_hero": "Razor",
+  "countered": "Static Link",
+  "value": 1.562
+ },
+ {
+  "counter_hero": "Marci",
+  "counter": "Unleash",
+  "countered_hero": "Undying",
+  "countered": "Tombstone",
+  "value": 1.526
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ice Blast",
+  "countered_hero": "Abaddon",
+  "countered": "Mist Coil",
+  "value": 1.519
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "Fortune's End",
+  "countered_hero": "Dark Seer",
+  "countered": "Ion Shell",
+  "value": 1.516
+ },
+ {
+  "counter_hero": "Doom",
+  "counter": "Doom",
+  "countered_hero": "Lifestealer",
+  "countered": "Rage",
+  "value": 1.512
+ },
+ {
+  "counter_hero": "Doom",
+  "counter": "Doom",
+  "countered_hero": "Lifestealer",
+  "countered": "Feast",
+  "value": 1.512
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Dark Pact",
+  "countered_hero": "Bounty Hunter",
+  "countered": "Track",
+  "value": 1.512
+ },
+ {
+  "counter_hero": "Lone Druid",
+  "counter": "Lone Druid (model)",
+  "countered_hero": "Juggernaut",
+  "countered": "Omnislash",
+  "value": 1.512
+ },
+ {
+  "counter_hero": "Drow Ranger",
+  "counter": "Gust",
+  "countered_hero": "Batrider",
+  "countered": "Flaming Lasso",
+  "value": 1.505
+ },
+ {
+  "counter_hero": "Marci",
+  "counter": "Unleash",
+  "countered_hero": "Phoenix",
+  "countered": "Supernova",
+  "value": 1.496
+ },
+ {
+  "counter_hero": "Underlord",
+  "counter": "Atrophy Aura",
+  "countered_hero": "Phantom Lancer",
+  "countered": "Juxtapose",
+  "value": 1.482
+ },
+ {
+  "counter_hero": "Legion Commander",
+  "counter": "Press The Attack",
+  "countered_hero": "Bristleback",
+  "countered": "Viscous Nasal Goo",
+  "value": 1.47
+ },
+ {
+  "counter_hero": "Axe",
+  "counter": "Counter Helix",
+  "countered_hero": "Broodmother",
+  "countered": "Spawn Spiderlings",
+  "value": 1.466
+ },
+ {
+  "counter_hero": "Weaver",
+  "counter": "Time Lapse",
+  "countered_hero": "Juggernaut",
+  "countered": "Omnislash",
+  "value": 1.462
+ },
+ {
+  "counter_hero": "Mars",
+  "counter": "Spear of Mars",
+  "countered_hero": "Sniper",
+  "countered": "Take Aim",
+  "value": 1.456
+ },
+ {
+  "counter_hero": "Razor",
+  "counter": "Static Link",
+  "countered_hero": "Oracle",
+  "countered": "False Promise",
+  "value": 1.448
+ },
+ {
+  "counter_hero": "Earth Spirit",
+  "counter": "Rolling Boulder",
+  "countered_hero": "Sniper",
+  "countered": "Take Aim",
+  "value": 1.442
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Dark Pact",
+  "countered_hero": "Warlock",
+  "countered": "Fatal Bonds",
+  "value": 1.438
+ },
+ {
+  "counter_hero": "Pangolier",
+  "counter": "Rolling Thunder",
+  "countered_hero": "Keeper of the Light",
+  "countered": "Blinding Light",
+  "value": 1.435
+ },
+ {
+  "counter_hero": "Weaver",
+  "counter": "Shukuchi",
+  "countered_hero": "Razor",
+  "countered": "Static Link",
+  "value": 1.431
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Outworld Devourer",
+  "countered": "Arcane Orb",
+  "value": 1.413
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Techies",
+  "countered": "Blast Off!",
+  "value": 1.408
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Techies",
+  "countered": "Proximity Mines",
+  "value": 1.408
+ },
+ {
+  "counter_hero": "Winter Wyvern",
+  "counter": "Winter's Curse",
+  "countered_hero": "Troll Warlord",
+  "countered": "Battle Trance",
+  "value": 1.4
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Sand King",
+  "countered": "Burrowstrike",
+  "value": 1.396
+ },
+ {
+  "counter_hero": "Muerta",
+  "counter": "Pierce the Veil",
+  "countered_hero": "Winter Wyvern",
+  "countered": "Cold Embrace",
+  "value": 1.393
+ },
+ {
+  "counter_hero": "Beastmaster",
+  "counter": "Summon Razorback",
+  "countered_hero": "Pudge",
+  "countered": "Meat Hook",
+  "value": 1.388
+ },
+ {
+  "counter_hero": "Tidehunter",
+  "counter": "Kraken Shell",
+  "countered_hero": "Phantom Lancer",
+  "countered": "Juxtapose",
+  "value": 1.387
+ },
+ {
+  "counter_hero": "Necrophos",
+  "counter": "Reaper's Scythe",
+  "countered_hero": "Huskar",
+  "countered": "Berserker's Blood",
+  "value": 1.387
+ },
+ {
+  "counter_hero": "Razor",
+  "counter": "Static Link",
+  "countered_hero": "Juggernaut",
+  "countered": "Omnislash",
+  "value": 1.38
+ },
+ {
+  "counter_hero": "Outworld Devourer",
+  "counter": "Astral Imprisonment",
+  "countered_hero": "Ancient Apparition",
+  "countered": "Ice Blast",
+  "value": 1.375
+ },
+ {
+  "counter_hero": "Storm Spirit",
+  "counter": "Ball Lightning",
+  "countered_hero": "Keeper of the Light",
+  "countered": "Keeper of the Light (model)",
+  "value": 1.375
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Nyx Assassin",
+  "countered": "Vendetta",
+  "value": 1.365
+ },
+ {
+  "counter_hero": "Io",
+  "counter": "Relocate",
+  "countered_hero": "Spectre",
+  "countered": "Haunt",
+  "value": 1.365
+ },
+ {
+  "counter_hero": "Sven",
+  "counter": "Great Cleave",
+  "countered_hero": "Phantom Lancer",
+  "countered": "Juxtapose",
+  "value": 1.359
+ },
+ {
+  "counter_hero": "Phantom Lancer",
+  "counter": "Juxtapose",
+  "countered_hero": "Clockwerk",
+  "countered": "Hookshot",
+  "value": 1.356
+ },
+ {
+  "counter_hero": "Centaur Warrunner",
+  "counter": "Retaliate",
+  "countered_hero": "Phantom Lancer",
+  "countered": "Juxtapose",
+  "value": 1.353
+ },
+ {
+  "counter_hero": "Outworld Devourer",
+  "counter": "Arcane Orb",
+  "countered_hero": "Timbersaw",
+  "countered": "Reactive Armor",
+  "value": 1.352
+ },
+ {
+  "counter_hero": "Naga Siren",
+  "counter": "Mirror Image",
+  "countered_hero": "Mirana",
+  "countered": "Sacred Arrow",
+  "value": 1.344
+ },
+ {
+  "counter_hero": "Dark Seer",
+  "counter": "Surge",
+  "countered_hero": "Viper",
+  "countered": "Poison Attack",
+  "value": 1.34
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Slardar",
+  "countered": "Slithereen Crush",
+  "value": 1.339
+ },
+ {
+  "counter_hero": "Death Prophet",
+  "counter": "Exorcism",
+  "countered_hero": "Visage",
+  "countered": "Gravekeeper's Cloak",
+  "value": 1.332
+ },
+ {
+  "counter_hero": "Monkey King",
+  "counter": "Wukong's Command",
+  "countered_hero": "Undying",
+  "countered": "Tombstone",
+  "value": 1.33
+ },
+ {
+  "counter_hero": "Tidehunter",
+  "counter": "Kraken Shell",
+  "countered_hero": "Naga Siren",
+  "countered": "Mirror Image",
+  "value": 1.312
+ },
+ {
+  "counter_hero": "Disruptor",
+  "counter": "Glimpse",
+  "countered_hero": "Primal Beast",
+  "countered": "Onslaught",
+  "value": 1.312
+ },
+ {
+  "counter_hero": "Huskar",
+  "counter": "Huskar (model)",
+  "countered_hero": "Anti-Mage",
+  "countered": "Mana Break",
+  "value": 1.304
+ },
+ {
+  "counter_hero": "Brewmaster",
+  "counter": "Primal Split",
+  "countered_hero": "Ancient Apparition",
+  "countered": "Ice Blast",
+  "value": 1.298
+ },
+ {
+  "counter_hero": "Pangolier",
+  "counter": "Rolling Thunder",
+  "countered_hero": "Witch Doctor",
+  "countered": "Paralyzing Cask",
+  "value": 1.295
+ },
+ {
+  "counter_hero": "Phoenix",
+  "counter": "Sun Ray",
+  "countered_hero": "Templar Assassin",
+  "countered": "Refraction",
+  "value": 1.29
+ },
+ {
+  "counter_hero": "Timbersaw",
+  "counter": "Chakram",
+  "countered_hero": "Hoodwink",
+  "countered": "Bushwhack",
+  "value": 1.281
+ },
+ {
+  "counter_hero": "Phantom Lancer",
+  "counter": "Juxtapose",
+  "countered_hero": "Arc Warden",
+  "countered": "Spark Wraith",
+  "value": 1.275
+ },
+ {
+  "counter_hero": "Axe",
+  "counter": "Counter Helix",
+  "countered_hero": "Marci",
+  "countered": "Unleash",
+  "value": 1.269
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Tiny",
+  "countered": "Avalanche",
+  "value": 1.262
+ },
+ {
+  "counter_hero": "Death Prophet",
+  "counter": "Silence",
+  "countered_hero": "Crystal Maiden",
+  "countered": "Freezing Field",
+  "value": 1.253
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Dark Pact",
+  "countered_hero": "Dazzle",
+  "countered": "Poison Touch",
+  "value": 1.253
+ },
+ {
+  "counter_hero": "Tinker",
+  "counter": "Laser",
+  "countered_hero": "Troll Warlord",
+  "countered": "Fervor",
+  "value": 1.25
+ },
+ {
+  "counter_hero": "Tinker",
+  "counter": "Laser",
+  "countered_hero": "Troll Warlord",
+  "countered": "Battle Trance",
+  "value": 1.25
+ },
+ {
+  "counter_hero": "Muerta",
+  "counter": "Pierce the Veil",
+  "countered_hero": "Tusk",
+  "countered": "Walrus PUNCH!",
+  "value": 1.246
+ },
+ {
+  "counter_hero": "Beastmaster",
+  "counter": "Summon Razorback",
+  "countered_hero": "Arc Warden",
+  "countered": "Flux",
+  "value": 1.24
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ancient Apparition (model)",
+  "countered_hero": "Huskar",
+  "countered": "Berserker's Blood",
+  "value": 1.235
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Mars",
+  "countered": "Spear of Mars",
+  "value": 1.216
+ },
+ {
+  "counter_hero": "Terrorblade",
+  "counter": "Conjure Image",
+  "countered_hero": "Pudge",
+  "countered": "Meat Hook",
+  "value": 1.19
+ },
+ {
+  "counter_hero": "Sniper",
+  "counter": "Assassinate",
+  "countered_hero": "Enigma",
+  "countered": "Black Hole",
+  "value": 1.167
+ },
+ {
+  "counter_hero": "Windranger",
+  "counter": "Windrun",
+  "countered_hero": "Viper",
+  "countered": "Poison Attack",
+  "value": 1.155
+ },
+ {
+  "counter_hero": "Puck",
+  "counter": "Waning Rift",
+  "countered_hero": "Crystal Maiden",
+  "countered": "Freezing Field",
+  "value": 1.15
+ },
+ {
+  "counter_hero": "Largo",
+  "counter": "Catchy Lick",
+  "countered_hero": "Ember Spirit",
+  "countered": "Searing Chains",
+  "value": 1.144
+ },
+ {
+  "counter_hero": "Broodmother",
+  "counter": "Spawn Spiderlings",
+  "countered_hero": "Clockwerk",
+  "countered": "Hookshot",
+  "value": 1.12
+ },
+ {
+  "counter_hero": "Spectre",
+  "counter": "Dispersion",
+  "countered_hero": "Ursa",
+  "countered": "Fury Swipes",
+  "value": 1.116
+ },
+ {
+  "counter_hero": "Shadow Demon",
+  "counter": "Disruption",
+  "countered_hero": "Skywrath Mage",
+  "countered": "Mystic Flare",
+  "value": 1.113
+ },
+ {
+  "counter_hero": "Disruptor",
+  "counter": "Glimpse",
+  "countered_hero": "Slark",
+  "countered": "Pounce",
+  "value": 1.103
+ },
+ {
+  "counter_hero": "Shadow Demon",
+  "counter": "Disruption",
+  "countered_hero": "Lich",
+  "countered": "Chain Frost",
+  "value": 1.102
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Feast",
+  "countered_hero": "Centaur Warrunner",
+  "countered": "Centaur Warrunner (model)",
+  "value": 1.097
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Kunkka",
+  "countered": "Torrent",
+  "value": 1.091
+ },
+ {
+  "counter_hero": "Razor",
+  "counter": "Static Link",
+  "countered_hero": "Oracle",
+  "countered": "Fortune's End",
+  "value": 1.086
+ },
+ {
+  "counter_hero": "Sand King",
+  "counter": "Sand King (model)",
+  "countered_hero": "Broodmother",
+  "countered": "Spawn Spiderlings",
+  "value": 1.086
+ },
+ {
+  "counter_hero": "Mars",
+  "counter": "Arena Of Blood",
+  "countered_hero": "Drow Ranger",
+  "countered": "Drow Ranger (model)",
+  "value": 1.078
+ },
+ {
+  "counter_hero": "Axe",
+  "counter": "Culling Blade",
+  "countered_hero": "Troll Warlord",
+  "countered": "Battle Trance",
+  "value": 1.076
+ },
+ {
+  "counter_hero": "Undying",
+  "counter": "Decay",
+  "countered_hero": "Centaur Warrunner",
+  "countered": "Double Edge",
+  "value": 1.075
+ },
+ {
+  "counter_hero": "Phantom Lancer",
+  "counter": "Juxtapose",
+  "countered_hero": "Ursa",
+  "countered": "Fury Swipes",
+  "value": 1.072
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Lion",
+  "countered": "Finger of Death",
+  "value": 1.069
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "False Promise",
+  "countered_hero": "Earth Spirit",
+  "countered": "Magnetize",
+  "value": 1.056
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Tidehunter",
+  "countered": "Ravage",
+  "value": 1.05
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Snapfire",
+  "countered": "Mortimer Kisses",
+  "value": 1.043
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "Fortune's End",
+  "countered_hero": "Void Spirit",
+  "countered": "Resonant Pulse",
+  "value": 1.041
+ },
+ {
+  "counter_hero": "Puck",
+  "counter": "Phase Shift",
+  "countered_hero": "Mirana",
+  "countered": "Sacred Arrow",
+  "value": 1.039
+ },
+ {
+  "counter_hero": "Winter Wyvern",
+  "counter": "Winter's Curse",
+  "countered_hero": "Legion Commander",
+  "countered": "Duel",
+  "value": 1.037
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Gyrocopter",
+  "countered": "Homing Missile",
+  "value": 1.037
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Shapeshift",
+  "countered_hero": "Ancient Apparition",
+  "countered": "Ancient Apparition (model)",
+  "value": 1.022
+ },
+ {
+  "counter_hero": "Timbersaw",
+  "counter": "Reactive Armor",
+  "countered_hero": "Legion Commander",
+  "countered": "Duel",
+  "value": 1.019
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Elder Titan",
+  "countered": "Echo Stomp",
+  "value": 1.016
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Elder Titan",
+  "countered": "Earth Splitter",
+  "value": 1.016
+ },
+ {
+  "counter_hero": "Troll Warlord",
+  "counter": "Battle Trance",
+  "countered_hero": "Sven",
+  "countered": "God's Strength",
+  "value": 1.012
+ },
+ {
+  "counter_hero": "Abaddon",
+  "counter": "Aphotic Shield",
+  "countered_hero": "Silencer",
+  "countered": "Global Silence",
+  "value": 1.011
+ },
+ {
+  "counter_hero": "Doom",
+  "counter": "Doom",
+  "countered_hero": "Abaddon",
+  "countered": "Borrowed Time",
+  "value": 1.0
+ },
+ {
+  "counter_hero": "Brewmaster",
+  "counter": "Primal Split",
+  "countered_hero": "Abaddon",
+  "countered": "Borrowed Time",
+  "value": 1.0
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "Fortune's End",
+  "countered_hero": "Abaddon",
+  "countered": "Aphotic Shield",
+  "value": 1.0
+ },
+ {
+  "counter_hero": "Largo",
+  "counter": "Catchy Lick",
+  "countered_hero": "Abaddon",
+  "countered": "Aphotic Shield",
+  "value": 1.0
+ },
+ {
+  "counter_hero": "Pugna",
+  "counter": "Nether Ward",
+  "countered_hero": "Lich",
+  "countered": "Chain Frost",
+  "value": 1.0
+ },
+ {
+  "counter_hero": "Razor",
+  "counter": "Static Link",
+  "countered_hero": "Ursa",
+  "countered": "Fury Swipes",
+  "value": 0.996
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Kunkka",
+  "countered": "Torrent",
+  "value": 0.984
+ },
+ {
+  "counter_hero": "Pugna",
+  "counter": "Nether Ward",
+  "countered_hero": "Crystal Maiden",
+  "countered": "Freezing Field",
+  "value": 0.975
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Magnus",
+  "countered": "Shockwave",
+  "value": 0.973
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Omnislash",
+  "countered_hero": "Crystal Maiden",
+  "countered": "Frostbite",
+  "value": 0.971
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Earthshaker",
+  "countered": "Fissure",
+  "value": 0.971
+ },
+ {
+  "counter_hero": "Nyx Assassin",
+  "counter": "Vendetta",
+  "countered_hero": "Abaddon",
+  "countered": "Borrowed Time",
+  "value": 0.965
+ },
+ {
+  "counter_hero": "Muerta",
+  "counter": "Pierce the Veil",
+  "countered_hero": "Troll Warlord",
+  "countered": "Fervor",
+  "value": 0.947
+ },
+ {
+  "counter_hero": "Muerta",
+  "counter": "Pierce the Veil",
+  "countered_hero": "Troll Warlord",
+  "countered": "Battle Trance",
+  "value": 0.947
+ },
+ {
+  "counter_hero": "Void Spirit",
+  "counter": "Astral Step",
+  "countered_hero": "Mars",
+  "countered": "Arena Of Blood",
+  "value": 0.945
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Shadow Dance",
+  "countered_hero": "Alchemist",
+  "countered": "Unstable Concoction",
+  "value": 0.945
+ },
+ {
+  "counter_hero": "Dawnbreaker",
+  "counter": "Solar Guardian",
+  "countered_hero": "Night Stalker",
+  "countered": "Void",
+  "value": 0.942
+ },
+ {
+  "counter_hero": "Necrophos",
+  "counter": "Ghost Shroud",
+  "countered_hero": "Lycan",
+  "countered": "Summon Wolves",
+  "value": 0.937
+ },
+ {
+  "counter_hero": "Weaver",
+  "counter": "Time Lapse",
+  "countered_hero": "Warlock",
+  "countered": "Fatal Bonds",
+  "value": 0.932
+ },
+ {
+  "counter_hero": "Tidehunter",
+  "counter": "Kraken Shell",
+  "countered_hero": "Chaos Knight",
+  "countered": "Phantasm",
+  "value": 0.927
+ },
+ {
+  "counter_hero": "Anti-Mage",
+  "counter": "Mana Break",
+  "countered_hero": "Largo",
+  "countered": "Amphibian Rhapsody",
+  "value": 0.927
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Phoenix",
+  "countered": "Fire Spirits",
+  "value": 0.919
+ },
+ {
+  "counter_hero": "Naga Siren",
+  "counter": "Mirror Image",
+  "countered_hero": "Spectre",
+  "countered": "Spectre (model)",
+  "value": 0.919
+ },
+ {
+  "counter_hero": "Nyx Assassin",
+  "counter": "Vendetta",
+  "countered_hero": "Bristleback",
+  "countered": "Bristleback",
+  "value": 0.915
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ice Blast",
+  "countered_hero": "Abaddon",
+  "countered": "Borrowed Time",
+  "value": 0.911
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Centaur Warrunner",
+  "countered": "Double Edge",
+  "value": 0.91
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "Fortune's End",
+  "countered_hero": "Dark Seer",
+  "countered": "Surge",
+  "value": 0.909
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Shadow Dance",
+  "countered_hero": "Bounty Hunter",
+  "countered": "Track",
+  "value": 0.907
+ },
+ {
+  "counter_hero": "Brewmaster",
+  "counter": "Primal Split",
+  "countered_hero": "Treant Protector",
+  "countered": "Overgrowth",
+  "value": 0.903
+ },
+ {
+  "counter_hero": "Arc Warden",
+  "counter": "Magnetic Field",
+  "countered_hero": "Clinkz",
+  "countered": "Clinkz (model)",
+  "value": 0.9
+ },
+ {
+  "counter_hero": "Arc Warden",
+  "counter": "Magnetic Field",
+  "countered_hero": "Clinkz",
+  "countered": "Strafe",
+  "value": 0.9
+ },
+ {
+  "counter_hero": "Venomancer",
+  "counter": "Plague Ward",
+  "countered_hero": "Gyrocopter",
+  "countered": "Rocket Barrage",
+  "value": 0.889
+ },
+ {
+  "counter_hero": "Weaver",
+  "counter": "Shukuchi",
+  "countered_hero": "Juggernaut",
+  "countered": "Omnislash",
+  "value": 0.877
+ },
+ {
+  "counter_hero": "Omniknight",
+  "counter": "Repel",
+  "countered_hero": "Disruptor",
+  "countered": "Static Storm",
+  "value": 0.869
+ },
+ {
+  "counter_hero": "Largo",
+  "counter": "Catchy Lick",
+  "countered_hero": "Bounty Hunter",
+  "countered": "Track",
+  "value": 0.868
+ },
+ {
+  "counter_hero": "Primal Beast",
+  "counter": "Onslaught",
+  "countered_hero": "Razor",
+  "countered": "Static Link",
+  "value": 0.868
+ },
+ {
+  "counter_hero": "Ursa",
+  "counter": "Enrage",
+  "countered_hero": "Bane",
+  "countered": "Enfeeble",
+  "value": 0.855
+ },
+ {
+  "counter_hero": "Sand King",
+  "counter": "Sand Storm",
+  "countered_hero": "Terrorblade",
+  "countered": "Conjure Image",
+  "value": 0.848
+ },
+ {
+  "counter_hero": "Slardar",
+  "counter": "Corrosive Haze",
+  "countered_hero": "Sand King",
+  "countered": "Sand Storm",
+  "value": 0.844
+ },
+ {
+  "counter_hero": "Puck",
+  "counter": "Phase Shift",
+  "countered_hero": "Lich",
+  "countered": "Chain Frost",
+  "value": 0.844
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Sand King",
+  "countered": "Epicenter",
+  "value": 0.837
+ },
+ {
+  "counter_hero": "Outworld Devourer",
+  "counter": "Objurgation",
+  "countered_hero": "Ancient Apparition",
+  "countered": "Ice Blast",
+  "value": 0.825
+ },
+ {
+  "counter_hero": "Shadow Shaman",
+  "counter": "Mass Serpent Ward",
+  "countered_hero": "Templar Assassin",
+  "countered": "Refraction",
+  "value": 0.825
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Nyx Assassin",
+  "countered": "Impale",
+  "value": 0.819
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Shapeshift",
+  "countered_hero": "Skywrath Mage",
+  "countered": "Skywrath Mage (model)",
+  "value": 0.815
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Summon Wolves",
+  "countered_hero": "Skywrath Mage",
+  "countered": "Skywrath Mage (model)",
+  "value": 0.815
+ },
+ {
+  "counter_hero": "Dark Seer",
+  "counter": "Surge",
+  "countered_hero": "Viper",
+  "countered": "Viper Strike",
+  "value": 0.804
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Slardar",
+  "countered": "Corrosive Haze",
+  "value": 0.803
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Shadow Fiend",
+  "countered": "Shadowraze",
+  "value": 0.8
+ },
+ {
+  "counter_hero": "Pangolier",
+  "counter": "Rolling Thunder",
+  "countered_hero": "Nature's Prophet",
+  "countered": "Sprout",
+  "value": 0.791
+ },
+ {
+  "counter_hero": "Necrophos",
+  "counter": "Heartstopper Aura",
+  "countered_hero": "Bristleback",
+  "countered": "Bristleback",
+  "value": 0.789
+ },
+ {
+  "counter_hero": "Weaver",
+  "counter": "Shukuchi",
+  "countered_hero": "Keeper of the Light",
+  "countered": "Keeper of the Light (model)",
+  "value": 0.787
+ },
+ {
+  "counter_hero": "Abaddon",
+  "counter": "Aphotic Shield",
+  "countered_hero": "Earth Spirit",
+  "countered": "Magnetize",
+  "value": 0.785
+ },
+ {
+  "counter_hero": "Anti-Mage",
+  "counter": "Counterspell",
+  "countered_hero": "Brewmaster",
+  "countered": "Primal Split",
+  "value": 0.782
+ },
+ {
+  "counter_hero": "Lone Druid",
+  "counter": "Entangle",
+  "countered_hero": "Anti-Mage",
+  "countered": "Blink",
+  "value": 0.769
+ },
+ {
+  "counter_hero": "Omniknight",
+  "counter": "Repel",
+  "countered_hero": "Lion",
+  "countered": "Hex",
+  "value": 0.769
+ },
+ {
+  "counter_hero": "Phantom Lancer",
+  "counter": "Juxtapose",
+  "countered_hero": "Gyrocopter",
+  "countered": "Rocket Barrage",
+  "value": 0.761
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Tiny",
+  "countered": "Toss",
+  "value": 0.757
+ },
+ {
+  "counter_hero": "Storm Spirit",
+  "counter": "Ball Lightning",
+  "countered_hero": "Ancient Apparition",
+  "countered": "Ancient Apparition (model)",
+  "value": 0.747
+ },
+ {
+  "counter_hero": "Beastmaster",
+  "counter": "Summon Raptors",
+  "countered_hero": "Arc Warden",
+  "countered": "Flux",
+  "value": 0.744
+ },
+ {
+  "counter_hero": "Largo",
+  "counter": "Catchy Lick",
+  "countered_hero": "Warlock",
+  "countered": "Fatal Bonds",
+  "value": 0.744
+ },
+ {
+  "counter_hero": "Shadow Demon",
+  "counter": "Disruption",
+  "countered_hero": "Lina",
+  "countered": "Laguna Blade",
+  "value": 0.742
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Lina",
+  "countered": "Dragon Slave",
+  "value": 0.74
+ },
+ {
+  "counter_hero": "Weaver",
+  "counter": "Time Lapse",
+  "countered_hero": "Viper",
+  "countered": "Viper Strike",
+  "value": 0.738
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Phantom Assassin",
+  "countered": "Coup de Grace",
+  "value": 0.732
+ },
+ {
+  "counter_hero": "Muerta",
+  "counter": "Muerta (model)",
+  "countered_hero": "Kez",
+  "countered": "Kazurai Katana",
+  "value": 0.726
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Shapeshift",
+  "countered_hero": "Sniper",
+  "countered": "Take Aim",
+  "value": 0.725
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Summon Wolves",
+  "countered_hero": "Sniper",
+  "countered": "Take Aim",
+  "value": 0.725
+ },
+ {
+  "counter_hero": "Sniper",
+  "counter": "Take Aim",
+  "countered_hero": "Drow Ranger",
+  "countered": "Drow Ranger (model)",
+  "value": 0.724
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Dark Pact",
+  "countered_hero": "Troll Warlord",
+  "countered": "Berserker's Rage",
+  "value": 0.722
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Dark Pact",
+  "countered_hero": "Treant Protector",
+  "countered": "Overgrowth",
+  "value": 0.712
+ },
+ {
+  "counter_hero": "Anti-Mage",
+  "counter": "Counterspell",
+  "countered_hero": "Abaddon",
+  "countered": "Mist Coil",
+  "value": 0.711
+ },
+ {
+  "counter_hero": "Medusa",
+  "counter": "Medusa (model)",
+  "countered_hero": "Shadow Fiend",
+  "countered": "Shadowraze",
+  "value": 0.709
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Techies",
+  "countered": "Sticky Bomb",
+  "value": 0.704
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Techies",
+  "countered": "Sticky Bomb",
+  "value": 0.704
+ },
+ {
+  "counter_hero": "Marci",
+  "counter": "Dispose",
+  "countered_hero": "Arc Warden",
+  "countered": "Magnetic Field",
+  "value": 0.703
+ },
+ {
+  "counter_hero": "Queen of Pain",
+  "counter": "Blink",
+  "countered_hero": "Keeper of the Light",
+  "countered": "Keeper of the Light (model)",
+  "value": 0.7
+ },
+ {
+  "counter_hero": "Kez",
+  "counter": "Talon Toss",
+  "countered_hero": "Crystal Maiden",
+  "countered": "Freezing Field",
+  "value": 0.697
+ },
+ {
+  "counter_hero": "Silencer",
+  "counter": "Global Silence",
+  "countered_hero": "Dazzle",
+  "countered": "Shallow Grave",
+  "value": 0.695
+ },
+ {
+  "counter_hero": "Storm Spirit",
+  "counter": "Ball Lightning",
+  "countered_hero": "Zeus",
+  "countered": "Zeus (model)",
+  "value": 0.693
+ },
+ {
+  "counter_hero": "Terrorblade",
+  "counter": "Conjure Image",
+  "countered_hero": "Gyrocopter",
+  "countered": "Rocket Barrage",
+  "value": 0.693
+ },
+ {
+  "counter_hero": "Keeper of the Light",
+  "counter": "Blinding Light",
+  "countered_hero": "Kunkka",
+  "countered": "Tidebringer",
+  "value": 0.692
+ },
+ {
+  "counter_hero": "Lion",
+  "counter": "Mana Drain",
+  "countered_hero": "Storm Spirit",
+  "countered": "Ball Lightning",
+  "value": 0.69
+ },
+ {
+  "counter_hero": "Visage",
+  "counter": "Gravekeeper's Cloak",
+  "countered_hero": "Elder Titan",
+  "countered": "Echo Stomp",
+  "value": 0.683
+ },
+ {
+  "counter_hero": "Visage",
+  "counter": "Gravekeeper's Cloak",
+  "countered_hero": "Elder Titan",
+  "countered": "Earth Splitter",
+  "value": 0.683
+ },
+ {
+  "counter_hero": "Spectre",
+  "counter": "Haunt",
+  "countered_hero": "Drow Ranger",
+  "countered": "Drow Ranger (model)",
+  "value": 0.682
+ },
+ {
+  "counter_hero": "Queen of Pain",
+  "counter": "Blink",
+  "countered_hero": "Clockwerk",
+  "countered": "Power Cogs",
+  "value": 0.682
+ },
+ {
+  "counter_hero": "Pudge",
+  "counter": "Meat Hook",
+  "countered_hero": "Crystal Maiden",
+  "countered": "Crystal Maiden (model)",
+  "value": 0.681
+ },
+ {
+  "counter_hero": "Clinkz",
+  "counter": "Skeleton Walk",
+  "countered_hero": "Grimstroke",
+  "countered": "Grimstroke (model)",
+  "value": 0.678
+ },
+ {
+  "counter_hero": "Venomancer",
+  "counter": "Plague Ward",
+  "countered_hero": "Clockwerk",
+  "countered": "Hookshot",
+  "value": 0.674
+ },
+ {
+  "counter_hero": "Pangolier",
+  "counter": "Rolling Thunder",
+  "countered_hero": "Outworld Devourer",
+  "countered": "Outworld Devourer (model)",
+  "value": 0.672
+ },
+ {
+  "counter_hero": "Ember Spirit",
+  "counter": "Sleight of Fist",
+  "countered_hero": "Centaur Warrunner",
+  "countered": "Retaliate",
+  "value": 0.667
+ },
+ {
+  "counter_hero": "Anti-Mage",
+  "counter": "Counterspell",
+  "countered_hero": "Shadow Demon",
+  "countered": "Disruption",
+  "value": 0.667
+ },
+ {
+  "counter_hero": "Ursa",
+  "counter": "Enrage",
+  "countered_hero": "Underlord",
+  "countered": "Pit of Malice",
+  "value": 0.665
+ },
+ {
+  "counter_hero": "Tinker",
+  "counter": "Laser",
+  "countered_hero": "Muerta",
+  "countered": "Gunslinger",
+  "value": 0.664
+ },
+ {
+  "counter_hero": "Disruptor",
+  "counter": "Kinetic Field",
+  "countered_hero": "Slark",
+  "countered": "Pounce",
+  "value": 0.661
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "Fortune's End",
+  "countered_hero": "Underlord",
+  "countered": "Pit of Malice",
+  "value": 0.661
+ },
+ {
+  "counter_hero": "Spectre",
+  "counter": "Haunt",
+  "countered_hero": "Templar Assassin",
+  "countered": "Refraction",
+  "value": 0.658
+ },
+ {
+  "counter_hero": "Earth Spirit",
+  "counter": "Rolling Boulder",
+  "countered_hero": "Drow Ranger",
+  "countered": "Drow Ranger (model)",
+  "value": 0.656
+ },
+ {
+  "counter_hero": "Batrider",
+  "counter": "Firefly",
+  "countered_hero": "Templar Assassin",
+  "countered": "Refraction",
+  "value": 0.654
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Kunkka",
+  "countered": "X Marks the Spot",
+  "value": 0.654
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Earth Spirit",
+  "countered": "Rolling Boulder",
+  "value": 0.651
+ },
+ {
+  "counter_hero": "Mars",
+  "counter": "Arena Of Blood",
+  "countered_hero": "Drow Ranger",
+  "countered": "Marksmanship",
+  "value": 0.647
+ },
+ {
+  "counter_hero": "Mars",
+  "counter": "Spear of Mars",
+  "countered_hero": "Drow Ranger",
+  "countered": "Drow Ranger (model)",
+  "value": 0.647
+ },
+ {
+  "counter_hero": "Undying",
+  "counter": "Decay",
+  "countered_hero": "Centaur Warrunner",
+  "countered": "Retaliate",
+  "value": 0.645
+ },
+ {
+  "counter_hero": "Batrider",
+  "counter": "Flaming Lasso",
+  "countered_hero": "Pugna",
+  "countered": "Pugna (model)",
+  "value": 0.645
+ },
+ {
+  "counter_hero": "Slardar",
+  "counter": "Corrosive Haze",
+  "countered_hero": "Invoker",
+  "countered": "Ghost Walk (AD)",
+  "value": 0.644
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "Fortune's End",
+  "countered_hero": "Earth Spirit",
+  "countered": "Magnetize",
+  "value": 0.634
+ },
+ {
+  "counter_hero": "Dawnbreaker",
+  "counter": "Solar Guardian",
+  "countered_hero": "Night Stalker",
+  "countered": "Crippling Fear",
+  "value": 0.628
+ },
+ {
+  "counter_hero": "Winter Wyvern",
+  "counter": "Cold Embrace",
+  "countered_hero": "Alchemist",
+  "countered": "Unstable Concoction",
+  "value": 0.625
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Gyrocopter",
+  "countered": "Call Down",
+  "value": 0.622
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Summon Wolves",
+  "countered_hero": "Ancient Apparition",
+  "countered": "Ancient Apparition (model)",
+  "value": 0.613
+ },
+ {
+  "counter_hero": "Pangolier",
+  "counter": "Rolling Thunder",
+  "countered_hero": "Jakiro",
+  "countered": "Ice Path",
+  "value": 0.609
+ },
+ {
+  "counter_hero": "Phantom Assassin",
+  "counter": "Immaterial",
+  "countered_hero": "Clinkz",
+  "countered": "Strafe",
+  "value": 0.609
+ },
+ {
+  "counter_hero": "Legion Commander",
+  "counter": "Press The Attack",
+  "countered_hero": "Brewmaster",
+  "countered": "Cinder Brew",
+  "value": 0.606
+ },
+ {
+  "counter_hero": "Abaddon",
+  "counter": "Aphotic Shield",
+  "countered_hero": "Silencer",
+  "countered": "Arcane Curse",
+  "value": 0.606
+ },
+ {
+  "counter_hero": "Winter Wyvern",
+  "counter": "Cold Embrace",
+  "countered_hero": "Tusk",
+  "countered": "Walrus PUNCH!",
+  "value": 0.602
+ },
+ {
+  "counter_hero": "Puck",
+  "counter": "Phase Shift",
+  "countered_hero": "Invoker",
+  "countered": "Sun Strike (AD)",
+  "value": 0.597
+ },
+ {
+  "counter_hero": "Primal Beast",
+  "counter": "Onslaught",
+  "countered_hero": "Pugna",
+  "countered": "Pugna (model)",
+  "value": 0.596
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Kunkka",
+  "countered": "Ghostship",
+  "value": 0.591
+ },
+ {
+  "counter_hero": "Doom",
+  "counter": "Doom",
+  "countered_hero": "Alchemist",
+  "countered": "Chemical Rage",
+  "value": 0.587
+ },
+ {
+  "counter_hero": "Primal Beast",
+  "counter": "Onslaught",
+  "countered_hero": "Drow Ranger",
+  "countered": "Drow Ranger (model)",
+  "value": 0.581
+ },
+ {
+  "counter_hero": "Undying",
+  "counter": "Tombstone",
+  "countered_hero": "Leshrac",
+  "countered": "Diabolic Edict",
+  "value": 0.579
+ },
+ {
+  "counter_hero": "Void Spirit",
+  "counter": "Astral Step",
+  "countered_hero": "Zeus",
+  "countered": "Zeus (model)",
+  "value": 0.577
+ },
+ {
+  "counter_hero": "Weaver",
+  "counter": "Time Lapse",
+  "countered_hero": "Venomancer",
+  "countered": "Venomous Gale",
+  "value": 0.576
+ },
+ {
+  "counter_hero": "Broodmother",
+  "counter": "Spawn Spiderlings",
+  "countered_hero": "Witch Doctor",
+  "countered": "Paralyzing Cask",
+  "value": 0.575
+ },
+ {
+  "counter_hero": "Weaver",
+  "counter": "Shukuchi",
+  "countered_hero": "Batrider",
+  "countered": "Flaming Lasso",
+  "value": 0.572
+ },
+ {
+  "counter_hero": "Anti-Mage",
+  "counter": "Counterspell",
+  "countered_hero": "Tinker",
+  "countered": "Laser",
+  "value": 0.571
+ },
+ {
+  "counter_hero": "Enchantress",
+  "counter": "Enchant",
+  "countered_hero": "Invoker",
+  "countered": "Alacrity (AD)",
+  "value": 0.565
+ },
+ {
+  "counter_hero": "Mars",
+  "counter": "Arena Of Blood",
+  "countered_hero": "Mirana",
+  "countered": "Leap",
+  "value": 0.556
+ },
+ {
+  "counter_hero": "Keeper of the Light",
+  "counter": "Blinding Light",
+  "countered_hero": "Dawnbreaker",
+  "countered": "Starbreaker",
+  "value": 0.555
+ },
+ {
+  "counter_hero": "Lone Druid",
+  "counter": "Lone Druid (model)",
+  "countered_hero": "Mirana",
+  "countered": "Sacred Arrow",
+  "value": 0.553
+ },
+ {
+  "counter_hero": "Warlock",
+  "counter": "Fatal Bonds",
+  "countered_hero": "Chaos Knight",
+  "countered": "Phantasm",
+  "value": 0.55
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Jakiro",
+  "countered": "Ice Path",
+  "value": 0.547
+ },
+ {
+  "counter_hero": "Pangolier",
+  "counter": "Rolling Thunder",
+  "countered_hero": "Lion",
+  "countered": "Hex",
+  "value": 0.547
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Centaur Warrunner",
+  "countered": "Retaliate",
+  "value": 0.546
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Nyx Assassin",
+  "countered": "Mind Flare",
+  "value": 0.546
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Ringmaster",
+  "countered": "Tame the Beasts",
+  "value": 0.544
+ },
+ {
+  "counter_hero": "Kez",
+  "counter": "Grappling Claw",
+  "countered_hero": "Nature's Prophet",
+  "countered": "Sprout",
+  "value": 0.54
+ },
+ {
+  "counter_hero": "Beastmaster",
+  "counter": "Summon Razorback",
+  "countered_hero": "Clockwerk",
+  "countered": "Hookshot",
+  "value": 0.534
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ice Blast",
+  "countered_hero": "Treant Protector",
+  "countered": "Living Armor",
+  "value": 0.529
+ },
+ {
+  "counter_hero": "Spectre",
+  "counter": "Haunt",
+  "countered_hero": "Grimstroke",
+  "countered": "Grimstroke (model)",
+  "value": 0.529
+ },
+ {
+  "counter_hero": "Kez",
+  "counter": "Raptor Dance",
+  "countered_hero": "Pudge",
+  "countered": "Pudge (model)",
+  "value": 0.529
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Invoker",
+  "countered": "Sun Strike (AD)",
+  "value": 0.525
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Dark Pact",
+  "countered_hero": "Venomancer",
+  "countered": "Venomous Gale",
+  "value": 0.521
+ },
+ {
+  "counter_hero": "Pudge",
+  "counter": "Meat Hook",
+  "countered_hero": "Drow Ranger",
+  "countered": "Drow Ranger (model)",
+  "value": 0.521
+ },
+ {
+  "counter_hero": "Faceless Void",
+  "counter": "Time Walk",
+  "countered_hero": "Keeper of the Light",
+  "countered": "Keeper of the Light (model)",
+  "value": 0.521
+ },
+ {
+  "counter_hero": "Pudge",
+  "counter": "Meat Hook",
+  "countered_hero": "Enchantress",
+  "countered": "Impetus",
+  "value": 0.521
+ },
+ {
+  "counter_hero": "Pudge",
+  "counter": "Meat Hook",
+  "countered_hero": "Enchantress",
+  "countered": "Enchantress (model)",
+  "value": 0.521
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Centaur Warrunner",
+  "countered": "Hoof Stomp",
+  "value": 0.517
+ },
+ {
+  "counter_hero": "Muerta",
+  "counter": "Muerta (model)",
+  "countered_hero": "Ember Spirit",
+  "countered": "Sleight of Fist",
+  "value": 0.517
+ },
+ {
+  "counter_hero": "Shadow Demon",
+  "counter": "Demonic Purge",
+  "countered_hero": "Ogre Magi",
+  "countered": "Bloodlust",
+  "value": 0.514
+ },
+ {
+  "counter_hero": "Weaver",
+  "counter": "Time Lapse",
+  "countered_hero": "Ursa",
+  "countered": "Fury Swipes",
+  "value": 0.513
+ },
+ {
+  "counter_hero": "Clockwerk",
+  "counter": "Power Cogs",
+  "countered_hero": "Spirit Breaker",
+  "countered": "Charge of Darkness",
+  "value": 0.513
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Dark Willow",
+  "countered": "Bramble Maze",
+  "value": 0.51
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Dark Pact",
+  "countered_hero": "Faceless Void",
+  "countered": "Time Dilation",
+  "value": 0.507
+ },
+ {
+  "counter_hero": "Shadow Demon",
+  "counter": "Disruption",
+  "countered_hero": "Dark Willow",
+  "countered": "Cursed Crown",
+  "value": 0.503
+ },
+ {
+  "counter_hero": "Marci",
+  "counter": "Rebound",
+  "countered_hero": "Pugna",
+  "countered": "Pugna (model)",
+  "value": 0.498
+ },
+ {
+  "counter_hero": "Pudge",
+  "counter": "Meat Hook",
+  "countered_hero": "Pugna",
+  "countered": "Pugna (model)",
+  "value": 0.496
+ },
+ {
+  "counter_hero": "Necrophos",
+  "counter": "Ghost Shroud",
+  "countered_hero": "Wraith King",
+  "countered": "Mortal Strike",
+  "value": 0.493
+ },
+ {
+  "counter_hero": "Puck",
+  "counter": "Phase Shift",
+  "countered_hero": "Dark Willow",
+  "countered": "Cursed Crown",
+  "value": 0.489
+ },
+ {
+  "counter_hero": "Terrorblade",
+  "counter": "Conjure Image",
+  "countered_hero": "Clockwerk",
+  "countered": "Hookshot",
+  "value": 0.486
+ },
+ {
+  "counter_hero": "Windranger",
+  "counter": "Windrun",
+  "countered_hero": "Huskar",
+  "countered": "Burning Spear",
+  "value": 0.473
+ },
+ {
+  "counter_hero": "Abaddon",
+  "counter": "Borrowed Time",
+  "countered_hero": "Earth Spirit",
+  "countered": "Magnetize",
+  "value": 0.471
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Shapeshift",
+  "countered_hero": "Outworld Devourer",
+  "countered": "Outworld Devourer (model)",
+  "value": 0.462
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Summon Wolves",
+  "countered_hero": "Outworld Devourer",
+  "countered": "Outworld Devourer (model)",
+  "value": 0.462
+ },
+ {
+  "counter_hero": "Omniknight",
+  "counter": "Repel",
+  "countered_hero": "Lion",
+  "countered": "Finger of Death",
+  "value": 0.461
+ },
+ {
+  "counter_hero": "Weaver",
+  "counter": "Shukuchi",
+  "countered_hero": "Enchantress",
+  "countered": "Enchantress (model)",
+  "value": 0.455
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Snapfire",
+  "countered": "Firesnap Cookie",
+  "value": 0.451
+ },
+ {
+  "counter_hero": "Mars",
+  "counter": "Bulwark",
+  "countered_hero": "Legion Commander",
+  "countered": "Duel",
+  "value": 0.445
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Lina",
+  "countered": "Light Strike Array",
+  "value": 0.444
+ },
+ {
+  "counter_hero": "Necrophos",
+  "counter": "Ghost Shroud",
+  "countered_hero": "Kez",
+  "countered": "Kazurai Katana",
+  "value": 0.439
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Shapeshift",
+  "countered_hero": "Zeus",
+  "countered": "Zeus (model)",
+  "value": 0.438
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Summon Wolves",
+  "countered_hero": "Zeus",
+  "countered": "Zeus (model)",
+  "value": 0.438
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Kunkka",
+  "countered": "Ghostship",
+  "value": 0.436
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Axe",
+  "countered": "Battle Hunger",
+  "value": 0.435
+ },
+ {
+  "counter_hero": "Earth Spirit",
+  "counter": "Geomagnetic Grip",
+  "countered_hero": "Underlord",
+  "countered": "Pit of Malice",
+  "value": 0.43
+ },
+ {
+  "counter_hero": "Slardar",
+  "counter": "Guardian Sprint",
+  "countered_hero": "Keeper of the Light",
+  "countered": "Keeper of the Light (model)",
+  "value": 0.426
+ },
+ {
+  "counter_hero": "Medusa",
+  "counter": "Medusa (model)",
+  "countered_hero": "Shadow Fiend",
+  "countered": "Requiem of Souls",
+  "value": 0.425
+ },
+ {
+  "counter_hero": "Legion Commander",
+  "counter": "Press The Attack",
+  "countered_hero": "Venomancer",
+  "countered": "Venomous Gale",
+  "value": 0.42
+ },
+ {
+  "counter_hero": "Centaur Warrunner",
+  "counter": "Stampede",
+  "countered_hero": "Drow Ranger",
+  "countered": "Drow Ranger (model)",
+  "value": 0.418
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Magnus",
+  "countered": "Shockwave",
+  "value": 0.415
+ },
+ {
+  "counter_hero": "Puck",
+  "counter": "Illusory Orb",
+  "countered_hero": "Mars",
+  "countered": "Arena Of Blood",
+  "value": 0.414
+ },
+ {
+  "counter_hero": "Spectre",
+  "counter": "Haunt",
+  "countered_hero": "Drow Ranger",
+  "countered": "Marksmanship",
+  "value": 0.409
+ },
+ {
+  "counter_hero": "Dark Seer",
+  "counter": "Vacuum",
+  "countered_hero": "Drow Ranger",
+  "countered": "Drow Ranger (model)",
+  "value": 0.409
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Dark Pact",
+  "countered_hero": "Bane",
+  "countered": "Enfeeble",
+  "value": 0.399
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Shadow Dance",
+  "countered_hero": "Bane",
+  "countered": "Nightmare",
+  "value": 0.399
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "False Promise",
+  "countered_hero": "Underlord",
+  "countered": "Pit of Malice",
+  "value": 0.396
+ },
+ {
+  "counter_hero": "Earth Spirit",
+  "counter": "Rolling Boulder",
+  "countered_hero": "Drow Ranger",
+  "countered": "Marksmanship",
+  "value": 0.394
+ },
+ {
+  "counter_hero": "Mars",
+  "counter": "Spear of Mars",
+  "countered_hero": "Drow Ranger",
+  "countered": "Marksmanship",
+  "value": 0.388
+ },
+ {
+  "counter_hero": "Dark Seer",
+  "counter": "Surge",
+  "countered_hero": "Venomancer",
+  "countered": "Plague Ward",
+  "value": 0.386
+ },
+ {
+  "counter_hero": "Puck",
+  "counter": "Phase Shift",
+  "countered_hero": "Queen of Pain",
+  "countered": "Shadow Strike",
+  "value": 0.381
+ },
+ {
+  "counter_hero": "Magnus",
+  "counter": "Skewer",
+  "countered_hero": "Drow Ranger",
+  "countered": "Drow Ranger (model)",
+  "value": 0.374
+ },
+ {
+  "counter_hero": "Largo",
+  "counter": "Catchy Lick",
+  "countered_hero": "Dark Seer",
+  "countered": "Ion Shell",
+  "value": 0.373
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Shapeshift",
+  "countered_hero": "Grimstroke",
+  "countered": "Grimstroke (model)",
+  "value": 0.373
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Summon Wolves",
+  "countered_hero": "Grimstroke",
+  "countered": "Grimstroke (model)",
+  "value": 0.373
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Earth Spirit",
+  "countered": "Magnetize",
+  "value": 0.372
+ },
+ {
+  "counter_hero": "Void Spirit",
+  "counter": "Astral Step",
+  "countered_hero": "Ancient Apparition",
+  "countered": "Ancient Apparition (model)",
+  "value": 0.371
+ },
+ {
+  "counter_hero": "Spirit Breaker",
+  "counter": "Charge of Darkness",
+  "countered_hero": "Hoodwink",
+  "countered": "Hoodwink (model)",
+  "value": 0.369
+ },
+ {
+  "counter_hero": "Winter Wyvern",
+  "counter": "Cold Embrace",
+  "countered_hero": "Vengeful Spirit",
+  "countered": "Nether Swap",
+  "value": 0.366
+ },
+ {
+  "counter_hero": "Winter Wyvern",
+  "counter": "Cold Embrace",
+  "countered_hero": "Dawnbreaker",
+  "countered": "Starbreaker",
+  "value": 0.354
+ },
+ {
+  "counter_hero": "Phantom Assassin",
+  "counter": "Phantom Strike",
+  "countered_hero": "Enchantress",
+  "countered": "Impetus",
+  "value": 0.354
+ },
+ {
+  "counter_hero": "Phantom Assassin",
+  "counter": "Phantom Strike",
+  "countered_hero": "Enchantress",
+  "countered": "Enchantress (model)",
+  "value": 0.354
+ },
+ {
+  "counter_hero": "Medusa",
+  "counter": "Split Shot",
+  "countered_hero": "Undying",
+  "countered": "Tombstone",
+  "value": 0.353
+ },
+ {
+  "counter_hero": "Primal Beast",
+  "counter": "Onslaught",
+  "countered_hero": "Drow Ranger",
+  "countered": "Marksmanship",
+  "value": 0.349
+ },
+ {
+  "counter_hero": "Mars",
+  "counter": "Spear of Mars",
+  "countered_hero": "Hoodwink",
+  "countered": "Hoodwink (model)",
+  "value": 0.345
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "Fortune's End",
+  "countered_hero": "Phoenix",
+  "countered": "Fire Spirits",
+  "value": 0.339
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Dark Pact",
+  "countered_hero": "Brewmaster",
+  "countered": "Cinder Brew",
+  "value": 0.333
+ },
+ {
+  "counter_hero": "Grimstroke",
+  "counter": "Soulbind",
+  "countered_hero": "Timbersaw",
+  "countered": "Timber Chain",
+  "value": 0.332
+ },
+ {
+  "counter_hero": "Pugna",
+  "counter": "Nether Ward",
+  "countered_hero": "Queen of Pain",
+  "countered": "Sonic Wave",
+  "value": 0.33
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Dark Pact",
+  "countered_hero": "Batrider",
+  "countered": "Sticky Napalm",
+  "value": 0.33
+ },
+ {
+  "counter_hero": "Pangolier",
+  "counter": "Rolling Thunder",
+  "countered_hero": "Lion",
+  "countered": "Earth Spike",
+  "value": 0.328
+ },
+ {
+  "counter_hero": "Abaddon",
+  "counter": "Aphotic Shield",
+  "countered_hero": "Axe",
+  "countered": "Battle Hunger",
+  "value": 0.321
+ },
+ {
+  "counter_hero": "Ancient Apparition",
+  "counter": "Ice Blast",
+  "countered_hero": "Treant Protector",
+  "countered": "Leech Seed",
+  "value": 0.318
+ },
+ {
+  "counter_hero": "Pudge",
+  "counter": "Meat Hook",
+  "countered_hero": "Drow Ranger",
+  "countered": "Marksmanship",
+  "value": 0.313
+ },
+ {
+  "counter_hero": "Windranger",
+  "counter": "Windrun",
+  "countered_hero": "Snapfire",
+  "countered": "Lil' Shredder",
+  "value": 0.31
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Dark Willow",
+  "countered": "Cursed Crown",
+  "value": 0.306
+ },
+ {
+  "counter_hero": "Templar Assassin",
+  "counter": "Refraction",
+  "countered_hero": "Lina",
+  "countered": "Laguna Blade",
+  "value": 0.296
+ },
+ {
+  "counter_hero": "Windranger",
+  "counter": "Shackleshot",
+  "countered_hero": "Hoodwink",
+  "countered": "Hoodwink (model)",
+  "value": 0.285
+ },
+ {
+  "counter_hero": "Weaver",
+  "counter": "Time Lapse",
+  "countered_hero": "Sven",
+  "countered": "God's Strength",
+  "value": 0.281
+ },
+ {
+  "counter_hero": "Dark Seer",
+  "counter": "Surge",
+  "countered_hero": "Abaddon",
+  "countered": "Curse of Avernus",
+  "value": 0.276
+ },
+ {
+  "counter_hero": "Disruptor",
+  "counter": "Kinetic Field",
+  "countered_hero": "Slark",
+  "countered": "Dark Pact",
+  "value": 0.265
+ },
+ {
+  "counter_hero": "Earth Spirit",
+  "counter": "Boulder Smash",
+  "countered_hero": "Underlord",
+  "countered": "Pit of Malice",
+  "value": 0.258
+ },
+ {
+  "counter_hero": "Puck",
+  "counter": "Phase Shift",
+  "countered_hero": "Queen of Pain",
+  "countered": "Sonic Wave",
+  "value": 0.254
+ },
+ {
+  "counter_hero": "Centaur Warrunner",
+  "counter": "Stampede",
+  "countered_hero": "Drow Ranger",
+  "countered": "Marksmanship",
+  "value": 0.251
+ },
+ {
+  "counter_hero": "Dark Seer",
+  "counter": "Vacuum",
+  "countered_hero": "Drow Ranger",
+  "countered": "Marksmanship",
+  "value": 0.245
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Shadow Dance",
+  "countered_hero": "Bane",
+  "countered": "Enfeeble",
+  "value": 0.24
+ },
+ {
+  "counter_hero": "Pangolier",
+  "counter": "Rolling Thunder",
+  "countered_hero": "Ringmaster",
+  "countered": "Wheel of Wonder",
+  "value": 0.235
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Shapeshift",
+  "countered_hero": "Shadow Demon",
+  "countered": "Shadow Demon (model)",
+  "value": 0.235
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Summon Wolves",
+  "countered_hero": "Shadow Demon",
+  "countered": "Shadow Demon (model)",
+  "value": 0.235
+ },
+ {
+  "counter_hero": "Anti-Mage",
+  "counter": "Counterspell",
+  "countered_hero": "Lich",
+  "countered": "Frost Blast",
+  "value": 0.231
+ },
+ {
+  "counter_hero": "Magnus",
+  "counter": "Skewer",
+  "countered_hero": "Drow Ranger",
+  "countered": "Marksmanship",
+  "value": 0.224
+ },
+ {
+  "counter_hero": "Largo",
+  "counter": "Catchy Lick",
+  "countered_hero": "Dark Seer",
+  "countered": "Surge",
+  "value": 0.224
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Shapeshift",
+  "countered_hero": "Ringmaster",
+  "countered": "Ringmaster (model)",
+  "value": 0.213
+ },
+ {
+  "counter_hero": "Lycan",
+  "counter": "Summon Wolves",
+  "countered_hero": "Ringmaster",
+  "countered": "Ringmaster (model)",
+  "value": 0.213
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Blade Fury",
+  "countered_hero": "Dark Willow",
+  "countered": "Terrorize",
+  "value": 0.204
+ },
+ {
+  "counter_hero": "Juggernaut",
+  "counter": "Omnislash",
+  "countered_hero": "Centaur Warrunner",
+  "countered": "Retaliate",
+  "value": 0.186
+ },
+ {
+  "counter_hero": "Pangolier",
+  "counter": "Rolling Thunder",
+  "countered_hero": "Ringmaster",
+  "countered": "Tame the Beasts",
+  "value": 0.176
+ },
+ {
+  "counter_hero": "Weaver",
+  "counter": "Shukuchi",
+  "countered_hero": "Shadow Demon",
+  "countered": "Shadow Demon (model)",
+  "value": 0.175
+ },
+ {
+  "counter_hero": "Lifestealer",
+  "counter": "Rage",
+  "countered_hero": "Jakiro",
+  "countered": "Ice Path",
+  "value": 0.172
+ },
+ {
+  "counter_hero": "Enigma",
+  "counter": "Demonic Summoning",
+  "countered_hero": "Mirana",
+  "countered": "Sacred Arrow",
+  "value": 0.171
+ },
+ {
+  "counter_hero": "Legion Commander",
+  "counter": "Press The Attack",
+  "countered_hero": "Jakiro",
+  "countered": "Ice Path",
+  "value": 0.159
+ },
+ {
+  "counter_hero": "Primal Beast",
+  "counter": "Onslaught",
+  "countered_hero": "Hoodwink",
+  "countered": "Hoodwink (model)",
+  "value": 0.136
+ },
+ {
+  "counter_hero": "Abaddon",
+  "counter": "Borrowed Time",
+  "countered_hero": "Axe",
+  "countered": "Battle Hunger",
+  "value": 0.128
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "Fortune's End",
+  "countered_hero": "Ringmaster",
+  "countered": "Tame the Beasts",
+  "value": 0.124
+ },
+ {
+  "counter_hero": "Slark",
+  "counter": "Shadow Dance",
+  "countered_hero": "Batrider",
+  "countered": "Flaming Lasso",
+  "value": 0.119
+ },
+ {
+  "counter_hero": "Kez",
+  "counter": "Raptor Dance",
+  "countered_hero": "Earth Spirit",
+  "countered": "Magnetize",
+  "value": 0.096
+ },
+ {
+  "counter_hero": "Shadow Demon",
+  "counter": "Shadow Demon (model)",
+  "countered_hero": "Silencer",
+  "countered": "Global Silence",
+  "value": 0.094
+ },
+ {
+  "counter_hero": "Earth Spirit",
+  "counter": "Rolling Boulder",
+  "countered_hero": "Hoodwink",
+  "countered": "Hoodwink (model)",
+  "value": 0.087
+ },
+ {
+  "counter_hero": "Oracle",
+  "counter": "False Promise",
+  "countered_hero": "Ringmaster",
+  "countered": "Tame the Beasts",
+  "value": 0.074
+ },
+ {
+  "counter_hero": "Shadow Demon",
+  "counter": "Shadow Demon (model)",
+  "countered_hero": "Silencer",
+  "countered": "Last Word",
+  "value": 0.07
+ }
+]

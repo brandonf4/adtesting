@@ -1,0 +1,621 @@
+{
+  "note": "Judge-only, context-dependent rules from Brandon's verdict notes (lab only, never the site bot). Flat model and pair value edits were removed on 2026-11-06 at Brandon's request: notes describe build context, which is being modeled as archetypes, needs and what covers them.",
+  "pairs": [],
+  "conditional": [
+    {
+      "item": "phantom_lancer_juxtapose",
+      "modelAttack": "melee",
+      "unlessAny": [
+        "phantom_lancer_doppelwalk",
+        "phantom_lancer_phantom_edge"
+      ],
+      "value": -6,
+      "from": "batch-001-1000: Juxtapose on a melee hero without Doppelganger or Phantom Rush is always bad"
+    },
+    {
+      "item": "abaddon_borrowed_time",
+      "modelAttr": "int",
+      "modelAttack": "ranged",
+      "value": -4,
+      "from": "batch-001-1000: Borrowed Time is mostly wasted on a squishy intelligence hero that sits in the back"
+    },
+    {
+      "item": "lina_fiery_soul",
+      "unlessTagAny": [
+        "magical",
+        "pure"
+      ],
+      "value": -5,
+      "from": "carries-001-14: Fiery Soul needs spells that deal damage to proc; without one the build is useless"
+    },
+    {
+      "item": "naga_siren_mirror_image",
+      "modelAttack": "melee",
+      "unlessAny": [
+        "naga_siren_rip_tide"
+      ],
+      "value": -4,
+      "from": "carries-001-25: Mirror Image on a melee hero without Rip Tide is weak and farms slowly"
+    },
+    {
+      "item": "centaur_return",
+      "modelAttack": "ranged",
+      "value": -3,
+      "from": "carries-001-13: Retaliate is not good on a ranged (Dark Willow) model"
+    },
+    {
+      "item": "tidehunter_anchor_smash",
+      "modelAttack": "melee",
+      "value": -3,
+      "from": "carries-001-1: melee Anchor Smash is bad"
+    },
+    {
+      "item": "medusa",
+      "unlessAny": [
+        "medusa_mystic_snake"
+      ],
+      "value": -2,
+      "from": "carries-001-12: Medusa without Mystic Snake is weak early and farms slower"
+    },
+    {
+      "item": "gyrocopter_flak_cannon",
+      "modelAttack": "melee",
+      "value": -4,
+      "from": "carries-002-13: melee Flak Cannon is very bad"
+    },
+    {
+      "item": "tiny_grow",
+      "modelAttr": "agi",
+      "value": -3,
+      "from": "carries-002-19: Grow on an agility carry is generally detrimental"
+    },
+    {
+      "item": "ursa_fury_swipes",
+      "modelAttack": "melee",
+      "value": -3,
+      "from": "2026-11-05 note and carries-002-12: Fury Swipes is much better on ranged models"
+    },
+    {
+      "item": "ursa_fury_swipes",
+      "modelAttack": "ranged",
+      "value": 2,
+      "from": "carries-002-12: ranged Fury Swipes (with Chaos Strike) is very strong"
+    },
+    {
+      "item": "shredder_whirling_death",
+      "modelAttack": "ranged",
+      "value": -3,
+      "from": "mids-002-7: Whirling Death on a ranged hero is weak, you can't get in range"
+    },
+    {
+      "item": "shredder_chakram",
+      "ifAny": [
+        "huskar_burning_spear",
+        "obsidian_destroyer_arcane_orb",
+        "drow_ranger_frost_arrows",
+        "clinkz_searing_arrows",
+        "viper_poison_attack",
+        "silencer_glaives_of_wisdom"
+      ],
+      "value": -2,
+      "from": "mids-002-7: Chakram disarms you, so it fights your own attack modifiers (Burning Spear)"
+    },
+    {
+      "item": "broodmother_spawn_spiderlings",
+      "unlessAny": [
+        "broodmother_spin_web"
+      ],
+      "value": -2,
+      "from": "mids-002-21: spiders without webs are much worse"
+    },
+    {
+      "item": "earth_spirit_rolling_boulder",
+      "unlessAny": [
+        "earth_spirit",
+        "earth_spirit_magnetize"
+      ],
+      "value": -3,
+      "from": "mids-003-12: Rolling Boulder without the Earth Spirit model or Magnetize is much worse"
+    },
+    {
+      "item": "naga_siren_rip_tide",
+      "unlessAny": [
+        "naga_siren_mirror_image",
+        "phantom_lancer_juxtapose"
+      ],
+      "value": -3,
+      "from": "mids-003-7: Rip Tide without illusions is much weaker; Brandon 2026-11-10: Rip Tide also works with Juxtapose"
+    },
+    {
+      "item": "tiny_grow",
+      "ifAny": [
+        "zuus_arc_lightning"
+      ],
+      "value": -3,
+      "from": "mids-003-8: Grow is anti-synergy with Arc Lightning, you want to attack fast"
+    },
+    {
+      "item": "pudge_rot",
+      "unlessAny": [
+        "pudge_flesh_heap"
+      ],
+      "value": -1,
+      "from": "mids-003-15: Rot is hard to farm with unless you have Meat Shield"
+    },
+    {
+      "item": "earth_spirit_boulder_smash",
+      "unlessAny": [
+        "earth_spirit",
+        "earth_spirit_magnetize"
+      ],
+      "value": -2,
+      "from": "batch-002-2014: Earth Spirit spells without the Earth Spirit model or Magnetize do little"
+    },
+    {
+      "item": "earth_spirit_geomagnetic_grip",
+      "unlessAny": [
+        "earth_spirit",
+        "earth_spirit_magnetize"
+      ],
+      "value": -1,
+      "from": "batch-002-2014: Grip without the Earth Spirit model or Magnetize is only a save"
+    }
+  ],
+  "models": [],
+  "counters": [
+    {
+      "counter": "viper_viper_strike",
+      "countered": "huskar_berserkers_blood",
+      "value": 8,
+      "from": "batch-001-1002: Viper Strike completely counters Berserker's Blood"
+    },
+    {
+      "counter": "viper_viper_strike",
+      "countered": "bristleback_bristleback",
+      "value": 8,
+      "from": "batch-001-1002: Viper Strike completely counters Bristleback's passive"
+    }
+  ],
+  "combos": [
+    {
+      "allOf": [
+        "batrider_sticky_napalm",
+        "dark_seer_ion_shell"
+      ],
+      "value": 3,
+      "from": "mids-002-8: strong Napalm + Ion Shell combo"
+    },
+    {
+      "allOf": [
+        "pangolier_swashbuckle",
+        "pangolier_shield_crash"
+      ],
+      "value": 3,
+      "from": "mids-002-8, mids-003-10: Swashbuckle + Shield Crash"
+    },
+    {
+      "allOf": [
+        "silencer_glaives_of_wisdom",
+        "puck_phase_shift"
+      ],
+      "value": 3,
+      "from": "mids-003-11: Glaives procs extra attacks with Phase Shift"
+    },
+    {
+      "allOf": [
+        "silencer_glaives_of_wisdom",
+        "abaddon_death_coil"
+      ],
+      "value": 3,
+      "from": "mids-003-11: Glaives + Coil"
+    },
+    {
+      "allOf": [
+        "huskar_burning_spear",
+        "lina_fiery_soul"
+      ],
+      "value": 3,
+      "from": "mids-003-5: Burning Spear procs Fiery Soul"
+    },
+    {
+      "allOf": [
+        "storm_spirit_ball_lightning",
+        "huskar_berserkers_blood"
+      ],
+      "value": 3,
+      "from": "mids-002-3: Berserker's Blood sustains Ball Lightning"
+    },
+    {
+      "allOf": [
+        "pudge_rot",
+        "brewmaster_primal_split"
+      ],
+      "value": 3,
+      "from": "mids-003-15: Rot + Primal Split is very strong"
+    },
+    {
+      "allOf": [
+        "weaver_shukuchi",
+        "brewmaster_cinder_brew"
+      ],
+      "value": 3,
+      "from": "mids-003-20: Shukuchi ignites Cinder Brew, wave clear and fights"
+    },
+    {
+      "allOf": [
+        "tinker_rearm",
+        "invoker_tornado_ad"
+      ],
+      "value": 3,
+      "from": "mids-001-21: Rearm with Tornado is very OP"
+    },
+    {
+      "allOf": [
+        "tinker_rearm",
+        "muerta_the_calling"
+      ],
+      "value": 3,
+      "from": "duos-001-9: Rearm + The Calling"
+    },
+    {
+      "allOf": [
+        "luna_moon_glaive",
+        "chaos_knight_phantasm"
+      ],
+      "value": 3,
+      "from": "carries-001-12: Glaives + Phantasm"
+    },
+    {
+      "allOf": [
+        "life_stealer_feast",
+        "muerta_gunslinger"
+      ],
+      "value": 3,
+      "from": "carries-001-14: Feast + Gunslinger"
+    },
+    {
+      "allOf": [
+        "huskar_berserkers_blood",
+        "lycan_feral_impulse"
+      ],
+      "value": 3,
+      "from": "carries-001-23: raid boss Ogre"
+    },
+    {
+      "allOf": [
+        "mars_gods_rebuke",
+        "elder_titan_natural_order"
+      ],
+      "value": 3,
+      "from": "offlanes-001-20: Rebuke + Natural Order"
+    },
+    {
+      "allOf": [
+        "skywrath_mage_mystic_flare",
+        "abyssal_underlord_firestorm"
+      ],
+      "value": 3,
+      "from": "mids-003-16: setup for Mystic Flare + Firestorm"
+    },
+    {
+      "allOf": [
+        "kunkka_tidebringer",
+        "terrorblade_conjure_image"
+      ],
+      "value": 3,
+      "from": "carries-001-24: cleave + Conjure Image farms very fast"
+    },
+    {
+      "allOf": [
+        "terrorblade_conjure_image",
+        "naga_siren_rip_tide"
+      ],
+      "value": 3,
+      "from": "carries-001-24: Conjure Image + Rip Tide farms very fast"
+    },
+    {
+      "allOf": [
+        "naga_siren_ensnare",
+        "void_spirit_aether_remnant"
+      ],
+      "value": 3,
+      "from": "duos-001-10: Ensnare into Aether Remnant"
+    },
+    {
+      "allOf": [
+        "nyx_assassin_impale",
+        "ringmaster_tame_the_beasts"
+      ],
+      "value": 3,
+      "from": "duos-001-2: Impale setup into Tame the Beasts"
+    },
+    {
+      "allOf": [
+        "crystal_maiden_frostbite",
+        "ringmaster_tame_the_beasts"
+      ],
+      "value": 3,
+      "from": "duos-001-20: Frostbite into Tame the Beasts"
+    },
+    {
+      "allOf": [
+        "lion_impale",
+        "nevermore_shadowraze2"
+      ],
+      "value": 3,
+      "from": "duos-001-11: Earth Spike sets up razes"
+    },
+    {
+      "allOf": [
+        "sven_storm_bolt",
+        "kunkka_torrent"
+      ],
+      "value": 3,
+      "from": "duos-001-4: Storm Hammer into Torrent"
+    },
+    {
+      "allOf": [
+        "oracle_fortunes_end",
+        "kunkka_torrent"
+      ],
+      "value": 3,
+      "from": "duos-001-6: Fortune's End sets up Torrent"
+    },
+    {
+      "allOf": [
+        "oracle_fortunes_end",
+        "skywrath_mage_mystic_flare"
+      ],
+      "value": 3,
+      "from": "duos-001-6: Fortune's End sets up Mystic Flare"
+    },
+    {
+      "allOf": [
+        "dark_willow_bramble_maze",
+        "magnataur_skewer"
+      ],
+      "value": 3,
+      "from": "duos-001-21: Bramble + Skewer"
+    },
+    {
+      "allOf": [
+        "dark_seer_vacuum",
+        "tiny_avalanche"
+      ],
+      "value": 3,
+      "from": "duos-001-7: Vacuum into Avalanche"
+    },
+    {
+      "allOf": [
+        "dark_seer_vacuum",
+        "largo_frogstomp"
+      ],
+      "value": 3,
+      "from": "duos-001-7: Vacuum into Frogstomp"
+    },
+    {
+      "allOf": [
+        "disruptor_kinetic_field",
+        "lina_light_strike_array"
+      ],
+      "value": 3,
+      "from": "duos-001-15: Kinetic Field + LSA holds people"
+    },
+    {
+      "allOf": [
+        "disruptor_kinetic_field",
+        "undying_tombstone"
+      ],
+      "value": 3,
+      "from": "duos-001-15: Kinetic Field + Tomb"
+    },
+    {
+      "allOf": [
+        "void_spirit_astral_step",
+        "storm_spirit_electric_vortex"
+      ],
+      "value": 3,
+      "from": "duos-001-5: Astral Step into Vortex"
+    },
+    {
+      "allOf": [
+        "vengefulspirit_magic_missile",
+        "techies_suicide"
+      ],
+      "value": 3,
+      "from": "duos-001-3: Magic Missile stun into Blast Off"
+    },
+    {
+      "allOf": [
+        "weaver_the_swarm",
+        "grimstroke_ink_creature"
+      ],
+      "value": 3,
+      "from": "duos-001-19: Swarm + Phantom's Embrace"
+    },
+    {
+      "allOf": [
+        "axe_battle_hunger",
+        "venomancer_noxious_plague"
+      ],
+      "value": 3,
+      "from": "duos-001-4: Battle Hunger + Noxious Plague"
+    },
+    {
+      "allOf": [
+        "shredder_timber_chain",
+        "techies_suicide"
+      ],
+      "value": 3,
+      "from": "duos-001-24: Timber Chain then Blast Off"
+    },
+    {
+      "allOf": [
+        "techies_suicide",
+        "leshrac_split_earth"
+      ],
+      "value": 3,
+      "from": "duos-001-24: Blast Off into Split Earth"
+    },
+    {
+      "allOf": [
+        "phantom_assassin_phantom_strike",
+        "pangolier_gyroshell"
+      ],
+      "value": 3,
+      "from": "mids-002-22: Rolling Thunder with Phantom Strike"
+    },
+    {
+      "allOf": [
+        "razor_static_link",
+        "life_stealer_infest"
+      ],
+      "value": 3,
+      "from": "carries-003-12: Infest + Static Link"
+    },
+    {
+      "allOf": [
+        "enchantress_enchant",
+        "enchantress"
+      ],
+      "value": 3,
+      "from": "mids-003-6: Enchant on the Enchantress model"
+    },
+    {
+      "allOf": [
+        "dark_willow_bramble_maze",
+        "mars_spear"
+      ],
+      "value": 3,
+      "from": "duos-001-7: Bramble Maze + Spear"
+    },
+    {
+      "allOf": [
+        "abyssal_underlord_atrophy_aura",
+        "tiny_tree_grab"
+      ],
+      "value": 3,
+      "from": "batch-002-2000: Atrophy with Tree Grab farms fast and stacks Atrophy"
+    },
+    {
+      "allOf": [
+        "ember_spirit_fire_remnant",
+        "ember_spirit_flame_guard"
+      ],
+      "value": 3,
+      "from": "batch-002-2007: Flame Guard is good with Fire Remnant"
+    },
+    {
+      "allOf": [
+        "ember_spirit",
+        "ember_spirit_flame_guard"
+      ],
+      "value": 3,
+      "from": "batch-002-2007: Flame Guard is good on the Ember model"
+    },
+    {
+      "allOf": [
+        "ember_spirit_searing_chains",
+        "void_spirit_astral_step"
+      ],
+      "value": 3,
+      "from": "batch-002-2010: Searing Chains goes well with mobility like Astral Step"
+    },
+    {
+      "allOf": [
+        "ember_spirit_searing_chains",
+        "ember_spirit_fire_remnant"
+      ],
+      "value": 3,
+      "from": "Extension of batch-002-2010: Searing Chains goes well with mobility"
+    },
+    {
+      "allOf": [
+        "ember_spirit_searing_chains",
+        "storm_spirit_ball_lightning"
+      ],
+      "value": 3,
+      "from": "Extension of batch-002-2010: Searing Chains goes well with mobility"
+    },
+    {
+      "allOf": [
+        "ursa_overpower",
+        "ursa_fury_swipes"
+      ],
+      "value": 3,
+      "from": "batch-002-2001: Overpower is solid with Fury Swipes"
+    },
+    {
+      "allOf": [
+        "silencer_glaives_of_wisdom",
+        "ursa_overpower"
+      ],
+      "value": 3,
+      "from": "batch-002-2001: Glaives of Wisdom + Overpower is really good damage"
+    },
+    {
+      "allOf": [
+        "storm_spirit_overload",
+        "storm_spirit_ball_lightning"
+      ],
+      "value": 3,
+      "from": "batch-002-2013: Overload with Ball Lightning"
+    },
+    {
+      "allOf": [
+        "life_stealer_feast",
+        "pangolier_swashbuckle"
+      ],
+      "value": 3,
+      "from": "batch-002-2012: the Feast build should have taken Swashbuckle"
+    }
+  ],
+  "needsSetup": {
+    "items": [
+      "kunkka_torrent",
+      "lina_light_strike_array",
+      "leshrac_split_earth",
+      "invoker_sun_strike_ad",
+      "invoker_chaos_meteor_ad",
+      "skywrath_mage_mystic_flare",
+      "nevermore_shadowraze2",
+      "windrunner_powershot",
+      "void_spirit_aether_remnant",
+      "ringmaster_tame_the_beasts",
+      "mirana_arrow",
+      "jakiro_ice_path",
+      "sandking_burrowstrike",
+      "elder_titan_echo_stomp"
+    ],
+    "setupTags": [
+      "dis",
+      "aoed"
+    ],
+    "missing": -2,
+    "from": "Extension of mids-003-4 (Pugna can't land Meteor), duos-001-11 (no setup for Split Earth), duos-001-23 (no setup for the Silencer's spell), duos-001-4/6 (Torrent benefits from setup): delayed or skillshot spells need a disable from another spell; Brandon 2026-11-11: Fissure doesn't need setup"
+  },
+  "shortRangeSelfAoE": {
+    "items": [
+      "shredder_whirling_death",
+      "axe_counter_helix",
+      "bristleback_quill_spray",
+      "juggernaut_blade_fury",
+      "brewmaster_thunder_clap",
+      "elder_titan_echo_stomp",
+      "pudge_rot",
+      "necrolyte_heartstopper_aura",
+      "dark_seer_ion_shell",
+      "sandking_burrowstrike"
+    ],
+    "value": -2,
+    "from": "Extension of mids-002-7 (Whirling Death on ranged), duos-001-23 (Blade Fury on ranged Phoenix with no gap close), duos-001-4 (Burrowstrike on a ranged hero): self-centered short-range spells want a melee or tanky model, or a gap close"
+  },
+  "loneAttack": {
+    "value": -2,
+    "from": "Extension of batch-002-2002 (Impetus with Pulse Nova: you run in and cast, you don't attack; crit is useless on the Skywrath build): one attack modifier in a build of damage spells is wasted"
+  },
+  "gapOnRanged": {
+    "value": -2,
+    "from": "batch-002-2009: gap-close spells on a ranged hero are weird"
+  }
+}
